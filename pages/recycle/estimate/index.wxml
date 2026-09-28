@@ -1,0 +1,51 @@
+<view class="page">
+  <view wx:if="{{loading}}" class="state">
+    <t-loading theme="circular" size="40rpx" text="加载中..." inherit-color />
+  </view>
+
+  <view wx:elif="{{loadError}}" class="state">
+    <text class="state-text">{{loadError}}</text>
+    <t-button theme="primary" size="small" bindtap="onRetry">重试</t-button>
+  </view>
+
+  <block wx:else>
+    <t-cell-group theme="card">
+      <t-cell title="品牌" arrow hover data-type="brand" bindtap="showPicker" note="{{form.brandName || '请选择品牌'}}" />
+      <t-cell title="机型" arrow hover data-type="model" bindtap="showPicker" note="{{form.modelName || '请选择机型'}}" />
+      <t-cell title="内存" arrow hover data-type="storage" bindtap="showPicker" note="{{form.storage || '请选择内存'}}" />
+    </t-cell-group>
+
+    <view class="section-title">成色</view>
+    <t-radio-group value="{{form.condition}}" bindchange="onConditionChange">
+      <view class="option-list">
+        <t-radio wx:for="{{conditions}}" wx:key="key" value="{{item.key}}" label="{{item.label}}" content="{{item.desc}}" block align="left" borderless />
+      </view>
+    </t-radio-group>
+
+    <view class="section-title">功能问题（可多选，选得越准报价越准）</view>
+    <t-checkbox-group value="{{form.issues}}" bindchange="onIssuesChange">
+      <view class="option-list">
+        <t-checkbox wx:for="{{issues}}" wx:key="key" value="{{item.key}}" label="{{item.label}}" block align="left" borderless />
+      </view>
+    </t-checkbox-group>
+
+    <view class="footer">
+      <t-button theme="primary" block disabled="{{!(form.brandId && form.modelId && form.storage && form.condition) || submitting}}" loading="{{submitting}}" bindtap="onSubmit">
+        获取预估价
+      </t-button>
+      <view class="footer-tip">预估价仅供参考，最终回收价以质检结果为准</view>
+    </view>
+  </block>
+
+  <t-picker visible="{{pickerVisible.brand}}" value="{{pickerValue.brand}}" title="选择品牌" bindchange="onPickerChange" bindcancel="hidePicker" data-type="brand">
+    <t-picker-item options="{{pickerColumns.brand}}" />
+  </t-picker>
+
+  <t-picker visible="{{pickerVisible.model}}" value="{{pickerValue.model}}" title="选择机型" bindchange="onPickerChange" bindcancel="hidePicker" data-type="model">
+    <t-picker-item options="{{pickerColumns.model}}" />
+  </t-picker>
+
+  <t-picker visible="{{pickerVisible.storage}}" value="{{pickerValue.storage}}" title="选择内存" bindchange="onPickerChange" bindcancel="hidePicker" data-type="storage">
+    <t-picker-item options="{{pickerColumns.storage}}" />
+  </t-picker>
+</view>

@@ -1,0 +1,22 @@
+<view class="page" wx:if="{{quote}}">
+  <view class="price-card">
+    <view class="price-label">预估回收价</view>
+    <view class="price-row">
+      <text class="price-symbol">¥</text>
+      <text class="price-value">{{priceText}}</text>
+    </view>
+    <view class="price-tip">最终价格以收到机器后的质检结果为准</view>
+  </view>
+
+  <t-cell-group theme="card">
+    <t-cell title="机型" note="{{quote.brandName}} {{quote.modelName}}" />
+    <t-cell title="内存" note="{{quote.storage}}" />
+    <t-cell title="成色" note="{{quote.conditionLabel}}" />
+    <t-cell title="功能问题" note="{{quote.issueLabels.length ? quote.issueLabels : '无'}}" />
+  </t-cell-group>
+
+  <view class="footer">
+    <t-button theme="default" block bindtap="onReQuote">重新估价</t-button>
+    <t-button theme="primary" block bindtap="onOrder">立即下单</t-button>
+  </view>
+</view>

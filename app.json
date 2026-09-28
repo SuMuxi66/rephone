@@ -1,5 +1,12 @@
 {
-  "pages": ["pages/home/home", "pages/category/index", "pages/cart/index", "pages/usercenter/index"],
+  "pages": [
+    "pages/home/home",
+    "pages/recycle/estimate/index",
+    "pages/recycle/result/index",
+    "pages/category/index",
+    "pages/cart/index",
+    "pages/usercenter/index"
+  ],
   "subpackages": [
     {
       "root": "pages/user",
@@ -34,16 +41,6 @@
         "delivery-detail/index",
         "invoice/index"
       ]
-    },
-    {
-      "root": "pages/coupon",
-      "name": "coupon",
-      "pages": ["coupon-list/index", "coupon-detail/index", "coupon-activity-goods/index"]
-    },
-    {
-      "root": "pages/promotion",
-      "name": "promotion",
-      "pages": ["promotion-detail/index"]
     }
   ],
   "tabBar": {
@@ -58,12 +55,8 @@
         "text": "首页"
       },
       {
-        "pagePath": "pages/category/index",
-        "text": "分类"
-      },
-      {
-        "pagePath": "pages/cart/index",
-        "text": "购物车"
+        "pagePath": "pages/recycle/estimate/index",
+        "text": "估价"
       },
       {
         "pagePath": "pages/usercenter/index",
@@ -77,7 +70,7 @@
   "window": {
     "backgroundTextStyle": "light",
     "navigationBarBackgroundColor": "#fff",
-    "navigationBarTitleText": "Weixin",
+    "navigationBarTitleText": "RePhone 二手机回收",
     "navigationBarTextStyle": "black"
   },
   "sitemapLocation": "sitemap.json",

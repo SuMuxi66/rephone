@@ -25,6 +25,7 @@ import org.springframework.test.context.TestPropertySource;
  * 3. user 表有记录；
  * 4. 无 token / 伪造 token 返回 401。
  * 运行于 H2 内存库（MODE=MySQL），无需本机 MySQL。
+ * 注意：P2 测试与本病例共享同一 H2 库，user 行数断言一律用相对值。
  */
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @TestPropertySource(properties = {
@@ -67,13 +68,14 @@ class P1AuthFlowTest {
         assertEquals(200, profileResp.getStatusCode().value());
         JsonNode profile = objectMapper.readTree(profileResp.getBody());
         assertEquals(0, profile.get("code").asInt());
-        assertTrue(profile.path("data").path("userId").asLong() > 0, "profile 应返回 userId");
+        long userId = profile.path("data").path("userId").asLong();
+        assertTrue(userId > 0, "profile 应返回 userId");
 
-        // 3. user 表有记录（tenant_id 默认 0）
-        Long tenantId = jdbcTemplate.queryForObject("select tenant_id from `user` limit 1", Long.class);
+        // 3. user 表有记录（tenant_id 默认 0）；总行数断言用相对值（P2 测试共用同一 H2 库）
+        Long tenantId = jdbcTemplate.queryForObject(
+                "select tenant_id from `user` where id = ?", Long.class, userId);
         assertEquals(0L, tenantId);
-        Integer count = jdbcTemplate.queryForObject("select count(*) from `user`", Integer.class);
-        assertEquals(1, count);
+        Integer countBefore = jdbcTemplate.queryForObject("select count(*) from `user`", Integer.class);
 
         // 4. 无 token → 401
         ResponseEntity<String> noAuth = rest.getForEntity("/api/wx/user/profile", String.class);
@@ -86,9 +88,9 @@ class P1AuthFlowTest {
                 new HttpEntity<>(badHeaders), String.class);
         assertEquals(401, forged.getStatusCode().value());
 
-        // 6. 同一 code 再次登录不产生新用户
+        // 6. 同一 code 再次登录不产生新用户（openid 稳定）
         rest.postForEntity("/api/wx/login", Map.of("code", "it-code-p1"), String.class);
-        Integer countAgain = jdbcTemplate.queryForObject("select count(*) from `user`", Integer.class);
-        assertEquals(1, countAgain);
+        Integer countAfter = jdbcTemplate.queryForObject("select count(*) from `user`", Integer.class);
+        assertEquals(countBefore, countAfter, "同一 code 重复登录不应新增用户");
     }
 }

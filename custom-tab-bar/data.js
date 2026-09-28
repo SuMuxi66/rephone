@@ -5,18 +5,13 @@ export default [
     url: 'pages/home/home',
   },
   {
-    icon: 'sort',
-    text: '分类',
-    url: 'pages/category/index',
-  },
-  {
-    icon: 'cart',
-    text: '购物车',
-    url: 'pages/cart/index',
+    icon: 'wallet',
+    text: '估价',
+    url: 'pages/recycle/estimate/index',
   },
   {
     icon: 'person',
-    text: '个人中心',
+    text: '我的',
     url: 'pages/usercenter/index',
   },
 ];

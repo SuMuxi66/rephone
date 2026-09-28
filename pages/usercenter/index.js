@@ -9,18 +9,6 @@ const menuData = [
       url: '',
       type: 'address',
     },
-    {
-      title: '优惠券',
-      tit: '',
-      url: '',
-      type: 'coupon',
-    },
-    {
-      title: '积分',
-      tit: '',
-      url: '',
-      type: 'point',
-    },
   ],
   [
     {
