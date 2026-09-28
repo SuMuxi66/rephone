@@ -1,0 +1,17 @@
+# 依赖与构建产物
+# miniprogram_npm/ 为微信开发者工具"构建 npm"的产物（克隆后执行构建 npm 再生成）
+node_modules/
+miniprogram_npm/
+server/**/target/
+server/.mvn/wrapper/*.zip
+
+# 系统与工具文件
+.DS_Store
+Thumbs.db
+.mimosa/
+.zcode/
+*.log
+
+# IDE
+.idea/
+*.iml
