@@ -1,7 +1,24 @@
-export const config = {
-  /** 是否使用mock代替api返回 */
-  useMock: true,
+// 环境开关：envVersion 由微信运行时提供（develop=开发者工具/真机调试, trial=体验版, release=正式版）
+const envVersion =
+  typeof __wxConfig !== 'undefined' && __wxConfig.envVersion ? __wxConfig.envVersion : 'develop';
+
+const ENV_MAP = {
+  develop: {
+    apiBaseUrl: 'http://localhost:8080',
+    /** 出售端模板页是否使用 mock 数据（回收端 services/recycle/* 始终走真实后端） */
+    useMock: true,
+  },
+  trial: {
+    apiBaseUrl: 'https://api-trial.rephone.example.com', // TODO(P6): 替换为真实体验版域名
+    useMock: false,
+  },
+  release: {
+    apiBaseUrl: 'https://api.rephone.example.com', // TODO(P6): 替换为真实正式域名
+    useMock: false,
+  },
 };
+
+export const config = Object.assign({ envVersion }, ENV_MAP[envVersion] || ENV_MAP.develop);
 
 export const cdnBase =
   'https://we-retail-static-1300977798.cos.ap-guangzhou.myqcloud.com/retail-mp';

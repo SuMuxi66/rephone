@@ -1,0 +1,37 @@
+name: rephone
+
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: rephone-mysql
+    restart: unless-stopped
+    environment:
+      # 密码来自同目录 .env（已被 gitignore），见 .env.example
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      TZ: Asia/Shanghai
+    ports:
+      - "3306:3306"
+    volumes:
+      - rephone-mysql-data:/var/lib/mysql
+      - ./sql/001_init.sql:/docker-entrypoint-initdb.d/001_init.sql:ro
+    command:
+      - --character-set-server=utf8mb4
+      - --collation-server=utf8mb4_unicode_ci
+    healthcheck:
+      test: ["CMD-SHELL", "mysqladmin ping -h 127.0.0.1 -uroot -p\"$$MYSQL_ROOT_PASSWORD\" --silent"]
+      interval: 5s
+      timeout: 3s
+      retries: 30
+
+  redis:
+    image: redis:7-alpine
+    container_name: rephone-redis
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    volumes:
+      - rephone-redis-data:/data
+
+volumes:
+  rephone-mysql-data:
+  rephone-redis-data:

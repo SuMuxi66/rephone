@@ -1,0 +1,42 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: rephone-server
+  datasource:
+    url: ${MYSQL_URL:jdbc:mysql://localhost:3306/rephone?useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Shanghai&useSSL=false&allowPublicKeyRetrieval=true}
+    username: ${MYSQL_USERNAME:root}
+    password: ${MYSQL_PASSWORD:}
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  sql:
+    init:
+      # 启动时执行幂等建表（CREATE TABLE IF NOT EXISTS），可关：--spring.sql.init.mode=never
+      mode: ${SQL_INIT_MODE:always}
+      schema-locations: classpath:db/schema.sql
+  data:
+    redis:
+      host: ${REDIS_HOST:localhost}
+      port: ${REDIS_PORT:6379}
+      password: ${REDIS_PASSWORD:}
+
+mybatis-plus:
+  configuration:
+    map-underscore-to-camel-case: true
+  global-config:
+    banner: false
+    db-config:
+      id-type: auto
+
+rephone:
+  jwt:
+    secret: ${JWT_SECRET:}
+    ttl-seconds: ${JWT_TTL_SECONDS:604800}
+  wx:
+    appid: ${WX_APPID:}
+    secret: ${WX_SECRET:}
+    mock-login: ${WX_MOCK_LOGIN:false}
+
+logging:
+  level:
+    com.rephone: info
