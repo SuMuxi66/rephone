@@ -30,6 +30,21 @@ CREATE TABLE IF NOT EXISTS `user` (
     CONSTRAINT `uk_user_username` UNIQUE (`username`)
 );
 
+CREATE TABLE IF NOT EXISTS `user_address` (
+    `id`          BIGINT       NOT NULL AUTO_INCREMENT,
+    `tenant_id`   BIGINT       NOT NULL DEFAULT 0,
+    `user_id`     BIGINT       NOT NULL,
+    `name`        VARCHAR(32)  NOT NULL,
+    `phone`       VARCHAR(20)  NOT NULL,
+    `region`      VARCHAR(128) NOT NULL,
+    `detail`      VARCHAR(255) NOT NULL,
+    `is_default`  TINYINT      NOT NULL DEFAULT 0,
+    `create_time` DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    `update_time` DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (`id`),
+    KEY `idx_addr_user` (`user_id`)
+);
+
 CREATE TABLE IF NOT EXISTS `order_status_log` (
     `id`            BIGINT       NOT NULL AUTO_INCREMENT,
     `tenant_id`     BIGINT       NOT NULL DEFAULT 0,

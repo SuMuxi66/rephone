@@ -11,6 +11,18 @@
           <el-icon><Tools /></el-icon>
           <span>维修单管理</span>
         </el-menu-item>
+        <el-menu-item index="/models">
+          <el-icon><Iphone /></el-icon>
+          <span>机型管理</span>
+        </el-menu-item>
+        <el-menu-item index="/accounts">
+          <el-icon><UserFilled /></el-icon>
+          <span>账号管理</span>
+        </el-menu-item>
+        <el-menu-item index="/addresses">
+          <el-icon><Location /></el-icon>
+          <span>地址管理</span>
+        </el-menu-item>
       </el-menu>
     </el-aside>
     <el-container>
@@ -37,7 +49,7 @@
 
 <script setup>
 import { useRoute, useRouter } from 'vue-router';
-import { Box, Tools, UserFilled } from '@element-plus/icons-vue';
+import { Box, Tools, UserFilled, Iphone, Location } from '@element-plus/icons-vue';
 import { getProfile, clearSession } from '../api/http';
 
 const route = useRoute();

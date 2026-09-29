@@ -23,6 +23,25 @@ export const fetchRepairOrderDetail = (orderNo) => http.get(`/admin/repair/order
 export const changeRepairStatus = (orderNo, toStatus, remark) =>
   http.put(`/admin/repair/order/${orderNo}/status`, { toStatus, remark });
 
+// ===== 账号管理 =====
+export const fetchUsers = (params) => http.get('/admin/users', { params });
+export const setUserStatus = (id, status) => http.put(`/admin/user/${id}/status`, { status });
+export const createAdminAccount = (payload) => http.post('/admin/account', payload);
+export const resetAdminPassword = (id, password) => http.put(`/admin/account/${id}/password`, { password });
+
+// ===== 用户地址管理 =====
+export const fetchAddresses = (params) => http.get('/admin/addresses', { params });
+export const deleteAddress = (id) => http.delete(`/admin/addresses/${id}`);
+
+// ===== 机型管理 =====
+export const fetchBrands = () => http.get('/admin/brands');
+export const createBrand = (name) => http.post('/admin/brand', { name });
+export const fetchModels = (brandId) => http.get('/admin/models', { params: { brandId } });
+export const createModel = (payload) => http.post('/admin/model', payload);
+export const updateModel = (id, payload) => http.put(`/admin/model/${id}`, payload);
+export const updateModelPrice = (id, storage, priceYuan) =>
+  http.put(`/admin/model/${id}/price`, { storage, priceYuan });
+
 // ===== 状态字典 =====
 export const RECYCLE_STATUS = {
   10: { label: '待寄出', type: 'warning' },

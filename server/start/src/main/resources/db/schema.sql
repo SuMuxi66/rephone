@@ -30,6 +30,21 @@ CREATE TABLE IF NOT EXISTS `user` (
     KEY `idx_user_tenant` (`tenant_id`)
 ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COMMENT = '用户';
 
+CREATE TABLE IF NOT EXISTS `user_address` (
+    `id`          BIGINT       NOT NULL AUTO_INCREMENT COMMENT '地址ID',
+    `tenant_id`   BIGINT       NOT NULL DEFAULT 0 COMMENT '所属租户',
+    `user_id`     BIGINT       NOT NULL COMMENT '所属用户',
+    `name`        VARCHAR(32)  NOT NULL COMMENT '收件人',
+    `phone`       VARCHAR(20)  NOT NULL COMMENT '联系电话',
+    `region`      VARCHAR(128) NOT NULL COMMENT '省 市 区（空格拼接）',
+    `detail`      VARCHAR(255) NOT NULL COMMENT '详细地址',
+    `is_default`  TINYINT      NOT NULL DEFAULT 0 COMMENT '1默认地址',
+    `create_time` DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+    `update_time` DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+    PRIMARY KEY (`id`),
+    KEY `idx_addr_user` (`user_id`)
+) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COMMENT = '用户收货地址';
+
 CREATE TABLE IF NOT EXISTS `order_status_log` (
     `id`            BIGINT       NOT NULL AUTO_INCREMENT COMMENT '日志ID',
     `tenant_id`     BIGINT       NOT NULL DEFAULT 0 COMMENT '所属租户',
