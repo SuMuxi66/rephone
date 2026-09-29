@@ -23,7 +23,7 @@ import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
 /**
- * 估价服务：基准价(元) × 成色系数 − 故障扣减(元)，下限 0；
+ * 估价服务：基准价(元) × 成色系数 × 屏幕系数 − 故障扣减(元)，下限 0；
  * 返回小程序的金额统一换算为分（LONG，HALF_UP），见 AI_PLAN 硬约束 4。
  */
 @Service
@@ -89,6 +89,21 @@ public class QuoteService {
             throw new BizException(40015, "成色选项无效");
         }
 
+        // 屏幕状态为可选维度：未传视为无瑕疵（系数 1.0），与整机成色相乘
+        BigDecimal screenFactor = BigDecimal.ONE;
+        String screenLabel = null;
+        if (StringUtils.hasText(req.screenCondition())) {
+            QuoteRule screenRule = ruleMapper.selectOne(new LambdaQueryWrapper<QuoteRule>()
+                    .eq(QuoteRule::getRuleType, QuoteRule.TYPE_SCREEN_FACTOR)
+                    .eq(QuoteRule::getOptionKey, req.screenCondition())
+                    .last("limit 1"));
+            if (screenRule == null) {
+                throw new BizException(40017, "屏幕状态选项无效");
+            }
+            screenFactor = screenRule.getNumericValue();
+            screenLabel = screenRule.getOptionLabel();
+        }
+
         BigDecimal deduction = BigDecimal.ZERO;
         List<String> issueLabels = List.of();
         if (!CollectionUtils.isEmpty(req.issues())) {
@@ -107,6 +122,7 @@ public class QuoteService {
 
         BigDecimal price = baseRule.getNumericValue()
                 .multiply(condRule.getNumericValue())
+                .multiply(screenFactor)
                 .subtract(deduction)
                 .max(BigDecimal.ZERO)
                 .setScale(2, RoundingMode.HALF_UP);
@@ -118,7 +134,7 @@ public class QuoteService {
         return new QuoteResult(model.getId(), model.getName(),
                 brand == null ? "" : brand.getName(),
                 req.storage(), req.condition(), condRule.getOptionLabel(),
-                issueLabels, priceFen);
+                screenLabel, issueLabels, priceFen);
     }
 
     private List<String> storageOptions(Long modelId) {

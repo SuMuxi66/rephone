@@ -188,6 +188,25 @@ class P3OrderFlowTest {
         assertEquals(401, noAdmin.getStatusCode().value(), "管理端无 token 应 401");
     }
 
+    @Test
+    @Order(4)
+    void inspection_final_price_upper_bound() throws Exception {
+        // 质检最终价必须为正且不超过估价两倍（566000 分估价 → 上限 1132000 分）
+        ResponseEntity<String> createResp = createOrder(566000L, 10);
+        String orderNo = objectMapper.readTree(createResp.getBody()).path("data").path("orderNo").asText();
+        // 状态机要求 10 → 20（填运单）后才能进入质检
+        rest.exchange("/api/wx/recycle/order/" + orderNo + "/express", HttpMethod.PUT,
+                new HttpEntity<>(Map.of("expressCompany", "顺丰速运", "expressNo", "SF-BOUND-4"), auth()),
+                String.class);
+        adminStatus(orderNo, 30);
+
+        ResponseEntity<String> resp = rest.exchange("/api/admin/recycle/order/" + orderNo + "/inspection",
+                HttpMethod.POST, new HttpEntity<>(Map.of("result", "质检结论", "finalFen", 2000000L,
+                        "images", List.of()), admin()), String.class);
+        assertNotEquals(0, objectMapper.readTree(resp.getBody()).get("code").asInt(),
+                "最终价超估价两倍应被拒绝");
+    }
+
     private JsonNode getDetail(String orderNo) throws Exception {
         ResponseEntity<String> resp = rest.exchange("/api/wx/recycle/order/" + orderNo, HttpMethod.GET,
                 new HttpEntity<>(auth()), String.class);

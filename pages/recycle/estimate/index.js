@@ -8,13 +8,63 @@ const CONDITION_OPTIONS = [
   { key: 'COND_80', label: '8成新及以下', desc: '较多磨损或功能问题' },
 ];
 
-const ISSUE_OPTIONS = [
-  { key: 'SCREEN', label: '屏幕划痕或磕碰' },
-  { key: 'SHELL', label: '外壳明显磨损' },
-  { key: 'BATTERY', label: '电池健康低于80%' },
-  { key: 'REPAIRED', label: '曾维修或拆机' },
-  { key: 'FACEID', label: '面容/指纹失效' },
-  { key: 'NOBOOT', label: '无法开机' },
+// 屏幕状态（独立于整机成色，报价=基准×成色×屏幕系数−故障扣减）
+const SCREEN_OPTIONS = [
+  { key: 'SCR_OK', label: '无划痕无瑕疵', desc: '屏幕完好，点亮无明显划痕' },
+  { key: 'SCR_LIGHT', label: '轻微划痕', desc: '有细划痕，日常使用不显眼' },
+  { key: 'SCR_HEAVY', label: '明显划痕或磕碰', desc: '多处划痕或外屏磕碰' },
+  { key: 'SCR_BROKEN', label: '碎屏或显示异常', desc: '外屏破裂、花屏、亮线或色斑' },
+];
+
+// 功能问题分组（对齐转转/爱回收标准检测项，key 与后端 quote_rule 一致）
+const ISSUE_GROUPS = [
+  {
+    title: '电池与充电',
+    items: [
+      { key: 'BATTERY', label: '电池健康低于80%' },
+      { key: 'CHARGE', label: '充电异常' },
+    ],
+  },
+  {
+    title: '显示与拍照',
+    items: [
+      { key: 'DISPLAY', label: '花屏/亮线或色斑' },
+      { key: 'CAMERA', label: '前后摄像头异常' },
+      { key: 'FLASH', label: '闪光灯异常' },
+    ],
+  },
+  {
+    title: '声音与通话',
+    items: [
+      { key: 'SPEAKER', label: '扬声器或听筒异常' },
+      { key: 'MIC', label: '麦克风或送话异常' },
+      { key: 'SIGNAL', label: 'Wi-Fi/蓝牙或信号异常' },
+    ],
+  },
+  {
+    title: '按键与其他功能',
+    items: [
+      { key: 'BUTTON', label: '电源/音量键失灵' },
+      { key: 'VIBRATE', label: '振动异常' },
+      { key: 'FACEID', label: '面容/指纹失效' },
+    ],
+  },
+  {
+    title: '维修与进水',
+    items: [
+      { key: 'REPAIRED', label: '曾拆机或换件维修' },
+      { key: 'MAINBOARD', label: '主板维修史' },
+      { key: 'WATER', label: '进水或受潮' },
+    ],
+  },
+  {
+    title: '严重故障与账号',
+    items: [
+      { key: 'REBOOT', label: '反复重启或死机' },
+      { key: 'NOBOOT', label: '无法开机' },
+      { key: 'IDLOCK', label: 'ID锁/账号无法退出' },
+    ],
+  },
 ];
 
 const EMPTY_FORM = {
@@ -24,6 +74,7 @@ const EMPTY_FORM = {
   modelName: '',
   storage: '',
   condition: '',
+  screen: '',
   issues: [],
 };
 
@@ -36,7 +87,8 @@ Page({
     models: [],
     form: EMPTY_FORM,
     conditions: CONDITION_OPTIONS,
-    issues: ISSUE_OPTIONS,
+    screens: SCREEN_OPTIONS,
+    issueGroups: ISSUE_GROUPS,
     pickerVisible: { brand: false, model: false, storage: false },
     pickerValue: { brand: [], model: [], storage: [] },
     pickerColumns: { brand: [], model: [], storage: [] },
@@ -167,15 +219,20 @@ Page({
     this.updateStep();
   },
 
+  onScreenChange(e) {
+    this.setData({ 'form.screen': e.detail.value });
+    this.updateStep();
+  },
+
   onIssuesChange(e) {
     this.setData({ 'form.issues': e.detail.value || [] });
   },
 
-  /** 选机型(品牌+机型+内存)完成 → 第2步；成色完成 → 第3步 */
+  /** 选机型(品牌+机型+内存)完成 → 第2步；成色与屏幕状态完成 → 第3步 */
   updateStep() {
     const { form } = this.data;
     let stepCurrent = 0;
-    if (form.condition) {
+    if (form.condition && form.screen) {
       stepCurrent = 2;
     } else if (form.brandId && form.modelId && form.storage) {
       stepCurrent = 1;
@@ -187,8 +244,8 @@ Page({
 
   async onSubmit() {
     const { form, submitting } = this.data;
-    if (submitting || !form.brandId || !form.modelId || !form.storage || !form.condition) {
-      wx.showToast({ title: '请先完成品牌、机型、内存与成色的选择', icon: 'none' });
+    if (submitting || !form.brandId || !form.modelId || !form.storage || !form.condition || !form.screen) {
+      wx.showToast({ title: '请先完成机型、成色与屏幕状态的选择', icon: 'none' });
       return;
     }
     this.setData({ submitting: true });
@@ -197,10 +254,14 @@ Page({
         modelId: form.modelId,
         storage: form.storage,
         condition: form.condition,
+        screenCondition: form.screen,
         issues: form.issues,
       });
-      // issueKeys 供下单页回传后端复核（后端只认代码，不认中文标签）
-      wx.setStorageSync('recycle.quoteResult', Object.assign({}, result, { issueKeys: form.issues }));
+      // issueKeys/screen 供下单页回传后端复核（后端只认代码，不认中文标签）
+      wx.setStorageSync(
+        'recycle.quoteResult',
+        Object.assign({}, result, { issueKeys: form.issues, screen: form.screen }),
+      );
       wx.navigateTo({ url: '/pages/recycle/result/index' });
     } catch (e) {
       wx.showToast({ title: e.message || '估价失败，请稍后重试', icon: 'none' });

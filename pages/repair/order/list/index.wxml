@@ -1,0 +1,36 @@
+<view class="page repair-page">
+  <scroll-view scroll-x class="filter-bar">
+    <view
+      wx:for="{{filters}}"
+      wx:key="status"
+      class="filter-item {{activeStatus === item.status ? 'active' : ''}}"
+      data-status="{{item.status}}"
+      bindtap="switchFilter"
+    >{{item.label}}</view>
+  </scroll-view>
+
+  <view wx:if="{{orders.length === 0 && loadStatus !== 1}}" class="empty">
+    <t-empty description="暂无维修单，工程师上门快修" />
+    <t-button theme="primary" size="small" bindtap="goRepair">去预约维修</t-button>
+  </view>
+
+  <view
+    wx:for="{{orders}}"
+    wx:key="orderNo"
+    class="order-card"
+    data-order-no="{{item.orderNo}}"
+    bindtap="goDetail"
+  >
+    <view class="row">
+      <text class="model">{{item.brandName}} {{item.modelName}}</text>
+      <status-tag biz="repair" status="{{item.status}}" />
+    </view>
+    <view class="sub">{{item.itemsText}} · {{item.orderNo}}</view>
+    <view class="row bottom">
+      <text class="price">¥{{item.priceText}}</text>
+      <text class="time">{{item.createTime}}</text>
+    </view>
+  </view>
+
+  <t-load-more status="{{loadStatus}}" list-is-empty="{{orders.length === 0}}" bind:retry="reload" />
+</view>

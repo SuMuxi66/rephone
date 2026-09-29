@@ -10,7 +10,8 @@
 	 wx:key="index"
 	>
 		<view class="custom-tab-bar-wrapper">
-			<t-icon prefix="wr" name="{{item.icon}}" size="48rpx" />
+			<t-icon wx:if="{{item.prefix === 'wr'}}" prefix="wr" name="{{item.icon}}" size="48rpx" />
+			<t-icon wx:else name="{{item.icon}}" size="48rpx" />
 			<view class="text">{{ item.text }}</view>
 		</view>
 	</t-tab-bar-item>

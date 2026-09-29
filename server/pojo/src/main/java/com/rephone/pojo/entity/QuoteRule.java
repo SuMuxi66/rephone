@@ -6,8 +6,8 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import java.math.BigDecimal;
 
 /**
- * 估价规则。rule_type：10=机型+内存基准价(元)、20=成色系数、30=故障扣减(元)。
- * model_id=0 表示全局规则（成色/故障）。
+ * 估价规则。rule_type：10=机型+内存基准价(元)、20=成色系数、30=故障扣减(元)、40=屏幕成色系数。
+ * model_id=0 表示全局规则（成色/故障/屏幕）。
  */
 @TableName("quote_rule")
 public class QuoteRule {
@@ -15,6 +15,7 @@ public class QuoteRule {
     public static final int TYPE_BASE_PRICE = 10;
     public static final int TYPE_CONDITION_FACTOR = 20;
     public static final int TYPE_ISSUE_DEDUCTION = 30;
+    public static final int TYPE_SCREEN_FACTOR = 40;
 
     @TableId(type = IdType.AUTO)
     private Long id;

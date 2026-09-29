@@ -1,6 +1,7 @@
 package com.rephone.service;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -86,7 +87,7 @@ public class RecycleOrderService {
         validateCreate(req);
         // 服务端复核估价：以 quote_rule 实时计算为准，客户端报价不一致则拒绝（防止篡改价格下单）
         QuoteResult serverQuote = quoteService.calculate(new QuoteCalculateRequest(
-                req.modelId(), req.storage(), req.condition(), req.issues()));
+                req.modelId(), req.storage(), req.condition(), req.screenCondition(), req.issues()));
         if (!serverQuote.priceFen().equals(req.quoteFen())) {
             throw new BizException(40020, "报价已更新，请重新估价");
         }
@@ -139,7 +140,7 @@ public class RecycleOrderService {
         if (status != null && status > 0) {
             wrapper.eq(RecycleOrder::getStatus, status);
         }
-        Page<RecycleOrder> page = orderMapper.selectPage(new Page<>(pageNum, pageSize), wrapper);
+        Page<RecycleOrder> page = orderMapper.selectPage(new Page<>(clampPage(pageNum), clampPage(pageSize)), wrapper);
         Page<RecycleOrderItem> result = new Page<>(page.getCurrent(), page.getSize(), page.getTotal());
         result.setRecords(page.getRecords().stream().map(this::toItem).toList());
         return result;
@@ -179,6 +180,8 @@ public class RecycleOrderService {
         if (req == null || !StringUtils.hasText(req.expressNo())) {
             throw new BizException(40021, "快递单号不能为空");
         }
+        requireLen(req.expressCompany(), 32, "快递公司");
+        requireLen(req.expressNo(), 32, "快递单号");
         RecycleOrder order = getOwned(orderNo);
         transition(order, RecycleOrder.STATUS_SHIPPING, 10, order.getUserId(), "用户填写运单号");
         order.setExpressCompany(req.expressCompany());
@@ -189,20 +192,31 @@ public class RecycleOrderService {
     /** 用户取消：仅待寄出可取消。 */
     @Transactional
     public void cancel(String orderNo, String reason) {
+        requireLen(reason, 255, "取消原因");
         RecycleOrder order = getOwned(orderNo);
         transition(order, RecycleOrder.STATUS_CANCELED, 10, order.getUserId(),
                 StringUtils.hasText(reason) ? reason : "用户取消订单");
     }
 
-    /** 用户确认打款：40 → 触发打款 → 50。 */
+    /** 用户确认打款：40 → 50 → 打款。 */
     @Transactional
     public void confirmPayout(String orderNo) {
         RecycleOrder order = getOwned(orderNo);
+        doPayout(order, 10, order.getUserId());
+    }
+
+    /**
+     * 打款统一入口：先 CAS 占位 40→50（同一订单只有一个请求能进入打款，杜绝并发重复外呼），
+     * 打款是事务内最后一步，其后不存在任何会回滚本事务的 DB 写；打款抛异常则整事务回滚回 40，可重试
+     * （微信侧以订单号派生的 partner_trade_no 幂等，不会重复出款）。
+     */
+    private void doPayout(RecycleOrder order, int operatorType, Long operatorId) {
         if (order.getFinalFen() == null) {
             throw new BizException(40022, "订单尚未出质检最终价");
         }
+        transition(order, RecycleOrder.STATUS_PAID, operatorType, operatorId,
+                "打款" + fen(order.getFinalFen()) + "元");
         payoutService.payoutToChange(order.getOrderNo(), order.getOpenid(), order.getFinalFen());
-        transition(order, RecycleOrder.STATUS_PAID, 10, order.getUserId(), "用户确认，打款" + fen(order.getFinalFen()) + "元");
     }
 
     // ===== 管理端 =====
@@ -213,7 +227,7 @@ public class RecycleOrderService {
         if (status != null && status > 0) {
             wrapper.eq(RecycleOrder::getStatus, status);
         }
-        Page<RecycleOrder> page = orderMapper.selectPage(new Page<>(pageNum, pageSize), wrapper);
+        Page<RecycleOrder> page = orderMapper.selectPage(new Page<>(clampPage(pageNum), clampPage(pageSize)), wrapper);
         Page<RecycleOrderItem> result = new Page<>(page.getCurrent(), page.getSize(), page.getTotal());
         result.setRecords(page.getRecords().stream().map(this::toItem).toList());
         return result;
@@ -225,13 +239,21 @@ public class RecycleOrderService {
         transition(order, toStatus, 20, null, remark);
     }
 
-    /** 管理端提交质检：30 → 40 待确认，落最终价。 */
+    /** 管理端提交质检：30 → 40 待确认，落最终价。最终价必须为正且不超过估价两倍（防资金异常）。 */
     @Transactional
     public void adminSubmitInspection(String orderNo, InspectionSubmitRequest req) {
         if (req == null || !StringUtils.hasText(req.result()) || req.finalFen() == null) {
             throw new BizException(40023, "质检结论与最终价不能为空");
         }
+        requireLen(req.result(), 512, "质检结论");
+        if (req.images() != null
+                && (req.images().size() > 9 || req.images().stream().anyMatch(i -> i != null && i.length() > 255))) {
+            throw new BizException(40039, "质检图片数量或路径超限");
+        }
         RecycleOrder order = getByOrderNo(orderNo);
+        if (req.finalFen() <= 0 || req.finalFen() > order.getQuoteFen() * 2) {
+            throw new BizException(40029, "质检最终价超出合理范围（须为正且不超过估价两倍）");
+        }
         transition(order, RecycleOrder.STATUS_WAIT_CONFIRM, 20, null,
                 "质检完成，最终价" + fen(req.finalFen()) + "元");
         order.setFinalFen(req.finalFen());
@@ -246,15 +268,11 @@ public class RecycleOrderService {
         inspectionMapper.insert(inspection);
     }
 
-    /** 管理端直接触发打款（40 → 50）。 */
+    /** 管理端直接触发打款（40 → 50），与用户确认打款共用 CAS 占位逻辑。 */
     @Transactional
     public void adminPayout(String orderNo) {
         RecycleOrder order = getByOrderNo(orderNo);
-        if (order.getFinalFen() == null) {
-            throw new BizException(40022, "订单尚未出质检最终价");
-        }
-        payoutService.payoutToChange(order.getOrderNo(), order.getOpenid(), order.getFinalFen());
-        transition(order, RecycleOrder.STATUS_PAID, 20, null, "后台打款" + fen(order.getFinalFen()) + "元");
+        doPayout(order, 20, null);
     }
 
     /** 快递100 物流回调：揽收/运输 → 20 运输中。按运单号或取件任务号匹配订单。 */
@@ -288,8 +306,15 @@ public class RecycleOrderService {
         if (allowed == null || !allowed.contains(toStatus)) {
             throw new BizException(40024, "订单状态不允许该操作（当前：" + desc(from) + "）");
         }
+        // CAS 状态流转：UPDATE ... WHERE status=from，并发下只有一个请求能改成功，防状态互相覆盖/重复打款
+        long updated = orderMapper.update(null, new LambdaUpdateWrapper<RecycleOrder>()
+                .eq(RecycleOrder::getId, order.getId())
+                .eq(RecycleOrder::getStatus, from)
+                .set(RecycleOrder::getStatus, toStatus));
+        if (updated != 1) {
+            throw new BizException(40024, "订单状态已变更，请刷新后重试");
+        }
         order.setStatus(toStatus);
-        orderMapper.updateById(order);
         statusLogService.record(10, order.getOrderNo(), from, toStatus, operatorType, operatorId, remark);
         String notify = "您的回收订单 " + order.getOrderNo() + " " + desc(from) + " → " + desc(toStatus);
         subscribeService.notifyOrderStatus(order.getOpenid(), order.getOrderNo(), notify);
@@ -325,12 +350,28 @@ public class RecycleOrderService {
                 || !StringUtils.hasText(req.pickupAddress())) {
             throw new BizException(40027, "取件联系人/电话/地址不能为空");
         }
+        // 长度与列宽对齐，超限返回业务错误而非 DB 异常
+        requireLen(req.pickupName(), 32, "取件联系人");
+        requireLen(req.pickupPhone(), 20, "取件电话");
+        requireLen(req.pickupAddress(), 255, "取件地址");
+        requireLen(req.remark(), 255, "备注");
     }
 
-    /** 订单号：R + 时间戳 + 4 位随机，业务生成，非自增。 */
+    /** 分页参数钳制：页码 ≥1，页大小 ≤100，防超大分页拖库。 */
+    private static long clampPage(long value) {
+        return Math.min(Math.max(value, 1), 100);
+    }
+
+    private static void requireLen(String value, int max, String label) {
+        if (value != null && value.length() > max) {
+            throw new BizException(40039, label + "长度不能超过 " + max + " 字");
+        }
+    }
+
+    /** 订单号：R + 时间戳 + 8 位随机，业务生成，非自增。 */
     private static String nextOrderNo() {
         return "R" + LocalDateTime.now().format(TS)
-                + String.format("%04d", RANDOM.nextInt(10000));
+                + String.format("%08d", RANDOM.nextInt(100000000));
     }
 
     private RecycleOrderItem toItem(RecycleOrder o) {

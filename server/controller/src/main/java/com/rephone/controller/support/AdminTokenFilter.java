@@ -6,6 +6,8 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
 import java.util.Map;
 import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -31,7 +33,10 @@ public class AdminTokenFilter extends OncePerRequestFilter {
             return;
         }
         String header = request.getHeader("Authorization");
-        if (header == null || !header.equals("Bearer " + adminToken)) {
+        String expected = "Bearer " + adminToken;
+        // 常量时间比较，防时序侧信道逐字节爆破
+        if (header == null || !MessageDigest.isEqual(
+                header.getBytes(StandardCharsets.UTF_8), expected.getBytes(StandardCharsets.UTF_8))) {
             writeError(response, 40100, "管理端鉴权失败");
             return;
         }

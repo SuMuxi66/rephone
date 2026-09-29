@@ -1,0 +1,50 @@
+<view class="page repair-page" wx:if="{{order}}">
+  <view class="status-card">
+    <view class="status-row">
+      <text class="status-text">{{order.statusDesc}}</text>
+      <view class="status-tags">
+        <t-tag theme="primary" variant="light" size="small">上门维修</t-tag>
+        <status-tag biz="repair" status="{{order.status}}" />
+      </view>
+    </view>
+    <view class="price-row">
+      <text class="price-label">维修合计（修好验收后付款）</text>
+      <text class="price">¥{{totalText}}</text>
+    </view>
+    <view class="warranty-line">质保 {{order.warrantyDays}} 天，自维修完成日起算</view>
+    <view wx:if="{{order.status === 80}}" class="canceled-tip">预约已取消，如有疑问请联系客服</view>
+  </view>
+
+  <view class="timeline-card" wx:if="{{timeline}}">
+    <t-steps layout="vertical" theme="dot" current="{{timeline.current}}">
+      <t-step-item wx:for="{{timeline.nodes}}" wx:key="label" title="{{item.label}}" content="{{item.desc}}" />
+    </t-steps>
+  </view>
+
+  <t-cell-group theme="card">
+    <t-cell title="机型" note="{{order.brandName}} {{order.modelName}}" />
+    <t-cell title="维修项目" note="{{itemsText}}" />
+    <t-cell title="预约时间" note="{{order.appointTime}}" />
+    <t-cell title="联系人" note="{{order.contactName}} {{order.contactPhone}}" />
+    <t-cell title="上门地址" note="{{order.address}}" />
+    <t-cell wx:if="{{order.remark}}" title="故障描述" note="{{order.remark}}" />
+    <t-cell wx:if="{{order.adminRemark}}" title="工程师说明" note="{{order.adminRemark}}" />
+  </t-cell-group>
+
+  <view wx:if="{{order.images.length}}" class="section-title">故障照片</view>
+  <view wx:if="{{order.images.length}}" class="photo-grid">
+    <image
+      wx:for="{{order.images}}"
+      wx:key="index"
+      src="{{item}}"
+      mode="aspectFill"
+      class="photo-thumb"
+      data-index="{{index}}"
+      bindtap="previewImage"
+    />
+  </view>
+
+  <view class="footer" wx:if="{{order.status === 10}}">
+    <t-button theme="default" block bindtap="onCancel">取消预约</t-button>
+  </view>
+</view>

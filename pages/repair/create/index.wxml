@@ -1,0 +1,48 @@
+<view class="page repair-page" wx:if="{{selection}}">
+  <view class="summary-card">
+    <view class="summary-model">{{selection.brandName}} {{selection.modelName}}</view>
+    <view class="summary-items">{{itemsText}}</view>
+    <view class="summary-total">合计 ¥{{totalText}}（修好验收后付款）</view>
+  </view>
+
+  <section-card title="上门信息">
+    <view class="form-body">
+      <t-input label="联系人" placeholder="姓名" value="{{form.name}}" data-field="name" bindchange="onInput" />
+      <t-input label="手机号" type="number" placeholder="11 位手机号" value="{{form.phone}}" data-field="phone" bindchange="onInput" bindblur="onPhoneBlur" />
+      <view wx:if="{{errors.phone}}" class="field-error">{{errors.phone}}</view>
+      <t-cell title="所在地区" arrow hover bindtap="showRegion" note="{{form.region || '请选择省/市/区'}}" />
+      <t-input label="详细地址" placeholder="街道、门牌号" value="{{form.detail}}" data-field="detail" bindchange="onInput" />
+      <t-cell title="预约时间" arrow hover bindtap="showTime" note="{{form.timeText || '请选择上门时间段'}}" />
+      <t-textarea label="故障描述" placeholder="补充故障现象，方便工程师备件（可选）" value="{{form.remark}}" data-field="remark" bindchange="onInput" autosize maxlength="100" />
+    </view>
+  </section-card>
+
+  <section-card title="故障照片（可选，最多3张）">
+    <view class="photo-list">
+      <view wx:for="{{photos}}" wx:key="index" class="photo-item">
+        <image src="{{item}}" mode="aspectFill" class="photo-img" data-index="{{index}}" bindtap="previewPhoto" />
+        <view class="photo-del" data-index="{{index}}" catchtap="removePhoto">×</view>
+      </view>
+      <view wx:if="{{photos.length < 3}}" class="photo-add" bindtap="choosePhoto">
+        <text class="photo-add-icon">+</text>
+        <text class="photo-add-text">添加照片</text>
+      </view>
+    </view>
+  </section-card>
+
+  <view class="footer">
+    <t-button theme="primary" block loading="{{submitting}}" disabled="{{submitting}}" bindtap="onSubmit">提交预约</t-button>
+    <view class="footer-tip">提交后客服将电话确认上门时间，工程师先报价后维修，修好验收付款</view>
+  </view>
+
+  <t-picker visible="{{regionPickerVisible}}" value="{{regionValue}}" title="选择地区" bindpick="onRegionPick" bind:confirm="onRegionConfirm" bind:close="hideRegion">
+    <t-picker-item options="{{regionColumns.province}}" />
+    <t-picker-item options="{{regionColumns.city}}" />
+    <t-picker-item options="{{regionColumns.district}}" />
+  </t-picker>
+
+  <t-picker visible="{{timePickerVisible}}" value="{{timeValue}}" title="选择上门时间" bind:confirm="onTimeConfirm" bind:close="hideTime">
+    <t-picker-item options="{{timeColumns.day}}" />
+    <t-picker-item options="{{timeColumns.slot}}" />
+  </t-picker>
+</view>

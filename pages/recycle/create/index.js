@@ -134,6 +134,7 @@ Page({
         modelId: this.data.quote.modelId,
         storage: this.data.quote.storage,
         condition: this.data.quote.condition,
+        screenCondition: this.data.quote.screen || '',
         issues: this.data.quote.issueKeys || [],
         quoteFen: this.data.quote.priceFen,
         pickupType: form.pickupType,

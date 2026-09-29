@@ -118,4 +118,30 @@ class P2QuoteFlowTest {
         ResponseEntity<String> noAuth = rest.getForEntity("/api/wx/brands", String.class);
         assertEquals(401, noAuth.getStatusCode().value(), "匿名访问应 401");
     }
+
+    @Test
+    @Order(5)
+    void quote_with_screen_condition_and_expanded_issues() throws Exception {
+        // 6800 × 0.85(COND_95) × 0.92(SCR_LIGHT) − 400(进水WATER) − 800(IDLOCK) = 4117.60 元 = 411760 分
+        Map<String, Object> payload = Map.of(
+                "modelId", 1,
+                "storage", "128GB",
+                "condition", "COND_95",
+                "screenCondition", "SCR_LIGHT",
+                "issues", List.of("WATER", "IDLOCK"));
+        ResponseEntity<String> resp = rest.exchange("/api/wx/quote/calculate", HttpMethod.POST,
+                new HttpEntity<>(payload, auth()), String.class);
+        JsonNode body = objectMapper.readTree(resp.getBody());
+        assertEquals(0, body.get("code").asInt());
+        assertEquals(411760L, body.path("data").path("priceFen").asLong(), "屏幕系数应与成色相乘后扣减故障");
+        assertEquals("轻微划痕", body.path("data").path("screenLabel").asText());
+
+        Map<String, Object> badScreen = Map.of(
+                "modelId", 1, "storage", "128GB", "condition", "COND_95",
+                "screenCondition", "SCR_XXX", "issues", List.of());
+        ResponseEntity<String> resp2 = rest.exchange("/api/wx/quote/calculate", HttpMethod.POST,
+                new HttpEntity<>(badScreen, auth()), String.class);
+        JsonNode body2 = objectMapper.readTree(resp2.getBody());
+        assertTrue(body2.get("code").asInt() != 0, "无效屏幕状态应报业务错误");
+    }
 }

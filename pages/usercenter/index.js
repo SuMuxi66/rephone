@@ -10,6 +10,12 @@ const menuData = [
       type: 'recycle-orders',
     },
     {
+      title: '我的维修单',
+      tit: '',
+      url: '',
+      type: 'repair-orders',
+    },
+    {
       title: '收货地址',
       tit: '',
       url: '',
@@ -137,6 +143,10 @@ Page({
     switch (type) {
       case 'recycle-orders': {
         wx.navigateTo({ url: '/pages/recycle/order/list/index' });
+        break;
+      }
+      case 'repair-orders': {
+        wx.navigateTo({ url: '/pages/repair/order/list/index' });
         break;
       }
       case 'address': {

@@ -1,0 +1,91 @@
+page {
+  box-sizing: border-box;
+  /* 自定义 tabBar 为底部浮层，预留高度保证内容可完整滑到底 */
+  padding-bottom: calc(env(safe-area-inset-bottom) + 160rpx);
+}
+
+.repair-page {
+  min-height: 100vh;
+  background: var(--bg-page);
+}
+
+.state {
+  padding: 120rpx 40rpx;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 24rpx;
+}
+
+.state-text {
+  color: var(--text-3);
+  font-size: 28rpx;
+}
+
+.assurance-bar {
+  margin: 24rpx var(--space-page);
+  padding: 20rpx 24rpx;
+  background: var(--brand-light);
+  border-radius: var(--radius-card);
+  color: var(--brand);
+  font-size: 26rpx;
+  text-align: center;
+}
+
+.assurance-bar .dot {
+  margin: 0 12rpx;
+  color: var(--brand);
+  opacity: 0.6;
+}
+
+.option-list {
+  padding: 0 16rpx;
+}
+
+.flow-steps {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8rpx 24rpx 0;
+}
+
+.flow-step {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8rpx;
+  font-size: 26rpx;
+  color: var(--text-2);
+}
+
+.flow-num {
+  width: 44rpx;
+  height: 44rpx;
+  border-radius: 50%;
+  background: var(--brand-light);
+  color: var(--brand);
+  font-size: 26rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.flow-arrow {
+  color: var(--text-3);
+  font-size: 24rpx;
+}
+
+.flow-tip {
+  margin-top: 20rpx;
+  padding: 0 24rpx;
+  font-size: 24rpx;
+  color: var(--text-3);
+}
+
+.footer {
+  padding: 48rpx 32rpx 0;
+}
+
+.empty-tip {
+  padding: 120rpx 40rpx;
+}

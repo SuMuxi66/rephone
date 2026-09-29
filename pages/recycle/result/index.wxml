@@ -12,6 +12,7 @@
     <t-cell title="机型" note="{{quote.brandName}} {{quote.modelName}}" />
     <t-cell title="内存" note="{{quote.storage}}" />
     <t-cell title="成色" note="{{quote.conditionLabel}}" />
+    <t-cell title="屏幕状态" note="{{quote.screenLabel || '未选择'}}" />
     <t-cell title="功能问题" note="{{quote.issueLabels.length ? quote.issueLabels : '无'}}" />
   </t-cell-group>
 

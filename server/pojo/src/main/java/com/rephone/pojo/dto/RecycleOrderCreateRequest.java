@@ -7,6 +7,7 @@ public record RecycleOrderCreateRequest(
         Long modelId,
         String storage,
         String condition,
+        String screenCondition,
         List<String> issues,
         Long quoteFen,
         Integer pickupType,

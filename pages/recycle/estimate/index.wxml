@@ -31,16 +31,27 @@
       </t-radio-group>
     </section-card>
 
+    <section-card title="屏幕状态">
+      <t-radio-group value="{{form.screen}}" bindchange="onScreenChange">
+        <view class="option-list">
+          <t-radio wx:for="{{screens}}" wx:key="key" value="{{item.key}}" label="{{item.label}}" content="{{item.desc}}" block align="left" borderless />
+        </view>
+      </t-radio-group>
+    </section-card>
+
     <section-card title="功能问题（可多选，选得越准报价越准）">
       <t-checkbox-group value="{{form.issues}}" bindchange="onIssuesChange">
-        <view class="option-list-plain">
-          <t-checkbox wx:for="{{issues}}" wx:key="key" value="{{item.key}}" label="{{item.label}}" block align="left" borderless />
+        <view wx:for="{{issueGroups}}" wx:key="title" wx:for-item="group" class="issue-group">
+          <view class="issue-group-title">{{group.title}}</view>
+          <view class="option-list-plain">
+            <t-checkbox wx:for="{{group.items}}" wx:key="key" wx:for-item="issue" value="{{issue.key}}" label="{{issue.label}}" block align="left" borderless />
+          </view>
         </view>
       </t-checkbox-group>
     </section-card>
 
     <view class="footer">
-      <t-button theme="primary" block disabled="{{!(form.brandId && form.modelId && form.storage && form.condition) || submitting}}" loading="{{submitting}}" bindtap="onSubmit">
+      <t-button theme="primary" block disabled="{{!(form.brandId && form.modelId && form.storage && form.condition && form.screen) || submitting}}" loading="{{submitting}}" bindtap="onSubmit">
         获取预估价
       </t-button>
       <view class="footer-tip">预估价仅供参考，最终回收价以质检结果为准</view>

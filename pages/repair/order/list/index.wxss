@@ -1,0 +1,77 @@
+page {
+  background: var(--bg-page);
+}
+
+.repair-page {
+  min-height: 100vh;
+  padding-bottom: calc(env(safe-area-inset-bottom) + 40rpx);
+  box-sizing: border-box;
+}
+
+.filter-bar {
+  white-space: nowrap;
+  padding: 20rpx 24rpx;
+}
+
+.filter-item {
+  display: inline-block;
+  padding: 10rpx 28rpx;
+  margin-right: 16rpx;
+  border-radius: 999rpx;
+  background: var(--bg-card);
+  color: var(--text-2);
+  font-size: 26rpx;
+}
+
+.filter-item.active {
+  background: var(--brand);
+  color: #fff;
+}
+
+.empty {
+  padding: 120rpx 40rpx;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 24rpx;
+}
+
+.order-card {
+  margin: 0 24rpx 20rpx;
+  padding: 28rpx 32rpx;
+  background: var(--bg-card);
+  border-radius: var(--radius-card);
+}
+
+.row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.model {
+  font-size: 30rpx;
+  font-weight: 600;
+  color: var(--text-1);
+}
+
+.sub {
+  margin-top: 10rpx;
+  font-size: 24rpx;
+  color: var(--text-3);
+}
+
+.row.bottom {
+  margin-top: 20rpx;
+}
+
+.price {
+  font-size: 30rpx;
+  font-weight: 700;
+  color: var(--brand);
+}
+
+.time {
+  font-size: 22rpx;
+  color: var(--text-3);
+}

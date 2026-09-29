@@ -1,0 +1,54 @@
+<view class="page repair-page" wx:if="{{selection}}">
+  <view class="model-card">
+    <view class="model-name">{{selection.brandName}} {{selection.modelName}}</view>
+    <view class="model-sub">上门维修 · 先报价后维修 · 修好验收付款</view>
+  </view>
+
+  <section-card title="维修项目（{{selection.items.length}} 项）">
+    <view class="item-list">
+      <view wx:for="{{items}}" wx:key="itemId" class="item-row">
+        <text class="item-name">{{item.name}}</text>
+        <text class="item-price">¥{{item.priceText}}</text>
+      </view>
+    </view>
+  </section-card>
+
+  <section-card title="服务方式">
+    <view class="service-row active">
+      <t-icon prefix="wr" name="navigation" size="40rpx" />
+      <view class="service-info">
+        <view class="service-name">上门维修</view>
+        <view class="service-desc">工程师按预约时间上门，现场维修</view>
+      </view>
+      <t-tag theme="primary" variant="light" size="small">已选</t-tag>
+    </view>
+    <view class="service-row disabled">
+      <t-icon name="swap" size="40rpx" />
+      <view class="service-info">
+        <view class="service-name">寄修服务</view>
+        <view class="service-desc">双向包邮，维修全程直播</view>
+      </view>
+      <t-tag theme="default" variant="light" size="small">即将上线</t-tag>
+    </view>
+  </section-card>
+
+  <section-card title="费用明细">
+    <view class="fee-row">
+      <text>维修项目费</text>
+      <text>¥{{totalText}}</text>
+    </view>
+    <view class="fee-row">
+      <text>上门人工费</text>
+      <text class="free">¥0</text>
+    </view>
+    <view class="fee-row total">
+      <text>合计（修好验收后付款）</text>
+      <text class="total-price">¥{{totalText}}</text>
+    </view>
+  </section-card>
+
+  <view class="footer">
+    <t-button theme="default" bindtap="goBack">返回调整</t-button>
+    <t-button theme="primary" bindtap="goCreate">填写预约信息</t-button>
+  </view>
+</view>

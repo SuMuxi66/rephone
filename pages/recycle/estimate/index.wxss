@@ -1,7 +1,8 @@
 .page {
   min-height: 100vh;
   background: var(--bg-page);
-  padding-bottom: 60rpx;
+  /* 页面是自定义 tabBar 页：tabBar 为底部浮层，内容需让出其高度才能完整滑到底 */
+  padding-bottom: calc(env(safe-area-inset-bottom) + 160rpx);
 }
 
 .steps-wrap {
@@ -27,6 +28,17 @@
 
 .option-list-plain {
   padding: 0 16rpx;
+}
+
+.issue-group {
+  margin-bottom: 8rpx;
+}
+
+.issue-group-title {
+  padding: 24rpx 16rpx 8rpx;
+  font-size: 26rpx;
+  font-weight: 600;
+  color: var(--text-2);
 }
 
 .footer {

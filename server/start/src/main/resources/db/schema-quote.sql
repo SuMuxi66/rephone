@@ -1,6 +1,6 @@
 -- P2 估价基础数据（MySQL 8 / H2 MySQL 模式通用，幂等可重复执行）。
--- 规则类型：10=机型+内存基准回收价(元)  20=成色系数  30=故障扣减(元)。
--- model_id=0 表示全局规则（成色/故障）。应用启动时由 spring.sql.init 自动导入（INSERT IGNORE）。
+-- 规则类型：10=机型+内存基准回收价(元)  20=成色系数  30=故障扣减(元)  40=屏幕成色系数。
+-- model_id=0 表示全局规则（成色/故障/屏幕）。应用启动时由 spring.sql.init 自动导入（INSERT IGNORE）。
 -- 注：为兼容 H2 测试库，本文件不使用 ENGINE/CHARSET/COMMENT 等 MySQL 方言子句。
 
 CREATE TABLE IF NOT EXISTS `brand` (
@@ -110,3 +110,27 @@ INSERT IGNORE INTO `quote_rule` (`tenant_id`, `rule_type`, `model_id`, `option_k
 (0, 30, 0, 'REPAIRED','曾维修或拆机',     300.00, 4),
 (0, 30, 0, 'FACEID',  '面容/指纹失效',    200.00, 5),
 (0, 30, 0, 'NOBOOT',  '无法开机',         500.00, 6);
+
+-- ===== 屏幕成色系数（全局，与整机成色相乘；对齐转转/爱回收屏幕单列检测）=====
+INSERT IGNORE INTO `quote_rule` (`tenant_id`, `rule_type`, `model_id`, `option_key`, `option_label`, `numeric_value`, `sort`) VALUES
+(0, 40, 0, 'SCR_OK',     '无划痕无瑕疵',    1.00, 1),
+(0, 40, 0, 'SCR_LIGHT',  '轻微划痕',        0.92, 2),
+(0, 40, 0, 'SCR_HEAVY',  '明显划痕或磕碰',  0.78, 3),
+(0, 40, 0, 'SCR_BROKEN', '碎屏或显示异常',  0.45, 4);
+
+-- ===== 故障扣减补充（全局，元；转转/爱回收标准功能检测项。
+-- SCREEN/SHELL 与成色维度语义重叠，前端已改为屏幕状态/成色表达，规则保留兼容旧客户端 =====
+INSERT IGNORE INTO `quote_rule` (`tenant_id`, `rule_type`, `model_id`, `option_key`, `option_label`, `numeric_value`, `sort`) VALUES
+(0, 30, 0, 'DISPLAY',   '花屏/亮线或色斑',        200.00, 11),
+(0, 30, 0, 'CAMERA',    '前后摄像头异常',         120.00, 12),
+(0, 30, 0, 'FLASH',     '闪光灯异常',              40.00, 13),
+(0, 30, 0, 'SPEAKER',   '扬声器或听筒异常',       100.00, 14),
+(0, 30, 0, 'MIC',       '麦克风或送话异常',        80.00, 15),
+(0, 30, 0, 'SIGNAL',    'Wi-Fi/蓝牙或信号异常',   100.00, 16),
+(0, 30, 0, 'BUTTON',    '电源/音量键失灵',         60.00, 17),
+(0, 30, 0, 'VIBRATE',   '振动异常',                40.00, 18),
+(0, 30, 0, 'CHARGE',    '充电异常',               100.00, 19),
+(0, 30, 0, 'WATER',     '进水或受潮',             400.00, 20),
+(0, 30, 0, 'MAINBOARD', '主板维修史',             600.00, 21),
+(0, 30, 0, 'REBOOT',    '反复重启或死机',         300.00, 22),
+(0, 30, 0, 'IDLOCK',    'ID锁/账号无法退出',      800.00, 23);

@@ -6,6 +6,11 @@
     "pages/recycle/create/index",
     "pages/recycle/order/list/index",
     "pages/recycle/order/detail/index",
+    "pages/repair/index",
+    "pages/repair/quote/index",
+    "pages/repair/create/index",
+    "pages/repair/order/list/index",
+    "pages/repair/order/detail/index",
     "pages/usercenter/index"
   ],
   "subpackages": [
@@ -58,6 +63,10 @@
       {
         "pagePath": "pages/recycle/estimate/index",
         "text": "估价"
+      },
+      {
+        "pagePath": "pages/repair/index",
+        "text": "维修"
       },
       {
         "pagePath": "pages/usercenter/index",

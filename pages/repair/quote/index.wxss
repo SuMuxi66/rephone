@@ -1,0 +1,118 @@
+.repair-page {
+  min-height: 100vh;
+  background: var(--bg-page);
+  box-sizing: border-box;
+  padding-bottom: calc(env(safe-area-inset-bottom) + 60rpx);
+}
+
+.model-card {
+  margin: 24rpx var(--space-page);
+  padding: 32rpx;
+  background: var(--bg-card);
+  border-radius: var(--radius-card);
+}
+
+.model-name {
+  font-size: 34rpx;
+  font-weight: 600;
+  color: var(--text-1);
+}
+
+.model-sub {
+  margin-top: 12rpx;
+  font-size: 24rpx;
+  color: var(--text-3);
+}
+
+.item-list {
+  padding: 0 8rpx;
+}
+
+.item-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20rpx 8rpx;
+  border-bottom: 1rpx solid var(--border-light);
+}
+
+.item-row:last-child {
+  border-bottom: none;
+}
+
+.item-name {
+  font-size: 28rpx;
+  color: var(--text-1);
+}
+
+.item-price {
+  font-size: 28rpx;
+  color: var(--brand);
+  font-weight: 600;
+}
+
+.service-row {
+  display: flex;
+  align-items: center;
+  gap: 16rpx;
+  padding: 24rpx 16rpx;
+  border: 2rpx solid var(--border-light);
+  border-radius: 16rpx;
+  margin: 0 8rpx 16rpx;
+}
+
+.service-row.active {
+  border-color: var(--brand);
+  background: var(--brand-light);
+}
+
+.service-row.disabled {
+  opacity: 0.55;
+}
+
+.service-info {
+  flex: 1;
+}
+
+.service-name {
+  font-size: 28rpx;
+  color: var(--text-1);
+}
+
+.service-desc {
+  margin-top: 4rpx;
+  font-size: 24rpx;
+  color: var(--text-3);
+}
+
+.fee-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16rpx 8rpx;
+  font-size: 28rpx;
+  color: var(--text-2);
+}
+
+.fee-row .free {
+  color: var(--success);
+}
+
+.fee-row.total {
+  margin-top: 8rpx;
+  padding-top: 24rpx;
+  border-top: 1rpx solid var(--border-light);
+  color: var(--text-1);
+}
+
+.total-price {
+  font-size: 36rpx;
+  font-weight: 700;
+  color: var(--brand);
+}
+
+.footer {
+  display: flex;
+  gap: 24rpx;
+  padding: 48rpx 32rpx 0;
+}
