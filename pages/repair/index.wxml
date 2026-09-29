@@ -64,7 +64,21 @@
     </block>
 
     <view wx:else class="empty-tip">
-      <t-empty description="选择品牌和机型，查看专属维修价" />
+      <view class="promise">
+        <view class="promise-item">
+          <t-icon prefix="wr" name="wallet" size="44rpx" color="#FF5F15" />
+          <text>先报价后维修</text>
+        </view>
+        <view class="promise-item">
+          <t-icon name="tools" size="44rpx" color="#FF5F15" />
+          <text>品质配件</text>
+        </view>
+        <view class="promise-item">
+          <t-icon name="check-circle-filled" size="44rpx" color="#FF5F15" />
+          <text>180天质保</text>
+        </view>
+      </view>
+      <view class="empty-guide">选择品牌和机型，查看专属维修价</view>
     </view>
   </block>
 
