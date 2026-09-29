@@ -1,15 +1,12 @@
 import { fetchHome } from '../../services/home/home';
 
+const HOT_REPAIRS = ['换屏', '换电池', '进水', '不开机', '摄像头', '其他故障'];
+
 Page({
   data: {
     pageLoading: true,
+    hotRepairs: HOT_REPAIRS,
     hotModels: [],
-    flowSteps: [
-      { step: 1, name: '在线估价', desc: '选机型答成色' },
-      { step: 2, name: '顺丰邮寄', desc: '免费包邮上门取件' },
-      { step: 3, name: '专业质检', desc: '48小时内出报告' },
-      { step: 4, name: '确认打款', desc: '满意收款闪电到账' },
-    ],
   },
 
   onShow() {
@@ -31,6 +28,10 @@ Page({
     }).catch(() => {
       this.setData({ pageLoading: false });
     });
+  },
+
+  goRepair() {
+    wx.switchTab({ url: '/pages/repair/index' });
   },
 
   goEstimate() {

@@ -184,3 +184,38 @@
   font-size: 20rpx;
   color: var(--text-3);
 }
+
+/* ===== 维修主导改版（2026-09-29） ===== */
+.hero--secondary {
+  padding: 40rpx 48rpx;
+  background: var(--bg-card);
+  border: 2rpx solid var(--brand-light);
+  color: var(--text-1);
+}
+
+.hero--secondary .hero-title {
+  font-size: 36rpx;
+  color: var(--text-1);
+}
+
+.hero--secondary .hero-sub {
+  color: var(--text-3);
+  opacity: 1;
+}
+
+.hero--secondary .hero-cta {
+  background: var(--brand);
+  color: #fff;
+}
+
+.repair-chip {
+  display: inline-flex;
+  align-items: center;
+  padding: 16rpx 32rpx;
+  margin-right: 20rpx;
+  border-radius: 36rpx;
+  background: var(--bg-card);
+  color: var(--text-1);
+  font-size: 28rpx;
+  font-weight: 500;
+}

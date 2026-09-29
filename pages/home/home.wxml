@@ -1,25 +1,42 @@
 <view class="page" wx:if="{{!pageLoading}}">
-  <!-- 主横幅：回收入口 -->
-  <view class="hero" bindtap="goEstimate">
-    <view class="hero-title">旧机回收 · 高价秒估</view>
-    <view class="hero-sub">顺丰包邮 / 上门取件 · 质检后快速打款</view>
-    <view class="hero-cta">立即免费估价</view>
+  <!-- 主推：维修 -->
+  <view class="hero" bindtap="goRepair">
+    <view class="hero-title">手机维修 · 上门快修</view>
+    <view class="hero-sub">先报价后维修 · 修好验收付款 · 180天质保</view>
+    <view class="hero-cta">立即报修</view>
   </view>
 
-  <!-- 流程三入口 -->
+  <!-- 服务三保障 -->
   <view class="entries">
-    <view class="entry" bindtap="goEstimate">
-      <t-icon prefix="wr" name="search" size="52rpx" />
-      <view class="entry-name">在线估价</view>
+    <view class="entry" bindtap="goRepair">
+      <t-icon name="tools" size="52rpx" color="#FF5F15" />
+      <view class="entry-name">工程师上门</view>
     </view>
-    <view class="entry" bindtap="goEstimate">
-      <t-icon prefix="wr" name="deliver" size="52rpx" />
-      <view class="entry-name">顺丰包邮</view>
+    <view class="entry" bindtap="goRepair">
+      <t-icon name="check-circle-filled" size="52rpx" color="#FF5F15" />
+      <view class="entry-name">180天质保</view>
     </view>
-    <view class="entry" bindtap="goEstimate">
-      <t-icon prefix="wr" name="wallet" size="52rpx" />
-      <view class="entry-name">质检打款</view>
+    <view class="entry" bindtap="goRepair">
+      <t-icon prefix="wr" name="wallet" size="52rpx" color="#FF5F15" />
+      <view class="entry-name">先报价后修</view>
     </view>
+  </view>
+
+  <!-- 热门维修 -->
+  <view class="section-head">
+    <text class="section-title">热门维修</text>
+  </view>
+  <scroll-view scroll-x class="models" enhanced show-scrollbar="{{false}}">
+    <view wx:for="{{hotRepairs}}" wx:key="*this" class="repair-chip" bindtap="goRepair">
+      {{item}}
+    </view>
+  </scroll-view>
+
+  <!-- 次业务：回收 -->
+  <view class="hero hero--secondary" bindtap="goEstimate">
+    <view class="hero-title">旧机回收 · 高价秒估</view>
+    <view class="hero-sub">顺丰包邮 / 上门取件 · 质检后快速打款</view>
+    <view class="hero-cta">免费估价</view>
   </view>
 
   <!-- 热门机型 -->
@@ -44,18 +61,6 @@
       <view class="model-price">最高 {{item.priceText}}</view>
     </view>
   </scroll-view>
-
-  <!-- 回收流程 -->
-  <view class="section-head">
-    <text class="section-title">回收流程</text>
-  </view>
-  <view class="flow">
-    <view class="flow-step" wx:for="{{flowSteps}}" wx:key="step">
-      <view class="flow-no">{{item.step}}</view>
-      <view class="flow-name">{{item.name}}</view>
-      <view class="flow-desc">{{item.desc}}</view>
-    </view>
-  </view>
 </view>
 
 <view wx:if="{{pageLoading}}" style="text-align: center; color: #b9b9b9; padding-top: 200rpx">
