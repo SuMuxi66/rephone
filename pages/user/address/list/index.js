@@ -3,6 +3,7 @@ import { fetchDeliveryAddressList } from '../../../../services/address/fetchAddr
 import Toast from 'tdesign-miniprogram/toast/index';
 import { resolveAddress, rejectAddress } from '../../../../services/address/list';
 import { getAddressPromise } from '../../../../services/address/edit';
+import { handleChooseAddressFail } from '../../../../utils/getPermission';
 
 Page({
   data: {
@@ -77,6 +78,22 @@ Page({
             id: len,
           },
         });
+      },
+      fail: (err) => {
+        const handled = handleChooseAddressFail(err, {
+          onNoPermission: () => {
+            Toast({
+              context: this,
+              selector: '#t-toast',
+              message: '当前小程序未开通微信地址权限，请手动填写',
+              icon: '',
+              duration: 2000,
+            });
+          },
+        });
+        if (!handled) {
+          console.warn('chooseAddress fail', err);
+        }
       },
     });
   },

@@ -1,4 +1,4 @@
-import { getPermission } from '../../../../utils/getPermission';
+import { getPermission, handleChooseAddressFail } from '../../../../utils/getPermission';
 import { phoneRegCheck } from '../../../../utils/util';
 import Toast from 'tdesign-miniprogram/toast/index';
 import { addressParse } from '../../../../utils/addressParse';
@@ -85,8 +85,21 @@ Component({
               wx.showToast({ title: '地址解析出错，请稍后再试', icon: 'none' });
             }
           },
-          fail(err) {
-            console.warn('未选择微信收货地址', err);
+          fail: (err) => {
+            const handled = handleChooseAddressFail(err, {
+              onNoPermission: () => {
+                Toast({
+                  context: this,
+                  selector: '#t-toast',
+                  message: '当前小程序未开通微信地址权限，请手动填写',
+                  icon: '',
+                  duration: 2000,
+                });
+              },
+            });
+            if (!handled) {
+              console.warn('未选择微信收货地址', err);
+            }
           },
         });
       });
