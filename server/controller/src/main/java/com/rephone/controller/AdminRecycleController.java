@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.rephone.common.result.R;
 import com.rephone.pojo.dto.AdminStatusRequest;
 import com.rephone.pojo.dto.InspectionSubmitRequest;
+import com.rephone.pojo.dto.RecycleOrderDetail;
 import com.rephone.pojo.dto.RecycleOrderItem;
 import com.rephone.service.RecycleOrderService;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -31,6 +32,11 @@ public class AdminRecycleController {
                                           @RequestParam(defaultValue = "1") long pageNum,
                                           @RequestParam(defaultValue = "20") long pageSize) {
         return R.ok(orderService.adminList(status, pageNum, pageSize));
+    }
+
+    @GetMapping("/order/{orderNo}")
+    public R<RecycleOrderDetail> detail(@PathVariable String orderNo) {
+        return R.ok(orderService.adminDetailWithInspections(orderNo));
     }
 
     @PutMapping("/order/{orderNo}/status")

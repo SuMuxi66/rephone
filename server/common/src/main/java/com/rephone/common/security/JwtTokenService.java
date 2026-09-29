@@ -39,6 +39,19 @@ public class JwtTokenService {
                 .compact();
     }
 
+    /** 管理端账号登录签发：subject=用户ID，带 role claim（AdminTokenFilter 校验 role=admin）。 */
+    public String createAdminToken(long userId, long tenantId, String role) {
+        Instant now = Instant.now();
+        return Jwts.builder()
+                .subject(String.valueOf(userId))
+                .claim("tid", tenantId)
+                .claim("role", role)
+                .issuedAt(Date.from(now))
+                .expiration(Date.from(now.plusSeconds(ttlSeconds)))
+                .signWith(key)
+                .compact();
+    }
+
     /** 校验并解析 token；签名不符/过期抛 JwtException。 */
     public Claims parse(String token) {
         return Jwts.parser().verifyWith(key).build().parseSignedClaims(token).getPayload();

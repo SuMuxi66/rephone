@@ -11,19 +11,23 @@ CREATE TABLE IF NOT EXISTS `tenant` (
 );
 
 CREATE TABLE IF NOT EXISTS `user` (
-    `id`          BIGINT       NOT NULL AUTO_INCREMENT,
-    `tenant_id`   BIGINT       NOT NULL DEFAULT 0,
-    `openid`      VARCHAR(64)  NOT NULL,
-    `unionid`     VARCHAR(64)  NULL,
-    `nickname`    VARCHAR(64)  NULL,
-    `avatar_url`  VARCHAR(512) NULL,
-    `gender`      TINYINT      NOT NULL DEFAULT 0,
-    `phone`       VARCHAR(20)  NULL,
-    `status`      TINYINT      NOT NULL DEFAULT 1,
-    `create_time` DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    `update_time` DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    `id`            BIGINT       NOT NULL AUTO_INCREMENT,
+    `tenant_id`     BIGINT       NOT NULL DEFAULT 0,
+    `openid`        VARCHAR(64)  NOT NULL,
+    `unionid`       VARCHAR(64)  NULL,
+    `nickname`      VARCHAR(64)  NULL,
+    `avatar_url`    VARCHAR(512) NULL,
+    `gender`        TINYINT      NOT NULL DEFAULT 0,
+    `phone`         VARCHAR(20)  NULL,
+    `status`        TINYINT      NOT NULL DEFAULT 1,
+    `username`      VARCHAR(64)  NULL,
+    `password_hash` VARCHAR(100) NULL,
+    `role`          VARCHAR(16)  NOT NULL DEFAULT 'USER',
+    `create_time`   DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    `update_time`   DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP,
     PRIMARY KEY (`id`),
-    CONSTRAINT `uk_user_openid` UNIQUE (`openid`)
+    CONSTRAINT `uk_user_openid` UNIQUE (`openid`),
+    CONSTRAINT `uk_user_username` UNIQUE (`username`)
 );
 
 CREATE TABLE IF NOT EXISTS `order_status_log` (

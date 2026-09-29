@@ -10,19 +10,23 @@ CREATE TABLE IF NOT EXISTS `tenant` (
 ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COMMENT = '租户';
 
 CREATE TABLE IF NOT EXISTS `user` (
-    `id`          BIGINT       NOT NULL AUTO_INCREMENT COMMENT '用户ID',
-    `tenant_id`   BIGINT       NOT NULL DEFAULT 0 COMMENT '所属租户，0=平台/自营',
-    `openid`      VARCHAR(64)  NOT NULL COMMENT '微信openid',
-    `unionid`     VARCHAR(64)  NULL COMMENT '微信unionid',
-    `nickname`    VARCHAR(64)  NULL COMMENT '昵称',
-    `avatar_url`  VARCHAR(512) NULL COMMENT '头像',
-    `gender`      TINYINT      NOT NULL DEFAULT 0 COMMENT '0未知 1男 2女',
-    `phone`       VARCHAR(20)  NULL COMMENT '手机号',
-    `status`      TINYINT      NOT NULL DEFAULT 1 COMMENT '1正常 0禁用',
-    `create_time` DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-    `update_time` DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+    `id`            BIGINT       NOT NULL AUTO_INCREMENT COMMENT '用户ID',
+    `tenant_id`     BIGINT       NOT NULL DEFAULT 0 COMMENT '所属租户，0=平台/自营',
+    `openid`        VARCHAR(64)  NOT NULL COMMENT '微信openid',
+    `unionid`       VARCHAR(64)  NULL COMMENT '微信unionid',
+    `nickname`      VARCHAR(64)  NULL COMMENT '昵称',
+    `avatar_url`    VARCHAR(512) NULL COMMENT '头像',
+    `gender`        TINYINT      NOT NULL DEFAULT 0 COMMENT '0未知 1男 2女',
+    `phone`         VARCHAR(20)  NULL COMMENT '手机号',
+    `status`        TINYINT      NOT NULL DEFAULT 1 COMMENT '1正常 0禁用',
+    `username`      VARCHAR(64)  NULL COMMENT '管理端登录名（仅管理员账号使用）',
+    `password_hash` VARCHAR(100) NULL COMMENT 'BCrypt 密码哈希（仅管理员账号使用）',
+    `role`          VARCHAR(16)  NOT NULL DEFAULT 'USER' COMMENT 'USER 普通用户 ADMIN 管理员',
+    `create_time`   DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+    `update_time`   DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
     PRIMARY KEY (`id`),
     UNIQUE KEY `uk_user_openid` (`openid`),
+    UNIQUE KEY `uk_user_username` (`username`),
     KEY `idx_user_tenant` (`tenant_id`)
 ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COMMENT = '用户';
 

@@ -55,6 +55,7 @@ rephone:
     mock: ${EXPRESS_MOCK:true}
   admin:
     token: ${ADMIN_TOKEN:}
+    bootstrap-password: ${ADMIN_BOOTSTRAP_PASSWORD:}
 
 logging:
   level:

@@ -9,6 +9,10 @@
       {
         "type": "folder",
         "value": "docs"
+      },
+      {
+        "type": "folder",
+        "value": "admin"
       }
     ],
     "include": []

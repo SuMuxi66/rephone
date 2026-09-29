@@ -52,9 +52,10 @@ public class SecurityBeanConfig {
     }
 
     @Bean
-    public FilterRegistrationBean<AdminTokenFilter> adminTokenFilter(Environment env) {
+    public FilterRegistrationBean<AdminTokenFilter> adminTokenFilter(Environment env, JwtTokenService tokenService) {
         FilterRegistrationBean<AdminTokenFilter> registration =
-                new FilterRegistrationBean<>(new AdminTokenFilter(env.getProperty("rephone.admin.token", "")));
+                new FilterRegistrationBean<>(
+                        new AdminTokenFilter(env.getProperty("rephone.admin.token", ""), tokenService));
         registration.addUrlPatterns("/api/admin/*");
         registration.setOrder(0);
         return registration;

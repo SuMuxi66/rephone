@@ -32,6 +32,15 @@ public class User {
     /** 1 正常 0 禁用 */
     private Integer status;
 
+    /** 管理端登录名（仅管理员账号使用） */
+    private String username;
+
+    /** BCrypt 密码哈希（仅管理员账号使用） */
+    private String passwordHash;
+
+    /** USER 普通用户 ADMIN 管理员 */
+    private String role;
+
     private LocalDateTime createTime;
 
     private LocalDateTime updateTime;
@@ -106,6 +115,30 @@ public class User {
 
     public void setStatus(Integer status) {
         this.status = status;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public String getPasswordHash() {
+        return passwordHash;
+    }
+
+    public void setPasswordHash(String passwordHash) {
+        this.passwordHash = passwordHash;
+    }
+
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
     }
 
     public LocalDateTime getCreateTime() {

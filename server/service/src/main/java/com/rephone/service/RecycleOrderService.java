@@ -154,14 +154,22 @@ public class RecycleOrderService {
         return order;
     }
 
-    /** 详情 DTO：订单字段 + 质检记录列表。 */
+    /** 详情 DTO：订单字段 + 质检记录列表（用户端，校验归属）。 */
     public RecycleOrderDetail detailWithInspections(String orderNo) {
-        RecycleOrder o = detail(orderNo);
+        return assemble(detail(orderNo));
+    }
+
+    /** 管理端详情：不做归属校验（管理端可见全部租户订单）。 */
+    public RecycleOrderDetail adminDetailWithInspections(String orderNo) {
+        return assemble(getByOrderNo(orderNo));
+    }
+
+    private RecycleOrderDetail assemble(RecycleOrder o) {
         return new RecycleOrderDetail(o.getOrderNo(), o.getBrandName(), o.getModelName(), o.getStorage(),
                 o.getConditionLabel(), fromJsonList(o.getIssuesJson()), o.getQuoteFen(), o.getFinalFen(),
                 o.getStatus(), desc(o.getStatus()), o.getPickupType(), o.getPickupName(), o.getPickupPhone(),
                 o.getPickupAddress(), o.getExpressCompany(), o.getExpressNo(), o.getRemark(), o.getAdminRemark(),
-                o.getCreateTime() == null ? "" : o.getCreateTime().toString(), inspections(orderNo));
+                o.getCreateTime() == null ? "" : o.getCreateTime().toString(), inspections(o.getOrderNo()));
     }
 
     public List<RecycleOrderDetail.InspectionItem> inspections(String orderNo) {

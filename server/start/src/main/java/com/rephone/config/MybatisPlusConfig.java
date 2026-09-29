@@ -2,6 +2,7 @@ package com.rephone.config;
 
 import com.baomidou.mybatisplus.extension.plugins.MybatisPlusInterceptor;
 import com.baomidou.mybatisplus.extension.plugins.handler.TenantLineHandler;
+import com.baomidou.mybatisplus.extension.plugins.inner.PaginationInnerInterceptor;
 import com.baomidou.mybatisplus.extension.plugins.inner.TenantLineInnerInterceptor;
 import com.rephone.common.context.TenantContextHolder;
 import net.sf.jsqlparser.expression.Expression;
@@ -10,11 +11,13 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 /**
- * MyBatis-Plus 多租户配置。
- * 规则：
+ * MyBatis-Plus 拦截器配置。
+ * 多租户规则：
  * - 业务 SQL 自动追加 tenant_id = 当前上下文租户；
  * - 租户上下文为空（登录前匿名链路、平台任务）不追加条件；
  * - tenant 表是租户注册表本身，固定不过滤。
+ * 分页插件必须注册（否则 selectPage 不生效：全量返回且 total=0）；
+ * 改写类插件在前、分页插件在最后。
  */
 @Configuration
 public class MybatisPlusConfig {
@@ -37,6 +40,7 @@ public class MybatisPlusConfig {
                 return TenantContextHolder.get() == null;
             }
         }));
+        interceptor.addInnerInterceptor(new PaginationInnerInterceptor());
         return interceptor;
     }
 }
