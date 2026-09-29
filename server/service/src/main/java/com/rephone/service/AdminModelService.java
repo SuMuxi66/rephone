@@ -77,7 +77,7 @@ public class AdminModelService {
                         .in(QuoteRule::getModelId, models.stream().map(PhoneModel::getId).toList()))
                 .stream()
                 .collect(Collectors.groupingBy(QuoteRule::getModelId));
-        return models.stream().map(m -> new AdminModelItem(m.getId(), m.getName(), m.getReleaseYear(),
+        return models.stream().map(m -> new AdminModelItem(m.getId(), m.getName(), m.getImage(), m.getReleaseYear(),
                 pricesByModel.getOrDefault(m.getId(), List.of()).stream()
                         .sorted(Comparator.comparing(QuoteRule::getSort))
                         .map(r -> new AdminModelItem.AdminModelPrice(r.getOptionKey(), r.getNumericValue()))
@@ -109,6 +109,7 @@ public class AdminModelService {
         model.setTenantId(0L);
         model.setBrandId(req.brandId());
         model.setName(req.name().trim());
+        model.setImage(StringUtils.hasText(req.image()) ? req.image().trim() : null);
         model.setReleaseYear(req.releaseYear());
         Long count = modelMapper.selectCount(new LambdaQueryWrapper<PhoneModel>()
                 .eq(PhoneModel::getBrandId, req.brandId()));
@@ -119,7 +120,7 @@ public class AdminModelService {
     }
 
     @Transactional
-    public void updateModel(Long id, String name, Integer releaseYear) {
+    public void updateModel(Long id, String name, Integer releaseYear, String image) {
         PhoneModel model = requireModel(id);
         if (StringUtils.hasText(name)) {
             requireLen(name, 128, "机型名");
@@ -134,6 +135,10 @@ public class AdminModelService {
         }
         if (releaseYear != null) {
             model.setReleaseYear(releaseYear);
+        }
+        // image 传空串表示清除，null 表示不修改
+        if (image != null) {
+            model.setImage(image.isBlank() ? null : image.trim());
         }
         modelMapper.updateById(model);
     }

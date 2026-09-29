@@ -35,6 +35,10 @@
       data-brand-id="{{item.brandId}}"
       bindtap="goEstimateWithBrand"
     >
+      <image wx:if="{{item.image}}" src="{{item.image}}" mode="aspectFit" class="model-img" lazy-load />
+      <view wx:else class="model-ph">
+        <view class="model-ph-body"><view class="model-ph-camera"></view></view>
+      </view>
       <view class="model-brand">{{item.brandName}}</view>
       <view class="model-name">{{item.modelName}}</view>
       <view class="model-price">最高 {{item.priceText}}</view>

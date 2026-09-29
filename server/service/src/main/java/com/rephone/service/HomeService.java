@@ -76,6 +76,7 @@ public class HomeService {
             result.add(new HomeModelItem(model.getBrandId(),
                     brand == null ? "" : brand.getName(),
                     model.getName(),
+                    model.getImage() == null ? (brand == null ? null : brand.getLogo()) : model.getImage(),
                     maxYuan == null ? 0L
                             : maxYuan.multiply(BigDecimal.valueOf(100))
                             .setScale(0, RoundingMode.HALF_UP).longValueExact()));

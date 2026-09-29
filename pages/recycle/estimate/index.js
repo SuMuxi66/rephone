@@ -145,10 +145,6 @@ Page({
 
   showPicker(e) {
     const { type } = e.currentTarget.dataset;
-    if (type === 'model' && !this.data.form.brandId) {
-      wx.showToast({ title: '请先选择品牌', icon: 'none' });
-      return;
-    }
     if (type === 'storage' && !this.data.form.modelId) {
       wx.showToast({ title: '请先选择机型', icon: 'none' });
       return;
@@ -159,6 +155,39 @@ Page({
   hidePicker(e) {
     const { type } = e.currentTarget.dataset;
     this.setData({ [`pickerVisible.${type}`]: false });
+  },
+
+  /** 机型图片选择弹层（转转式：图 + 名字） */
+  showModelSheet() {
+    if (!this.data.form.brandId) {
+      wx.showToast({ title: '请先选择品牌', icon: 'none' });
+      return;
+    }
+    this.setData({ modelSheetVisible: true });
+  },
+
+  hideModelSheet(e) {
+    if (!e.detail.visible) {
+      this.setData({ modelSheetVisible: false });
+    }
+  },
+
+  hideSheet() {
+    this.setData({ modelSheetVisible: false });
+  },
+
+  onModelPick(e) {
+    const model = this.data.models.find((m) => m.id === e.currentTarget.dataset.id);
+    if (!model) return;
+    this.setData({
+      modelSheetVisible: false,
+      'form.modelId': model.id,
+      'form.modelName': model.name,
+      'form.storage': '',
+      'pickerValue.model': [model.id],
+      'pickerColumns.storage': (model.storages || []).map((s) => ({ label: s, value: s })),
+    });
+    this.updateStep();
   },
 
   async selectBrand(brand) {

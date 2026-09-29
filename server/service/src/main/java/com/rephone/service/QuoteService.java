@@ -53,8 +53,8 @@ public class QuoteService {
         List<PhoneModel> models = modelMapper.selectList(new LambdaQueryWrapper<PhoneModel>()
                 .eq(PhoneModel::getBrandId, brandId)
                 .orderByAsc(PhoneModel::getSort));
-        return models.stream().map(m -> new ModelItem(m.getId(), m.getName(), m.getReleaseYear(),
-                storageOptions(m.getId()))).toList();
+        return models.stream().map(m -> new ModelItem(m.getId(), m.getName(), m.getImage(),
+                m.getReleaseYear(), storageOptions(m.getId()))).toList();
     }
 
     public QuoteResult calculate(QuoteCalculateRequest req) {

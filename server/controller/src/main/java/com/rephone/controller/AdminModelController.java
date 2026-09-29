@@ -51,9 +51,10 @@ public class AdminModelController {
     @PutMapping("/model/{id}")
     public R<Void> updateModel(@PathVariable Long id, @RequestBody Map<String, Object> body) {
         String name = body == null ? null : (String) body.get("name");
+        String image = body == null ? null : (String) body.get("image");
         Integer releaseYear = body == null || body.get("releaseYear") == null
                 ? null : Integer.valueOf(String.valueOf(body.get("releaseYear")));
-        modelService.updateModel(id, name, releaseYear);
+        modelService.updateModel(id, name, releaseYear, image);
         return R.ok();
     }
 

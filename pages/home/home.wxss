@@ -88,6 +88,44 @@
   vertical-align: top;
 }
 
+.model-img {
+  width: 120rpx;
+  height: 120rpx;
+  margin-bottom: 12rpx;
+}
+
+/* 无图占位：CSS 手机轮廓（与估价页弹层同款） */
+.model-ph {
+  width: 120rpx;
+  height: 120rpx;
+  margin-bottom: 12rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #f5f6f8;
+  border-radius: 12rpx;
+}
+
+.model-ph-body {
+  width: 56rpx;
+  height: 100rpx;
+  border: 5rpx solid #c9cdd4;
+  border-radius: 12rpx;
+  position: relative;
+  background: #fff;
+}
+
+.model-ph-camera {
+  position: absolute;
+  top: 6rpx;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 20rpx;
+  height: 6rpx;
+  border-radius: 3rpx;
+  background: #c9cdd4;
+}
+
 .model-brand {
   font-size: 22rpx;
   color: var(--text-3);

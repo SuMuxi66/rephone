@@ -10,6 +10,7 @@ export function fetchHome() {
       brandId: m.brandId,
       brandName: m.brandName,
       modelName: m.modelName,
+      image: m.image || '',
       priceText: '¥' + (m.maxPriceFen / 100).toFixed(0),
     })),
   }));

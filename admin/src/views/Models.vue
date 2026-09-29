@@ -40,8 +40,21 @@
             </div>
           </template>
         </el-table-column>
-        <el-table-column prop="id" label="ID" width="80" />
-        <el-table-column prop="name" label="机型" min-width="180" />
+        <el-table-column prop="id" label="ID" width="70" />
+        <el-table-column label="图片" width="80">
+          <template #default="{ row }">
+            <el-image
+              v-if="row.image"
+              :src="row.image"
+              fit="contain"
+              class="thumb"
+              :preview-src-list="[row.image]"
+              preview-teleported
+            />
+            <div v-else class="thumb-ph">无图</div>
+          </template>
+        </el-table-column>
+        <el-table-column prop="name" label="机型" min-width="160" />
         <el-table-column prop="releaseYear" label="发布年份" width="100">
           <template #default="{ row }">{{ row.releaseYear || '--' }}</template>
         </el-table-column>
@@ -66,6 +79,24 @@
 
     <el-dialog v-model="modelVisible" :title="editing ? '编辑机型' : '新增机型'" width="560px">
       <el-form label-position="top">
+        <el-form-item label="机型图片（白底产品图效果最佳，≤2MB）">
+          <div class="upload-row">
+            <el-image v-if="modelForm.image" :src="modelForm.image" fit="contain" class="upload-preview" />
+            <div v-else class="upload-preview upload-ph">暂无图片</div>
+            <div class="upload-ops">
+              <input
+                ref="fileInput"
+                type="file"
+                accept="image/jpeg,image/png,image/webp"
+                style="display: none"
+                @change="onFileChange"
+              />
+              <el-button size="small" :loading="uploading" @click="fileInput?.click()">上传图片</el-button>
+              <el-button v-if="modelForm.image" size="small" text type="danger" @click="modelForm.image = ''">移除</el-button>
+              <div class="upload-tip">图片经后端保存至 data/img/models/，小程序即时展示；暂无图则显示占位轮廓</div>
+            </div>
+          </div>
+        </el-form-item>
         <el-form-item label="机型名称" required>
           <el-input v-model="modelForm.name" placeholder="如 iPhone 16 Pro Max" />
         </el-form-item>
@@ -107,6 +138,7 @@
 <script setup>
 import { computed, onMounted, reactive, ref } from 'vue';
 import { ElMessage } from 'element-plus';
+import http from '../api/http';
 import {
   createBrand,
   createModel,
@@ -121,12 +153,14 @@ const activeBrandId = ref(null);
 const models = ref([]);
 const loading = ref(false);
 const submitting = ref(false);
+const uploading = ref(false);
+const fileInput = ref(null);
 
 const brandVisible = ref(false);
 const brandName = ref('');
 const modelVisible = ref(false);
 const editing = ref(null);
-const modelForm = reactive({ name: '', releaseYear: 2026, prices: [] });
+const modelForm = reactive({ name: '', image: '', releaseYear: 2026, prices: [] });
 const priceVisible = ref(false);
 const priceForm = reactive({ modelId: null, storage: '', priceYuan: null, existing: null });
 
@@ -169,6 +203,7 @@ async function onCreateBrand() {
 function openCreate() {
   editing.value = null;
   modelForm.name = '';
+  modelForm.image = '';
   modelForm.releaseYear = 2026;
   modelForm.prices = [{ storage: '128GB', priceYuan: null }];
   modelVisible.value = true;
@@ -177,8 +212,28 @@ function openCreate() {
 function openEdit(row) {
   editing.value = row;
   modelForm.name = row.name;
+  modelForm.image = row.image || '';
   modelForm.releaseYear = row.releaseYear;
   modelVisible.value = true;
+}
+
+async function onFileChange(e) {
+  const file = e.target.files && e.target.files[0];
+  if (!file) return;
+  uploading.value = true;
+  try {
+    const form = new FormData();
+    form.append('file', file);
+    form.append('category', 'models');
+    const data = await http.post('/admin/upload', form, {
+      headers: { 'Content-Type': 'multipart/form-data' },
+    });
+    modelForm.image = data.url;
+    ElMessage.success('图片已上传');
+  } finally {
+    uploading.value = false;
+    e.target.value = '';
+  }
 }
 
 async function onSubmitModel() {
@@ -192,6 +247,7 @@ async function onSubmitModel() {
       await updateModel(editing.value.id, {
         name: modelForm.name.trim(),
         releaseYear: modelForm.releaseYear,
+        image: modelForm.image,
       });
       ElMessage.success('机型已更新');
     } else {
@@ -203,6 +259,7 @@ async function onSubmitModel() {
       await createModel({
         brandId: activeBrandId.value,
         name: modelForm.name.trim(),
+        image: modelForm.image || '',
         releaseYear: modelForm.releaseYear,
         prices,
       });
@@ -299,5 +356,48 @@ onMounted(loadBrands);
   gap: 8px;
   margin-bottom: 8px;
   align-items: center;
+}
+.thumb {
+  width: 44px;
+  height: 44px;
+}
+.thumb-ph {
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #f5f7fa;
+  border-radius: 6px;
+  color: #c0c4cc;
+  font-size: 12px;
+}
+.upload-row {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+}
+.upload-preview {
+  width: 72px;
+  height: 72px;
+  background: #f5f7fa;
+  border-radius: 8px;
+  flex-shrink: 0;
+}
+.upload-ph {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #c0c4cc;
+  font-size: 12px;
+}
+.upload-ops {
+  flex: 1;
+}
+.upload-tip {
+  margin-top: 6px;
+  color: #909399;
+  font-size: 12px;
+  line-height: 1.4;
 }
 </style>

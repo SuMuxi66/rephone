@@ -17,6 +17,9 @@ public class PhoneModel {
 
     private String name;
 
+    /** 机型图片 URL（空则前端回退品牌 logo） */
+    private String image;
+
     private Integer releaseYear;
 
     private Integer sort;
@@ -51,6 +54,14 @@ public class PhoneModel {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
     }
 
     public Integer getReleaseYear() {

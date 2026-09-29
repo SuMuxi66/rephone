@@ -19,7 +19,7 @@
 
     <t-cell-group theme="card">
       <t-cell title="品牌" arrow hover data-type="brand" bindtap="showPicker" note="{{form.brandName || '请选择品牌'}}" />
-      <t-cell title="机型" arrow hover data-type="model" bindtap="showPicker" note="{{form.modelName || '请选择机型'}}" />
+      <t-cell title="机型" arrow hover data-type="model" bindtap="showModelSheet" note="{{form.modelName || '选择机型'}}" />
       <t-cell title="内存" arrow hover data-type="storage" bindtap="showPicker" note="{{form.storage || '请选择内存'}}" />
     </t-cell-group>
 
@@ -58,12 +58,39 @@
     </view>
   </block>
 
+  <!-- 机型图片选择弹层（转转式：图 + 名字） -->
+  <t-popup visible="{{modelSheetVisible}}" placement="bottom" bind:visible-change="hideModelSheet">
+    <view class="model-sheet">
+      <view class="model-sheet-head">
+        <text class="model-sheet-title">选择机型{{form.brandName ? '（' + form.brandName + '）' : ''}}</text>
+        <t-icon name="close" size="44rpx" data-type="model" bindtap="hideSheet" />
+      </view>
+      <scroll-view scroll-y class="model-sheet-body">
+        <view class="model-grid">
+          <view
+            wx:for="{{models}}"
+            wx:key="id"
+            class="model-item {{form.modelId === item.id ? 'active' : ''}}"
+            data-id="{{item.id}}"
+            data-name="{{item.name}}"
+            bindtap="onModelPick"
+          >
+            <image wx:if="{{item.image}}" src="{{item.image}}" mode="aspectFit" class="model-img" lazy-load />
+            <view wx:else class="model-ph">
+              <view class="model-ph-body">
+                <view class="model-ph-camera"></view>
+              </view>
+            </view>
+            <view class="model-item-name">{{item.name}}</view>
+          </view>
+        </view>
+        <view wx:if="{{!models.length}}" class="model-empty">该品牌暂无机型，请先在后台机型库添加</view>
+      </scroll-view>
+    </view>
+  </t-popup>
+
   <t-picker visible="{{pickerVisible.brand}}" value="{{pickerValue.brand}}" title="选择品牌" bind:confirm="onPickerChange" bind:close="hidePicker" data-type="brand">
     <t-picker-item options="{{pickerColumns.brand}}" />
-  </t-picker>
-
-  <t-picker visible="{{pickerVisible.model}}" value="{{pickerValue.model}}" title="选择机型" bind:confirm="onPickerChange" bind:close="hidePicker" data-type="model">
-    <t-picker-item options="{{pickerColumns.model}}" />
   </t-picker>
 
   <t-picker visible="{{pickerVisible.storage}}" value="{{pickerValue.storage}}" title="选择内存" bind:confirm="onPickerChange" bind:close="hidePicker" data-type="storage">

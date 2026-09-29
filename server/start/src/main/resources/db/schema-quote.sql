@@ -18,6 +18,7 @@ CREATE TABLE IF NOT EXISTS `phone_model` (
     `tenant_id`    BIGINT       NOT NULL DEFAULT 0 COMMENT '所属租户',
     `brand_id`     BIGINT       NOT NULL,
     `name`         VARCHAR(128) NOT NULL,
+    `image`        VARCHAR(512) NULL COMMENT '机型图片URL（空则前端回退品牌logo）',
     `release_year` INT          NULL,
     `sort`         INT          NOT NULL DEFAULT 0,
     PRIMARY KEY (`id`),

@@ -13,6 +13,8 @@
     "t-button": "tdesign-miniprogram/button/button",
     "t-steps": "tdesign-miniprogram/steps/steps",
     "t-step-item": "tdesign-miniprogram/step-item/step-item",
+    "t-popup": "tdesign-miniprogram/popup/popup",
+    "t-icon": "tdesign-miniprogram/icon/icon",
     "section-card": "/components/section-card/index"
   }
 }
