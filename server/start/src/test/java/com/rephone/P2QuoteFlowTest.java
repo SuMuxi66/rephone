@@ -144,4 +144,19 @@ class P2QuoteFlowTest {
         JsonNode body2 = objectMapper.readTree(resp2.getBody());
         assertTrue(body2.get("code").asInt() != 0, "无效屏幕状态应报业务错误");
     }
+
+    @Test
+    @Order(6)
+    void home_hot_models_from_real_catalog() throws Exception {
+        // 首页热门机型来自机型库：8 条、每品牌前 2 款、价格为最贵内存档基准价（分）
+        ResponseEntity<String> resp = rest.exchange("/api/wx/home", HttpMethod.GET,
+                new HttpEntity<>(auth()), String.class);
+        JsonNode body = objectMapper.readTree(resp.getBody());
+        assertEquals(0, body.get("code").asInt());
+        JsonNode models = body.path("data");
+        assertEquals(8, models.size(), "应有 8 条热门机型（5 品牌 × 2 截 8）");
+        assertEquals("iPhone 15 Pro Max", models.get(0).path("modelName").asText());
+        assertEquals(820000L, models.get(0).path("maxPriceFen").asLong(), "首条应为 iPhone 15 Pro Max 512GB 价");
+        assertTrue(models.get(0).path("brandId").asLong() == 1L);
+    }
 }
