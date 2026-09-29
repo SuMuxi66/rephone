@@ -61,12 +61,12 @@
         "text": "首页"
       },
       {
-        "pagePath": "pages/recycle/estimate/index",
-        "text": "估价"
-      },
-      {
         "pagePath": "pages/repair/index",
         "text": "维修"
+      },
+      {
+        "pagePath": "pages/recycle/estimate/index",
+        "text": "回收"
       },
       {
         "pagePath": "pages/usercenter/index",
@@ -80,7 +80,7 @@
   "window": {
     "backgroundTextStyle": "light",
     "navigationBarBackgroundColor": "#fff",
-    "navigationBarTitleText": "RePhone 二手机回收",
+    "navigationBarTitleText": "RePhone 手机维修·回收",
     "navigationBarTextStyle": "black"
   },
   "sitemapLocation": "sitemap.json",

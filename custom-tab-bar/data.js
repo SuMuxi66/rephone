@@ -6,16 +6,16 @@ export default [
     prefix: 'wr',
   },
   {
-    icon: 'wallet',
-    text: '估价',
-    url: 'pages/recycle/estimate/index',
-    prefix: 'wr',
-  },
-  {
     icon: 'tools',
     text: '维修',
     url: 'pages/repair/index',
     prefix: '',
+  },
+  {
+    icon: 'wallet',
+    text: '回收',
+    url: 'pages/recycle/estimate/index',
+    prefix: 'wr',
   },
   {
     icon: 'person',
