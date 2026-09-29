@@ -24,6 +24,10 @@
             <artifactId>rephone-wechat</artifactId>
         </dependency>
         <dependency>
+            <groupId>com.rephone</groupId>
+            <artifactId>rephone-express</artifactId>
+        </dependency>
+        <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-redis</artifactId>
         </dependency>

@@ -1,37 +1,20 @@
-import { config, cdnBase } from '../../config/index';
+import { config } from '../../config/index';
 
-/** 获取首页数据 */
+/** 回收首页数据（mock；P6 接 /api/wx/home 时按 mock.md 适配层方案替换） */
 function mockFetchHome() {
   const { delay } = require('../_utils/delay');
-  const { genSwiperImageList } = require('../../model/swiper');
-  return delay().then(() => {
-    return {
-      swiper: genSwiperImageList(),
-      tabList: [
-        {
-          text: '手机回收',
-          key: 0,
-        },
-        {
-          text: '平板回收',
-          key: 1,
-        },
-        {
-          text: '笔记本',
-          key: 2,
-        },
-        {
-          text: '热门机型',
-          key: 3,
-        },
-        {
-          text: '好评榜',
-          key: 4,
-        },
-      ],
-      activityImg: `${cdnBase}/activity/banner.png`,
-    };
-  });
+  return delay().then(() => ({
+    hotModels: [
+      { brandId: 1, brandName: 'Apple', modelName: 'iPhone 15 Pro Max', priceText: '¥8200' },
+      { brandId: 1, brandName: 'Apple', modelName: 'iPhone 15', priceText: '¥6700' },
+      { brandId: 2, brandName: '华为', modelName: 'Mate 60 Pro', priceText: '¥7400' },
+      { brandId: 2, brandName: '华为', modelName: 'P60', priceText: '¥5700' },
+      { brandId: 3, brandName: '小米', modelName: '小米 14 Pro', priceText: '¥6600' },
+      { brandId: 3, brandName: '小米', modelName: 'Redmi K70', priceText: '¥4000' },
+      { brandId: 4, brandName: 'OPPO', modelName: 'Find X7', priceText: '¥5900' },
+      { brandId: 5, brandName: 'vivo', modelName: 'X100', priceText: '¥5600' },
+    ],
+  }));
 }
 
 /** 获取首页数据 */

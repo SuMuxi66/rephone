@@ -1,4 +1,4 @@
-import { get, post } from '../../request';
+import { get, post } from '../request';
 
 /** 品牌列表：GET /api/wx/brands */
 export const fetchBrands = () => get('/api/wx/brands');

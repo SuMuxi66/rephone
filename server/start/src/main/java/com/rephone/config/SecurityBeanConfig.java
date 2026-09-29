@@ -1,6 +1,7 @@
 package com.rephone.config;
 
 import com.rephone.common.security.JwtTokenService;
+import com.rephone.controller.support.AdminTokenFilter;
 import com.rephone.controller.support.JwtAuthFilter;
 import com.rephone.wechat.WxProperties;
 import java.security.SecureRandom;
@@ -10,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.env.Environment;
 import org.springframework.util.StringUtils;
 
 /**
@@ -46,6 +48,15 @@ public class SecurityBeanConfig {
                 new FilterRegistrationBean<>(new JwtAuthFilter(tokenService));
         registration.addUrlPatterns("/api/wx/*");
         registration.setOrder(1);
+        return registration;
+    }
+
+    @Bean
+    public FilterRegistrationBean<AdminTokenFilter> adminTokenFilter(Environment env) {
+        FilterRegistrationBean<AdminTokenFilter> registration =
+                new FilterRegistrationBean<>(new AdminTokenFilter(env.getProperty("rephone.admin.token", "")));
+        registration.addUrlPatterns("/api/admin/*");
+        registration.setOrder(0);
         return registration;
     }
 }

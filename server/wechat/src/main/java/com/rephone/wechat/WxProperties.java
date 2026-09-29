@@ -19,6 +19,17 @@ public class WxProperties {
      */
     private boolean mockLogin = false;
 
+    /** 订阅消息模板 ID（订单状态通知）。WX_SUBSCRIBE_TEMPLATE_ID。 */
+    private String subscribeTemplateId;
+
+    public String getSubscribeTemplateId() {
+        return subscribeTemplateId;
+    }
+
+    public void setSubscribeTemplateId(String subscribeTemplateId) {
+        this.subscribeTemplateId = subscribeTemplateId;
+    }
+
     public String getAppid() {
         return appid;
     }

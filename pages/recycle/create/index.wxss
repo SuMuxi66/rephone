@@ -1,0 +1,90 @@
+.page {
+  min-height: 100vh;
+  background: var(--bg-page);
+  padding-bottom: 60rpx;
+}
+
+.quote-card {
+  margin: var(--space-page);
+  padding: 40rpx;
+  border-radius: 20rpx;
+  background: linear-gradient(135deg, var(--brand-light), var(--bg-card));
+  display: flex;
+  flex-direction: column;
+  gap: 8rpx;
+}
+
+.quote-label {
+  font-size: 26rpx;
+  color: var(--text-2);
+}
+
+.quote-price {
+  font-size: 64rpx;
+  font-weight: 700;
+  color: var(--brand);
+}
+
+.quote-model {
+  font-size: 26rpx;
+  color: var(--text-3);
+}
+
+.pickup-cards {
+  display: flex;
+  gap: 20rpx;
+  padding: 8rpx 24rpx 16rpx;
+}
+
+.pickup-card {
+  flex: 1;
+  border: 2rpx solid var(--border-light);
+  border-radius: var(--radius-card);
+  padding: 24rpx;
+  display: flex;
+  flex-direction: column;
+  gap: 6rpx;
+  color: var(--text-2);
+}
+
+.pickup-card.active {
+  border-color: var(--brand);
+  background: var(--brand-light);
+  color: var(--brand);
+}
+
+.pickup-name {
+  font-size: 30rpx;
+  font-weight: 600;
+  color: var(--text-1);
+}
+
+.pickup-card.active .pickup-name {
+  color: var(--brand);
+}
+
+.pickup-desc {
+  font-size: 22rpx;
+  color: var(--text-3);
+}
+
+.form-body {
+  padding: 8rpx 24rpx 16rpx;
+}
+
+.field-error {
+  padding: 0 32rpx 12rpx;
+  font-size: 24rpx;
+  color: var(--danger);
+}
+
+.footer {
+  padding: 48rpx 32rpx 0;
+}
+
+.footer-tip {
+  margin-top: 20rpx;
+  text-align: center;
+  font-size: 24rpx;
+  color: var(--text-3);
+}

@@ -13,7 +13,7 @@ spring:
     init:
       # 启动时执行幂等建表（CREATE TABLE IF NOT EXISTS），可关：--spring.sql.init.mode=never
       mode: ${SQL_INIT_MODE:always}
-      schema-locations: classpath:db/schema.sql,classpath:db/schema-quote.sql
+      schema-locations: classpath:db/schema.sql,classpath:db/schema-quote.sql,classpath:db/schema-recycle.sql
   data:
     redis:
       host: ${REDIS_HOST:localhost}
@@ -36,6 +36,25 @@ rephone:
     appid: ${WX_APPID:}
     secret: ${WX_SECRET:}
     mock-login: ${WX_MOCK_LOGIN:false}
+    subscribe-template-id: ${WX_SUBSCRIBE_TEMPLATE_ID:}
+  wxpay:
+    mch-id: ${WXPAY_MCH_ID:}
+    mch-key: ${WXPAY_MCH_KEY:}
+    cert-path: ${WXPAY_CERT_PATH:}
+    mock: ${WXPAY_MOCK:false}
+  cos:
+    secret-id: ${COS_SECRET_ID:}
+    secret-key: ${COS_SECRET_KEY:}
+    bucket: ${COS_BUCKET:}
+    region: ${COS_REGION:ap-guangzhou}
+    mock: ${COS_MOCK:false}
+  express:
+    key: ${EXPRESS_KEY:}
+    customer: ${EXPRESS_CUSTOMER:}
+    callback-url: ${EXPRESS_CALLBACK_URL:}
+    mock: ${EXPRESS_MOCK:true}
+  admin:
+    token: ${ADMIN_TOKEN:}
 
 logging:
   level:

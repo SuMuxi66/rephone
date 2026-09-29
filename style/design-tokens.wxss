@@ -1,0 +1,28 @@
+/* RePhone 设计令牌（唯一色板/圆角/间距来源，页面禁止裸写色值） */
+page {
+  /* 品牌 */
+  --brand: #FF5F15;
+  --brand-light: #FFF1E8;
+  /* 语义状态 */
+  --success: #2BA246;
+  --warning: #E37318;
+  --info: #4572FF;
+  --danger: #FA550F;
+  /* 文字三级 */
+  --text-1: #333333;
+  --text-2: #666666;
+  --text-3: #999999;
+  /* 背景/边框 */
+  --bg-page: #F5F5F7;
+  --bg-card: #FFFFFF;
+  --border-light: #EEEEEE;
+  /* 圆角/间距 */
+  --radius-card: 16rpx;
+  --space-page: 24rpx;
+}
+
+/* 页面通用底色（回收页直接继承） */
+.recycle-page {
+  min-height: 100vh;
+  background: var(--bg-page);
+}

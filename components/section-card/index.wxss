@@ -1,0 +1,17 @@
+.sc {
+  background: var(--bg-card);
+  margin: 16rpx var(--space-page) 0;
+  border-radius: var(--radius-card);
+  overflow: hidden;
+}
+
+.sc-title {
+  padding: 24rpx 32rpx 8rpx;
+  font-size: 30rpx;
+  font-weight: 600;
+  color: var(--text-1);
+}
+
+.sc-body {
+  padding: 8rpx 0 16rpx;
+}

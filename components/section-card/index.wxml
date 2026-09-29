@@ -1,0 +1,6 @@
+<view class="sc">
+  <view wx:if="{{title}}" class="sc-title">{{title}}</view>
+  <view class="sc-body">
+    <slot />
+  </view>
+</view>

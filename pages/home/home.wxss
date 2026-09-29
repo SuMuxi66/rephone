@@ -1,107 +1,148 @@
-page {
-  box-sizing: border-box;
-  padding-bottom: calc(env(safe-area-inset-bottom) + 96rpx);
+.page {
+  min-height: 100vh;
+  background: var(--bg-page);
+  padding-bottom: calc(env(safe-area-inset-bottom) + 40rpx);
 }
 
-.t-tabs.t-tabs--top .t-tabs__scroll {
-  border-bottom: none !important;
+.hero {
+  margin: var(--space-page);
+  padding: 72rpx 48rpx;
+  border-radius: 24rpx;
+  background: linear-gradient(135deg, var(--brand), #ff8a4c);
+  color: #fff;
 }
 
-.home-page-header {
-  background: linear-gradient(#fff, #f5f5f5);
+.hero-title {
+  font-size: 44rpx;
+  font-weight: 700;
 }
 
-.home-page-container {
-  background: #f5f5f5;
+.hero-sub {
+  margin-top: 12rpx;
+  font-size: 26rpx;
+  opacity: 0.9;
 }
 
-.home-page-container,
-.home-page-header {
-  display: block;
-  padding: 0 24rpx;
-}
-
-.home-page-header .t-search__input-container {
-  border-radius: 32rpx !important;
-  height: 64rpx !important;
-}
-
-.home-page-header .t-search__input {
-  font-size: 28rpx !important;
-  color: rgb(116, 116, 116) !important;
-}
-
-.home-page-header .swiper-wrap {
-  margin-top: 20rpx;
-}
-
-.home-page-header .t-image__swiper {
-  width: 100%;
-  height: 300rpx;
-  border-radius: 10rpx;
-}
-
-.home-page-container .t-tabs {
-  background: #f5f5f5 !important;
-}
-
-.home-page-container .t-tabs .t-tabs-nav {
-  background-color: transparent;
-  line-height: 80rpx;
+.hero-cta {
+  display: inline-block;
+  margin-top: 28rpx;
+  padding: 14rpx 40rpx;
+  border-radius: 36rpx;
+  background: #fff;
+  color: var(--brand);
   font-size: 28rpx;
-  color: #333;
+  font-weight: 600;
 }
 
-.home-page-container .t-tabs .t-tabs-scroll {
-  border: none !important;
+.entries {
+  display: flex;
+  margin: 0 var(--space-page);
+  padding: 28rpx 0;
+  background: var(--bg-card);
+  border-radius: var(--radius-card);
 }
 
-/* 半个字 */
-.home-page-container .tab.order-nav .order-nav-item.scroll-width {
-  min-width: 165rpx;
-}
-.home-page-container .tab .order-nav-item.active {
-  color: #fa550f !important;
-}
-
-.home-page-container .tab .bottom-line {
-  border-radius: 4rpx;
+.entry {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10rpx;
+  color: var(--text-1);
 }
 
-.home-page-container .tab .order-nav-item.active .bottom-line {
-  background-color: #fa550f !important;
+.entry-name {
+  font-size: 26rpx;
 }
 
-.home-page-container .tabs-external__item {
-  /* color: #666 !important; */
-  font-size: 28rpx;
+.section-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  padding: 36rpx var(--space-page) 16rpx;
 }
 
-.home-page-container .tabs-external__active {
-  color: #333333 !important;
+.section-title {
   font-size: 32rpx;
+  font-weight: 600;
+  color: var(--text-1);
 }
 
-.home-page-container .tabs-external__track {
-  /* background-color: #fa4126 !important; */
-  height: 6rpx !important;
-  border-radius: 4rpx !important;
-  width: 48rpx !important;
+.section-more {
+  font-size: 24rpx;
+  color: var(--text-3);
 }
 
-.t-tabs.t-tabs--top .t-tabs__item,
-.t-tabs.t-tabs--bottom .t-tabs__item {
-  height: 86rpx !important;
+.models {
+  white-space: nowrap;
+  padding: 0 var(--space-page);
 }
 
-.home-page-container .goods-list-container {
-  background: #f5f5f5 !important;
-  margin-top: 16rpx;
+.model-card {
+  display: inline-block;
+  width: 240rpx;
+  margin-right: 20rpx;
+  padding: 28rpx 24rpx;
+  border-radius: var(--radius-card);
+  background: var(--bg-card);
+  vertical-align: top;
 }
 
-.home-page-tabs {
-  --td-tab-nav-bg-color: transparent;
-  --td-tab-border-color: transparent;
-  --td-tab-item-color: #666;
-  --td-tab-track-color: red;
+.model-brand {
+  font-size: 22rpx;
+  color: var(--text-3);
+}
+
+.model-name {
+  margin-top: 6rpx;
+  font-size: 28rpx;
+  font-weight: 600;
+  color: var(--text-1);
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.model-price {
+  margin-top: 14rpx;
+  font-size: 26rpx;
+  font-weight: 700;
+  color: var(--brand);
+}
+
+.flow {
+  display: flex;
+  margin: 0 var(--space-page);
+  padding: 32rpx 12rpx;
+  background: var(--bg-card);
+  border-radius: var(--radius-card);
+}
+
+.flow-step {
+  flex: 1;
+  text-align: center;
+}
+
+.flow-no {
+  width: 44rpx;
+  height: 44rpx;
+  line-height: 44rpx;
+  margin: 0 auto;
+  border-radius: 50%;
+  background: var(--brand-light);
+  color: var(--brand);
+  font-size: 24rpx;
+  font-weight: 700;
+}
+
+.flow-name {
+  margin-top: 12rpx;
+  font-size: 26rpx;
+  font-weight: 600;
+  color: var(--text-1);
+}
+
+.flow-desc {
+  margin-top: 6rpx;
+  font-size: 20rpx;
+  color: var(--text-3);
 }

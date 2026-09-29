@@ -103,6 +103,7 @@
       isStock="{{isStock}}"
       shopCartNum="{{cartNum}}"
       buttonType="{{buttonType}}"
+      show-add-cart="{{false}}"
       bind:toAddCart="toAddCart"
       bind:toNav="toNav"
       bind:toBuyNow="buyItNow"

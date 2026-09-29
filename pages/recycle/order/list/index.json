@@ -1,0 +1,10 @@
+{
+  "navigationBarTitleText": "我的回收单",
+  "enablePullDownRefresh": true,
+  "usingComponents": {
+    "status-tag": "/components/status-tag/index",
+    "t-load-more": "/components/load-more/index",
+    "t-empty": "tdesign-miniprogram/empty/empty",
+    "t-button": "tdesign-miniprogram/button/button"
+  }
+}

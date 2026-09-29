@@ -1,0 +1,36 @@
+<view class="page recycle-page">
+  <scroll-view scroll-x class="filter-bar">
+    <view
+      wx:for="{{filters}}"
+      wx:key="status"
+      class="filter-item {{activeStatus === item.status ? 'active' : ''}}"
+      data-status="{{item.status}}"
+      bindtap="switchFilter"
+    >{{item.label}}</view>
+  </scroll-view>
+
+  <view wx:if="{{orders.length === 0 && loadStatus !== 1}}" class="empty">
+    <t-empty description="暂无回收单，估价立得高额回收价" />
+    <t-button theme="primary" size="small" bindtap="goEstimate">去估价</t-button>
+  </view>
+
+  <view
+    wx:for="{{orders}}"
+    wx:key="orderNo"
+    class="order-card"
+    data-order-no="{{item.orderNo}}"
+    bindtap="goDetail"
+  >
+    <view class="row">
+      <text class="model">{{item.brandName}} {{item.modelName}}</text>
+      <status-tag status="{{item.status}}" />
+    </view>
+    <view class="sub">{{item.storage}} · {{item.conditionLabel}} · {{item.orderNo}}</view>
+    <view class="row bottom">
+      <text class="price">¥{{item.priceText}}</text>
+      <text class="time">{{item.createTime}}</text>
+    </view>
+  </view>
+
+  <t-load-more status="{{loadStatus}}" list-is-empty="{{orders.length === 0}}" bind:retry="reload" />
+</view>

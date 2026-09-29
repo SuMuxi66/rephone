@@ -2,6 +2,8 @@
 
 @import 'style/theme.wxss';
 
+@import 'style/design-tokens.wxss';
+
 .cell--noborder .t-cell::after {
   border-bottom: none !important;
 }

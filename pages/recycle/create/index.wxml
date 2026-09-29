@@ -1,0 +1,44 @@
+<view class="page recycle-page" wx:if="{{quote}}">
+  <view class="quote-card">
+    <view class="quote-label">预估回收价</view>
+    <view class="quote-price">¥{{quoteText}}</view>
+    <view class="quote-model">{{quote.brandName}} {{quote.modelName}} · {{quote.storage}} · {{quote.conditionLabel}}</view>
+  </view>
+
+  <section-card title="取件方式">
+    <view class="pickup-cards">
+      <view class="pickup-card {{form.pickupType === 10 ? 'active' : ''}}" data-type="10" bindtap="onPickupType">
+        <t-icon prefix="wr" name="deliver" size="44rpx" />
+        <view class="pickup-name">顺丰邮寄</view>
+        <view class="pickup-desc">自行寄出，运费到付</view>
+      </view>
+      <view class="pickup-card {{form.pickupType === 20 ? 'active' : ''}}" data-type="20" bindtap="onPickupType">
+        <t-icon prefix="wr" name="navigation" size="44rpx" />
+        <view class="pickup-name">上门取件</view>
+        <view class="pickup-desc">快递员按预约上门</view>
+      </view>
+    </view>
+  </section-card>
+
+  <section-card title="取件信息">
+    <view class="form-body">
+      <t-input label="联系人" placeholder="姓名" value="{{form.name}}" data-field="name" bindchange="onInput" />
+      <t-input label="手机号" type="number" placeholder="11 位手机号" value="{{form.phone}}" data-field="phone" bindchange="onInput" bindblur="onPhoneBlur" />
+      <view wx:if="{{errors.phone}}" class="field-error">{{errors.phone}}</view>
+      <t-cell title="所在地区" arrow hover bindtap="showRegion" note="{{form.region || '请选择省/市/区'}}" />
+      <t-input label="详细地址" placeholder="街道、门牌号" value="{{form.detail}}" data-field="detail" bindchange="onInput" />
+      <t-textarea label="备注" placeholder="机器实际情况补充（可选）" value="{{form.remark}}" data-field="remark" bindchange="onInput" autosize maxlength="100" />
+    </view>
+  </section-card>
+
+  <view class="footer">
+    <t-button theme="primary" block loading="{{submitting}}" disabled="{{submitting}}" bindtap="onSubmit">提交回收订单</t-button>
+    <view class="footer-tip">提交后请按取件方式寄出机器，质检完成后打款</view>
+  </view>
+
+  <t-picker visible="{{regionPickerVisible}}" value="{{regionValue}}" title="选择地区" bindpick="onRegionPick" bind:confirm="onRegionConfirm" bind:close="hideRegion">
+    <t-picker-item options="{{regionColumns.province}}" />
+    <t-picker-item options="{{regionColumns.city}}" />
+    <t-picker-item options="{{regionColumns.district}}" />
+  </t-picker>
+</view>

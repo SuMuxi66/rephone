@@ -21,7 +21,7 @@
 | 鉴权 | JWT + 微信 `wx.login` |
 | 多租户 | 共享库 + `tenant_id` 字段隔离 |
 | 快递 | 快递100 企业版 API |
-| 支付 | 出售端微信支付 JSAPI；回收端"商家转账到零钱"后置 |
+| 支付 | 出售端微信支付 JSAPI；回收端"商家转账到零钱"在 P4 实现（未配置商户凭据时 mock 模式可先跑通闭环） |
 | 通知 | 微信订阅消息 |
 | 部署 | Docker + Nginx + HTTPS |
 
@@ -424,3 +424,20 @@ decimal(10,2)
 5. P4：快递100 沙箱 + 订阅消息
 
 **先不要做：** 出售端支付、维修端、完整管理后台、商家转账到零钱。
+
+---
+
+## 11. 后端能力清单映射（2026-09-29 更新，来源：需求截图）
+
+| # | 需求 | 落点 | 状态 |
+|---|---|---|---|
+| 1 | 微信小程序登录API | P1 `POST /api/wx/login` + JWT | ✅ 已交付 |
+| 2 | COS图片上传签名API | P3 `GET /api/wx/cos/upload-sign`（后端算签名，小程序直传 COS；未配密钥时 mock 模式） | P3 交付 |
+| 3 | 估价、创建订单、订单查询（自研） | 估价=P2 ✅；创建/查询=P3 recycle_order + inspection | P3 交付 |
+| 4 | 快递100下单 + 物流回调 | P4 ExpressService（上门取件/取消/轨迹）+ `POST /api/callback/kuaidi100` 回调验签更新订单状态（EXPRESS_MOCK 沙箱模式） | P4 交付 |
+| 5 | 微信订阅消息推送 | P4 WxSubscribeService（stable_token + subscribe/send，状态变更时推送；mock 模式） | P4 交付 |
+| 6 | 企业付款到零钱（打款） | P4 WxPayoutService + 用户确认接口 + 管理端打款触发（WXPAY mock 模式；真实模式需商户证书） | P4 交付 |
+
+配套管理端最小接口（驱动状态机用，P5 做 Vue 界面）：`GET /api/admin/recycle/orders`、
+`PUT /api/admin/recycle/order/{orderNo}/status`、`POST /api/admin/recycle/order/{orderNo}/inspection`、
+`POST /api/admin/recycle/order/{orderNo}/payout`，鉴权用 `ADMIN_TOKEN` 环境变量。

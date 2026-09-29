@@ -1,4 +1,4 @@
-<view class="page">
+<view class="page recycle-page">
   <view wx:if="{{loading}}" class="state">
     <t-loading theme="circular" size="40rpx" text="加载中..." inherit-color />
   </view>
@@ -9,25 +9,35 @@
   </view>
 
   <block wx:else>
+    <view class="steps-wrap">
+      <t-steps current="{{stepCurrent}}" theme="default">
+        <t-step-item title="选机型" />
+        <t-step-item title="描述成色" />
+        <t-step-item title="获取报价" />
+      </t-steps>
+    </view>
+
     <t-cell-group theme="card">
       <t-cell title="品牌" arrow hover data-type="brand" bindtap="showPicker" note="{{form.brandName || '请选择品牌'}}" />
       <t-cell title="机型" arrow hover data-type="model" bindtap="showPicker" note="{{form.modelName || '请选择机型'}}" />
       <t-cell title="内存" arrow hover data-type="storage" bindtap="showPicker" note="{{form.storage || '请选择内存'}}" />
     </t-cell-group>
 
-    <view class="section-title">成色</view>
-    <t-radio-group value="{{form.condition}}" bindchange="onConditionChange">
-      <view class="option-list">
-        <t-radio wx:for="{{conditions}}" wx:key="key" value="{{item.key}}" label="{{item.label}}" content="{{item.desc}}" block align="left" borderless />
-      </view>
-    </t-radio-group>
+    <section-card title="成色">
+      <t-radio-group value="{{form.condition}}" bindchange="onConditionChange">
+        <view class="option-list">
+          <t-radio wx:for="{{conditions}}" wx:key="key" value="{{item.key}}" label="{{item.label}}" content="{{item.desc}}" block align="left" borderless />
+        </view>
+      </t-radio-group>
+    </section-card>
 
-    <view class="section-title">功能问题（可多选，选得越准报价越准）</view>
-    <t-checkbox-group value="{{form.issues}}" bindchange="onIssuesChange">
-      <view class="option-list">
-        <t-checkbox wx:for="{{issues}}" wx:key="key" value="{{item.key}}" label="{{item.label}}" block align="left" borderless />
-      </view>
-    </t-checkbox-group>
+    <section-card title="功能问题（可多选，选得越准报价越准）">
+      <t-checkbox-group value="{{form.issues}}" bindchange="onIssuesChange">
+        <view class="option-list-plain">
+          <t-checkbox wx:for="{{issues}}" wx:key="key" value="{{item.key}}" label="{{item.label}}" block align="left" borderless />
+        </view>
+      </t-checkbox-group>
+    </section-card>
 
     <view class="footer">
       <t-button theme="primary" block disabled="{{!(form.brandId && form.modelId && form.storage && form.condition) || submitting}}" loading="{{submitting}}" bindtap="onSubmit">
@@ -37,15 +47,15 @@
     </view>
   </block>
 
-  <t-picker visible="{{pickerVisible.brand}}" value="{{pickerValue.brand}}" title="选择品牌" bindchange="onPickerChange" bindcancel="hidePicker" data-type="brand">
+  <t-picker visible="{{pickerVisible.brand}}" value="{{pickerValue.brand}}" title="选择品牌" bind:confirm="onPickerChange" bind:close="hidePicker" data-type="brand">
     <t-picker-item options="{{pickerColumns.brand}}" />
   </t-picker>
 
-  <t-picker visible="{{pickerVisible.model}}" value="{{pickerValue.model}}" title="选择机型" bindchange="onPickerChange" bindcancel="hidePicker" data-type="model">
+  <t-picker visible="{{pickerVisible.model}}" value="{{pickerValue.model}}" title="选择机型" bind:confirm="onPickerChange" bind:close="hidePicker" data-type="model">
     <t-picker-item options="{{pickerColumns.model}}" />
   </t-picker>
 
-  <t-picker visible="{{pickerVisible.storage}}" value="{{pickerValue.storage}}" title="选择内存" bindchange="onPickerChange" bindcancel="hidePicker" data-type="storage">
+  <t-picker visible="{{pickerVisible.storage}}" value="{{pickerValue.storage}}" title="选择内存" bind:confirm="onPickerChange" bind:close="hidePicker" data-type="storage">
     <t-picker-item options="{{pickerColumns.storage}}" />
   </t-picker>
 </view>

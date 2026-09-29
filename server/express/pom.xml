@@ -12,5 +12,28 @@
 
     <artifactId>rephone-express</artifactId>
     <name>rephone-express</name>
-    <description>快递100 能力接口占位（P4 实现上门取件/取消/轨迹）</description>
+    <description>快递100 能力：上门取件/取消/轨迹 + 物流回调</description>
+
+    <dependencies>
+        <dependency>
+            <groupId>com.rephone</groupId>
+            <artifactId>rephone-common</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-web</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-context</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+        </dependency>
+    </dependencies>
 </project>

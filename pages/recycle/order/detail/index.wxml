@@ -1,0 +1,67 @@
+<view class="page recycle-page" wx:if="{{order}}">
+  <view class="status-card">
+    <view class="status-row">
+      <text class="status-text">{{order.statusDesc}}</text>
+      <view class="status-tags">
+        <t-tag theme="default" variant="light" size="small">{{order.pickupType === 20 ? '上门取件' : '顺丰邮寄'}}</t-tag>
+        <status-tag status="{{order.status}}" />
+      </view>
+    </view>
+    <view class="price-row">
+      <block wx:if="{{order.finalFen != null}}">
+        <text class="price-label">质检最终价</text>
+        <text class="price">¥{{finalText}}</text>
+      </block>
+      <block wx:else>
+        <text class="price-label">预估回收价</text>
+        <text class="price">¥{{quoteText}}</text>
+      </block>
+    </view>
+    <view wx:if="{{order.status === 80}}" class="canceled-tip">订单已取消，如有疑问请联系客服</view>
+  </view>
+
+  <view class="timeline-card" wx:if="{{timeline}}">
+    <t-steps layout="vertical" theme="dot" current="{{timeline.current}}">
+      <t-step-item wx:for="{{timeline.nodes}}" wx:key="label" title="{{item.label}}" content="{{item.desc}}" />
+    </t-steps>
+  </view>
+
+  <t-cell-group theme="card">
+    <t-cell title="机型" note="{{order.brandName}} {{order.modelName}}" />
+    <t-cell title="配置" note="{{order.storage}} · {{order.conditionLabel}}" />
+    <t-cell title="功能问题" note="{{order.issues.length ? order.issues : '无'}}" />
+    <t-cell title="取件人" note="{{order.pickupName}} {{order.pickupPhone}}" />
+    <t-cell title="取件地址" note="{{order.pickupAddress}}" />
+    <t-cell wx:if="{{order.expressNo}}" title="运单号" note="{{order.expressCompany || ''}} {{order.expressNo}}" />
+    <t-cell wx:if="{{order.remark}}" title="备注" note="{{order.remark}}" />
+    <t-cell wx:if="{{order.adminRemark}}" title="质检说明" note="{{order.adminRemark}}" />
+  </t-cell-group>
+
+  <view wx:if="{{order.inspections.length}}" class="section-title">质检记录</view>
+  <view wx:for="{{order.inspections}}" wx:key="createTime" class="inspection-card">
+    <view class="insp-row">
+      <text class="insp-result">{{item.result}}</text>
+      <text class="insp-price">¥{{item.finalPriceText}}</text>
+    </view>
+    <view class="insp-time">{{item.createTime}}</view>
+  </view>
+
+  <view class="footer">
+    <block wx:if="{{order.status === 10}}">
+      <t-button theme="default" bindtap="onCancel">取消订单</t-button>
+      <t-button theme="primary" bindtap="showExpressPopup">填写运单号</t-button>
+    </block>
+    <block wx:if="{{order.status === 40}}">
+      <t-button theme="primary" block bindtap="onConfirmPayout">确认打款 ¥{{finalText}}</t-button>
+    </block>
+  </view>
+
+  <t-popup visible="{{expressPopupVisible}}" placement="bottom" bind:visible-change="hideExpressPopup">
+    <view class="express-popup">
+      <view class="popup-title">填写寄出运单号</view>
+      <t-input label="快递公司" value="{{expressForm.company}}" data-field="company" bindchange="onExpressInput" />
+      <t-input label="运单号" placeholder="请输入快递单号" value="{{expressForm.no}}" data-field="no" bindchange="onExpressInput" />
+      <t-button theme="primary" block loading="{{submitting}}" bindtap="submitExpress">提交</t-button>
+    </view>
+  </t-popup>
+</view>

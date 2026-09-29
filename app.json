@@ -3,8 +3,9 @@
     "pages/home/home",
     "pages/recycle/estimate/index",
     "pages/recycle/result/index",
-    "pages/category/index",
-    "pages/cart/index",
+    "pages/recycle/create/index",
+    "pages/recycle/order/list/index",
+    "pages/recycle/order/detail/index",
     "pages/usercenter/index"
   ],
   "subpackages": [

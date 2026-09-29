@@ -4,6 +4,11 @@ Component({
   options: { multipleSlots: true },
 
   properties: {
+    /** 是否显示"加入购物车"按钮（回收模式下隐藏，出售端 P6 传 true 恢复） */
+    showAddCart: {
+      type: Boolean,
+      value: true,
+    },
     soldout: {
       // 商品是否下架
       type: Boolean,

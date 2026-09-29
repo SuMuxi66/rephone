@@ -22,6 +22,6 @@ Page({
   },
 
   onOrder() {
-    wx.showToast({ title: '回收下单功能将在下一阶段上线', icon: 'none' });
+    wx.navigateTo({ url: '/pages/recycle/create/index' });
   },
 });

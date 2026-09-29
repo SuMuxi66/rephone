@@ -53,12 +53,6 @@ Page({
         url: '/pages/home/home',
         iconName: 'home',
       },
-      {
-        title: '购物车',
-        url: '/pages/cart/index',
-        iconName: 'cart',
-        showCartNum: true,
-      },
     ],
     isStock: true,
     cartNum: 0,

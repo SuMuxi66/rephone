@@ -1,6 +1,7 @@
 package com.rephone.express;
 
 import com.rephone.express.model.ExpressPickupRequest;
+import com.rephone.express.model.ExpressPickupResult;
 import com.rephone.express.model.ExpressTrace;
 
 /**
@@ -9,8 +10,8 @@ import com.rephone.express.model.ExpressTrace;
  */
 public interface ExpressService {
 
-    /** 预约上门取件，返回快递100 任务号。 */
-    String createPickup(ExpressPickupRequest request);
+    /** 预约上门取件，返回任务号与运单号（运单号可能为空，由后续回调补齐）。 */
+    ExpressPickupResult createPickup(ExpressPickupRequest request);
 
     /** 取消取件任务。 */
     void cancelPickup(String taskNo);

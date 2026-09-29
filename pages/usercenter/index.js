@@ -4,6 +4,12 @@ import Toast from 'tdesign-miniprogram/toast/index';
 const menuData = [
   [
     {
+      title: '我的回收单',
+      tit: '',
+      url: '',
+      type: 'recycle-orders',
+    },
+    {
       title: '收货地址',
       tit: '',
       url: '',
@@ -129,6 +135,10 @@ Page({
     const { type } = currentTarget.dataset;
 
     switch (type) {
+      case 'recycle-orders': {
+        wx.navigateTo({ url: '/pages/recycle/order/list/index' });
+        break;
+      }
       case 'address': {
         wx.navigateTo({ url: '/pages/user/address/list/index' });
         break;

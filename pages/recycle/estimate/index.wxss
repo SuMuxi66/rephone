@@ -1,7 +1,11 @@
 .page {
   min-height: 100vh;
-  background: #f5f5f7;
+  background: var(--bg-page);
   padding-bottom: 60rpx;
+}
+
+.steps-wrap {
+  padding: 24rpx var(--space-page) 8rpx;
 }
 
 .state {
@@ -13,22 +17,16 @@
 }
 
 .state-text {
-  color: #999;
+  color: var(--text-3);
   font-size: 28rpx;
 }
 
-.section-title {
-  padding: 32rpx 32rpx 8rpx;
-  font-size: 30rpx;
-  font-weight: 600;
-  color: #333;
+.option-list {
+  padding: 0 16rpx;
 }
 
-.option-list {
-  background: #fff;
-  margin: 16rpx 24rpx 0;
-  border-radius: 16rpx;
-  overflow: hidden;
+.option-list-plain {
+  padding: 0 16rpx;
 }
 
 .footer {
@@ -39,5 +37,5 @@
   margin-top: 20rpx;
   text-align: center;
   font-size: 24rpx;
-  color: #999;
+  color: var(--text-3);
 }
