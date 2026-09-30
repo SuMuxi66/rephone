@@ -85,13 +85,13 @@ Page({
     loadError: '',
     brands: [],
     models: [],
+    storages: [],
     form: EMPTY_FORM,
     conditions: CONDITION_OPTIONS,
     screens: SCREEN_OPTIONS,
     issueGroups: ISSUE_GROUPS,
-    pickerVisible: { brand: false, model: false, storage: false },
-    pickerValue: { brand: [], model: [], storage: [] },
-    pickerColumns: { brand: [], model: [], storage: [] },
+    /** 功能问题选中映射（WXML 无法对数组做 includes，渲染态用 map） */
+    issueSelected: {},
     /** 步骤指示：0 选机型中，1 描述成色中，2 可获取报价 */
     stepCurrent: 0,
   },
@@ -115,11 +115,9 @@ Page({
   async init() {
     try {
       const brands = await fetchBrands();
-      this.setData({
-        brands,
-        loading: false,
-        'pickerColumns.brand': brands.map((b) => ({ label: b.name, value: b.id })),
-      });
+      // 卡片无 logo 时用品牌首字占位（WXML 不便做字符串截取，进页算好）
+      const decorated = (brands || []).map((b) => Object.assign({}, b, { initial: (b.name || '')[0] }));
+      this.setData({ brands: decorated, loading: false });
       this.applyPrefill();
     } catch (e) {
       this.setData({ loading: false, loadError: e.message || '加载失败' });
@@ -143,53 +141,6 @@ Page({
     this.init();
   },
 
-  showPicker(e) {
-    const { type } = e.currentTarget.dataset;
-    if (type === 'storage' && !this.data.form.modelId) {
-      wx.showToast({ title: '请先选择机型', icon: 'none' });
-      return;
-    }
-    this.setData({ [`pickerVisible.${type}`]: true });
-  },
-
-  hidePicker(e) {
-    const { type } = e.currentTarget.dataset;
-    this.setData({ [`pickerVisible.${type}`]: false });
-  },
-
-  /** 机型图片选择弹层（转转式：图 + 名字） */
-  showModelSheet() {
-    if (!this.data.form.brandId) {
-      wx.showToast({ title: '请先选择品牌', icon: 'none' });
-      return;
-    }
-    this.setData({ modelSheetVisible: true });
-  },
-
-  hideModelSheet(e) {
-    if (!e.detail.visible) {
-      this.setData({ modelSheetVisible: false });
-    }
-  },
-
-  hideSheet() {
-    this.setData({ modelSheetVisible: false });
-  },
-
-  onModelPick(e) {
-    const model = this.data.models.find((m) => m.id === e.currentTarget.dataset.id);
-    if (!model) return;
-    this.setData({
-      modelSheetVisible: false,
-      'form.modelId': model.id,
-      'form.modelName': model.name,
-      'form.storage': '',
-      'pickerValue.model': [model.id],
-      'pickerColumns.storage': (model.storages || []).map((s) => ({ label: s, value: s })),
-    });
-    this.updateStep();
-  },
-
   async selectBrand(brand) {
     this.setData({
       'form.brandId': brand.id,
@@ -197,64 +148,83 @@ Page({
       'form.modelId': null,
       'form.modelName': '',
       'form.storage': '',
-      'pickerValue.brand': [brand.id],
-      'pickerColumns.model': [],
-      'pickerColumns.storage': [],
+      models: [],
+      storages: [],
       stepCurrent: 0,
     });
     try {
       const models = await fetchModels(brand.id);
-      this.setData({
-        models,
-        'pickerColumns.model': models.map((m) => ({ label: m.name, value: m.id })),
-      });
+      this.setData({ models });
+      this.scrollToSection('#sec-model');
     } catch (err) {
       wx.showToast({ title: err.message || '机型加载失败', icon: 'none' });
     }
   },
 
-  async onPickerChange(e) {
-    const { type } = e.currentTarget.dataset;
-    const value = Array.isArray(e.detail.value) ? e.detail.value[0] : e.detail.value;
-    this.setData({ [`pickerVisible.${type}`]: false });
-
-    if (type === 'brand') {
-      const brand = this.data.brands.find((b) => b.id === value);
-      if (brand) await this.selectBrand(brand);
-      return;
-    }
-
-    if (type === 'model') {
-      const model = this.data.models.find((m) => m.id === value);
-      if (!model) return;
-      this.setData({
-        'form.modelId': model.id,
-        'form.modelName': model.name,
-        'form.storage': '',
-        'pickerValue.model': [model.id],
-        'pickerColumns.storage': (model.storages || []).map((s) => ({ label: s, value: s })),
-      });
-      return;
-    }
-
-    if (type === 'storage') {
-      this.setData({ 'form.storage': value, 'pickerValue.storage': [value] });
-    }
-    this.updateStep();
+  onBrandTap(e) {
+    const brand = this.data.brands.find((b) => b.id === e.currentTarget.dataset.id);
+    if (!brand || brand.id === this.data.form.brandId) return;
+    this.selectBrand(brand);
   },
 
-  onConditionChange(e) {
-    this.setData({ 'form.condition': e.detail.value });
+  onModelTap(e) {
+    const model = this.data.models.find((m) => m.id === e.currentTarget.dataset.id);
+    if (!model || model.id === this.data.form.modelId) return;
+    this.setData({
+      'form.modelId': model.id,
+      'form.modelName': model.name,
+      'form.storage': '',
+      storages: model.storages || [],
+    });
     this.updateStep();
+    this.scrollToSection('#sec-storage');
   },
 
-  onScreenChange(e) {
-    this.setData({ 'form.screen': e.detail.value });
+  onStorageTap(e) {
+    const value = e.currentTarget.dataset.val;
+    if (!value || value === this.data.form.storage) return;
+    this.setData({ 'form.storage': value });
     this.updateStep();
+    this.scrollToSection('#sec-condition');
   },
 
-  onIssuesChange(e) {
-    this.setData({ 'form.issues': e.detail.value || [] });
+  onConditionTap(e) {
+    const key = e.currentTarget.dataset.key;
+    if (!key || key === this.data.form.condition) return;
+    const option = CONDITION_OPTIONS.find((item) => item.key === key);
+    this.setData({ 'form.condition': key, 'form.conditionLabel': option ? option.label : '' });
+    this.updateStep();
+    this.scrollToSection('#sec-screen');
+  },
+
+  onScreenTap(e) {
+    const key = e.currentTarget.dataset.key;
+    if (!key || key === this.data.form.screen) return;
+    const option = SCREEN_OPTIONS.find((item) => item.key === key);
+    this.setData({ 'form.screen': key, 'form.screenLabel': option ? option.label : '' });
+    this.updateStep();
+    this.scrollToSection('#sec-issues');
+  },
+
+  onIssueToggle(e) {
+    const key = e.currentTarget.dataset.key;
+    if (!key) return;
+    const issues = (this.data.form.issues || []).slice();
+    const index = issues.indexOf(key);
+    if (index >= 0) {
+      issues.splice(index, 1);
+    } else {
+      issues.push(key);
+    }
+    this.setData({ 'form.issues': issues, issueSelected: this.buildIssueSelected(issues) });
+  },
+
+  buildIssueSelected(issues) {
+    const map = {};
+    (issues || []).forEach((key) => {
+      map[key] = true;
+    });
+    return map;
   },
 
   /** 选机型(品牌+机型+内存)完成 → 第2步；成色与屏幕状态完成 → 第3步 */
@@ -269,6 +239,12 @@ Page({
     if (stepCurrent !== this.data.stepCurrent) {
       this.setData({ stepCurrent });
     }
+  },
+
+  /** 新区块渐显后滚到可见处；低版本基础库不支持 selector 时静默跳过 */
+  scrollToSection(selector) {
+    if (!wx.pageScrollTo) return;
+    wx.pageScrollTo({ selector, offsetTop: -16, duration: 300, fail: () => {} });
   },
 
   async onSubmit() {

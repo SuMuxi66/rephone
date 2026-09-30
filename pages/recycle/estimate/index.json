@@ -1,20 +1,9 @@
 {
   "navigationBarTitleText": "在线估价",
   "usingComponents": {
-    "t-cell": "tdesign-miniprogram/cell/cell",
-    "t-cell-group": "tdesign-miniprogram/cell-group/cell-group",
     "t-loading": "tdesign-miniprogram/loading/loading",
-    "t-picker": "tdesign-miniprogram/picker/picker",
-    "t-picker-item": "tdesign-miniprogram/picker-item/picker-item",
-    "t-radio-group": "tdesign-miniprogram/radio-group/radio-group",
-    "t-radio": "tdesign-miniprogram/radio/radio",
-    "t-checkbox-group": "tdesign-miniprogram/checkbox-group/checkbox-group",
-    "t-checkbox": "tdesign-miniprogram/checkbox/checkbox",
     "t-button": "tdesign-miniprogram/button/button",
     "t-steps": "tdesign-miniprogram/steps/steps",
-    "t-step-item": "tdesign-miniprogram/step-item/step-item",
-    "t-popup": "tdesign-miniprogram/popup/popup",
-    "t-icon": "tdesign-miniprogram/icon/icon",
-    "section-card": "/components/section-card/index"
+    "t-step-item": "tdesign-miniprogram/step-item/step-item"
   }
 }

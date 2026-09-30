@@ -17,38 +17,136 @@
       </t-steps>
     </view>
 
-    <t-cell-group theme="card">
-      <t-cell title="品牌" arrow hover data-type="brand" bindtap="showPicker" note="{{form.brandName || '请选择品牌'}}" />
-      <t-cell title="机型" arrow hover data-type="model" bindtap="showModelSheet" note="{{form.modelName || '选择机型'}}" />
-      <t-cell title="内存" arrow hover data-type="storage" bindtap="showPicker" note="{{form.storage || '请选择内存'}}" />
-    </t-cell-group>
-
-    <section-card title="成色">
-      <t-radio-group value="{{form.condition}}" bindchange="onConditionChange">
-        <view class="option-list">
-          <t-radio wx:for="{{conditions}}" wx:key="key" value="{{item.key}}" label="{{item.label}}" content="{{item.desc}}" block align="left" borderless />
+    <!-- ① 品牌：答完才出现机型 -->
+    <view class="q-card">
+      <view class="q-head">
+        <text class="q-no">1</text>
+        <text class="q-title">选择品牌</text>
+        <text wx:if="{{form.brandName}}" class="q-picked">{{form.brandName}}</text>
+      </view>
+      <view class="brand-grid">
+        <view
+          wx:for="{{brands}}"
+          wx:key="id"
+          class="opt-card {{form.brandId === item.id ? 'active' : ''}}"
+          data-id="{{item.id}}"
+          bindtap="onBrandTap"
+        >
+          <image wx:if="{{item.logo}}" class="opt-logo" src="{{item.logo}}" mode="aspectFit" lazy-load />
+          <view wx:else class="opt-logo opt-logo--ph">{{item.initial}}</view>
+          <view class="opt-name">{{item.name}}</view>
         </view>
-      </t-radio-group>
-    </section-card>
+      </view>
+    </view>
 
-    <section-card title="屏幕状态">
-      <t-radio-group value="{{form.screen}}" bindchange="onScreenChange">
-        <view class="option-list">
-          <t-radio wx:for="{{screens}}" wx:key="key" value="{{item.key}}" label="{{item.label}}" content="{{item.desc}}" block align="left" borderless />
-        </view>
-      </t-radio-group>
-    </section-card>
-
-    <section-card title="功能问题（可多选，选得越准报价越准）">
-      <t-checkbox-group value="{{form.issues}}" bindchange="onIssuesChange">
-        <view wx:for="{{issueGroups}}" wx:key="title" wx:for-item="group" class="issue-group">
-          <view class="issue-group-title">{{group.title}}</view>
-          <view class="option-list-plain">
-            <t-checkbox wx:for="{{group.items}}" wx:key="key" wx:for-item="issue" value="{{issue.key}}" label="{{issue.label}}" block align="left" borderless />
+    <!-- ② 机型：选完品牌才出现 -->
+    <view wx:if="{{form.brandId}}" id="sec-model" class="q-card">
+      <view class="q-head">
+        <text class="q-no">2</text>
+        <text class="q-title">选择机型</text>
+        <text wx:if="{{form.modelName}}" class="q-picked">{{form.modelName}}</text>
+      </view>
+      <view class="model-grid">
+        <view
+          wx:for="{{models}}"
+          wx:key="id"
+          class="model-item {{form.modelId === item.id ? 'active' : ''}}"
+          data-id="{{item.id}}"
+          bindtap="onModelTap"
+        >
+          <image wx:if="{{item.image}}" src="{{item.image}}" mode="aspectFit" class="model-img" lazy-load />
+          <view wx:else class="model-ph">
+            <view class="model-ph-body">
+              <view class="model-ph-camera"></view>
+            </view>
           </view>
+          <view class="model-item-name">{{item.name}}</view>
         </view>
-      </t-checkbox-group>
-    </section-card>
+      </view>
+      <view wx:if="{{!models.length}}" class="model-empty">该品牌暂无可估价机型，请更换品牌</view>
+    </view>
+
+    <!-- ③ 内存：选完机型才出现 -->
+    <view wx:if="{{form.modelId}}" id="sec-storage" class="q-card">
+      <view class="q-head">
+        <text class="q-no">3</text>
+        <text class="q-title">选择内存</text>
+        <text wx:if="{{form.storage}}" class="q-picked">{{form.storage}}</text>
+      </view>
+      <view class="chip-row">
+        <view
+          wx:for="{{storages}}"
+          wx:key="*this"
+          class="chip {{form.storage === item ? 'active' : ''}}"
+          data-val="{{item}}"
+          bindtap="onStorageTap"
+        >{{item}}</view>
+      </view>
+    </view>
+
+    <!-- ④ 成色：选完内存才出现 -->
+    <view wx:if="{{form.storage}}" id="sec-condition" class="q-card">
+      <view class="q-head">
+        <text class="q-no">4</text>
+        <text class="q-title">成色</text>
+        <text wx:if="{{form.condition}}" class="q-picked">{{form.conditionLabel}}</text>
+      </view>
+      <view class="desc-grid">
+        <view
+          wx:for="{{conditions}}"
+          wx:key="key"
+          class="desc-card {{form.condition === item.key ? 'active' : ''}}"
+          data-key="{{item.key}}"
+          bindtap="onConditionTap"
+        >
+          <view class="desc-label">{{item.label}}</view>
+          <view class="desc-text">{{item.desc}}</view>
+        </view>
+      </view>
+    </view>
+
+    <!-- ⑤ 屏幕状态：选完成色才出现 -->
+    <view wx:if="{{form.condition}}" id="sec-screen" class="q-card">
+      <view class="q-head">
+        <text class="q-no">5</text>
+        <text class="q-title">屏幕状态</text>
+        <text wx:if="{{form.screen}}" class="q-picked">{{form.screenLabel}}</text>
+      </view>
+      <view class="desc-grid">
+        <view
+          wx:for="{{screens}}"
+          wx:key="key"
+          class="desc-card {{form.screen === item.key ? 'active' : ''}}"
+          data-key="{{item.key}}"
+          bindtap="onScreenTap"
+        >
+          <view class="desc-label">{{item.label}}</view>
+          <view class="desc-text">{{item.desc}}</view>
+        </view>
+      </view>
+    </view>
+
+    <!-- ⑥ 功能问题：选完屏幕才出现，可多选 -->
+    <view wx:if="{{form.screen}}" id="sec-issues" class="q-card">
+      <view class="q-head">
+        <text class="q-no">6</text>
+        <text class="q-title">功能问题</text>
+        <text class="q-tip">可多选，选得越准报价越准</text>
+      </view>
+      <view wx:for="{{issueGroups}}" wx:key="title" wx:for-item="group" class="issue-group">
+        <view class="issue-group-title">{{group.title}}</view>
+        <view class="chip-row">
+          <view
+            wx:for="{{group.items}}"
+            wx:key="key"
+            wx:for-item="issue"
+            class="chip {{issueSelected[issue.key] ? 'active' : ''}}"
+            data-key="{{issue.key}}"
+            bindtap="onIssueToggle"
+          >{{issue.label}}</view>
+        </view>
+      </view>
+    </view>
 
     <view class="footer">
       <t-button theme="primary" block disabled="{{!(form.brandId && form.modelId && form.storage && form.condition && form.screen) || submitting}}" loading="{{submitting}}" bindtap="onSubmit">
@@ -57,43 +155,4 @@
       <view class="footer-tip">预估价仅供参考，最终回收价以质检结果为准</view>
     </view>
   </block>
-
-  <!-- 机型图片选择弹层（转转式：图 + 名字） -->
-  <t-popup visible="{{modelSheetVisible}}" placement="bottom" bind:visible-change="hideModelSheet">
-    <view class="model-sheet">
-      <view class="model-sheet-head">
-        <text class="model-sheet-title">选择机型{{form.brandName ? '（' + form.brandName + '）' : ''}}</text>
-        <t-icon name="close" size="44rpx" data-type="model" bindtap="hideSheet" />
-      </view>
-      <scroll-view scroll-y class="model-sheet-body">
-        <view class="model-grid">
-          <view
-            wx:for="{{models}}"
-            wx:key="id"
-            class="model-item {{form.modelId === item.id ? 'active' : ''}}"
-            data-id="{{item.id}}"
-            data-name="{{item.name}}"
-            bindtap="onModelPick"
-          >
-            <image wx:if="{{item.image}}" src="{{item.image}}" mode="aspectFit" class="model-img" lazy-load />
-            <view wx:else class="model-ph">
-              <view class="model-ph-body">
-                <view class="model-ph-camera"></view>
-              </view>
-            </view>
-            <view class="model-item-name">{{item.name}}</view>
-          </view>
-        </view>
-        <view wx:if="{{!models.length}}" class="model-empty">该品牌暂无机型，请先在后台机型库添加</view>
-      </scroll-view>
-    </view>
-  </t-popup>
-
-  <t-picker cancelBtn="取消" confirmBtn="确定" visible="{{pickerVisible.brand}}" value="{{pickerValue.brand}}" title="选择品牌" bind:confirm="onPickerChange" bind:close="hidePicker" data-type="brand">
-    <t-picker-item options="{{pickerColumns.brand}}" />
-  </t-picker>
-
-  <t-picker cancelBtn="取消" confirmBtn="确定" visible="{{pickerVisible.storage}}" value="{{pickerValue.storage}}" title="选择内存" bind:confirm="onPickerChange" bind:close="hidePicker" data-type="storage">
-    <t-picker-item options="{{pickerColumns.storage}}" />
-  </t-picker>
 </view>

@@ -22,53 +22,102 @@
   font-size: 28rpx;
 }
 
-.option-list {
-  padding: 0 16rpx;
+/* ===== 分步问题卡片（答完一题渐显下一题） ===== */
+.q-card {
+  background: var(--bg-card);
+  border-radius: var(--radius-card);
+  margin: 20rpx var(--space-page) 0;
+  padding: 8rpx 0 24rpx;
 }
 
-.option-list-plain {
-  padding: 0 16rpx;
-}
-
-.issue-group {
-  margin-bottom: 8rpx;
-}
-
-.issue-group-title {
-  padding: 24rpx 16rpx 8rpx;
-  font-size: 26rpx;
-  font-weight: 600;
-  color: var(--text-2);
-}
-
-/* ===== 机型图片选择弹层（转转式） ===== */
-.model-sheet {
-  background: #fff;
-  border-radius: 24rpx 24rpx 0 0;
-  padding-bottom: calc(env(safe-area-inset-bottom) + 24rpx);
-}
-
-.model-sheet-head {
+.q-head {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  padding: 32rpx 32rpx 16rpx;
+  padding: 24rpx 24rpx 16rpx;
 }
 
-.model-sheet-title {
-  font-size: 32rpx;
+.q-no {
+  width: 36rpx;
+  height: 36rpx;
+  line-height: 36rpx;
+  text-align: center;
+  border-radius: 50%;
+  background: var(--brand);
+  color: var(--bg-card);
+  font-size: 24rpx;
+  margin-right: 14rpx;
+  flex-shrink: 0;
+}
+
+.q-title {
+  font-size: 30rpx;
   font-weight: 600;
   color: var(--text-1);
 }
 
-.model-sheet-body {
-  max-height: 60vh;
+.q-picked {
+  margin-left: auto;
+  font-size: 24rpx;
+  font-weight: 600;
+  color: var(--brand);
 }
 
+.q-tip {
+  margin-left: auto;
+  font-size: 22rpx;
+  color: var(--text-3);
+}
+
+/* 品牌卡片栅格 */
+.brand-grid {
+  display: flex;
+  flex-wrap: wrap;
+  padding: 0 12rpx;
+}
+
+.opt-card {
+  width: 33.33%;
+  box-sizing: border-box;
+  padding: 16rpx 8rpx;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border-radius: var(--radius-card);
+  border: 2rpx solid transparent;
+}
+
+.opt-card.active {
+  border-color: var(--brand);
+  background: var(--brand-light);
+}
+
+.opt-logo {
+  width: 88rpx;
+  height: 88rpx;
+  border-radius: 16rpx;
+  background: var(--bg-page);
+}
+
+.opt-logo--ph {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-2);
+  font-size: 34rpx;
+  font-weight: 600;
+}
+
+.opt-name {
+  margin-top: 8rpx;
+  font-size: 24rpx;
+  color: var(--text-1);
+}
+
+/* 机型卡片栅格（内联展示） */
 .model-grid {
   display: flex;
   flex-wrap: wrap;
-  padding: 8rpx 16rpx 24rpx;
+  padding: 0 12rpx;
 }
 
 .model-item {
@@ -107,17 +156,17 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: #f5f6f8;
+  background: var(--bg-page);
   border-radius: 16rpx;
 }
 
 .model-ph-body {
   width: 76rpx;
   height: 136rpx;
-  border: 6rpx solid #c9cdd4;
+  border: 6rpx solid var(--line-strong);
   border-radius: 16rpx;
   position: relative;
-  background: #fff;
+  background: var(--bg-card);
 }
 
 .model-ph-camera {
@@ -128,7 +177,7 @@
   width: 28rpx;
   height: 8rpx;
   border-radius: 4rpx;
-  background: #c9cdd4;
+  background: var(--line-strong);
 }
 
 .model-empty {
@@ -136,6 +185,81 @@
   text-align: center;
   color: var(--text-3);
   font-size: 26rpx;
+}
+
+/* 内存 / 功能问题 chip */
+.chip-row {
+  display: flex;
+  flex-wrap: wrap;
+  padding: 0 24rpx;
+}
+
+.chip {
+  padding: 14rpx 28rpx;
+  margin: 0 16rpx 16rpx 0;
+  border-radius: 999rpx;
+  border: 2rpx solid var(--border-light);
+  background: var(--bg-card);
+  color: var(--text-1);
+  font-size: 26rpx;
+}
+
+.chip.active {
+  border-color: var(--brand);
+  background: var(--brand-light);
+  color: var(--brand);
+  font-weight: 600;
+}
+
+/* 成色 / 屏幕状态说明卡 */
+.desc-grid {
+  display: flex;
+  flex-wrap: wrap;
+  padding: 0 16rpx;
+}
+
+.desc-card {
+  width: calc(50% - 16rpx);
+  margin: 8rpx;
+  padding: 20rpx 24rpx;
+  border: 2rpx solid var(--border-light);
+  border-radius: var(--radius-card);
+  background: var(--bg-card);
+  box-sizing: border-box;
+}
+
+.desc-card.active {
+  border-color: var(--brand);
+  background: var(--brand-light);
+}
+
+.desc-label {
+  font-size: 28rpx;
+  font-weight: 600;
+  color: var(--text-1);
+}
+
+.desc-card.active .desc-label {
+  color: var(--brand);
+}
+
+.desc-text {
+  margin-top: 8rpx;
+  font-size: 22rpx;
+  color: var(--text-3);
+  line-height: 1.4;
+}
+
+/* 功能问题分组 */
+.issue-group {
+  margin-bottom: 8rpx;
+}
+
+.issue-group-title {
+  padding: 16rpx 24rpx 4rpx;
+  font-size: 26rpx;
+  font-weight: 600;
+  color: var(--text-2);
 }
 
 .footer {
