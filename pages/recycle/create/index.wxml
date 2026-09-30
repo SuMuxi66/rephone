@@ -42,7 +42,7 @@
     <view class="footer-tip">提交后请按取件方式寄出机器，质检完成后打款</view>
   </view>
 
-  <t-picker visible="{{regionPickerVisible}}" value="{{regionValue}}" title="选择地区" bindpick="onRegionPick" bind:confirm="onRegionConfirm" bind:close="hideRegion">
+  <t-picker cancelBtn="取消" confirmBtn="确定" visible="{{regionPickerVisible}}" value="{{regionValue}}" title="选择地区" bindpick="onRegionPick" bind:confirm="onRegionConfirm" bind:close="hideRegion">
     <t-picker-item options="{{regionColumns.province}}" />
     <t-picker-item options="{{regionColumns.city}}" />
     <t-picker-item options="{{regionColumns.district}}" />

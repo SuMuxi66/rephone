@@ -41,7 +41,7 @@
     <t-button theme="primary" loading="{{submitting}}" disabled="{{submitting}}" bindtap="onSubmit">提交订单</t-button>
   </view>
 
-  <t-picker
+  <t-picker cancelBtn="取消" confirmBtn="确定"
     visible="{{regionPickerVisible}}"
     value="{{regionValue}}"
     title="选择地区"

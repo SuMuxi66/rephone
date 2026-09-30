@@ -82,11 +82,11 @@
     </view>
   </block>
 
-  <t-picker visible="{{pickerVisible.brand}}" value="{{pickerValue.brand}}" title="选择品牌" bind:confirm="onPickerChange" bind:close="hidePicker" data-type="brand">
+  <t-picker cancelBtn="取消" confirmBtn="确定" visible="{{pickerVisible.brand}}" value="{{pickerValue.brand}}" title="选择品牌" bind:confirm="onPickerChange" bind:close="hidePicker" data-type="brand">
     <t-picker-item options="{{pickerColumns.brand}}" />
   </t-picker>
 
-  <t-picker visible="{{pickerVisible.model}}" value="{{pickerValue.model}}" title="选择机型" bind:confirm="onPickerChange" bind:close="hidePicker" data-type="model">
+  <t-picker cancelBtn="取消" confirmBtn="确定" visible="{{pickerVisible.model}}" value="{{pickerValue.model}}" title="选择机型" bind:confirm="onPickerChange" bind:close="hidePicker" data-type="model">
     <t-picker-item options="{{pickerColumns.model}}" />
   </t-picker>
 </view>
