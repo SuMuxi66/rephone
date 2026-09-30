@@ -13,3 +13,7 @@ export const fetchRecycleOrderTotal = () =>
 /** 维修单总数：GET /api/wx/repair/orders（取分页 total） */
 export const fetchRepairOrderTotal = () =>
   get('/api/wx/repair/orders', { pageNum: 1, pageSize: 1 }).then((page) => (page && page.total) || 0);
+
+/** 购买订单总数（我买到的）：GET /api/wx/sale/orders（取分页 total） */
+export const fetchSaleOrderTotal = () =>
+  get('/api/wx/sale/orders', { pageNum: 1, pageSize: 1 }).then((page) => (page && page.total) || 0);

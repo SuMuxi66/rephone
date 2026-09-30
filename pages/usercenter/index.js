@@ -1,20 +1,31 @@
-import { fetchUserProfile, fetchRecycleOrderTotal, fetchRepairOrderTotal } from '../../services/usercenter/fetchUsercenter';
+import {
+  fetchUserProfile,
+  fetchRecycleOrderTotal,
+  fetchRepairOrderTotal,
+  fetchSaleOrderTotal,
+} from '../../services/usercenter/fetchUsercenter';
 import Toast from 'tdesign-miniprogram/toast/index';
 import { config } from '../../config/index';
 
 const menuData = [
   [
     {
-      title: '我的回收单',
+      title: '我的维修单',
+      tit: '',
+      url: '',
+      type: 'repair-orders',
+    },
+    {
+      title: '我卖出的',
       tit: '',
       url: '',
       type: 'recycle-orders',
     },
     {
-      title: '我的维修单',
+      title: '我买到的',
       tit: '',
       url: '',
-      type: 'repair-orders',
+      type: 'sale-orders',
     },
     {
       title: '收货地址',
@@ -77,9 +88,19 @@ Page({
   },
 
   fetUseriInfoHandle() {
-    Promise.all([fetchUserProfile(), fetchRecycleOrderTotal(), fetchRepairOrderTotal()])
-      .then(([profile, recycleTotal, repairTotal]) => {
-        const totals = { 'recycle-orders': recycleTotal, 'repair-orders': repairTotal };
+    // 单条统计失败不影响整页：接口缺失/未登录时降级为 0
+    Promise.all([
+      fetchUserProfile(),
+      fetchRecycleOrderTotal().catch(() => 0),
+      fetchRepairOrderTotal().catch(() => 0),
+      fetchSaleOrderTotal().catch(() => 0),
+    ])
+      .then(([profile, recycleTotal, repairTotal, saleTotal]) => {
+        const totals = {
+          'recycle-orders': recycleTotal,
+          'repair-orders': repairTotal,
+          'sale-orders': saleTotal,
+        };
         menuData[0].forEach((v) => {
           if (totals[v.type] !== undefined) {
             // eslint-disable-next-line no-param-reassign
@@ -117,6 +138,10 @@ Page({
       }
       case 'repair-orders': {
         wx.navigateTo({ url: '/pages/repair/order/list/index' });
+        break;
+      }
+      case 'sale-orders': {
+        wx.navigateTo({ url: '/pages/sale/order/list/index' });
         break;
       }
       case 'address': {

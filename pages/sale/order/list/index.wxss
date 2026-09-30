@@ -1,0 +1,90 @@
+.page {
+  min-height: 100vh;
+  background: var(--bg-page);
+  padding-bottom: 40rpx;
+}
+
+.filter-bar {
+  white-space: nowrap;
+  background: var(--bg-card);
+  padding: 16rpx var(--space-page);
+}
+
+.filter-item {
+  display: inline-block;
+  padding: 10rpx 28rpx;
+  margin-right: 16rpx;
+  border-radius: 32rpx;
+  font-size: 26rpx;
+  color: var(--text-2);
+  background: #f2f2f4;
+}
+
+.filter-item.active {
+  color: var(--brand);
+  background: var(--brand-light);
+}
+
+.empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 24rpx;
+  padding-top: 120rpx;
+}
+
+.order-card {
+  background: var(--bg-card);
+  margin: var(--space-page);
+  padding: 28rpx;
+  border-radius: var(--radius-card);
+}
+
+.row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.thumb {
+  width: 96rpx;
+  height: 96rpx;
+  flex: none;
+  border-radius: 12rpx;
+  background: #f2f2f4;
+}
+
+.info {
+  flex: 1;
+  min-width: 0;
+  margin: 0 20rpx;
+  display: flex;
+  flex-direction: column;
+}
+
+.name {
+  font-size: 30rpx;
+  font-weight: 600;
+  color: var(--text-1);
+}
+
+.sub {
+  margin-top: 10rpx;
+  font-size: 22rpx;
+  color: var(--text-3);
+}
+
+.row.bottom {
+  margin-top: 20rpx;
+}
+
+.price {
+  font-size: 32rpx;
+  font-weight: 700;
+  color: var(--brand);
+}
+
+.time {
+  font-size: 22rpx;
+  color: var(--text-3);
+}

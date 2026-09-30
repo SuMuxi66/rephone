@@ -1,6 +1,8 @@
 {
   "pages": [
     "pages/home/home",
+    "pages/sale/order/list/index",
+    "pages/sale/order/detail/index",
     "pages/recycle/estimate/index",
     "pages/recycle/result/index",
     "pages/recycle/create/index",

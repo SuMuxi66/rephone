@@ -1,0 +1,39 @@
+<view class="page">
+  <scroll-view scroll-x class="filter-bar">
+    <view
+      wx:for="{{filters}}"
+      wx:key="status"
+      class="filter-item {{activeStatus === item.status ? 'active' : ''}}"
+      data-status="{{item.status}}"
+      bindtap="switchFilter"
+    >{{item.label}}</view>
+  </scroll-view>
+
+  <view wx:if="{{orders.length === 0 && loadStatus !== 1}}" class="empty">
+    <t-empty description="还没有买到的手机" />
+    <t-button theme="primary" size="small" bindtap="goHome">去逛逛</t-button>
+  </view>
+
+  <view
+    wx:for="{{orders}}"
+    wx:key="orderNo"
+    class="order-card"
+    data-order-no="{{item.orderNo}}"
+    bindtap="goDetail"
+  >
+    <view class="row">
+      <image wx:if="{{item.goodsImage}}" class="thumb" src="{{item.goodsImage}}" mode="aspectFill" />
+      <view class="info">
+        <text class="name">{{item.goodsName}}</text>
+        <text class="sub">x{{item.quantity}} · {{item.orderNo}}</text>
+      </view>
+      <status-tag biz="sale" status="{{item.status}}" />
+    </view>
+    <view class="row bottom">
+      <text class="price">¥{{item.totalText}}</text>
+      <text class="time">{{item.createTimeText}}</text>
+    </view>
+  </view>
+
+  <t-load-more status="{{loadStatus}}" list-is-empty="{{orders.length === 0}}" bind:retry="reload" />
+</view>
