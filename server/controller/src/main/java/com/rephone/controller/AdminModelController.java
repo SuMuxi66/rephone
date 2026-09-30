@@ -1,5 +1,6 @@
 package com.rephone.controller;
 
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.rephone.common.result.R;
 import com.rephone.pojo.dto.AdminBrandItem;
 import com.rephone.pojo.dto.AdminModelCreateRequest;
@@ -39,8 +40,11 @@ public class AdminModelController {
     }
 
     @GetMapping("/models")
-    public R<List<AdminModelItem>> models(@RequestParam Long brandId) {
-        return R.ok(modelService.models(brandId));
+    public R<Page<AdminModelItem>> models(@RequestParam Long brandId,
+                                          @RequestParam(required = false) String keyword,
+                                          @RequestParam(defaultValue = "1") long pageNum,
+                                          @RequestParam(defaultValue = "20") long pageSize) {
+        return R.ok(modelService.adminPage(brandId, keyword, pageNum, pageSize));
     }
 
     @PostMapping("/model")

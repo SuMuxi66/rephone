@@ -23,7 +23,17 @@
       <template #header>
         <div class="card-head">
           <span>机型{{ activeBrand ? `（${activeBrand.name}）` : '' }}</span>
-          <el-button size="small" type="primary" :disabled="!activeBrandId" @click="openCreate">新增机型</el-button>
+          <el-space>
+            <el-input
+              v-model="keyword"
+              placeholder="按机型名搜索"
+              clearable
+              style="width: 200px"
+              @keyup.enter="onSearch"
+            />
+            <el-button :disabled="!activeBrandId" @click="onSearch">查询</el-button>
+            <el-button type="primary" :disabled="!activeBrandId" @click="openCreate">新增机型</el-button>
+          </el-space>
         </div>
       </template>
 
@@ -67,6 +77,15 @@
           </template>
         </el-table-column>
       </el-table>
+
+      <el-pagination
+        class="pager"
+        layout="prev, pager, next, total"
+        :total="total"
+        :page-size="pageSize"
+        :current-page="pageNum"
+        @current-change="onPage"
+      />
     </el-card>
 
     <el-dialog v-model="brandVisible" title="新增品牌" width="380px">
@@ -151,6 +170,10 @@ import {
 const brands = ref([]);
 const activeBrandId = ref(null);
 const models = ref([]);
+const total = ref(0);
+const pageNum = ref(1);
+const pageSize = 20;
+const keyword = ref('');
 const loading = ref(false);
 const submitting = ref(false);
 const uploading = ref(false);
@@ -175,12 +198,32 @@ async function loadBrands() {
 
 async function selectBrand(id) {
   activeBrandId.value = id;
+  pageNum.value = 1;
+  await loadModels();
+}
+
+async function loadModels() {
+  if (!activeBrandId.value) return;
   loading.value = true;
   try {
-    models.value = await fetchModels(id);
+    const params = { pageNum: pageNum.value, pageSize };
+    if (keyword.value.trim()) params.keyword = keyword.value.trim();
+    const page = await fetchModels(activeBrandId.value, params);
+    models.value = page.records || [];
+    total.value = page.total || 0;
   } finally {
     loading.value = false;
   }
+}
+
+function onSearch() {
+  pageNum.value = 1;
+  loadModels();
+}
+
+function onPage(page) {
+  pageNum.value = page;
+  loadModels();
 }
 
 async function onCreateBrand() {
@@ -311,6 +354,9 @@ onMounted(loadBrands);
 }
 .model-card {
   flex: 1;
+}
+.pager {
+  margin-top: 16px;
 }
 .card-head {
   display: flex;

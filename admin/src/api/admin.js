@@ -36,7 +36,7 @@ export const deleteAddress = (id) => http.delete(`/admin/addresses/${id}`);
 // ===== 机型管理 =====
 export const fetchBrands = () => http.get('/admin/brands');
 export const createBrand = (name) => http.post('/admin/brand', { name });
-export const fetchModels = (brandId) => http.get('/admin/models', { params: { brandId } });
+export const fetchModels = (brandId, params) => http.get('/admin/models', { params: { brandId, ...params } });
 export const createModel = (payload) => http.post('/admin/model', payload);
 export const updateModel = (id, payload) => http.put(`/admin/model/${id}`, payload);
 export const updateModelPrice = (id, storage, priceYuan) =>

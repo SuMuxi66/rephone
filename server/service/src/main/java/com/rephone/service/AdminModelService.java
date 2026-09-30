@@ -1,6 +1,7 @@
 package com.rephone.service;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.rephone.common.exception.BizException;
 import com.rephone.mapper.BrandMapper;
 import com.rephone.mapper.PhoneModelMapper;
@@ -64,24 +65,36 @@ public class AdminModelService {
         return brand.getId();
     }
 
-    public List<AdminModelItem> models(Long brandId) {
+    /** 管理端机型分页（按机型名搜索），随页组装内存基准价。 */
+    public Page<AdminModelItem> adminPage(Long brandId, String keyword, long pageNum, long pageSize) {
         if (brandId == null) {
             throw new BizException(40030, "brandId 不能为空");
         }
-        List<PhoneModel> models = modelMapper.selectList(new LambdaQueryWrapper<PhoneModel>()
+        if (brandMapper.selectById(brandId) == null) {
+            throw new BizException(40405, "品牌不存在");
+        }
+        LambdaQueryWrapper<PhoneModel> wrapper = new LambdaQueryWrapper<PhoneModel>()
                 .eq(PhoneModel::getBrandId, brandId)
-                .orderByAsc(PhoneModel::getSort));
-        Map<Long, List<QuoteRule>> pricesByModel = models.isEmpty() ? Map.of()
+                .orderByAsc(PhoneModel::getSort)
+                .orderByAsc(PhoneModel::getId);
+        if (StringUtils.hasText(keyword)) {
+            wrapper.like(PhoneModel::getName, keyword.trim());
+        }
+        Page<PhoneModel> page = modelMapper.selectPage(new Page<>(pageNum, pageSize), wrapper);
+        Map<Long, List<QuoteRule>> pricesByModel = page.getRecords().isEmpty() ? Map.of()
                 : ruleMapper.selectList(new LambdaQueryWrapper<QuoteRule>()
                         .eq(QuoteRule::getRuleType, QuoteRule.TYPE_BASE_PRICE)
-                        .in(QuoteRule::getModelId, models.stream().map(PhoneModel::getId).toList()))
+                        .in(QuoteRule::getModelId, page.getRecords().stream().map(PhoneModel::getId).toList()))
                 .stream()
                 .collect(Collectors.groupingBy(QuoteRule::getModelId));
-        return models.stream().map(m -> new AdminModelItem(m.getId(), m.getName(), m.getImage(), m.getReleaseYear(),
+        Page<AdminModelItem> result = new Page<>(page.getCurrent(), page.getSize(), page.getTotal());
+        result.setRecords(page.getRecords().stream().map(m -> new AdminModelItem(m.getId(), m.getName(),
+                m.getImage(), m.getReleaseYear(),
                 pricesByModel.getOrDefault(m.getId(), List.of()).stream()
                         .sorted(Comparator.comparing(QuoteRule::getSort))
                         .map(r -> new AdminModelItem.AdminModelPrice(r.getOptionKey(), r.getNumericValue()))
-                        .toList())).toList();
+                        .toList())).toList());
+        return result;
     }
 
     @Transactional
