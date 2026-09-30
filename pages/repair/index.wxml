@@ -1,92 +1,78 @@
 <view class="page repair-page">
-  <view wx:if="{{loading}}" class="state">
-    <t-loading theme="circular" size="40rpx" text="加载中..." inherit-color />
+  <view class="assurance-bar">
+    <text>先报价后维修</text>
+    <text class="dot">·</text>
+    <text>品质配件</text>
+    <text class="dot">·</text>
+    <text>180天质保</text>
+    <text class="dot">·</text>
+    <text>上门快修</text>
   </view>
 
-  <view wx:elif="{{loadError}}" class="state">
-    <text class="state-text">{{loadError}}</text>
-    <t-button theme="primary" size="small" bindtap="onRetry">重试</t-button>
+  <!-- 品牌与机型都从机型库页面选择（品牌 + 机型一次选完） -->
+  <t-cell-group theme="card">
+    <t-cell title="品牌" arrow hover note="{{form.brandName || '请选择品牌'}}" bindtap="openModelPicker" />
+    <t-cell title="机型" arrow hover note="{{form.modelName || '从机型库选择'}}" bindtap="openModelPicker" />
+  </t-cell-group>
+
+  <view wx:if="{{itemsLoading}}" class="state">
+    <t-loading theme="circular" size="40rpx" text="加载维修项目..." inherit-color />
   </view>
 
-  <block wx:else>
-    <view class="assurance-bar">
-      <text>先报价后维修</text>
-      <text class="dot">·</text>
-      <text>品质配件</text>
-      <text class="dot">·</text>
-      <text>180天质保</text>
-      <text class="dot">·</text>
-      <text>上门快修</text>
-    </view>
-
-    <t-cell-group theme="card">
-      <t-cell title="品牌" arrow hover data-type="brand" bindtap="showPicker" note="{{form.brandName || '请选择品牌'}}" />
-      <t-cell title="机型" arrow hover data-type="model" bindtap="showPicker" note="{{form.modelName || '请选择机型'}}" />
-    </t-cell-group>
-
-    <block wx:if="{{form.modelId}}">
-      <t-checkbox-group value="{{selectedIds}}" bindchange="onItemsChange">
-        <section-card wx:for="{{groups}}" wx:key="groupName" wx:for-item="group" title="{{group.groupName}}">
-          <view class="option-list">
-            <t-checkbox
-              wx:for="{{group.items}}"
-              wx:key="itemId"
-              wx:for-item="item"
-              value="{{item.itemId}}"
-              label="{{item.name}}"
-              content="¥{{item.priceText}} 起"
-              block
-              align="left"
-              borderless
-            />
-          </view>
-        </section-card>
-      </t-checkbox-group>
-
-      <section-card title="维修流程">
-        <view class="flow-steps">
-          <view class="flow-step"><text class="flow-num">1</text><text>选故障</text></view>
-          <view class="flow-arrow">→</view>
-          <view class="flow-step"><text class="flow-num">2</text><text>约上门</text></view>
-          <view class="flow-arrow">→</view>
-          <view class="flow-step"><text class="flow-num">3</text><text>先报价</text></view>
-          <view class="flow-arrow">→</view>
-          <view class="flow-step"><text class="flow-num">4</text><text>修好付款</text></view>
+  <block wx:elif="{{form.modelId}}">
+    <t-checkbox-group value="{{selectedIds}}" bindchange="onItemsChange">
+      <section-card wx:for="{{groups}}" wx:key="groupName" wx:for-item="group" title="{{group.groupName}}">
+        <view class="option-list">
+          <t-checkbox
+            wx:for="{{group.items}}"
+            wx:key="itemId"
+            wx:for-item="item"
+            value="{{item.itemId}}"
+            label="{{item.name}}"
+            content="¥{{item.priceText}} 起"
+            block
+            align="left"
+            borderless
+          />
         </view>
-        <view class="flow-tip">工程师上门检测，确认报价后再开始维修，修好验收付款</view>
       </section-card>
+    </t-checkbox-group>
 
-      <view class="footer">
-        <t-button theme="primary" block disabled="{{!selectedIds.length}}" bindtap="goQuote">
-          去预约（已选 {{selectedIds.length}} 项）
-        </t-button>
+    <section-card title="维修流程">
+      <view class="flow-steps">
+        <view class="flow-step"><text class="flow-num">1</text><text>选故障</text></view>
+        <view class="flow-arrow">→</view>
+        <view class="flow-step"><text class="flow-num">2</text><text>约上门</text></view>
+        <view class="flow-arrow">→</view>
+        <view class="flow-step"><text class="flow-num">3</text><text>先报价</text></view>
+        <view class="flow-arrow">→</view>
+        <view class="flow-step"><text class="flow-num">4</text><text>修好付款</text></view>
       </view>
-    </block>
+      <view class="flow-tip">工程师上门检测，确认报价后再开始维修，修好验收付款</view>
+    </section-card>
 
-    <view wx:else class="empty-tip">
-      <view class="promise">
-        <view class="promise-item">
-          <t-icon prefix="wr" name="wallet" size="44rpx" color="#0E5A47" />
-          <text>先报价后维修</text>
-        </view>
-        <view class="promise-item">
-          <t-icon name="tools" size="44rpx" color="#0E5A47" />
-          <text>品质配件</text>
-        </view>
-        <view class="promise-item">
-          <t-icon name="check-circle-filled" size="44rpx" color="#0E5A47" />
-          <text>180天质保</text>
-        </view>
-      </view>
-      <view class="empty-guide">选择品牌和机型，查看专属维修价</view>
+    <view class="footer">
+      <t-button theme="primary" block disabled="{{!selectedIds.length}}" bindtap="goQuote">
+        去预约（已选 {{selectedIds.length}} 项）
+      </t-button>
     </view>
   </block>
 
-  <t-picker cancelBtn="取消" confirmBtn="确定" visible="{{pickerVisible.brand}}" value="{{pickerValue.brand}}" title="选择品牌" bind:confirm="onPickerChange" bind:close="hidePicker" data-type="brand">
-    <t-picker-item options="{{pickerColumns.brand}}" />
-  </t-picker>
-
-  <t-picker cancelBtn="取消" confirmBtn="确定" visible="{{pickerVisible.model}}" value="{{pickerValue.model}}" title="选择机型" bind:confirm="onPickerChange" bind:close="hidePicker" data-type="model">
-    <t-picker-item options="{{pickerColumns.model}}" />
-  </t-picker>
+  <view wx:else class="empty-tip">
+    <view class="promise">
+      <view class="promise-item">
+        <t-icon prefix="wr" name="wallet" size="44rpx" color="#0E5A47" />
+        <text>先报价后维修</text>
+      </view>
+      <view class="promise-item">
+        <t-icon name="tools" size="44rpx" color="#0E5A47" />
+        <text>品质配件</text>
+      </view>
+      <view class="promise-item">
+        <t-icon name="check-circle-filled" size="44rpx" color="#0E5A47" />
+        <text>180天质保</text>
+      </view>
+    </view>
+    <view class="empty-guide">从机型库选择品牌和机型，查看专属维修价</view>
+  </view>
 </view>
