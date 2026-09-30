@@ -1,10 +1,13 @@
 import { createRecycleOrder } from '../../../services/recycle/order';
 import { fen2yuan } from '../../../common/recycle-status';
 import { areaData } from '../../../config/index';
+import addressPrefill from '../../../common/address-prefill';
 
 const provinces = areaData.map((p) => ({ label: p.label, value: p.label }));
 
 Page({
+  behaviors: [addressPrefill],
+
   data: {
     quote: null,
     quoteText: '',
@@ -33,6 +36,7 @@ Page({
       return;
     }
     this.setData({ quote, quoteText: fen2yuan(quote.priceFen) });
+    this.loadAddressBook();
   },
 
   onPickupType(e) {
@@ -175,6 +179,7 @@ Page({
         pickupAddress: `${form.region} ${form.detail}`,
         remark: form.remark,
       });
+      await this.saveAddressIfNew();
       wx.removeStorageSync('recycle.quoteResult');
       wx.redirectTo({ url: `/pages/recycle/order/detail/index?orderNo=${orderNo}` });
     } catch (e) {

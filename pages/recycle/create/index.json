@@ -9,6 +9,8 @@
     "t-button": "tdesign-miniprogram/button/button",
     "t-textarea": "tdesign-miniprogram/textarea/textarea",
     "t-icon": "tdesign-miniprogram/icon/icon",
+    "t-popup": "tdesign-miniprogram/popup/popup",
+    "t-tag": "tdesign-miniprogram/tag/tag",
     "section-card": "/components/section-card/index"
   }
 }

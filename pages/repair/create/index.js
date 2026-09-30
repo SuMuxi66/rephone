@@ -1,6 +1,7 @@
 import { createRepairOrder, fetchCosUploadSign } from '../../../services/repair/repair';
 import { fen2yuan } from '../../../common/recycle-status';
 import { areaData } from '../../../config/index';
+import addressPrefill from '../../../common/address-prefill';
 
 const provinces = areaData.map((p) => ({ label: p.label, value: p.label }));
 const DAY_OPTIONS = [
@@ -38,6 +39,8 @@ function uploadToCos(tempFilePath, ext) {
 }
 
 Page({
+  behaviors: [addressPrefill],
+
   data: {
     selection: null,
     itemsText: '',
@@ -74,6 +77,7 @@ Page({
       itemsText: selection.items.map((it) => it.name).join('、'),
       totalText: fen2yuan(totalFen),
     });
+    this.loadAddressBook();
   },
 
   onInput(e) {
@@ -263,6 +267,7 @@ Page({
         remark: form.remark,
         images,
       });
+      await this.saveAddressIfNew();
       wx.removeStorageSync('repair.selection');
       wx.redirectTo({ url: `/pages/repair/order/detail/index?orderNo=${orderNo}` });
     } catch (e) {

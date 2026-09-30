@@ -8,6 +8,8 @@
     "t-button": "tdesign-miniprogram/button/button",
     "t-icon": "tdesign-miniprogram/icon/icon",
     "t-image": "tdesign-miniprogram/image/image",
+    "t-popup": "tdesign-miniprogram/popup/popup",
+    "t-tag": "tdesign-miniprogram/tag/tag",
     "t-picker": "tdesign-miniprogram/picker/picker",
     "t-picker-item": "tdesign-miniprogram/picker-item/picker-item",
     "section-card": "/components/section-card/index"

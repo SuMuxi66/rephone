@@ -20,6 +20,12 @@
     </view>
   </section-card>
 
+  <view wx:if="{{addressBook.length}}" class="addr-bar" bindtap="openAddressSheet">
+    <t-icon prefix="wr" name="location" size="34rpx" color="#FF5F15" />
+    <text class="addr-bar-text">已存 {{addressBook.length}} 条地址，点击套用</text>
+    <t-icon name="chevron-right" size="36rpx" color="#BBBBBB" />
+  </view>
+
   <section-card title="取件信息">
     <view class="form-body">
       <t-input label="联系人" placeholder="姓名" value="{{form.name}}" data-field="name" bindchange="onInput" />
@@ -41,4 +47,17 @@
     <t-picker-item options="{{regionColumns.city}}" />
     <t-picker-item options="{{regionColumns.district}}" />
   </t-picker>
+
+  <t-popup visible="{{addressSheetVisible}}" placement="bottom" bind:visible-change="onAddressSheetVisibleChange">
+    <view class="addr-sheet">
+      <view class="addr-sheet-title">选择常用地址</view>
+      <view wx:for="{{addressBook}}" wx:key="id" class="addr-item" data-id="{{item.id}}" bindtap="onPickAddress">
+        <view class="addr-item-info">
+          <view class="addr-item-contact">{{item.name}} {{item.phone}}</view>
+          <view class="addr-item-detail">{{item.region}} {{item.detail}}</view>
+        </view>
+        <t-tag wx:if="{{item.isDefault}}" theme="primary" variant="light" size="small">默认</t-tag>
+      </view>
+    </view>
+  </t-popup>
 </view>

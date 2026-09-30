@@ -88,3 +88,55 @@
   font-size: 24rpx;
   color: var(--text-3);
 }
+
+/* ===== 地址簿套用 ===== */
+.addr-bar {
+  display: flex;
+  align-items: center;
+  gap: 12rpx;
+  margin: 24rpx var(--space-page) 0;
+  padding: 20rpx 24rpx;
+  background: var(--bg-card);
+  border-radius: var(--radius-card);
+}
+
+.addr-bar-text {
+  flex: 1;
+  font-size: 26rpx;
+  color: var(--text-2);
+}
+
+.addr-sheet {
+  padding: 32rpx 32rpx calc(env(safe-area-inset-bottom) + 32rpx);
+}
+
+.addr-sheet-title {
+  margin-bottom: 8rpx;
+  font-size: 32rpx;
+  font-weight: 600;
+  color: var(--text-1);
+}
+
+.addr-item {
+  display: flex;
+  align-items: center;
+  gap: 16rpx;
+  padding: 24rpx 4rpx;
+  border-bottom: 1rpx solid #f0f0f0;
+}
+
+.addr-item-info {
+  flex: 1;
+}
+
+.addr-item-contact {
+  font-size: 28rpx;
+  font-weight: 600;
+  color: var(--text-1);
+}
+
+.addr-item-detail {
+  margin-top: 6rpx;
+  font-size: 24rpx;
+  color: var(--text-3);
+}
