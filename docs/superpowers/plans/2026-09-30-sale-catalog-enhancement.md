@@ -57,7 +57,7 @@ Java 实体对应 `brand / storage / conditionLevel / tags`（MyBatis-Plus 下�
 | 1 | `feat(goods): 商品表与实体扩展品牌/内存/成色/标签字段` | `db/schema-sale.sql`、`db/patch-goods-attrs.sql`(新)、`pojo/entity/Goods.java` | `mvnw test` 编译通过；H2 建表含新列 |
 | 2 | `feat(goods): 商品新增/编辑接口支持品牌/内存/成色/标签` | `GoodsService.java`、`AdminGoodsController.java` | 管理端可写入属性并回读 |
 | 3 | `feat(goods): 在售列表支持关键词/品牌/成色筛选与排序，并新增筛选项接口` | `GoodsService.java`、`WxGoodsController.java` | 不同入参返回不同结果集；`/filters` 返回在售品牌/成色去重 |
-| 4 | `test(goods): P6 补充商品属性与列表筛选断言` | `P6SaleOrderTest.java` | `mvnw test` 全绿 |
+| 4 | `fix(goods): 修正货架筛选项接口空值处理，补充 P6 属性与筛选断言` | `GoodsService.java`、`P6SaleOrderTest.java` | `mvnw test` 全绿 |
 | 5 | `feat(admin): 商品管理支持品牌/内存/成色/标签录入与展示` | `admin/src/views/Goods.vue`（+`api/admin.js` 如需） | `npm run build` 通过；表单可保存/回填 |
 | 6 | `feat(sale): 货架支持品牌/成色筛选，详情展示机型属性` | `pages/sale/index.*`、`pages/sale/detail/index.*` | 货架 chips 生效；详情显示 4 项属性 |
 
@@ -94,9 +94,15 @@ GET  /api/wx/goods/{id}        不变
 
 ## 8. 进度
 
-- [ ] 1 表与实体扩展
-- [ ] 2 管理端接口写入属性
-- [ ] 3 用户端筛选与筛选项接口
-- [ ] 4 P6 测试补充
+- [x] 1 表与实体扩展（`0b586ae`）
+- [x] 2 管理端接口写入属性（`9d4f008`）
+- [x] 3 用户端筛选与筛选项接口（`2e010ca`）
+- [x] 4 筛选项空值修复 + P6 断言（`10650ca`）
 - [ ] 5 后台录入 UI
 - [ ] 6 小程序货架/详情
+
+### 验证记录
+
+- `cd server && ./mvnw.cmd -o test` → **28 个用例全部通过**（P1 1 / P2 7 / P3 4 / P5 5+3 / P6 5 / P7 3），BUILD SUCCESS。
+- 第 3 项首次提交的 `onSaleFilterOptions` 在空值场景抛 NPE，已被第 4 项的 P6 用例捕获并修复——这正是「改契约必须同提交补测试」的价值。
+- 尚未验证：管理端 `npm run build`（第 5 项）、小程序开发者工具编译（第 6 项）。
