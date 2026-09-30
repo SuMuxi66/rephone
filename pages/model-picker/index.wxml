@@ -1,0 +1,59 @@
+<view class="picker">
+  <!-- 搜索 -->
+  <view class="search">
+    <view class="search-box">
+      <t-icon name="search" size="30rpx" color="#99A39D" />
+      <input
+        class="search-input"
+        placeholder="搜索机型"
+        placeholder-class="search-ph"
+        value="{{keyword}}"
+        confirm-type="search"
+        bindinput="onSearchInput"
+      />
+    </view>
+  </view>
+
+  <view wx:if="{{pageLoading}}" class="state">
+    <t-loading theme="circular" size="40rpx" text="加载中..." inherit-color />
+  </view>
+
+  <view wx:elif="{{loadError}}" class="state">
+    <text class="state-text">{{loadError}}</text>
+    <t-button theme="primary" size="small" bindtap="onRetry">重试</t-button>
+  </view>
+
+  <view wx:else class="body">
+    <!-- 左侧品牌栏 -->
+    <scroll-view scroll-y class="brands" enhanced show-scrollbar="{{false}}">
+      <view
+        wx:for="{{brands}}"
+        wx:key="id"
+        class="brand {{activeBrandId === item.id ? 'brand--active' : ''}}"
+        data-id="{{item.id}}"
+        bindtap="onBrandTap"
+      >{{item.name}}</view>
+    </scroll-view>
+
+    <!-- 右侧机型图片网格 -->
+    <scroll-view scroll-y class="models" enhanced show-scrollbar="{{false}}">
+      <view class="grid">
+        <view
+          wx:for="{{list}}"
+          wx:key="id"
+          class="cell {{selectedModelId === item.id ? 'cell--active' : ''}}"
+          data-id="{{item.id}}"
+          bindtap="onPick"
+        >
+          <image wx:if="{{item.image}}" class="cell-img" src="{{item.image}}" mode="aspectFit" lazy-load />
+          <view wx:else class="cell-ph">
+            <view class="cell-ph-body"><view class="cell-ph-camera"></view></view>
+          </view>
+          <text class="cell-name">{{item.name}}</text>
+        </view>
+      </view>
+      <view wx:if="{{modelsLoading}}" class="grid-tip">加载中…</view>
+      <view wx:elif="{{!list.length}}" class="grid-tip">{{keyword ? '没有匹配的机型' : '该品牌暂无机型，请先在后台机型库添加'}}</view>
+    </scroll-view>
+  </view>
+</view>

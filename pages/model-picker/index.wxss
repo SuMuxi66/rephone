@@ -1,0 +1,168 @@
+/* 机型库：整页不滚动，左右两栏各自滚动 */
+page {
+  height: 100vh;
+  overflow: hidden;
+  background: var(--bg-page);
+}
+
+.picker {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
+
+.search {
+  flex: none;
+  padding: 16rpx var(--space-page);
+  background: var(--bg-card);
+  border-bottom: 1rpx solid var(--border-light);
+}
+
+.search-box {
+  display: flex;
+  align-items: center;
+  gap: 12rpx;
+  height: 72rpx;
+  padding: 0 24rpx;
+  border-radius: 36rpx;
+  background: #EDEBE4;
+}
+
+.search-input {
+  flex: 1;
+  font-size: 28rpx;
+  color: var(--text-1);
+}
+
+.search-ph {
+  color: var(--text-3);
+}
+
+.state {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 24rpx;
+}
+
+.state-text {
+  font-size: 28rpx;
+  color: var(--text-3);
+}
+
+.body {
+  flex: 1;
+  display: flex;
+  min-height: 0;
+}
+
+/* 左侧品牌栏 */
+.brands {
+  width: 184rpx;
+  flex: none;
+  height: 100%;
+  background: #F1EFEA;
+}
+
+.brand {
+  box-sizing: border-box;
+  padding: 30rpx 16rpx 30rpx 24rpx;
+  font-size: 26rpx;
+  color: var(--text-2);
+}
+
+.brand--active {
+  background: var(--bg-card);
+  color: var(--brand);
+  font-weight: 700;
+  /* 左侧品牌绿指示条 */
+  border-left: 6rpx solid var(--brand);
+  padding-left: 18rpx;
+}
+
+/* 右侧机型网格 */
+.models {
+  flex: 1;
+  height: 100%;
+  min-width: 0;
+}
+
+/* 两列网格：border-box + space-between，不用 gap/calc(50%) 混用 */
+.grid {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  padding: 20rpx;
+}
+
+.cell {
+  box-sizing: border-box;
+  width: calc(50% - 10rpx);
+  margin-bottom: 20rpx;
+  padding: 16rpx 12rpx 18rpx;
+  background: var(--bg-card);
+  border: 1rpx solid var(--border-light);
+  border-radius: 16rpx;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.cell--active {
+  border-color: var(--brand);
+  background: var(--brand-light);
+}
+
+.cell-img {
+  width: 120rpx;
+  height: 120rpx;
+}
+
+.cell-ph {
+  width: 120rpx;
+  height: 120rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.cell-ph-body {
+  width: 56rpx;
+  height: 100rpx;
+  border: 5rpx solid #C9CDD4;
+  border-radius: 12rpx;
+  position: relative;
+  background: #FFFFFF;
+}
+
+.cell-ph-camera {
+  position: absolute;
+  top: 6rpx;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 20rpx;
+  height: 6rpx;
+  border-radius: 3rpx;
+  background: #C9CDD4;
+}
+
+.cell-name {
+  margin-top: 12rpx;
+  width: 100%;
+  text-align: center;
+  font-size: 24rpx;
+  color: var(--text-1);
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.grid-tip {
+  padding: 80rpx 24rpx;
+  text-align: center;
+  font-size: 24rpx;
+  line-height: 1.7;
+  color: var(--text-3);
+}
