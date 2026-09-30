@@ -37,12 +37,51 @@
   color: rgba(255, 255, 255, 0.72);
 }
 
-.mast-claim {
+/* 主张：第一行靠左、第二行靠右，形成错落；第二行做渐变艺术字 + 手写笔触 */
+.claim {
+  display: flex;
+  flex-direction: column;
+}
+
+.claim-l1 {
   font-size: 54rpx;
   font-weight: 700;
   letter-spacing: -1rpx;
   line-height: 1.24;
+  color: rgba(255, 255, 255, 0.9);
+  /* 细描边做微浮雕感；不支持描边时仍是正常填充，不会消失 */
+  -webkit-text-stroke: 1rpx rgba(255, 255, 255, 0.35);
+}
+
+.claim-l2 {
+  align-self: flex-end;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  margin-top: 10rpx;
+}
+
+.claim-l2-text {
+  font-size: 88rpx;
+  font-weight: 800;
+  letter-spacing: -2rpx;
+  line-height: 1.08;
+  /* 兜底色：不支持 background-clip 时仍是白色实心，不会消失 */
   color: #FFFFFF;
+  background-image: linear-gradient(98deg, #FFFFFF 0%, #F0FAF6 34%, #A8DCC8 74%, #7FC9B2 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* 手写感笔触：两端渐隐 + 轻微倾斜 */
+.claim-brush {
+  width: 100%;
+  height: 10rpx;
+  margin-top: 2rpx;
+  border-radius: 6rpx;
+  background: linear-gradient(90deg, rgba(185, 227, 213, 0) 0%, #B9E3D5 26%, #7FC9B2 100%);
+  transform: rotate(-1.2deg);
 }
 
 .mast-sub {

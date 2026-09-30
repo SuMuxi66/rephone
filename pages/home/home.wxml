@@ -8,8 +8,14 @@
       </view>
       <text class="mast-service" bindtap="goRepair">客服</text>
     </view>
-    <view class="mast-claim">修好，</view>
-    <view class="mast-claim">再付钱。</view>
+    <!-- 主张：错落排版（一左一右）+ 渐变艺术字 + 手写笔触 -->
+    <view class="claim">
+      <text class="claim-l1">修好，</text>
+      <view class="claim-l2">
+        <text class="claim-l2-text">再付钱。</text>
+        <view class="claim-brush"></view>
+      </view>
+    </view>
     <view class="mast-sub">换屏 · 换电池 · 进水 · 主板 · 摄像头</view>
     <view class="mast-sub">先报价后维修，修好验收才付款</view>
     <view class="mast-cta">
