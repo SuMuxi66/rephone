@@ -70,3 +70,37 @@ CREATE TABLE IF NOT EXISTS `after_sale` (
     KEY `idx_as_order` (`order_no`),
     KEY `idx_as_user` (`user_id`)
 );
+
+-- 商品质检报告（出售端）：与商品 1:1 的报告头。
+-- 注意：与回收单的 inspection 表语义不同（那张挂在 order_no 上），本表挂在 goods_id 上。
+-- 整体成色沿用 goods.condition_level，本表不冗余该列，避免两处不一致。
+CREATE TABLE IF NOT EXISTS `goods_inspection` (
+    `id`             BIGINT        NOT NULL AUTO_INCREMENT,
+    `tenant_id`      BIGINT        NOT NULL DEFAULT 0 COMMENT '所属租户',
+    `goods_id`       BIGINT        NOT NULL COMMENT '商品ID',
+    `report_no`      VARCHAR(32)   NOT NULL COMMENT '质检报告编号（Q前缀）',
+    `inspector`      VARCHAR(32)   NULL COMMENT '质检工程师',
+    `inspected_at`   DATETIME      NULL COMMENT '质检时间',
+    `battery_health` INT           NULL COMMENT '电池健康度（0-100）',
+    `summary`        VARCHAR(512)  NULL COMMENT '质检综合结论',
+    `images`         VARCHAR(1024) NULL COMMENT '报告图片URL，英文逗号分隔',
+    `create_time`    DATETIME      NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    `update_time`    DATETIME      NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    PRIMARY KEY (`id`),
+    UNIQUE KEY `uk_goods_inspection_goods` (`goods_id`)
+);
+
+-- 质检检查项（1 商品 : N 项）：category 分组，item_result 为该项结论（正常/轻微划痕/已更换…）
+CREATE TABLE IF NOT EXISTS `goods_inspection_item` (
+    `id`          BIGINT       NOT NULL AUTO_INCREMENT,
+    `tenant_id`   BIGINT       NOT NULL DEFAULT 0 COMMENT '所属租户',
+    `goods_id`    BIGINT       NOT NULL COMMENT '商品ID',
+    `category`    VARCHAR(16)  NOT NULL COMMENT '分组：外观/屏幕/功能/拆修',
+    `item_name`   VARCHAR(32)  NOT NULL COMMENT '检查项名',
+    `item_result` VARCHAR(32)  NOT NULL COMMENT '结论：正常/轻微划痕/已更换/异常等',
+    `item_note`   VARCHAR(128) NULL COMMENT '补充说明（损伤位置描述）',
+    `sort_no`     INT          NOT NULL DEFAULT 0 COMMENT '展示排序',
+    `create_time` DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (`id`),
+    KEY `idx_gii_goods` (`goods_id`)
+);
