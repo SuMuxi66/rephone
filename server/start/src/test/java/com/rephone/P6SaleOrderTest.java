@@ -275,4 +275,70 @@ class P6SaleOrderTest {
         }
         return false;
     }
+
+    /** 商品质检报告：无报告 → 录入 → 用户端读取 → 整体覆盖 → 清空。 */
+    @Test
+    @Order(6)
+    void goods_inspection_report() throws Exception {
+        ResponseEntity<String> created = rest.exchange("/api/admin/goods", HttpMethod.POST,
+                new HttpEntity<>(Map.of("name", "P6 质检机", "priceYuan", new BigDecimal("1500.00"),
+                        "stock", 2, "conditionLevel", "9成新"), admin()), String.class);
+        Long goodsId = objectMapper.readTree(created.getBody()).path("data").path("goodsId").asLong();
+
+        // 未录入报告 → data 为 null
+        JsonNode before = objectMapper.readTree(rest.exchange("/api/wx/goods/" + goodsId + "/inspection",
+                HttpMethod.GET, new HttpEntity<>(user()), String.class).getBody());
+        assertEquals(0, before.get("code").asInt());
+        assertTrue(before.get("data") == null || before.get("data").isNull(), "未录入报告时应为空");
+
+        // 录入：3 项检查，其中 1 项异常
+        Map<String, Object> body = Map.of(
+                "inspector", "质检员小李",
+                "inspectedAt", "2026-09-30 10:30:00",
+                "batteryHealth", 92,
+                "summary", "整机功能正常，屏幕左上角有细微划痕",
+                "images", List.of("https://cdn.example.com/q1.jpg", "https://cdn.example.com/q2.jpg"),
+                "items", List.of(
+                        Map.of("category", "外观", "name", "后盖", "result", "轻微磕碰", "note", "右下角一处"),
+                        Map.of("category", "屏幕", "name", "屏幕显示", "result", "正常", "note", ""),
+                        Map.of("category", "功能", "name", "电池健康", "result", "正常", "note", "92%")));
+        ResponseEntity<String> saved = rest.exchange("/api/admin/goods/" + goodsId + "/inspection",
+                HttpMethod.POST, new HttpEntity<>(body, admin()), String.class);
+        assertEquals(0, objectMapper.readTree(saved.getBody()).get("code").asInt());
+
+        JsonNode report = objectMapper.readTree(rest.exchange("/api/wx/goods/" + goodsId + "/inspection",
+                HttpMethod.GET, new HttpEntity<>(user()), String.class).getBody()).path("data");
+        String reportNo = report.path("reportNo").asText();
+        assertTrue(reportNo.startsWith("Q"), "报告号应 Q 前缀");
+        assertEquals("质检员小李", report.path("inspector").asText());
+        assertEquals(92, report.path("batteryHealth").asInt());
+        assertEquals("9成新", report.path("conditionLevel").asText(), "成色应取自商品本身");
+        assertEquals(3, report.path("items").size());
+        assertEquals(2, report.path("normalCount").asInt());
+        assertEquals(1, report.path("abnormalCount").asInt());
+        assertEquals(2, report.path("images").size());
+
+        // 整体覆盖：只留 1 项，报告号不变
+        Map<String, Object> overwrite = Map.of(
+                "inspector", "质检员小李",
+                "batteryHealth", 88,
+                "items", List.of(Map.of("category", "功能", "name", "电池健康",
+                        "result", "已更换", "note", "官方更换")));
+        rest.exchange("/api/admin/goods/" + goodsId + "/inspection", HttpMethod.POST,
+                new HttpEntity<>(overwrite, admin()), String.class);
+        JsonNode after = objectMapper.readTree(rest.exchange("/api/wx/goods/" + goodsId + "/inspection",
+                HttpMethod.GET, new HttpEntity<>(user()), String.class).getBody()).path("data");
+        assertEquals(1, after.path("items").size(), "检查项应整体覆盖");
+        assertEquals(88, after.path("batteryHealth").asInt());
+        assertEquals(0, after.path("normalCount").asInt());
+        assertEquals(1, after.path("abnormalCount").asInt());
+        assertEquals(reportNo, after.path("reportNo").asText(), "覆盖不应更换报告号");
+
+        // 清空：items 为空即删除报告
+        rest.exchange("/api/admin/goods/" + goodsId + "/inspection", HttpMethod.POST,
+                new HttpEntity<>(Map.of("items", List.of()), admin()), String.class);
+        JsonNode cleared = objectMapper.readTree(rest.exchange("/api/wx/goods/" + goodsId + "/inspection",
+                HttpMethod.GET, new HttpEntity<>(user()), String.class).getBody());
+        assertTrue(cleared.get("data") == null || cleared.get("data").isNull(), "清空后应为空");
+    }
 }
