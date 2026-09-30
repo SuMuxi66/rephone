@@ -1,0 +1,166 @@
+.page {
+  min-height: 100vh;
+  background: var(--bg-page);
+  padding-bottom: 220rpx;
+}
+
+.goods-card {
+  display: flex;
+  align-items: center;
+  margin: var(--space-page);
+  padding: 24rpx;
+  background: var(--bg-card);
+  border-radius: var(--radius-card);
+}
+
+.goods-img {
+  width: 140rpx;
+  height: 140rpx;
+  flex: none;
+  border-radius: 12rpx;
+  background: #f2f2f4;
+}
+
+.goods-img--empty {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22rpx;
+  color: var(--text-3);
+}
+
+.goods-info {
+  flex: 1;
+  min-width: 0;
+  margin-left: 20rpx;
+  display: flex;
+  flex-direction: column;
+}
+
+.goods-name {
+  font-size: 30rpx;
+  font-weight: 600;
+  color: var(--text-1);
+}
+
+.goods-desc {
+  margin-top: 8rpx;
+  font-size: 22rpx;
+  color: var(--text-3);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.goods-price {
+  margin-top: 12rpx;
+  font-size: 32rpx;
+  font-weight: 700;
+  color: var(--brand);
+}
+
+.qty-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 24rpx;
+}
+
+.qty-label {
+  font-size: 28rpx;
+  color: var(--text-2);
+}
+
+.addr-bar {
+  display: flex;
+  align-items: center;
+  gap: 12rpx;
+  margin: 0 var(--space-page) var(--space-page);
+  padding: 20rpx 24rpx;
+  background: var(--brand-light);
+  border-radius: var(--radius-card);
+}
+
+.addr-bar-text {
+  flex: 1;
+  font-size: 26rpx;
+  color: var(--brand);
+}
+
+.form-body {
+  padding-bottom: 12rpx;
+}
+
+.field-error {
+  padding: 0 24rpx 12rpx;
+  font-size: 22rpx;
+  color: var(--danger);
+}
+
+.footer {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20rpx;
+  padding: 20rpx var(--space-page);
+  padding-bottom: calc(20rpx + env(safe-area-inset-bottom));
+  background: var(--bg-card);
+  border-top: 1rpx solid var(--border-light);
+}
+
+.total {
+  display: flex;
+  align-items: baseline;
+}
+
+.total-label {
+  font-size: 24rpx;
+  color: var(--text-3);
+}
+
+.total-price {
+  margin-left: 8rpx;
+  font-size: 40rpx;
+  font-weight: 700;
+  color: var(--brand);
+}
+
+.addr-sheet {
+  padding: 32rpx var(--space-page);
+  padding-bottom: calc(32rpx + env(safe-area-inset-bottom));
+  background: var(--bg-card);
+}
+
+.addr-sheet-title {
+  margin-bottom: 16rpx;
+  font-size: 32rpx;
+  font-weight: 600;
+  color: var(--text-1);
+}
+
+.addr-item {
+  display: flex;
+  align-items: center;
+  padding: 24rpx 0;
+  border-bottom: 1rpx solid var(--border-light);
+}
+
+.addr-item-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.addr-item-contact {
+  font-size: 28rpx;
+  color: var(--text-1);
+}
+
+.addr-item-detail {
+  margin-top: 8rpx;
+  font-size: 24rpx;
+  color: var(--text-3);
+}

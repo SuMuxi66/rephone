@@ -1,0 +1,72 @@
+<view class="page">
+  <view class="search-wrap">
+    <view class="search-box">
+      <t-icon name="search" size="36rpx" color="#999999" />
+      <input
+        class="search-input"
+        placeholder="搜索品牌 / 型号 / 成色"
+        placeholder-class="search-ph"
+        value="{{keyword}}"
+        confirm-type="search"
+        bindinput="onSearchInput"
+      />
+    </view>
+  </view>
+
+  <view class="promise">
+    <view class="promise-item">
+      <t-icon name="verified" size="32rpx" color="#FF5F15" />
+      <text>官方自营</text>
+    </view>
+    <view class="promise-item">
+      <t-icon name="check-circle" size="32rpx" color="#FF5F15" />
+      <text>库存实时</text>
+    </view>
+    <view class="promise-item">
+      <t-icon name="service" size="32rpx" color="#FF5F15" />
+      <text>支持售后</text>
+    </view>
+  </view>
+
+  <view class="sort-bar">
+    <view
+      wx:for="{{sorts}}"
+      wx:key="key"
+      class="sort-item {{activeSort === item.key ? 'active' : ''}}"
+      data-key="{{item.key}}"
+      bindtap="switchSort"
+    >{{item.label}}</view>
+    <text class="count">共 {{total}} 台</text>
+  </view>
+
+  <view wx:if="{{!visible.length && loadStatus !== 1}}" class="empty">
+    <t-empty description="库存暂无在售机型" />
+  </view>
+
+  <view class="grid">
+    <view
+      wx:for="{{visible}}"
+      wx:key="id"
+      class="card"
+      data-id="{{item.id}}"
+      bindtap="goDetail"
+    >
+      <image wx:if="{{item.image}}" class="card-img" src="{{item.image}}" mode="aspectFill" />
+      <view wx:else class="card-img card-img--empty"><text>暂无图片</text></view>
+      <view class="card-body">
+        <view class="card-title">{{item.name}}</view>
+        <view wx:if="{{item.descText}}" class="card-desc">{{item.descText}}</view>
+        <view class="card-foot">
+          <view class="price-wrap">
+            <text class="price-symbol">¥</text>
+            <text class="price">{{item.priceText}}</text>
+            <text wx:if="{{item.originText}}" class="origin">¥{{item.originText}}</text>
+          </view>
+          <text class="stock">{{item.stockText}}</text>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <t-load-more status="{{loadStatus}}" list-is-empty="{{!visible.length}}" bind:retry="onRetry" />
+</view>

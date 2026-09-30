@@ -1,0 +1,161 @@
+.page {
+  min-height: 100vh;
+  background: var(--bg-page);
+  padding-bottom: 160rpx;
+}
+
+.search-wrap {
+  padding: 16rpx var(--space-page);
+  background: var(--bg-card);
+}
+
+.search-box {
+  display: flex;
+  align-items: center;
+  height: 72rpx;
+  padding: 0 24rpx;
+  border-radius: 36rpx;
+  background: #f2f2f4;
+}
+
+.search-input {
+  flex: 1;
+  margin-left: 12rpx;
+  font-size: 28rpx;
+  color: var(--text-1);
+}
+
+.search-ph {
+  color: var(--text-3);
+}
+
+.promise {
+  display: flex;
+  justify-content: space-around;
+  padding: 20rpx var(--space-page);
+  background: var(--bg-card);
+  border-top: 1rpx solid var(--border-light);
+}
+
+.promise-item {
+  display: flex;
+  align-items: center;
+  gap: 8rpx;
+  font-size: 24rpx;
+  color: var(--text-2);
+}
+
+.sort-bar {
+  display: flex;
+  align-items: center;
+  padding: 20rpx var(--space-page);
+  background: var(--bg-card);
+}
+
+.sort-item {
+  margin-right: 32rpx;
+  font-size: 26rpx;
+  color: var(--text-2);
+}
+
+.sort-item.active {
+  color: var(--brand);
+  font-weight: 600;
+}
+
+.count {
+  margin-left: auto;
+  font-size: 22rpx;
+  color: var(--text-3);
+}
+
+.empty {
+  padding-top: 120rpx;
+}
+
+.grid {
+  display: flex;
+  flex-wrap: wrap;
+  padding: 12rpx;
+}
+
+.card {
+  width: calc(50% - 24rpx);
+  margin: 12rpx;
+  background: var(--bg-card);
+  border-radius: var(--radius-card);
+  overflow: hidden;
+}
+
+.card-img {
+  display: block;
+  width: 100%;
+  height: 340rpx;
+  background: #f2f2f4;
+}
+
+.card-img--empty {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24rpx;
+  color: var(--text-3);
+}
+
+.card-body {
+  padding: 20rpx;
+}
+
+.card-title {
+  font-size: 28rpx;
+  font-weight: 600;
+  color: var(--text-1);
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+}
+
+.card-desc {
+  margin-top: 8rpx;
+  font-size: 22rpx;
+  color: var(--text-3);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.card-foot {
+  margin-top: 16rpx;
+}
+
+.price-wrap {
+  display: flex;
+  align-items: baseline;
+}
+
+.price-symbol {
+  font-size: 22rpx;
+  font-weight: 700;
+  color: var(--brand);
+}
+
+.price {
+  font-size: 36rpx;
+  font-weight: 700;
+  color: var(--brand);
+}
+
+.origin {
+  margin-left: 12rpx;
+  font-size: 22rpx;
+  color: var(--text-3);
+  text-decoration: line-through;
+}
+
+.stock {
+  display: block;
+  margin-top: 6rpx;
+  font-size: 20rpx;
+  color: var(--text-3);
+}

@@ -1,0 +1,83 @@
+.page {
+  min-height: 100vh;
+  background: var(--bg-page);
+  padding-bottom: 200rpx;
+}
+
+.gallery {
+  width: 100%;
+  height: 640rpx;
+  background: #f2f2f4;
+}
+
+.gallery-img {
+  width: 100%;
+  height: 100%;
+}
+
+.gallery--empty {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 26rpx;
+  color: var(--text-3);
+}
+
+.price-card {
+  background: var(--bg-card);
+  padding: 28rpx var(--space-page);
+}
+
+.price-row {
+  display: flex;
+  align-items: baseline;
+}
+
+.symbol {
+  font-size: 26rpx;
+  font-weight: 700;
+  color: var(--brand);
+}
+
+.price {
+  font-size: 48rpx;
+  font-weight: 700;
+  color: var(--brand);
+}
+
+.origin {
+  margin-left: 16rpx;
+  font-size: 24rpx;
+  color: var(--text-3);
+  text-decoration: line-through;
+}
+
+.stock {
+  margin-left: auto;
+  font-size: 24rpx;
+  color: var(--text-3);
+}
+
+.title {
+  margin-top: 16rpx;
+  font-size: 32rpx;
+  font-weight: 600;
+  color: var(--text-1);
+}
+
+.tags {
+  margin-top: 20rpx;
+  display: flex;
+  gap: 16rpx;
+}
+
+.footer {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  padding: 20rpx var(--space-page);
+  padding-bottom: calc(20rpx + env(safe-area-inset-bottom));
+  background: var(--bg-card);
+  border-top: 1rpx solid var(--border-light);
+}

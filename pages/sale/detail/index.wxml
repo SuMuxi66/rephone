@@ -1,0 +1,32 @@
+<view class="page" wx:if="{{goods}}">
+  <swiper wx:if="{{goods.image}}" class="gallery" indicator-dots circular>
+    <swiper-item>
+      <image class="gallery-img" src="{{goods.image}}" mode="aspectFill" bindtap="previewImage" />
+    </swiper-item>
+  </swiper>
+  <view wx:else class="gallery gallery--empty"><text>暂无实拍图</text></view>
+
+  <view class="price-card">
+    <view class="price-row">
+      <text class="symbol">¥</text>
+      <text class="price">{{priceText}}</text>
+      <text wx:if="{{originText}}" class="origin">¥{{originText}}</text>
+      <text class="stock">库存 {{goods.stock}} 件</text>
+    </view>
+    <view class="title">{{goods.name}}</view>
+    <view class="tags">
+      <t-tag theme="primary" variant="light" size="small">官方自营</t-tag>
+      <t-tag theme="success" variant="light" size="small">支持售后</t-tag>
+    </view>
+  </view>
+
+  <t-cell-group theme="card">
+    <t-cell title="商品名称" note="{{goods.name}}" />
+    <t-cell title="在库数量" note="{{goods.stock}} 件" />
+    <t-cell wx:if="{{goods.descText}}" title="商品说明" note="{{goods.descText}}" />
+  </t-cell-group>
+
+  <view class="footer">
+    <t-button theme="primary" block bindtap="goBuy">立即购买</t-button>
+  </view>
+</view>

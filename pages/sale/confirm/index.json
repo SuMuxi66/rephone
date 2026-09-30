@@ -1,0 +1,16 @@
+{
+  "navigationBarTitleText": "确认订单",
+  "usingComponents": {
+    "t-cell": "tdesign-miniprogram/cell/cell",
+    "t-input": "tdesign-miniprogram/input/input",
+    "t-textarea": "tdesign-miniprogram/textarea/textarea",
+    "t-button": "tdesign-miniprogram/button/button",
+    "t-icon": "tdesign-miniprogram/icon/icon",
+    "t-popup": "tdesign-miniprogram/popup/popup",
+    "t-tag": "tdesign-miniprogram/tag/tag",
+    "t-stepper": "tdesign-miniprogram/stepper/stepper",
+    "t-picker": "tdesign-miniprogram/picker/picker",
+    "t-picker-item": "tdesign-miniprogram/picker-item/picker-item",
+    "section-card": "/components/section-card/index"
+  }
+}

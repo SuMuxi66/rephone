@@ -1,0 +1,9 @@
+{
+  "navigationBarTitleText": "购买",
+  "enablePullDownRefresh": true,
+  "usingComponents": {
+    "t-icon": "tdesign-miniprogram/icon/icon",
+    "t-empty": "tdesign-miniprogram/empty/empty",
+    "t-load-more": "/components/load-more/index"
+  }
+}

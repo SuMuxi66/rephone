@@ -6,6 +6,12 @@ export default [
     prefix: 'wr',
   },
   {
+    icon: 'cart',
+    text: '购买',
+    url: 'pages/sale/index',
+    prefix: '',
+  },
+  {
     icon: 'tools',
     text: '维修',
     url: 'pages/repair/index',

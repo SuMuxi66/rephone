@@ -1,0 +1,69 @@
+<view class="page" wx:if="{{goods}}">
+  <view class="goods-card">
+    <image wx:if="{{goods.image}}" class="goods-img" src="{{goods.image}}" mode="aspectFill" />
+    <view wx:else class="goods-img goods-img--empty"><text>暂无图片</text></view>
+    <view class="goods-info">
+      <view class="goods-name">{{goods.name}}</view>
+      <view wx:if="{{goods.descText}}" class="goods-desc">{{goods.descText}}</view>
+      <view class="goods-price">¥{{priceText}}</view>
+    </view>
+  </view>
+
+  <section-card title="购买数量">
+    <view class="qty-row">
+      <text class="qty-label">库存 {{goods.stock}} 件</text>
+      <t-stepper value="{{quantity}}" min="1" max="{{maxQuantity}}" theme="filled" bindchange="onQuantityChange" />
+    </view>
+  </section-card>
+
+  <view wx:if="{{addressBook.length}}" class="addr-bar" bindtap="openAddressSheet">
+    <t-icon prefix="wr" name="location" size="34rpx" color="#FF5F15" />
+    <text class="addr-bar-text">已存 {{addressBook.length}} 条地址，点击套用</text>
+    <t-icon name="chevron-right" size="36rpx" color="#BBBBBB" />
+  </view>
+
+  <section-card title="收货信息">
+    <view class="form-body">
+      <t-input label="收货人" placeholder="姓名" value="{{form.name}}" data-field="name" bindchange="onInput" />
+      <t-input label="手机号" type="number" placeholder="11 位手机号" value="{{form.phone}}" data-field="phone" bindchange="onInput" bindblur="onPhoneBlur" />
+      <view wx:if="{{errors.phone}}" class="field-error">{{errors.phone}}</view>
+      <t-cell title="所在地区" arrow hover bindtap="showRegion" note="{{form.region || '请选择省/市/区'}}" />
+      <t-input label="详细地址" placeholder="街道、门牌号" value="{{form.detail}}" data-field="detail" bindchange="onInput" />
+      <t-textarea label="买家留言" placeholder="选填，可备注机型版本等需求" value="{{form.remark}}" data-field="remark" bindchange="onInput" autosize maxlength="100" />
+    </view>
+  </section-card>
+
+  <view class="footer">
+    <view class="total">
+      <text class="total-label">合计</text>
+      <text class="total-price">¥{{totalText}}</text>
+    </view>
+    <t-button theme="primary" loading="{{submitting}}" disabled="{{submitting}}" bindtap="onSubmit">提交订单</t-button>
+  </view>
+
+  <t-picker
+    visible="{{regionPickerVisible}}"
+    value="{{regionValue}}"
+    title="选择地区"
+    bindpick="onRegionPick"
+    bind:confirm="onRegionConfirm"
+    bind:close="hideRegion"
+  >
+    <t-picker-item options="{{regionColumns.province}}" />
+    <t-picker-item options="{{regionColumns.city}}" />
+    <t-picker-item options="{{regionColumns.district}}" />
+  </t-picker>
+
+  <t-popup visible="{{addressSheetVisible}}" placement="bottom" bind:visible-change="onAddressSheetVisibleChange">
+    <view class="addr-sheet">
+      <view class="addr-sheet-title">选择常用地址</view>
+      <view wx:for="{{addressBook}}" wx:key="id" class="addr-item" data-id="{{item.id}}" bindtap="onPickAddress">
+        <view class="addr-item-info">
+          <view class="addr-item-contact">{{item.name}} {{item.phone}}</view>
+          <view class="addr-item-detail">{{item.region}} {{item.detail}}</view>
+        </view>
+        <t-tag wx:if="{{item.isDefault}}" theme="primary" variant="light" size="small">默认</t-tag>
+      </view>
+    </view>
+  </t-popup>
+</view>

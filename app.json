@@ -1,6 +1,9 @@
 {
   "pages": [
     "pages/home/home",
+    "pages/sale/index",
+    "pages/sale/detail/index",
+    "pages/sale/confirm/index",
     "pages/sale/order/list/index",
     "pages/sale/order/detail/index",
     "pages/recycle/estimate/index",
@@ -61,6 +64,10 @@
       {
         "pagePath": "pages/home/home",
         "text": "首页"
+      },
+      {
+        "pagePath": "pages/sale/index",
+        "text": "购买"
       },
       {
         "pagePath": "pages/repair/index",
