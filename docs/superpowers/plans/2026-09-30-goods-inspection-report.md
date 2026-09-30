@@ -130,8 +130,19 @@ GET    /api/wx/goods/{id}/inspection      用户端读取（含检查项 + 商�
 
 ## 10. 进度
 
-- [ ] 1 表与实体
-- [ ] 2 服务与接口
-- [ ] 3 测试
-- [ ] 4 后台录入
-- [ ] 5 小程序卡片与报告页
+- [x] 1 表与实体（`51a0157`）
+- [x] 2 服务与接口（`1dc3f62`）
+- [x] 3 测试（`9452731`）
+- [x] 4 后台录入（`5f59de6`）
+- [x] 5 小程序卡片与报告页（`c7fbab1`）
+
+### 验证记录
+
+- `cd server && ./mvnw.cmd -o test` → **29 个用例全部通过**（P6 增至 6 个），BUILD SUCCESS。
+- 小程序：JSON 解析、@babel/parser 语法、WXML 标签配对、详情页组件注册齐全 —— 均通过；
+  运行时需在微信开发者工具「清缓存后编译」确认。
+- **受限项**：`admin/npm run build` 在本机执行到 1684 模块转换后，被 esbuild 清理临时文件的
+  `Access is denied` 打断（环境限制，非代码问题）。**注意：vite 在 build 开始时会清空
+  `admin/dist`**，构建失败会导致已跟踪的产物被删除，需 `git checkout HEAD -- admin/dist` 恢复。
+  本次改用 `@vue/compiler-sfc`（parse + compileScript + compileTemplate）校验通过。
+- 未做：货架的品牌/成色筛选条（属另一份计划的第 6 项）。
