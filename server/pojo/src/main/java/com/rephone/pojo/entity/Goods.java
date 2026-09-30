@@ -31,6 +31,18 @@ public class Goods {
 
     private String descText;
 
+    /** 品牌（如 Apple） */
+    private String brand;
+
+    /** 内存/容量（如 256G） */
+    private String storage;
+
+    /** 成色（如 95新） */
+    private String conditionLevel;
+
+    /** 标签，英文逗号分隔（如 官方自营,已验机） */
+    private String tags;
+
     private LocalDateTime createTime;
 
     private LocalDateTime updateTime;
@@ -105,6 +117,38 @@ public class Goods {
 
     public void setDescText(String descText) {
         this.descText = descText;
+    }
+
+    public String getBrand() {
+        return brand;
+    }
+
+    public void setBrand(String brand) {
+        this.brand = brand;
+    }
+
+    public String getStorage() {
+        return storage;
+    }
+
+    public void setStorage(String storage) {
+        this.storage = storage;
+    }
+
+    public String getConditionLevel() {
+        return conditionLevel;
+    }
+
+    public void setConditionLevel(String conditionLevel) {
+        this.conditionLevel = conditionLevel;
+    }
+
+    public String getTags() {
+        return tags;
+    }
+
+    public void setTags(String tags) {
+        this.tags = tags;
     }
 
     public LocalDateTime getCreateTime() {
