@@ -76,7 +76,8 @@ public class WxPayoutService {
         });
         sb.append("key=").append(key);
         try {
-            MessageDigest md = MessageDigest.getInstance("MD5");
+            // 微信支付 V2 API 签名规范强制 MD5（V3 才换 RSA），算法由协议强制
+            MessageDigest md = MessageDigest.getInstance("MD5"); // mimosa-ignore
             byte[] digest = md.digest(sb.toString().getBytes(StandardCharsets.UTF_8));
             StringBuilder hex = new StringBuilder();
             for (byte b : digest) {

@@ -50,7 +50,8 @@ public class CosSignService {
 
     private static String hmacSha1Hex(String data, String key) {
         try {
-            Mac mac = Mac.getInstance("HmacSHA1");
+            // 腾讯云 COS XML API 签名规范固定 q-sign-algorithm=sha1，算法由协议强制，不可更换
+            Mac mac = Mac.getInstance("HmacSHA1"); // mimosa-ignore
             mac.init(new SecretKeySpec(key.getBytes(StandardCharsets.UTF_8), "HmacSHA1"));
             return hex(mac.doFinal(data.getBytes(StandardCharsets.UTF_8)));
         } catch (Exception e) {
@@ -60,7 +61,8 @@ public class CosSignService {
 
     private static String sha1Hex(String data) {
         try {
-            MessageDigest digest = MessageDigest.getInstance("SHA-1");
+            // COS 签名同样以 SHA-1 派生 q-key-time 签名密钥，协议强制
+            MessageDigest digest = MessageDigest.getInstance("SHA-1"); // mimosa-ignore
             return hex(digest.digest(data.getBytes(StandardCharsets.UTF_8)));
         } catch (NoSuchAlgorithmException e) {
             throw new IllegalStateException("SHA-1 不可用", e);

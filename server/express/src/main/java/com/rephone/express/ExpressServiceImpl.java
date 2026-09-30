@@ -137,7 +137,7 @@ public class ExpressServiceImpl implements ExpressService {
     /** MD5 为快递100 签名协议强制要求（非安全算法选型）。 */
     private static String md5Hex(String data) {
         try {
-            byte[] digest = MessageDigest.getInstance("MD5").digest(data.getBytes(StandardCharsets.UTF_8));
+            byte[] digest = MessageDigest.getInstance("MD5").digest(data.getBytes(StandardCharsets.UTF_8)); // mimosa-ignore
             return HexFormat.of().formatHex(digest);
         } catch (Exception e) {
             throw new IllegalStateException(e);
