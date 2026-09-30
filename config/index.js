@@ -18,7 +18,15 @@ const ENV_MAP = {
   },
 };
 
-export const config = Object.assign({ envVersion }, ENV_MAP[envVersion] || ENV_MAP.develop);
+export const config = Object.assign(
+  {
+    envVersion,
+    // TODO(P6): 替换为真实客服号码与服务时间
+    servicePhone: '400-000-0000',
+    serviceTimeDuration: '每天 9:00-18:00',
+  },
+  ENV_MAP[envVersion] || ENV_MAP.develop,
+);
 
 export const cdnBase =
   'https://we-retail-static-1300977798.cos.ap-guangzhou.myqcloud.com/retail-mp';

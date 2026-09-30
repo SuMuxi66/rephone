@@ -1,4 +1,5 @@
 import { fetchPerson } from '../../../services/usercenter/fetchPerson';
+import { updateProfile } from '../../../services/usercenter/fetchUsercenter';
 import { phoneEncryption } from '../../../utils/util';
 import Toast from 'tdesign-miniprogram/toast/index';
 
@@ -24,7 +25,7 @@ Page({
     typeVisible: false,
     genderMap: ['', '男', '女'],
   },
-  onLoad() {
+  onShow() {
     this.init();
   },
   init() {
@@ -68,20 +69,30 @@ Page({
   },
   onConfirm(e) {
     const { value } = e.detail;
-    this.setData(
-      {
-        typeVisible: false,
-        'personInfo.gender': value,
-      },
-      () => {
+    const raw = value && typeof value === 'object' ? value.code : value;
+    const gender = Number(raw);
+    this.setData({
+      typeVisible: false,
+      'personInfo.gender': gender,
+    });
+    updateProfile({ gender: Number.isNaN(gender) ? null : gender })
+      .then(() => {
         Toast({
           context: this,
           selector: '#t-toast',
           message: '设置成功',
           theme: 'success',
         });
-      },
-    );
+      })
+      .catch((err) => {
+        Toast({
+          context: this,
+          selector: '#t-toast',
+          message: err.message || '设置失败',
+          icon: '',
+          duration: 1000,
+        });
+      });
   },
   async toModifyAvatar() {
     try {

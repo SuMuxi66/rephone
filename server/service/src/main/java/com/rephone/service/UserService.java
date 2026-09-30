@@ -53,4 +53,31 @@ public class UserService {
     public User getById(Long id) {
         return userMapper.selectById(id);
     }
+
+    /** 更新用户资料（仅传入字段生效），返回更新后的用户。 */
+    @Transactional
+    public User updateProfile(Long userId, String nickname, Integer gender, String avatarUrl) {
+        User user = userMapper.selectById(userId);
+        if (user == null) {
+            throw new BizException(40401, "用户不存在");
+        }
+        if (nickname != null) {
+            String trimmed = nickname.trim();
+            if (trimmed.isEmpty() || trimmed.length() > 20) {
+                throw new BizException(40039, "昵称长度需为 1-20 个字符");
+            }
+            user.setNickname(trimmed);
+        }
+        if (gender != null) {
+            if (gender < 0 || gender > 2) {
+                throw new BizException(40041, "性别取值不合法");
+            }
+            user.setGender(gender);
+        }
+        if (avatarUrl != null) {
+            user.setAvatarUrl(avatarUrl);
+        }
+        userMapper.updateById(user);
+        return user;
+    }
 }

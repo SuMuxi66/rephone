@@ -1,5 +1,6 @@
-import { fetchUserCenter } from '../../services/usercenter/fetchUsercenter';
+import { fetchUserProfile, fetchRecycleOrderTotal, fetchRepairOrderTotal } from '../../services/usercenter/fetchUsercenter';
 import Toast from 'tdesign-miniprogram/toast/index';
+import { config } from '../../config/index';
 
 const menuData = [
   [
@@ -39,44 +40,6 @@ const menuData = [
   ],
 ];
 
-const orderTagInfos = [
-  {
-    title: '待付款',
-    iconName: 'wallet',
-    orderNum: 0,
-    tabType: 5,
-    status: 1,
-  },
-  {
-    title: '待发货',
-    iconName: 'deliver',
-    orderNum: 0,
-    tabType: 10,
-    status: 1,
-  },
-  {
-    title: '待收货',
-    iconName: 'package',
-    orderNum: 0,
-    tabType: 40,
-    status: 1,
-  },
-  {
-    title: '待评价',
-    iconName: 'comment',
-    orderNum: 0,
-    tabType: 60,
-    status: 1,
-  },
-  {
-    title: '退款/售后',
-    iconName: 'exchang',
-    orderNum: 0,
-    tabType: 0,
-    status: 1,
-  },
-];
-
 const getDefaultData = () => ({
   showMakePhone: false,
   userInfo: {
@@ -85,8 +48,10 @@ const getDefaultData = () => ({
     phoneNumber: '',
   },
   menuData,
-  orderTagInfos,
-  customerServiceInfo: {},
+  customerServiceInfo: {
+    servicePhone: config.servicePhone,
+    serviceTimeDuration: config.serviceTimeDuration,
+  },
   currAuthStep: 1,
   showKefu: true,
   versionNo: '',
@@ -112,29 +77,34 @@ Page({
   },
 
   fetUseriInfoHandle() {
-    fetchUserCenter().then(({ userInfo, countsData, orderTagInfos: orderInfo, customerServiceInfo }) => {
-      // eslint-disable-next-line no-unused-expressions
-      menuData?.[0].forEach((v) => {
-        countsData.forEach((counts) => {
-          if (counts.type === v.type) {
+    Promise.all([fetchUserProfile(), fetchRecycleOrderTotal(), fetchRepairOrderTotal()])
+      .then(([profile, recycleTotal, repairTotal]) => {
+        const totals = { 'recycle-orders': recycleTotal, 'repair-orders': repairTotal };
+        menuData[0].forEach((v) => {
+          if (totals[v.type] !== undefined) {
             // eslint-disable-next-line no-param-reassign
-            v.tit = counts.num;
+            v.tit = totals[v.type];
           }
         });
+        this.setData({
+          userInfo: {
+            avatarUrl: profile.avatarUrl || '',
+            nickName: profile.nickname || 'RePhone 用户',
+            phoneNumber: profile.phone || '',
+          },
+          menuData,
+          currAuthStep: 2,
+        });
+        wx.stopPullDownRefresh();
+      })
+      .catch(() => {
+        // 未登录/网络失败：显示默认卡片，不阻断其它入口
+        this.setData({
+          userInfo: { avatarUrl: '', nickName: '点击登录', phoneNumber: '' },
+          currAuthStep: 2,
+        });
+        wx.stopPullDownRefresh();
       });
-      const info = orderTagInfos.map((v, index) => ({
-        ...v,
-        ...orderInfo[index],
-      }));
-      this.setData({
-        userInfo,
-        menuData,
-        orderTagInfos: info,
-        customerServiceInfo,
-        currAuthStep: 2,
-      });
-      wx.stopPullDownRefresh();
-    });
   },
 
   onClickCell({ currentTarget }) {
@@ -167,20 +137,6 @@ Page({
         });
         break;
       }
-      case 'point': {
-        Toast({
-          context: this,
-          selector: '#t-toast',
-          message: '你点击了积分菜单',
-          icon: '',
-          duration: 1000,
-        });
-        break;
-      }
-      case 'coupon': {
-        wx.navigateTo({ url: '/pages/coupon/coupon-list/index' });
-        break;
-      }
       default: {
         Toast({
           context: this,
@@ -192,20 +148,6 @@ Page({
         break;
       }
     }
-  },
-
-  jumpNav(e) {
-    const status = e.detail.tabType;
-
-    if (status === 0) {
-      wx.navigateTo({ url: '/pages/order/after-service-list/index' });
-    } else {
-      wx.navigateTo({ url: `/pages/order/order-list/index?status=${status}` });
-    }
-  },
-
-  jumpAllOrder() {
-    wx.navigateTo({ url: '/pages/order/order-list/index' });
   },
 
   openMakePhone() {

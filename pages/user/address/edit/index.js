@@ -1,7 +1,12 @@
 import Toast from 'tdesign-miniprogram/toast/index';
-import { fetchDeliveryAddress } from '../../../../services/address/fetchAddress';
 import { areaData } from '../../../../config/index';
-import { resolveAddress, rejectAddress } from '../../../../services/address/list';
+import { rejectAddress } from '../../../../services/address/list';
+import {
+  fetchAddressList,
+  createAddress,
+  updateAddress,
+  setDefaultAddress,
+} from '../../../../services/address';
 
 const innerPhoneReg = '^1(?:3\\d|4[4-9]|5[0-35-9]|6[67]|7[0-8]|8\\d|9\\d)\\d{8}$';
 const innerNameReg = '^[a-zA-Z\\d\\u4e00-\\u9fa5]+$';
@@ -66,15 +71,45 @@ Page({
     }
   },
   getAddressDetail(id) {
-    fetchDeliveryAddress(id).then((detail) => {
-      this.setData({ locationState: detail }, () => {
-        const { isLegal, tips } = this.onVerifyInputLegal();
-        this.setData({
-          submitActive: isLegal,
+    // 后端无单查接口：从地址簿列表中取该条并映射到表单状态
+    fetchAddressList()
+      .then((list) => {
+        const hit = (list || []).find((a) => String(a.id) === String(id));
+        if (!hit) return;
+        const [provinceName = '', cityName = '', districtName = ''] = (hit.region || '').split(' ');
+        this.setData(
+          {
+            locationState: {
+              ...this.data.locationState,
+              addressId: hit.id,
+              name: hit.name,
+              phone: hit.phone,
+              provinceName,
+              cityName,
+              districtName,
+              detailAddress: hit.detail,
+              isDefault: !!hit.isDefault,
+              isEdit: true,
+            },
+          },
+          () => {
+            const { isLegal, tips } = this.onVerifyInputLegal();
+            this.setData({
+              submitActive: isLegal,
+            });
+            this.privateData.verifyTips = tips;
+          },
+        );
+      })
+      .catch(() => {
+        Toast({
+          context: this,
+          selector: '#t-toast',
+          message: '地址加载失败',
+          icon: '',
+          duration: 1000,
         });
-        this.privateData.verifyTips = tips;
       });
-    });
   },
   onInputValue(e) {
     const { item } = e.currentTarget.dataset;
@@ -307,34 +342,44 @@ Page({
       return;
     }
     const { locationState } = this.data;
+    const payload = {
+      name: locationState.name,
+      phone: locationState.phone,
+      region: `${locationState.provinceName} ${locationState.cityName} ${locationState.districtName}`,
+      detail: locationState.detailAddress,
+    };
+    const fail = (e) => {
+      this.hasSava = false;
+      Toast({
+        context: this,
+        selector: '#t-toast',
+        message: e.message || '保存失败，请稍后重试',
+        icon: '',
+        duration: 1000,
+      });
+    };
+    const afterSave = () => {
+      Toast({
+        context: this,
+        selector: '#t-toast',
+        message: '保存成功',
+        theme: 'success',
+        duration: 800,
+      });
+      setTimeout(() => wx.navigateBack({ delta: 1 }), 600);
+    };
 
     this.hasSava = true;
-
-    resolveAddress({
-      saasId: '88888888',
-      uid: `88888888205500`,
-      authToken: null,
-      id: locationState.addressId,
-      addressId: locationState.addressId,
-      phone: locationState.phone,
-      name: locationState.name,
-      countryName: locationState.countryName,
-      countryCode: locationState.countryCode,
-      provinceName: locationState.provinceName,
-      provinceCode: locationState.provinceCode,
-      cityName: locationState.cityName,
-      cityCode: locationState.cityCode,
-      districtName: locationState.districtName,
-      districtCode: locationState.districtCode,
-      detailAddress: locationState.detailAddress,
-      isDefault: locationState.isDefault === 1 ? 1 : 0,
-      addressTag: locationState.addressTag,
-      latitude: locationState.latitude,
-      longitude: locationState.longitude,
-      storeId: null,
-    });
-
-    wx.navigateBack({ delta: 1 });
+    if (locationState.addressId) {
+      updateAddress(locationState.addressId, payload)
+        .then(() => (locationState.isDefault ? setDefaultAddress(locationState.addressId) : null))
+        .then(afterSave)
+        .catch(fail);
+    } else {
+      createAddress({ ...payload, isDefault: locationState.isDefault ? 1 : 0 })
+        .then(afterSave)
+        .catch(fail);
+    }
   },
 
   getWeixinAddress(e) {

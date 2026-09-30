@@ -1,28 +1,11 @@
-import { config } from '../../config/index';
+import { fetchUserProfile } from './fetchUsercenter';
 
-/** 获取个人中心信息 */
-function mockFetchPerson() {
-  const { delay } = require('../_utils/delay');
-  const { genSimpleUserInfo } = require('../../model/usercenter');
-  const { genAddress } = require('../../model/address');
-  const address = genAddress();
-  return delay().then(() => ({
-    ...genSimpleUserInfo(),
-    address: {
-      provinceName: address.provinceName,
-      provinceCode: address.provinceCode,
-      cityName: address.cityName,
-      cityCode: address.cityCode,
-    },
-  }));
-}
-
-/** 获取个人中心信息 */
+/** 个人资料（person-info 页）：真实用户数据 */
 export function fetchPerson() {
-  if (config.useMock) {
-    return mockFetchPerson();
-  }
-  return new Promise((resolve) => {
-    resolve('real api');
-  });
+  return fetchUserProfile().then((p) => ({
+    avatarUrl: p.avatarUrl || '',
+    nickName: p.nickname || '',
+    gender: p.gender || 0,
+    phoneNumber: p.phone || '',
+  }));
 }
