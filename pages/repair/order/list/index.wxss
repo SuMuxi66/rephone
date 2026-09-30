@@ -68,7 +68,7 @@ page {
 .price {
   font-size: 30rpx;
   font-weight: 700;
-  color: var(--brand);
+  color: var(--money);
 }
 
 .time {

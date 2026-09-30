@@ -27,7 +27,7 @@
 .summary-total {
   margin-top: 16rpx;
   font-size: 28rpx;
-  color: var(--brand);
+  color: var(--money);
   font-weight: 600;
 }
 

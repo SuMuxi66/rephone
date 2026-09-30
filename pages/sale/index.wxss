@@ -191,13 +191,13 @@
 .price-symbol {
   font-size: 22rpx;
   font-weight: 700;
-  color: var(--brand);
+  color: var(--money);
 }
 
 .price {
   font-size: 36rpx;
   font-weight: 700;
-  color: var(--brand);
+  color: var(--money);
 }
 
 .origin {

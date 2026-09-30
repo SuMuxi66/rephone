@@ -65,7 +65,7 @@
 .price {
   font-size: 32rpx;
   font-weight: 700;
-  color: var(--brand);
+  color: var(--money);
 }
 
 .time {

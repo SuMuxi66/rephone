@@ -47,7 +47,7 @@
 
 .item-price {
   font-size: 28rpx;
-  color: var(--brand);
+  color: var(--money);
   font-weight: 600;
 }
 
@@ -108,7 +108,7 @@
 .total-price {
   font-size: 36rpx;
   font-weight: 700;
-  color: var(--brand);
+  color: var(--money);
 }
 
 .footer {

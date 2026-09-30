@@ -57,7 +57,7 @@
 .price {
   font-size: 52rpx;
   font-weight: 700;
-  color: var(--brand);
+  color: var(--money);
 }
 
 .section-title {
@@ -89,7 +89,7 @@
 .insp-price {
   font-size: 30rpx;
   font-weight: 700;
-  color: var(--brand);
+  color: var(--money);
 }
 
 .insp-time {

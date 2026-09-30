@@ -22,7 +22,7 @@
 .quote-price {
   font-size: 64rpx;
   font-weight: 700;
-  color: var(--brand);
+  color: var(--money);
 }
 
 .quote-model {

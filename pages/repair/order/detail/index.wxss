@@ -45,7 +45,7 @@
 .price {
   font-size: 40rpx;
   font-weight: 700;
-  color: var(--brand);
+  color: var(--money);
 }
 
 .warranty-line {
