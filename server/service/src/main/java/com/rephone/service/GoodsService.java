@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.rephone.common.exception.BizException;
 import com.rephone.mapper.GoodsMapper;
 import com.rephone.pojo.entity.Goods;
+import com.rephone.service.dto.GoodsAttrs;
 import java.math.BigDecimal;
 import java.util.List;
 import org.springframework.stereotype.Service;
@@ -54,7 +55,7 @@ public class GoodsService {
     }
 
     public Long create(String name, String image, BigDecimal priceYuan, BigDecimal originalYuan,
-                       Integer stock, String descText) {
+                       Integer stock, String descText, GoodsAttrs attrs) {
         validateName(name);
         long priceFen = validatePrice(priceYuan);
         Long originalFen = null;
@@ -70,12 +71,13 @@ public class GoodsService {
         goods.setStock(stock == null ? 0 : Math.max(stock, 0));
         goods.setStatus(1);
         goods.setDescText(StringUtils.hasText(descText) ? descText.trim() : null);
+        applyAttrs(goods, attrs);
         goodsMapper.insert(goods);
         return goods.getId();
     }
 
     public void update(Long id, String name, String image, BigDecimal priceYuan,
-                       BigDecimal originalYuan, Integer stock, String descText) {
+                       BigDecimal originalYuan, Integer stock, String descText, GoodsAttrs attrs) {
         Goods goods = requireGoods(id);
         if (StringUtils.hasText(name)) {
             validateName(name);
@@ -96,6 +98,7 @@ public class GoodsService {
         if (descText != null) {
             goods.setDescText(descText.isBlank() ? null : descText.trim());
         }
+        applyAttrs(goods, attrs);
         goodsMapper.updateById(goods);
     }
 
@@ -132,6 +135,27 @@ public class GoodsService {
         goodsMapper.update(null, new LambdaUpdateWrapper<Goods>()
                 .eq(Goods::getId, goodsId)
                 .setSql("stock = stock + " + quantity));
+    }
+
+    /**
+     * 机型属性写入。管理端表单整表提交，故采用「整体覆盖」语义：传 null 即清空该属性。
+     */
+    private void applyAttrs(Goods goods, GoodsAttrs attrs) {
+        GoodsAttrs a = attrs == null ? GoodsAttrs.empty() : attrs;
+        checkAttrLen(a.brand(), 32, "品牌");
+        checkAttrLen(a.storage(), 16, "内存");
+        checkAttrLen(a.conditionLevel(), 16, "成色");
+        checkAttrLen(a.tags(), 255, "标签");
+        goods.setBrand(a.brand());
+        goods.setStorage(a.storage());
+        goods.setConditionLevel(a.conditionLevel());
+        goods.setTags(a.tags());
+    }
+
+    private void checkAttrLen(String value, int max, String label) {
+        if (value != null && value.length() > max) {
+            throw new BizException(40073, label + "不能超过 " + max + " 字");
+        }
     }
 
     private void validateName(String name) {
