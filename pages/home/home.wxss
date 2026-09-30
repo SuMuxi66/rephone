@@ -1,7 +1,9 @@
 .page {
   min-height: 100vh;
   background: var(--bg-page);
-  padding-bottom: calc(env(safe-area-inset-bottom) + 40rpx);
+  /* 首页是自定义 tabBar 页：tabBar 为底部浮层，必须让出其高度（与维修/回收页一致 160rpx），
+     否则最后一段「热门机型」会被遮挡且滚不出来 */
+  padding-bottom: calc(env(safe-area-inset-bottom) + 160rpx);
 }
 
 .hero {
