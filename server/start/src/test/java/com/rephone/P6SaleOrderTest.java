@@ -1,6 +1,7 @@
 package com.rephone;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -213,5 +214,65 @@ class P6SaleOrderTest {
         ResponseEntity<String> detail = rest.exchange("/api/admin/after-sales/" + asNo, HttpMethod.GET,
                 new HttpEntity<>(admin()), String.class);
         assertEquals(40, objectMapper.readTree(detail.getBody()).path("data").path("status").asInt());
+    }
+
+    /** 商品机型属性写入/回读 + 在售列表筛选、排序与筛选项接口。 */
+    @Test
+    @Order(5)
+    void goods_attributes_and_filters() throws Exception {
+        ResponseEntity<String> created = rest.exchange("/api/admin/goods", HttpMethod.POST,
+                new HttpEntity<>(Map.of(
+                        "name", "P6 属性机",
+                        "priceYuan", new BigDecimal("2999.00"),
+                        "stock", 3,
+                        "descText", "属性用例",
+                        "brand", "Apple",
+                        "storage", "256G",
+                        "conditionLevel", "95新",
+                        "tags", "官方自营,已验机"), admin()), String.class);
+        JsonNode createBody = objectMapper.readTree(created.getBody());
+        assertEquals(0, createBody.get("code").asInt());
+        Long goodsId = createBody.path("data").path("goodsId").asLong();
+
+        // 属性回读
+        JsonNode data = objectMapper.readTree(rest.exchange("/api/wx/goods/" + goodsId, HttpMethod.GET,
+                new HttpEntity<>(user()), String.class).getBody()).path("data");
+        assertEquals("Apple", data.path("brand").asText());
+        assertEquals("256G", data.path("storage").asText());
+        assertEquals("95新", data.path("conditionLevel").asText());
+        assertEquals("官方自营,已验机", data.path("tags").asText(), "标签应去重后原样返回");
+
+        // 精确筛选与关键词命中
+        assertTrue(containsGoods("/api/wx/goods?brand=Apple", goodsId), "按品牌筛选应命中");
+        assertTrue(containsGoods("/api/wx/goods?conditionLevel=95新", goodsId), "按成色筛选应命中");
+        assertTrue(containsGoods("/api/wx/goods?keyword=Apple", goodsId), "关键词应匹配品牌");
+        assertFalse(containsGoods("/api/wx/goods?brand=NoSuchBrand", goodsId), "不存在的品牌不应命中");
+
+        // 筛选项接口
+        JsonNode filters = objectMapper.readTree(rest.exchange("/api/wx/goods/filters", HttpMethod.GET,
+                new HttpEntity<>(user()), String.class).getBody()).path("data");
+        assertTrue(filters.path("brands").toString().contains("Apple"), "筛选项应含品牌 Apple");
+        assertTrue(filters.path("conditions").toString().contains("95新"), "筛选项应含成色 95新");
+
+        // 排序：价格升序时首项不高于末项
+        JsonNode asc = objectMapper.readTree(rest.exchange("/api/wx/goods?sort=priceAsc", HttpMethod.GET,
+                new HttpEntity<>(user()), String.class).getBody()).path("data");
+        assertTrue(asc.size() >= 2, "应有多个在售商品用于排序断言");
+        assertTrue(asc.get(0).path("priceFen").asLong() <= asc.get(asc.size() - 1).path("priceFen").asLong(),
+                "价格升序应生效");
+    }
+
+    /** 查询在售列表并判断是否包含指定商品 id。 */
+    private boolean containsGoods(String path, Long goodsId) throws Exception {
+        ResponseEntity<String> resp = rest.exchange(path, HttpMethod.GET,
+                new HttpEntity<>(user()), String.class);
+        JsonNode body = objectMapper.readTree(resp.getBody());
+        assertEquals(0, body.get("code").asInt());
+        for (JsonNode node : body.path("data")) {
+            if (node.path("id").asLong() == goodsId) {
+                return true;
+            }
+        }
+        return false;
     }
 }

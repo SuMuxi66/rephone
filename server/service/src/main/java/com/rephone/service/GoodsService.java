@@ -8,8 +8,11 @@ import com.rephone.mapper.GoodsMapper;
 import com.rephone.pojo.entity.Goods;
 import com.rephone.service.dto.GoodsAttrs;
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.TreeSet;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
@@ -63,24 +66,22 @@ public class GoodsService {
     /** 在售（有货）商品的品牌与成色去重选项，驱动小程序货架筛选条。 */
     public Map<String, List<String>> onSaleFilterOptions() {
         List<Goods> onSale = goodsMapper.selectList(new LambdaQueryWrapper<Goods>()
-                .select(Goods::getBrand, Goods::getConditionLevel)
                 .eq(Goods::getStatus, 1)
                 .gt(Goods::getStock, 0));
-        List<String> brands = onSale.stream()
-                .map(Goods::getBrand)
-                .filter(StringUtils::hasText)
-                .map(String::trim)
-                .distinct()
-                .sorted()
-                .toList();
-        List<String> conditions = onSale.stream()
-                .map(Goods::getConditionLevel)
-                .filter(StringUtils::hasText)
-                .map(String::trim)
-                .distinct()
-                .sorted()
-                .toList();
-        return Map.of("brands", brands, "conditions", conditions);
+        Set<String> brandSet = new TreeSet<>();
+        Set<String> conditionSet = new TreeSet<>();
+        for (Goods goods : onSale) {
+            if (goods == null) {
+                continue;
+            }
+            if (StringUtils.hasText(goods.getBrand())) {
+                brandSet.add(goods.getBrand().trim());
+            }
+            if (StringUtils.hasText(goods.getConditionLevel())) {
+                conditionSet.add(goods.getConditionLevel().trim());
+            }
+        }
+        return Map.of("brands", new ArrayList<>(brandSet), "conditions", new ArrayList<>(conditionSet));
     }
 
     public Goods getOnSale(Long id) {
