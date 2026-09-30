@@ -100,9 +100,15 @@ Page({
       this._selProvince = areaData[0].label;
       this._selCity = '';
       const cities = areaData[0].children || [];
+      const districts = (cities[0] && cities[0].children) || [];
+      const firstCity = (cities[0] && cities[0].label) || '';
+      const firstDistrict = (districts[0] && districts[0].label) || '';
       patch['regionColumns.city'] = cities.map((c) => ({ label: c.label, value: c.label }));
-      patch['regionColumns.district'] = ((cities[0] && cities[0].children) || [])
+      patch['regionColumns.district'] = districts
         .map((d) => ({ label: d.label, value: d.label }));
+      // TDesign picker 未触达的列 confirm 可能缺值：种子化默认选中，onRegionConfirm 兜底用
+      patch.regionValue = [this._selProvince, firstCity, firstDistrict];
+      this._selRegionLabels = [this._selProvince, firstCity, firstDistrict];
     }
     this.setData(patch);
   },
@@ -120,11 +126,17 @@ Page({
       this._selCity = '';
       const p = areaData.find((x) => x.label === province.label);
       const cities = (p && p.children) || [];
+      const districts = (cities[0] && cities[0].children) || [];
       this.setData({
         'regionColumns.city': cities.map((c) => ({ label: c.label, value: c.label })),
-        'regionColumns.district': ((cities[0] && cities[0].children) || [])
+        'regionColumns.district': districts
           .map((d) => ({ label: d.label, value: d.label })),
       });
+      this._selRegionLabels = [
+        this._selProvince,
+        (cities[0] && cities[0].label) || '',
+        (districts[0] && districts[0].label) || '',
+      ];
       return;
     }
     if (column === 1) {
@@ -133,15 +145,35 @@ Page({
       this._selCity = cityLabel;
       const province = areaData.find((x) => x.label === this._selProvince);
       const city = ((province && province.children) || []).find((c) => c.label === cityLabel);
+      const districts = (city && city.children) || [];
       this.setData({
-        'regionColumns.district': ((city && city.children) || [])
+        'regionColumns.district': districts
           .map((d) => ({ label: d.label, value: d.label })),
       });
+      this._selRegionLabels = [
+        this._selProvince,
+        this._selCity,
+        (districts[0] && districts[0].label) || '',
+      ];
+      return;
+    }
+    if (column === 2) {
+      const districtLabel = (this.data.regionColumns.district[index] || {}).label;
+      if (districtLabel) {
+        this._selRegionLabels = [
+          this._selRegionLabels[0],
+          this._selRegionLabels[1],
+          districtLabel,
+        ];
+      }
     }
   },
 
   onRegionConfirm(e) {
-    const value = (e.detail.value || []).filter(Boolean);
+    const picked = (e.detail.value || []).filter(Boolean);
+    const tracked = (this._selRegionLabels || []).filter(Boolean);
+    // picker 组件未触达列可能返回缺值，回退到页面侧跟踪的完整选中
+    const value = picked.length >= 3 ? picked : tracked;
     if (value.length < 3) {
       wx.showToast({ title: '请选择完整的省市区', icon: 'none' });
       return;
@@ -201,6 +233,10 @@ Page({
     if (submitting) return;
     if (!form.name || !form.phone || !form.region || !form.detail) {
       wx.showToast({ title: '请完整填写联系人、地区与详细地址', icon: 'none' });
+      return;
+    }
+    if (!form.timeText) {
+      wx.showToast({ title: '请选择预约时间', icon: 'none' });
       return;
     }
     if (!/^1\d{10}$/.test(form.phone) || errors.phone) {
