@@ -71,6 +71,202 @@
   gap: 16rpx;
 }
 
+/* 通用卡片 */
+.card {
+  margin: var(--space-page);
+  padding: 28rpx;
+  background: var(--bg-card);
+  border-radius: var(--radius-card);
+}
+
+.card-title {
+  font-size: 30rpx;
+  font-weight: 600;
+  color: var(--text-1);
+}
+
+/* 机型参数 */
+.param-grid {
+  margin-top: 20rpx;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.param-item {
+  width: 50%;
+  display: flex;
+  align-items: baseline;
+  padding: 10rpx 0;
+}
+
+.param-key {
+  width: 90rpx;
+  font-size: 24rpx;
+  color: var(--text-3);
+}
+
+.param-val {
+  flex: 1;
+  font-size: 26rpx;
+  color: var(--text-1);
+}
+
+.param-val--brand {
+  color: var(--brand);
+  font-weight: 600;
+}
+
+.param-tags {
+  margin-top: 16rpx;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12rpx;
+}
+
+/* 质检报告卡片 */
+.inspect-card {
+  border: 1rpx solid var(--brand-light);
+}
+
+.inspect-head {
+  display: flex;
+  align-items: center;
+}
+
+.inspect-badge {
+  width: 64rpx;
+  height: 64rpx;
+  flex: none;
+  border-radius: 50%;
+  background: var(--brand);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.inspect-head-text {
+  flex: 1;
+  min-width: 0;
+  margin-left: 20rpx;
+}
+
+.inspect-title {
+  font-size: 30rpx;
+  font-weight: 600;
+  color: var(--text-1);
+}
+
+.inspect-sub {
+  margin-top: 6rpx;
+  font-size: 22rpx;
+  color: var(--text-3);
+}
+
+.inspect-arrow {
+  display: flex;
+  align-items: center;
+  gap: 4rpx;
+  font-size: 24rpx;
+  color: var(--brand);
+}
+
+.inspect-stats {
+  margin-top: 24rpx;
+  display: flex;
+  padding: 20rpx 0;
+  background: #fff8f3;
+  border-radius: 12rpx;
+}
+
+.stat {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.stat-num {
+  font-size: 32rpx;
+  font-weight: 700;
+  color: var(--text-1);
+}
+
+.stat-num--brand {
+  color: var(--brand);
+}
+
+.stat-label {
+  margin-top: 6rpx;
+  font-size: 20rpx;
+  color: var(--text-3);
+}
+
+.inspect-abnormal {
+  margin-top: 20rpx;
+}
+
+.abnormal-title {
+  font-size: 24rpx;
+  color: var(--text-2);
+}
+
+.abnormal-row {
+  margin-top: 12rpx;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12rpx 16rpx;
+  background: #fff5ef;
+  border-radius: 10rpx;
+}
+
+.abnormal-name {
+  font-size: 24rpx;
+  color: var(--text-1);
+}
+
+.abnormal-result {
+  font-size: 24rpx;
+  color: var(--warning);
+  font-weight: 600;
+}
+
+.inspect-allgood {
+  margin-top: 20rpx;
+  font-size: 24rpx;
+  color: var(--success);
+}
+
+.inspect-summary {
+  margin-top: 20rpx;
+  padding: 16rpx;
+  background: #f7f7f9;
+  border-radius: 10rpx;
+  font-size: 24rpx;
+  line-height: 1.6;
+  color: var(--text-2);
+}
+
+.inspect-no {
+  margin-top: 16rpx;
+  font-size: 20rpx;
+  color: var(--text-3);
+}
+
+.inspect-empty {
+  margin-top: 20rpx;
+  font-size: 24rpx;
+  color: var(--text-3);
+  line-height: 1.6;
+}
+
+.desc-text {
+  margin-top: 16rpx;
+  font-size: 26rpx;
+  line-height: 1.7;
+  color: var(--text-2);
+}
+
 .footer {
   position: fixed;
   left: 0;

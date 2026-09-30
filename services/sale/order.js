@@ -6,6 +6,9 @@ export const fetchSaleGoods = () => get('/api/wx/goods');
 /** 商品详情：GET /api/wx/goods/{id} */
 export const fetchSaleGoodsDetail = (id) => get(`/api/wx/goods/${id}`);
 
+/** 商品质检报告：GET /api/wx/goods/{id}/inspection（该商品尚无报告时返回 null） */
+export const fetchGoodsInspection = (id) => get(`/api/wx/goods/${id}/inspection`);
+
 /** 创建出售订单（我买到的）：POST /api/wx/sale/order */
 export const createSaleOrder = (payload) => post('/api/wx/sale/order', payload);
 

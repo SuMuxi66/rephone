@@ -1,0 +1,71 @@
+<view class="page" wx:if="{{report}}">
+  <view class="hero">
+    <view class="hero-badge"><t-icon name="verified" size="40rpx" color="#FFFFFF" /></view>
+    <view class="hero-title">RePhone 官方质检报告</view>
+    <view class="hero-no">报告编号 {{report.reportNo}}</view>
+    <view class="hero-meta">
+      <text wx:if="{{report.inspector}}">质检工程师 {{report.inspector}}</text>
+      <text>质检时间 {{inspectedAtText}}</text>
+    </view>
+  </view>
+
+  <view class="card">
+    <view class="stat-row">
+      <view class="stat">
+        <text class="stat-num stat-num--brand">{{report.conditionLevel || '—'}}</text>
+        <text class="stat-label">综合成色</text>
+      </view>
+      <view class="stat">
+        <text class="stat-num">{{report.batteryHealth != null ? report.batteryHealth + '%' : '—'}}</text>
+        <text class="stat-label">电池健康度</text>
+      </view>
+      <view class="stat">
+        <text class="stat-num">{{report.normalCount}}/{{report.normalCount + report.abnormalCount}}</text>
+        <text class="stat-label">检测通过</text>
+      </view>
+    </view>
+    <view wx:if="{{report.abnormalCount > 0}}" class="hint hint--warn">
+      有 {{report.abnormalCount}} 项需要说明，已在下方标出
+    </view>
+    <view wx:else class="hint hint--ok">全部检查项均正常</view>
+  </view>
+
+  <view wx:for="{{groups}}" wx:key="name" class="card">
+    <view class="group-title">{{item.name}}</view>
+    <view wx:for="{{item.items}}" wx:for-item="row" wx:key="index" class="row">
+      <view class="row-left">
+        <text class="row-name">{{row.name}}</text>
+        <text wx:if="{{row.note}}" class="row-note">{{row.note}}</text>
+      </view>
+      <text class="row-result {{row.normal ? 'row-result--ok' : 'row-result--warn'}}">{{row.result}}</text>
+    </view>
+  </view>
+
+  <view wx:if="{{report.summary}}" class="card">
+    <view class="card-title">综合结论</view>
+    <view class="summary">{{report.summary}}</view>
+  </view>
+
+  <view wx:if="{{images.length}}" class="card">
+    <view class="card-title">质检图片</view>
+    <view class="img-list">
+      <image
+        wx:for="{{images}}"
+        wx:key="index"
+        class="img"
+        src="{{item}}"
+        mode="aspectFill"
+        data-index="{{index}}"
+        bindtap="previewImage"
+      />
+    </view>
+  </view>
+
+  <view class="footer">
+    <t-button theme="primary" block bindtap="goBuy">立即购买</t-button>
+  </view>
+</view>
+
+<view wx:elif="{{!loading}}" class="empty">
+  <t-empty description="该机型暂无质检报告" />
+</view>

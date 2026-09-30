@@ -4,6 +4,7 @@
     "pages/sale/index",
     "pages/sale/detail/index",
     "pages/sale/confirm/index",
+    "pages/sale/inspection/index",
     "pages/sale/order/list/index",
     "pages/sale/order/detail/index",
     "pages/recycle/estimate/index",

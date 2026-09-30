@@ -20,11 +20,88 @@
     </view>
   </view>
 
-  <t-cell-group theme="card">
-    <t-cell title="商品名称" note="{{goods.name}}" />
-    <t-cell title="在库数量" note="{{goods.stock}} 件" />
-    <t-cell wx:if="{{goods.descText}}" title="商品说明" note="{{goods.descText}}" />
-  </t-cell-group>
+  <!-- 机型参数 -->
+  <view class="card">
+    <view class="card-title">机型参数</view>
+    <view class="param-grid">
+      <view class="param-item">
+        <text class="param-key">品牌</text>
+        <text class="param-val">{{goods.brand || '—'}}</text>
+      </view>
+      <view class="param-item">
+        <text class="param-key">内存</text>
+        <text class="param-val">{{goods.storage || '—'}}</text>
+      </view>
+      <view class="param-item">
+        <text class="param-key">成色</text>
+        <text class="param-val param-val--brand">{{goods.conditionLevel || '—'}}</text>
+      </view>
+      <view class="param-item">
+        <text class="param-key">在库</text>
+        <text class="param-val">{{goods.stock}} 件</text>
+      </view>
+    </view>
+    <view wx:if="{{tagList.length}}" class="param-tags">
+      <t-tag wx:for="{{tagList}}" wx:key="*this" theme="primary" variant="light" size="small">{{item}}</t-tag>
+    </view>
+  </view>
+
+  <!-- 质检报告卡片 -->
+  <view class="card inspect-card" bindtap="goInspection">
+    <view class="inspect-head">
+      <view class="inspect-badge">
+        <t-icon name="verified" size="36rpx" color="#FFFFFF" />
+      </view>
+      <view class="inspect-head-text">
+        <view class="inspect-title">RePhone 官方质检</view>
+        <view class="inspect-sub">
+          {{hasReport ? '已通过 ' + normalCount + ' 项检测，其中 ' + abnormalCount + ' 项需说明' : '质检报告整理中'}}
+        </view>
+      </view>
+      <view class="inspect-arrow">
+        <text>完整报告</text>
+        <t-icon name="chevron-right" size="28rpx" color="#FF5F15" />
+      </view>
+    </view>
+
+    <block wx:if="{{hasReport}}">
+      <view class="inspect-stats">
+        <view class="stat">
+          <text class="stat-num stat-num--brand">{{goods.conditionLevel || '—'}}</text>
+          <text class="stat-label">综合成色</text>
+        </view>
+        <view class="stat">
+          <text class="stat-num">{{report.batteryHealth != null ? report.batteryHealth + '%' : '—'}}</text>
+          <text class="stat-label">电池健康度</text>
+        </view>
+        <view class="stat">
+          <text class="stat-num">{{normalCount}}/{{normalCount + abnormalCount}}</text>
+          <text class="stat-label">检测通过</text>
+        </view>
+      </view>
+
+      <view wx:if="{{abnormalCount > 0}}" class="inspect-abnormal">
+        <view class="abnormal-title">需说明项（{{abnormalCount}}）</view>
+        <view wx:for="{{previewItems}}" wx:key="index" class="abnormal-row">
+          <text class="abnormal-name">{{item.name}}</text>
+          <text class="abnormal-result">{{item.result}}</text>
+        </view>
+      </view>
+      <view wx:else class="inspect-allgood">全部检查项均正常</view>
+
+      <view wx:if="{{report.summary}}" class="inspect-summary">{{report.summary}}</view>
+      <view class="inspect-no">报告编号 {{report.reportNo}}</view>
+    </block>
+
+    <view wx:else class="inspect-empty">
+      该机型尚未录入质检报告，如需了解具体情况可联系客服
+    </view>
+  </view>
+
+  <view class="card">
+    <view class="card-title">商品说明</view>
+    <view class="desc-text">{{goods.descText || '暂无补充说明'}}</view>
+  </view>
 
   <view class="footer">
     <t-button theme="primary" block bindtap="goBuy">立即购买</t-button>
