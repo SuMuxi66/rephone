@@ -24,10 +24,28 @@ const router = createRouter({
           component: () => import('../views/RepairOrders.vue'),
         },
         {
+          path: 'sale',
+          name: 'sale',
+          meta: { requiresAdmin: true },
+          component: () => import('../views/SaleOrders.vue'),
+        },
+        {
+          path: 'after-sales',
+          name: 'after-sales',
+          meta: { requiresAdmin: true },
+          component: () => import('../views/AfterSales.vue'),
+        },
+        {
           path: 'models',
           name: 'models',
           meta: { requiresAdmin: true },
           component: () => import('../views/Models.vue'),
+        },
+        {
+          path: 'goods',
+          name: 'goods',
+          meta: { requiresAdmin: true },
+          component: () => import('../views/Goods.vue'),
         },
         {
           path: 'accounts',

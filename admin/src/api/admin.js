@@ -42,6 +42,41 @@ export const updateModel = (id, payload) => http.put(`/admin/model/${id}`, paylo
 export const updateModelPrice = (id, storage, priceYuan) =>
   http.put(`/admin/model/${id}/price`, { storage, priceYuan });
 
+// ===== 商品/售出/售后 =====
+export const fetchGoods = (params) => http.get('/admin/goods', { params });
+export const createGoods = (payload) => http.post('/admin/goods', payload);
+export const updateGoods = (id, payload) => http.put(`/admin/goods/${id}`, payload);
+export const setGoodsStatus = (id, status) => http.put(`/admin/goods/${id}/status`, { status });
+
+export const fetchSaleOrders = (params) => http.get('/admin/sale/orders', { params });
+export const fetchSaleOrderDetail = (orderNo) => http.get(`/admin/sale/order/${orderNo}`);
+export const shipSaleOrder = (orderNo, payload) => http.put(`/admin/sale/order/${orderNo}/ship`, payload);
+export const refundSaleOrder = (orderNo, reason) =>
+  http.post(`/admin/sale/order/${orderNo}/refund`, { reason });
+
+export const fetchAfterSales = (params) => http.get('/admin/after-sales', { params });
+export const fetchAfterSaleDetail = (asNo) => http.get(`/admin/after-sales/${asNo}`);
+export const agreeAfterSale = (asNo, adminRemark) =>
+  http.put(`/admin/after-sales/${asNo}/agree`, { adminRemark });
+export const rejectAfterSale = (asNo, adminRemark) =>
+  http.put(`/admin/after-sales/${asNo}/reject`, { adminRemark });
+
+export const SALE_STATUS = {
+  10: { label: '待付款', type: 'info' },
+  20: { label: '待发货', type: 'primary' },
+  30: { label: '已发货', type: 'warning' },
+  40: { label: '已完成', type: 'success' },
+  80: { label: '已取消', type: 'info' },
+  90: { label: '已退款', type: 'danger' },
+};
+
+export const AFTER_SALE_STATUS = {
+  10: { label: '待审核', type: 'warning' },
+  30: { label: '已退款', type: 'success' },
+  40: { label: '已拒绝', type: 'danger' },
+  80: { label: '已撤销', type: 'info' },
+};
+
 // ===== 状态字典 =====
 export const RECYCLE_STATUS = {
   10: { label: '待寄出', type: 'warning' },

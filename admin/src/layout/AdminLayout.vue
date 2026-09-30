@@ -11,6 +11,18 @@
           <el-icon><Tools /></el-icon>
           <span>维修单管理</span>
         </el-menu-item>
+        <el-menu-item index="/sale">
+          <el-icon><Sell /></el-icon>
+          <span>售出管理</span>
+        </el-menu-item>
+        <el-menu-item index="/after-sales">
+          <el-icon><ChatDotRound /></el-icon>
+          <span>售后管理</span>
+        </el-menu-item>
+        <el-menu-item index="/goods">
+          <el-icon><GoodsFilled /></el-icon>
+          <span>商品管理</span>
+        </el-menu-item>
         <el-menu-item index="/models">
           <el-icon><Iphone /></el-icon>
           <span>机型管理</span>
@@ -49,7 +61,7 @@
 
 <script setup>
 import { useRoute, useRouter } from 'vue-router';
-import { Box, Tools, UserFilled, Iphone, Location } from '@element-plus/icons-vue';
+import { Box, Tools, UserFilled, Iphone, Location, Sell, ChatDotRound, GoodsFilled } from '@element-plus/icons-vue';
 import { getProfile, clearSession } from '../api/http';
 
 const route = useRoute();
