@@ -33,7 +33,7 @@ import org.springframework.test.context.TestPropertySource;
         "spring.datasource.username=sa",
         "spring.datasource.password=",
         "spring.sql.init.mode=always",
-        "spring.sql.init.schema-locations=classpath:db/schema-h2.sql,classpath:db/schema-quote.sql",
+        "spring.sql.init.schema-locations=classpath:db/schema-h2.sql,classpath:db/schema-quote.sql,classpath:db/data-model-models.sql",
         "rephone.wx.mock-login=true",
         "rephone.jwt.ttl-seconds=3600"
 })
@@ -71,7 +71,7 @@ class P2QuoteFlowTest {
                 new HttpEntity<>(auth()), String.class);
         JsonNode body = objectMapper.readTree(resp.getBody());
         assertEquals(0, body.get("code").asInt());
-        assertEquals(5, body.path("data").size(), "应返回 5 个种子品牌");
+        assertEquals(12, body.path("data").size(), "应返回 12 个品牌（5 种子 + 7 MobileModels 新增）");
         assertEquals("Apple", body.path("data").get(0).path("name").asText());
     }
 
@@ -158,5 +158,22 @@ class P2QuoteFlowTest {
         assertEquals("iPhone 15 Pro Max", models.get(0).path("modelName").asText());
         assertEquals(820000L, models.get(0).path("maxPriceFen").asLong(), "首条应为 iPhone 15 Pro Max 512GB 价");
         assertTrue(models.get(0).path("brandId").asLong() == 1L);
+    }
+
+    @Test
+    @Order(7)
+    void model_catalog_full_vs_quotable() throws Exception {
+        // 全量机型库（维修用）：Apple 远多于 6 款种子（2015 年至今约 50 款）
+        ResponseEntity<String> repairModels = rest.exchange("/api/wx/repair/models?brandId=1",
+                HttpMethod.GET, new HttpEntity<>(auth()), String.class);
+        JsonNode repairBody = objectMapper.readTree(repairModels.getBody());
+        assertEquals(0, repairBody.get("code").asInt());
+        assertTrue(repairBody.path("data").size() >= 50, "维修应见全量 Apple 机型（含 2015 后新增）");
+
+        // 估价机型过滤：仅返回配置了内存基准价的 6 款种子
+        ResponseEntity<String> quoteModels = rest.exchange("/api/wx/models?brandId=1",
+                HttpMethod.GET, new HttpEntity<>(auth()), String.class);
+        assertEquals(6, objectMapper.readTree(quoteModels.getBody()).path("data").size(),
+                "估价应只返回有基准价的机型");
     }
 }

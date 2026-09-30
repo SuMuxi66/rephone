@@ -2,10 +2,12 @@ package com.rephone.controller;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.rephone.common.result.R;
+import com.rephone.pojo.dto.AdminStatusRequest;
 import com.rephone.pojo.dto.RepairGroupView;
 import com.rephone.pojo.dto.RepairOrderCreateRequest;
 import com.rephone.pojo.dto.RepairOrderDetail;
 import com.rephone.pojo.dto.RepairOrderItem;
+import com.rephone.service.QuoteService;
 import com.rephone.service.RepairOrderService;
 import java.util.List;
 import java.util.Map;
@@ -24,9 +26,17 @@ import org.springframework.web.bind.annotation.RestController;
 public class WxRepairOrderController {
 
     private final RepairOrderService repairService;
+    private final QuoteService quoteService;
 
-    public WxRepairOrderController(RepairOrderService repairService) {
+    public WxRepairOrderController(RepairOrderService repairService, QuoteService quoteService) {
         this.repairService = repairService;
+        this.quoteService = quoteService;
+    }
+
+    /** 全量机型（机型库为设备字典，维修价有全机型兜底价）。 */
+    @GetMapping("/models")
+    public R<?> allModels(@RequestParam Long brandId) {
+        return R.ok(quoteService.listAllModels(brandId));
     }
 
     /** 维修项目分组字典（含该机型实时价格）。 */

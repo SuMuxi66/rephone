@@ -46,15 +46,29 @@ public class QuoteService {
                 .toList();
     }
 
+    /** 估价用机型：仅返回配置了内存基准价的机型（机型库为全量设备字典）。 */
     public List<ModelItem> listModels(Long brandId) {
+        return listModels(brandId, true);
+    }
+
+    /** 全量机型（维修等场景：维修价按 model_id=0 基准价兜底，天然支持全部机型）。 */
+    public List<ModelItem> listAllModels(Long brandId) {
+        return listModels(brandId, false);
+    }
+
+    private List<ModelItem> listModels(Long brandId, boolean quotableOnly) {
         if (brandId == null) {
             throw new BizException(40010, "brandId 不能为空");
         }
         List<PhoneModel> models = modelMapper.selectList(new LambdaQueryWrapper<PhoneModel>()
                 .eq(PhoneModel::getBrandId, brandId)
                 .orderByAsc(PhoneModel::getSort));
-        return models.stream().map(m -> new ModelItem(m.getId(), m.getName(), m.getImage(),
-                m.getReleaseYear(), storageOptions(m.getId()))).toList();
+        var all = models.stream()
+                .map(m -> new ModelItem(m.getId(), m.getName(), m.getImage(),
+                        m.getReleaseYear(), storageOptions(m.getId())))
+                .toList();
+        // 估价仅对配置了内存基准价的机型开放（storages 非空）
+        return quotableOnly ? all.stream().filter(m -> !m.storages().isEmpty()).toList() : all;
     }
 
     public QuoteResult calculate(QuoteCalculateRequest req) {

@@ -1,7 +1,10 @@
 import { get, post, request } from '../request';
 
-export { fetchBrands, fetchModels } from '../recycle/quote';
+export { fetchBrands } from '../recycle/quote';
 export { fetchCosUploadSign } from '../recycle/order';
+
+/** 全量机型（维修用，不受估价基准价过滤）：GET /api/wx/repair/models?brandId= */
+export const fetchModels = (brandId) => get('/api/wx/repair/models', { brandId });
 
 /** 维修项目分组字典（含该机型实时价）：GET /api/wx/repair/items?modelId= */
 export const fetchRepairItems = (modelId) => get('/api/wx/repair/items', { modelId });
