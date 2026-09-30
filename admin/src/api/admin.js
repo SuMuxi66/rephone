@@ -48,6 +48,9 @@ export const createGoods = (payload) => http.post('/admin/goods', payload);
 export const updateGoods = (id, payload) => http.put(`/admin/goods/${id}`, payload);
 export const setGoodsStatus = (id, status) => http.put(`/admin/goods/${id}/status`, { status });
 
+export const fetchGoodsInspection = (id) => http.get(`/admin/goods/${id}/inspection`);
+export const saveGoodsInspection = (id, payload) => http.post(`/admin/goods/${id}/inspection`, payload);
+
 export const fetchSaleOrders = (params) => http.get('/admin/sale/orders', { params });
 export const fetchSaleOrderDetail = (orderNo) => http.get(`/admin/sale/order/${orderNo}`);
 export const shipSaleOrder = (orderNo, payload) => http.put(`/admin/sale/order/${orderNo}/ship`, payload);

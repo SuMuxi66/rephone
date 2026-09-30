@@ -37,8 +37,9 @@
           <el-tag :type="row.status === 1 ? 'success' : 'info'">{{ row.status === 1 ? '上架' : '下架' }}</el-tag>
         </template>
       </el-table-column>
-      <el-table-column label="操作" width="150" fixed="right">
+      <el-table-column label="操作" width="240" fixed="right">
         <template #default="{ row }">
+          <el-button link type="primary" @click="openInspect(row)">质检报告</el-button>
           <el-button link type="primary" @click="openEdit(row)">编辑</el-button>
           <el-button link :type="row.status === 1 ? 'danger' : 'success'" @click="onToggle(row)">
             {{ row.status === 1 ? '下架' : '上架' }}
@@ -88,6 +89,82 @@
         <el-button type="primary" :loading="submitting" @click="onSubmit">保存</el-button>
       </template>
     </el-dialog>
+
+    <el-dialog v-model="inspectDialog" :title="`质检报告 · ${inspectGoods ? inspectGoods.name : ''}`" width="760px">
+      <el-form label-position="top">
+        <el-row :gutter="12">
+          <el-col :span="8">
+            <el-form-item label="质检工程师">
+              <el-input v-model="inspectForm.inspector" maxlength="32" placeholder="如 质检员小李" />
+            </el-form-item>
+          </el-col>
+          <el-col :span="8">
+            <el-form-item label="质检时间">
+              <el-date-picker
+                v-model="inspectForm.inspectedAt"
+                type="datetime"
+                value-format="YYYY-MM-DD HH:mm:ss"
+                placeholder="默认当前时间"
+                style="width: 100%"
+              />
+            </el-form-item>
+          </el-col>
+          <el-col :span="8">
+            <el-form-item label="电池健康度（%）">
+              <el-input-number v-model="inspectForm.batteryHealth" :min="0" :max="100" :controls="false" style="width: 100%" />
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-form-item label="综合结论">
+          <el-input v-model="inspectForm.summary" type="textarea" :rows="2" maxlength="512"
+            placeholder="如：整机功能正常，屏幕左上角有细微划痕" />
+        </el-form-item>
+        <el-form-item label="报告图片 URL（每行一个，最多 9 张）">
+          <el-input v-model="inspectForm.imagesText" type="textarea" :rows="2" placeholder="https://..." />
+        </el-form-item>
+        <el-form-item label="检查项">
+          <el-table :data="inspectForm.items" border size="small">
+            <el-table-column label="分组" width="110">
+              <template #default="{ row }">
+                <el-select v-model="row.category" size="small">
+                  <el-option v-for="c in CATEGORIES" :key="c" :label="c" :value="c" />
+                </el-select>
+              </template>
+            </el-table-column>
+            <el-table-column label="检查项" width="150">
+              <template #default="{ row }">
+                <el-input v-model="row.name" size="small" maxlength="32" placeholder="如 屏幕显示" />
+              </template>
+            </el-table-column>
+            <el-table-column label="结论" width="150">
+              <template #default="{ row }">
+                <el-select v-model="row.result" size="small" filterable allow-create default-first-option>
+                  <el-option v-for="r in RESULTS" :key="r" :label="r" :value="r" />
+                </el-select>
+              </template>
+            </el-table-column>
+            <el-table-column label="说明（损伤位置等）">
+              <template #default="{ row }">
+                <el-input v-model="row.note" size="small" maxlength="128" />
+              </template>
+            </el-table-column>
+            <el-table-column label="操作" width="70">
+              <template #default="{ $index }">
+                <el-button link type="danger" @click="inspectForm.items.splice($index, 1)">删除</el-button>
+              </template>
+            </el-table-column>
+          </el-table>
+          <el-button class="add-item" @click="addInspectItem">新增检查项</el-button>
+          <div class="inspect-tip">
+            检查项与结论为空的行使会被忽略；把检查项全部清空再保存 = 删除该商品的质检报告。
+          </div>
+        </el-form-item>
+      </el-form>
+      <template #footer>
+        <el-button @click="inspectDialog = false">取消</el-button>
+        <el-button type="primary" :loading="inspectSubmitting" @click="onSaveInspection">保存报告</el-button>
+      </template>
+    </el-dialog>
   </div>
 </template>
 
@@ -97,10 +174,15 @@ import { ElMessage, ElMessageBox } from 'element-plus';
 import {
   createGoods,
   fetchGoods,
+  fetchGoodsInspection,
   fen2yuan,
+  saveGoodsInspection,
   setGoodsStatus,
   updateGoods,
 } from '../api/admin';
+
+const CATEGORIES = ['外观', '屏幕', '功能', '拆修', '其他'];
+const RESULTS = ['正常', '轻微划痕', '明显划痕', '轻微磕碰', '凹陷', '已更换', '异常'];
 
 const keyword = ref('');
 const statusFilter = ref(-1);
@@ -211,6 +293,75 @@ async function onToggle(row) {
   load();
 }
 
+// ===== 质检报告 =====
+const inspectDialog = ref(false);
+const inspectSubmitting = ref(false);
+const inspectGoods = ref(null);
+const inspectForm = reactive({
+  inspector: '',
+  inspectedAt: '',
+  batteryHealth: null,
+  summary: '',
+  imagesText: '',
+  items: [],
+});
+
+async function openInspect(row) {
+  inspectGoods.value = row;
+  Object.assign(inspectForm, {
+    inspector: '',
+    inspectedAt: '',
+    batteryHealth: null,
+    summary: '',
+    imagesText: '',
+    items: [],
+  });
+  try {
+    const report = await fetchGoodsInspection(row.id);
+    if (report) {
+      Object.assign(inspectForm, {
+        inspector: report.inspector || '',
+        // 后端 LocalDateTime 为 ISO（2026-09-30T10:30:00），需转成 picker 的 value-format
+        inspectedAt: report.inspectedAt ? String(report.inspectedAt).replace('T', ' ').slice(0, 19) : '',
+        batteryHealth: report.batteryHealth ?? null,
+        summary: report.summary || '',
+        imagesText: (report.images || []).join('\n'),
+        items: (report.items || []).map((it) => ({ ...it })),
+      });
+    }
+  } catch {
+    // 尚无质检报告属于正常情况，保持空表单
+  }
+  inspectDialog.value = true;
+}
+
+function addInspectItem() {
+  inspectForm.items.push({ category: '外观', name: '', result: '正常', note: '' });
+}
+
+async function onSaveInspection() {
+  if (!inspectGoods.value) return;
+  inspectSubmitting.value = true;
+  try {
+    const images = inspectForm.imagesText
+      .split('\n')
+      .map((s) => s.trim())
+      .filter(Boolean);
+    await saveGoodsInspection(inspectGoods.value.id, {
+      inspector: inspectForm.inspector,
+      inspectedAt: inspectForm.inspectedAt || null,
+      batteryHealth: inspectForm.batteryHealth,
+      summary: inspectForm.summary,
+      images,
+      items: inspectForm.items,
+    });
+    ElMessage.success('质检报告已保存');
+    inspectDialog.value = false;
+  } finally {
+    inspectSubmitting.value = false;
+  }
+}
+
 onMounted(load);
 </script>
 
@@ -235,5 +386,15 @@ onMounted(load);
   border-radius: 6px;
   color: #c0c4cc;
   font-size: 12px;
+}
+.add-item {
+  width: 100%;
+  margin-top: 8px;
+}
+.inspect-tip {
+  margin-top: 6px;
+  color: #909399;
+  font-size: 12px;
+  line-height: 1.5;
 }
 </style>
