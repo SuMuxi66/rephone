@@ -22,6 +22,9 @@
         </template>
       </el-table-column>
       <el-table-column prop="name" label="商品名" min-width="180" />
+      <el-table-column prop="brand" label="品牌" width="100" />
+      <el-table-column prop="storage" label="内存" width="90" />
+      <el-table-column prop="conditionLevel" label="成色" width="90" />
       <el-table-column label="售价" width="110" align="right">
         <template #default="{ row }">¥{{ fen2yuan(row.priceFen) }}</template>
       </el-table-column>
@@ -51,6 +54,18 @@
       <el-form label-position="top">
         <el-form-item label="商品名" required>
           <el-input v-model="form.name" maxlength="128" />
+        </el-form-item>
+        <el-form-item label="品牌">
+          <el-input v-model="form.brand" placeholder="如 Apple" maxlength="32" />
+        </el-form-item>
+        <el-form-item label="内存/容量">
+          <el-input v-model="form.storage" placeholder="如 256G" maxlength="16" />
+        </el-form-item>
+        <el-form-item label="成色">
+          <el-input v-model="form.conditionLevel" placeholder="如 95新" maxlength="16" />
+        </el-form-item>
+        <el-form-item label="标签（英文逗号分隔）">
+          <el-input v-model="form.tags" placeholder="如 官方自营,已验机" maxlength="255" />
         </el-form-item>
         <el-form-item label="商品图（可复用机型图片上传，或直接填 URL）">
           <el-input v-model="form.image" placeholder="/img/models/xxx.jpg 或完整 URL" />
@@ -97,7 +112,18 @@ const loading = ref(false);
 const submitting = ref(false);
 const dialog = ref(false);
 const editing = ref(null);
-const form = reactive({ name: '', image: '', priceYuan: null, originalPriceYuan: null, stock: 1, descText: '' });
+const form = reactive({
+  name: '',
+  image: '',
+  priceYuan: null,
+  originalPriceYuan: null,
+  stock: 1,
+  descText: '',
+  brand: '',
+  storage: '',
+  conditionLevel: '',
+  tags: '',
+});
 
 async function load() {
   loading.value = true;
@@ -125,7 +151,18 @@ function onPage(page) {
 
 function openCreate() {
   editing.value = null;
-  Object.assign(form, { name: '', image: '', priceYuan: null, originalPriceYuan: null, stock: 1, descText: '' });
+  Object.assign(form, {
+    name: '',
+    image: '',
+    priceYuan: null,
+    originalPriceYuan: null,
+    stock: 1,
+    descText: '',
+    brand: '',
+    storage: '',
+    conditionLevel: '',
+    tags: '',
+  });
   dialog.value = true;
 }
 
@@ -138,6 +175,10 @@ function openEdit(row) {
     originalPriceYuan: row.originalPriceFen ? row.originalPriceFen / 100 : null,
     stock: row.stock,
     descText: row.descText || '',
+    brand: row.brand || '',
+    storage: row.storage || '',
+    conditionLevel: row.conditionLevel || '',
+    tags: row.tags || '',
   });
   dialog.value = true;
 }
