@@ -104,6 +104,7 @@ RePhone 是「手机维修（主）+ 二手机回收 + 二手出售」平台，*
    - JS：`@babel/parser`（位于 `admin/node_modules`）以 `sourceType: module` 解析；
    - JSON：`JSON.parse`；
    - WXML：标签配对检查；
+   - Vue SFC：`@vue/compiler-sfc` 的 `parse` + `compileScript` + `compileTemplate`；
    - 交叉一致性：`app.json` 与 `custom-tab-bar/data.js` 顺序、菜单 `type` 与 `onClickCell` 分支一一对应。
 3. **禁止**声称「已验证/已测试」而没有实际执行。
 
@@ -114,6 +115,10 @@ RePhone 是「手机维修（主）+ 二手机回收 + 二手出售」平台，*
 - 本机 `pwsh` 不可用（退出码 `0xC0000142`，DLL 初始化失败）。**不要用 pwsh 工具**做构建或 git 操作。
 - 沙箱策略为 `workspace-write` 时，**所有子进程**（`git`/`node`/`java` 亦然）都会以 `0xC0000142` 失败；需要执行外部命令时，按宿主策略申请更宽权限后运行。文件策略为 `danger-full-access` 时正常。
 - 已确认可用：`node v24.14.1`、`java 25.0.3`、`git 2.53.0`；`.husky` 不存在（当前无 git 钩子）。
+- **`admin` 构建有破坏性风险**：`vite build` 会**先清空 `admin/dist`**，而本机 esbuild 清理临时文件会
+  报 `Access is denied` 导致构建失败——于是已跟踪的 `admin/dist` 产物被删除。
+  **跑之前先想清楚**；一旦失败，立刻执行 `git checkout HEAD -- admin/dist` 恢复，且不要提交 `admin/dist` 的删除。
+  仅校验 Vue 代码时，优先用第 7 节的 `@vue/compiler-sfc` 静态校验，不要动构建。
 - `.gitignore` 已忽略 `node_modules/`、`miniprogram_npm/`、`server/**/target/`、`.mimosa/`、`.zcode/`、`*.log`、`.env`。**不要**把构建产物或日志提交进仓库。
 
 ---
