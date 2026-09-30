@@ -1,0 +1,632 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<title>RePhone 首页改版设计稿 v2</title>
+<style>
+  :root {
+    --brand: #FF5F15;
+    --brand-dark: #E8500C;
+    --brand-light: #FFF1E8;
+    --success: #2BA246;
+    --warning: #E37318;
+    --text-1: #1F2229;
+    --text-2: #61666E;
+    --text-3: #9AA0A8;
+    --bg-page: #F5F5F7;
+    --bg-card: #FFFFFF;
+    --border: #EFEFF2;
+    --radius: 16px;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, "PingFang SC", "Microsoft YaHei", "Segoe UI", sans-serif;
+    background: #EEF0F4;
+    color: var(--text-1);
+    padding: 32px;
+    display: flex;
+    gap: 40px;
+    align-items: flex-start;
+  }
+
+  /* ---------- 手机外壳 ---------- */
+  .phone {
+    width: 390px;
+    height: 844px;
+    flex: none;
+    background: #111;
+    border-radius: 44px;
+    padding: 10px;
+    box-shadow: 0 24px 60px rgba(20,25,40,.28);
+    position: relative;
+  }
+  .screen {
+    width: 100%;
+    height: 100%;
+    background: var(--bg-page);
+    border-radius: 36px;
+    overflow: hidden;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+  }
+  .statusbar {
+    height: 46px;
+    flex: none;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 26px;
+    font-size: 13px;
+    font-weight: 600;
+    color: #fff;
+    background: linear-gradient(135deg, #FF8A45 0%, var(--brand) 62%);
+  }
+  .scroll {
+    flex: 1;
+    overflow-y: auto;
+    padding-bottom: 8px;
+  }
+  .scroll::-webkit-scrollbar { width: 0; }
+
+  /* ---------- 顶部头部 ---------- */
+  .header {
+    background: linear-gradient(170deg, #FF8A45 0%, var(--brand) 58%, #F2540E 100%);
+    padding: 0 16px 78px;
+    position: relative;
+  }
+  .header-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    color: #fff;
+    font-size: 13px;
+    padding: 4px 2px 14px;
+  }
+  .loc { display: flex; align-items: center; gap: 4px; font-weight: 600; }
+  .header-slogan { opacity: .9; font-size: 12px; }
+  .search {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    height: 40px;
+    background: rgba(255,255,255,.96);
+    border-radius: 20px;
+    padding: 0 14px;
+    box-shadow: 0 4px 14px rgba(180,60,0,.16);
+  }
+  .search svg { flex: none; }
+  .search span { color: var(--text-3); font-size: 13px; }
+
+  /* ---------- 维修主卡（浮起） ---------- */
+  .hero {
+    margin: -64px 16px 0;
+    background: var(--bg-card);
+    border-radius: 20px;
+    padding: 20px;
+    box-shadow: 0 10px 26px rgba(30,40,60,.10);
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::after {
+    content: "";
+    position: absolute;
+    right: -46px; top: -46px;
+    width: 150px; height: 150px;
+    border-radius: 50%;
+    background: radial-gradient(circle at 30% 30%, #FFE3D2, rgba(255,241,232,0));
+  }
+  .hero-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--brand);
+    background: var(--brand-light);
+    padding: 4px 10px;
+    border-radius: 20px;
+    position: relative;
+    z-index: 1;
+  }
+  .hero h1 {
+    font-size: 23px;
+    letter-spacing: -.3px;
+    margin: 12px 0 8px;
+    position: relative;
+    z-index: 1;
+  }
+  .hero-points {
+    font-size: 12.5px;
+    color: var(--text-2);
+    line-height: 1.7;
+    position: relative;
+    z-index: 1;
+  }
+  .hero-cta {
+    margin-top: 16px;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: linear-gradient(135deg, #FF7A3D, var(--brand));
+    color: #fff;
+    font-size: 14px;
+    font-weight: 700;
+    padding: 11px 22px;
+    border-radius: 24px;
+    box-shadow: 0 6px 16px rgba(255,95,21,.34);
+    position: relative;
+    z-index: 1;
+  }
+
+  /* ---------- 双业务卡 ---------- */
+  .duo { display: flex; gap: 10px; margin: 12px 16px 0; }
+  .duo-card {
+    flex: 1;
+    background: var(--bg-card);
+    border-radius: var(--radius);
+    padding: 14px;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 2px 10px rgba(30,40,60,.05);
+  }
+  .duo-card .ic {
+    width: 34px; height: 34px;
+    border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    margin-bottom: 10px;
+  }
+  .ic--recycle { background: #EAF4FF; }
+  .ic--buy { background: var(--brand-light); }
+  .duo-title { font-size: 14px; font-weight: 700; }
+  .duo-sub { font-size: 11.5px; color: var(--text-3); margin-top: 5px; line-height: 1.5; }
+  .duo-price { color: var(--brand); font-size: 15px; font-weight: 800; }
+  .duo-link {
+    margin-top: 10px;
+    display: inline-flex; align-items: center; gap: 2px;
+    font-size: 12px; font-weight: 600; color: var(--brand);
+  }
+
+  /* ---------- 通用区块 ---------- */
+  .sec { margin-top: 22px; padding: 0 16px; }
+  .sec-head {
+    display: flex; align-items: baseline; justify-content: space-between;
+    margin-bottom: 12px;
+  }
+  .sec-title { font-size: 17px; font-weight: 800; letter-spacing: -.2px; }
+  .sec-sub { font-size: 11.5px; color: var(--text-3); margin-left: 8px; font-weight: 400; }
+  .sec-more { font-size: 12px; color: var(--text-3); }
+
+  /* 快捷维修宫格 */
+  .quick { display: flex; gap: 8px; }
+  .quick-item {
+    flex: 1;
+    background: var(--bg-card);
+    border-radius: 14px;
+    padding: 14px 4px 12px;
+    text-align: center;
+  }
+  .quick-item .qic {
+    width: 34px; height: 34px; margin: 0 auto 8px;
+    border-radius: 50%; background: var(--brand-light);
+    display: flex; align-items: center; justify-content: center;
+  }
+  .quick-item span { font-size: 11.5px; color: var(--text-2); }
+
+  /* 横滑卡片 */
+  .row-scroll { display: flex; gap: 10px; overflow: hidden; }
+  .goods-card {
+    width: 126px; flex: none;
+    background: var(--bg-card);
+    border-radius: var(--radius);
+    overflow: hidden;
+    box-shadow: 0 2px 10px rgba(30,40,60,.05);
+  }
+  .ph {
+    height: 112px;
+    background: #FBFBFC;
+    border-bottom: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: center;
+    position: relative;
+  }
+  .phone-shape {
+    width: 46px; height: 76px;
+    border-radius: 9px;
+    background: #DFE3E9;
+    border: 2px solid #CFD5DD;
+    position: relative;
+  }
+  .phone-shape::before {
+    content: ""; position: absolute; top: 5px; left: 5px;
+    width: 14px; height: 14px; border-radius: 4px; background: #C6CDD6;
+  }
+  .goods-body { padding: 10px; }
+  .goods-name {
+    font-size: 12.5px; font-weight: 600; line-height: 1.4;
+    display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
+    min-height: 35px;
+  }
+  .chips { display: flex; gap: 4px; margin-top: 6px; flex-wrap: wrap; }
+  .chipx {
+    font-size: 10px; color: var(--brand); background: var(--brand-light);
+    padding: 2px 6px; border-radius: 4px;
+  }
+  .chipx--green { color: var(--success); background: #EDF8EF; }
+  .goods-price { margin-top: 8px; font-size: 16px; font-weight: 800; color: var(--brand); }
+  .goods-price small { font-size: 11px; }
+  .goods-origin { font-size: 10.5px; color: var(--text-3); text-decoration: line-through; margin-left: 4px; }
+
+  .model-card {
+    width: 104px; flex: none;
+    background: var(--bg-card);
+    border-radius: var(--radius);
+    padding: 12px 8px;
+    text-align: center;
+    box-shadow: 0 2px 10px rgba(30,40,60,.05);
+  }
+  .model-ph {
+    height: 66px; display: flex; align-items: center; justify-content: center;
+    margin-bottom: 8px;
+  }
+  .model-shape {
+    width: 36px; height: 60px; border-radius: 7px;
+    background: #E4E8EE; border: 2px solid #D3D9E1;
+  }
+  .model-brand { font-size: 10.5px; color: var(--text-3); }
+  .model-name { font-size: 12px; font-weight: 600; margin-top: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .model-price { font-size: 11.5px; color: var(--brand); font-weight: 700; margin-top: 6px; }
+
+  /* 服务保障 */
+  .assure {
+    display: flex; gap: 8px;
+    background: var(--bg-card);
+    border-radius: var(--radius);
+    padding: 16px 6px;
+  }
+  .assure-item { flex: 1; text-align: center; }
+  .assure-item .aic {
+    width: 28px; height: 28px; margin: 0 auto 7px; border-radius: 50%;
+    background: var(--brand-light); display: flex; align-items: center; justify-content: center;
+  }
+  .assure-item span { font-size: 10.5px; color: var(--text-2); line-height: 1.3; display: block; }
+
+  .foot-note {
+    text-align: center; font-size: 10.5px; color: #C2C7CE;
+    padding: 22px 0 18px;
+  }
+
+  /* ---------- 底部 tabBar ---------- */
+  .tabbar {
+    flex: none;
+    height: 62px;
+    background: rgba(255,255,255,.97);
+    border-top: 1px solid var(--border);
+    display: flex;
+    padding-bottom: 6px;
+  }
+  .tab {
+    flex: 1; display: flex; flex-direction: column;
+    align-items: center; justify-content: center; gap: 3px;
+  }
+  .tab span { font-size: 10.5px; color: #9AA0A8; }
+  .tab.on span { color: var(--brand); font-weight: 700; }
+  .tab svg { stroke: #9AA0A8; }
+  .tab.on svg { stroke: var(--brand); }
+
+  /* ---------- 右侧说明 ---------- */
+  .doc { flex: 1; min-width: 420px; max-width: 720px; }
+  .doc h1 { font-size: 26px; letter-spacing: -.5px; }
+  .doc .meta { color: var(--text-3); font-size: 13px; margin-top: 8px; }
+  .doc h2 {
+    font-size: 15px; margin: 26px 0 10px; padding-left: 10px;
+    border-left: 3px solid var(--brand);
+  }
+  .doc p, .doc li { font-size: 13.5px; line-height: 1.85; color: var(--text-2); }
+  .doc ul { padding-left: 20px; }
+  .doc b { color: var(--text-1); }
+  .doc code {
+    background: #E9ECF1; padding: 1px 6px; border-radius: 4px;
+    font-size: 12px; font-family: Consolas, monospace; color: #B2431A;
+  }
+  .doc table { width: 100%; border-collapse: collapse; margin-top: 8px; font-size: 13px; }
+  .doc th, .doc td { text-align: left; padding: 9px 10px; border-bottom: 1px solid #E3E6EB; }
+  .doc th { background: #E9ECF1; font-weight: 700; font-size: 12.5px; }
+  .doc td { color: var(--text-2); }
+  .badge {
+    display: inline-block; font-size: 11px; padding: 2px 8px; border-radius: 20px;
+    background: var(--brand-light); color: var(--brand); font-weight: 700;
+  }
+  .badge--new { background: #EAF4FF; color: #2A6FD6; }
+  .badge--keep { background: #EDF8EF; color: var(--success); }
+
+  /* ---------- 长图模式：#full 只保留手机，展示整页 ---------- */
+  body.full { justify-content: center; padding: 20px; }
+  body.full .doc { display: none; }
+  body.full .phone { height: auto; }
+  body.full .screen { height: auto; overflow: visible; }
+  body.full .scroll { overflow: visible; }
+</style>
+</head>
+<body>
+
+<!-- ================= 手机原型 ================= -->
+<div class="phone">
+  <div class="screen">
+    <div class="statusbar"><span>9:41</span><span>5G &nbsp; 100%</span></div>
+
+    <div class="scroll">
+      <!-- 头部 + 搜索 -->
+      <div class="header">
+        <div class="header-top">
+          <div class="loc">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="#fff"><path d="M12 2C8.1 2 5 5.1 5 9c0 5.2 7 13 7 13s7-7.8 7-13c0-3.9-3.1-7-7-7zm0 9.5A2.5 2.5 0 1 1 12 6.5a2.5 2.5 0 0 1 0 5z"/></svg>
+            上海
+          </div>
+          <div class="header-slogan">上门快修 · 官方质检</div>
+        </div>
+        <div class="search">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#9AA0A8" stroke-width="2.4"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
+          <span>搜机型、故障，或想买的二手机</span>
+        </div>
+      </div>
+
+      <!-- 维修主卡 -->
+      <div class="hero">
+        <div class="hero-tag">★ 平台主推</div>
+        <h1>手机维修 · 上门快修</h1>
+        <div class="hero-points">先报价后维修 · 原厂品质配件<br/>修好验收付款 · 180 天质保</div>
+        <div class="hero-cta">
+          立即报修
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3"><path d="M9 6l6 6-6 6"/></svg>
+        </div>
+      </div>
+
+      <!-- 回收 / 购买 双卡 -->
+      <div class="duo">
+        <div class="duo-card">
+          <div class="ic ic--recycle">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#2A6FD6" stroke-width="2"><path d="M4 8h16l-1.5 10.5a2 2 0 0 1-2 1.5H7.5a2 2 0 0 1-2-1.5L4 8z"/><path d="M8.5 8V6a3.5 3.5 0 0 1 7 0v2"/></svg>
+          </div>
+          <div class="duo-title">旧机回收</div>
+          <div class="duo-sub">顺丰包邮 · 质检后打款</div>
+          <div class="duo-price">最高 ¥3200</div>
+          <div class="duo-link">免费估价
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M9 6l6 6-6 6"/></svg>
+          </div>
+        </div>
+        <div class="duo-card">
+          <div class="ic ic--buy">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#FF5F15" stroke-width="2"><path d="M5 7h14l-1.3 12.1a2 2 0 0 1-2 1.9H8.3a2 2 0 0 1-2-1.9L5 7z"/><path d="M9 7V5.5a3 3 0 0 1 6 0V7"/></svg>
+          </div>
+          <div class="duo-title">严选二手机</div>
+          <div class="duo-sub">官方质检 · 支持售后</div>
+          <div class="duo-price">¥1299 起</div>
+          <div class="duo-link">去选购
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M9 6l6 6-6 6"/></svg>
+          </div>
+        </div>
+      </div>
+
+      <!-- 快捷维修 -->
+      <div class="sec">
+        <div class="sec-head">
+          <div><span class="sec-title">哪里坏了</span><span class="sec-sub">选故障，直接看价</span></div>
+          <span class="sec-more">全部 ›</span>
+        </div>
+        <div class="quick">
+          <div class="quick-item">
+            <div class="qic"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#FF5F15" stroke-width="2"><rect x="6" y="3" width="12" height="18" rx="2"/><path d="M9 7h6"/></svg></div>
+            <span>换屏幕</span>
+          </div>
+          <div class="quick-item">
+            <div class="qic"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#FF5F15" stroke-width="2"><rect x="3" y="7" width="14" height="9" rx="2"/><path d="M20 10v4"/></svg></div>
+            <span>换电池</span>
+          </div>
+          <div class="quick-item">
+            <div class="qic"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#FF5F15" stroke-width="2"><path d="M12 3s6 6.5 6 10a6 6 0 0 1-12 0c0-3.5 6-10 6-10z"/></svg></div>
+            <span>进水处理</span>
+          </div>
+          <div class="quick-item">
+            <div class="qic"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#FF5F15" stroke-width="2"><circle cx="12" cy="12" r="8"/><path d="M12 8v8M8 12h8"/></svg></div>
+            <span>不开机</span>
+          </div>
+          <div class="quick-item">
+            <div class="qic"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#FF5F15" stroke-width="2"><circle cx="5" cy="12" r="1.6"/><circle cx="12" cy="12" r="1.6"/><circle cx="19" cy="12" r="1.6"/></svg></div>
+            <span>其他</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 严选二手机 -->
+      <div class="sec">
+        <div class="sec-head">
+          <div><span class="sec-title">严选二手机</span><span class="sec-sub">官方质检 · 一机一报告</span></div>
+          <span class="sec-more">更多 ›</span>
+        </div>
+        <div class="row-scroll">
+          <div class="goods-card">
+            <div class="ph"><div class="phone-shape"></div></div>
+            <div class="goods-body">
+              <div class="goods-name">Apple iPhone 13 256G</div>
+              <div class="chips"><span class="chipx">95新</span><span class="chipx chipx--green">已质检</span></div>
+              <div class="goods-price"><small>¥</small>3299<span class="goods-origin">¥4599</span></div>
+            </div>
+          </div>
+          <div class="goods-card">
+            <div class="ph"><div class="phone-shape"></div></div>
+            <div class="goods-body">
+              <div class="goods-name">华为 Mate 60 512G</div>
+              <div class="chips"><span class="chipx">99新</span><span class="chipx chipx--green">已质检</span></div>
+              <div class="goods-price"><small>¥</small>4180<span class="goods-origin">¥5999</span></div>
+            </div>
+          </div>
+          <div class="goods-card">
+            <div class="ph"><div class="phone-shape"></div></div>
+            <div class="goods-body">
+              <div class="goods-name">小米 14 256G</div>
+              <div class="chips"><span class="chipx">9成新</span><span class="chipx chipx--green">已质检</span></div>
+              <div class="goods-price"><small>¥</small>2299<span class="goods-origin">¥3999</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 热门机型回收 -->
+      <div class="sec">
+        <div class="sec-head">
+          <div><span class="sec-title">热门机型回收</span><span class="sec-sub">30 秒出价</span></div>
+          <span class="sec-more">更多 ›</span>
+        </div>
+        <div class="row-scroll">
+          <div class="model-card">
+            <div class="model-ph"><div class="model-shape"></div></div>
+            <div class="model-brand">Apple</div>
+            <div class="model-name">iPhone 15 Pro</div>
+            <div class="model-price">最高 ¥6850</div>
+          </div>
+          <div class="model-card">
+            <div class="model-ph"><div class="model-shape"></div></div>
+            <div class="model-brand">华为</div>
+            <div class="model-name">Mate 60 Pro</div>
+            <div class="model-price">最高 ¥4300</div>
+          </div>
+          <div class="model-card">
+            <div class="model-ph"><div class="model-shape"></div></div>
+            <div class="model-brand">小米</div>
+            <div class="model-name">14 Ultra</div>
+            <div class="model-price">最高 ¥3600</div>
+          </div>
+          <div class="model-card">
+            <div class="model-ph"><div class="model-shape"></div></div>
+            <div class="model-brand">OPPO</div>
+            <div class="model-name">Find X7</div>
+            <div class="model-price">最高 ¥2950</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 服务保障 -->
+      <div class="sec">
+        <div class="assure">
+          <div class="assure-item">
+            <div class="aic"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#FF5F15" stroke-width="2"><path d="M4 6h16M4 12h16M4 18h10"/></svg></div>
+            <span>先报价<br/>后维修</span>
+          </div>
+          <div class="assure-item">
+            <div class="aic"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#FF5F15" stroke-width="2"><path d="M12 3l7 3v6c0 4.4-3 8-7 9-4-1-7-4.6-7-9V6l7-3z"/></svg></div>
+            <span>180 天<br/>质保</span>
+          </div>
+          <div class="assure-item">
+            <div class="aic"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#FF5F15" stroke-width="2"><path d="M5 13l4 4L19 7"/></svg></div>
+            <span>官方<br/>质检</span>
+          </div>
+          <div class="assure-item">
+            <div class="aic"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#FF5F15" stroke-width="2"><path d="M3 8h11v8H3zM14 11h4l3 3v2h-7z"/></svg></div>
+            <span>顺丰<br/>包邮</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="foot-note">RePhone · 手机维修 · 回收 · 严选</div>
+    </div>
+
+    <!-- tabBar -->
+    <div class="tabbar">
+      <div class="tab on">
+        <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M4 10.5L12 4l8 6.5V20H4z"/></svg>
+        <span>首页</span>
+      </div>
+      <div class="tab">
+        <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M5 7h14l-1.3 12.1a2 2 0 0 1-2 1.9H8.3a2 2 0 0 1-2-1.9L5 7z"/><path d="M9 7V5.5a3 3 0 0 1 6 0V7"/></svg>
+        <span>购买</span>
+      </div>
+      <div class="tab">
+        <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M6 3h12v18H6z"/><path d="M9 7h6"/></svg>
+        <span>维修</span>
+      </div>
+      <div class="tab">
+        <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke-width="2"><rect x="3" y="6" width="18" height="13" rx="2"/><path d="M16 12h2"/></svg>
+        <span>回收</span>
+      </div>
+      <div class="tab">
+        <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke-width="2"><circle cx="12" cy="8" r="3.6"/><path d="M5 20c0-3.6 3.1-5.6 7-5.6s7 2 7 5.6"/></svg>
+        <span>我的</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ================= 设计说明 ================= -->
+<div class="doc">
+  <h1>RePhone 首页改版设计稿 v2</h1>
+  <div class="meta">2026-09-30 ｜ 分支 feature/recycle-mvp ｜ 状态：待你确认后落地</div>
+
+  <h2>一、为什么改</h2>
+  <p>现在的首页是 2026-09-29「维修主导」改版的产物，当时平台只有<strong>维修 + 回收</strong>两个业务，
+  首页结构是：维修主卡 → 三保障 → 热门维修 chips → 回收次卡 → 热门机型。</p>
+  <p>但之后新增了 <strong>「购买」（严选二手机）</strong> 业务并占据了第 2 个 tab，首页却完全没有它的位置；
+  同时首页缺少<strong>搜索入口</strong>，也无法承载「质检」这个平台最核心的信任卖点。</p>
+
+  <h2>二、信息架构（自上而下）</h2>
+  <table>
+    <tr><th>顺序</th><th>模块</th><th>作用</th><th>状态</th></tr>
+    <tr><td>1</td><td>定位 + 全局搜索</td><td>降低寻找成本，搜索覆盖机型/故障/二手机</td><td><span class="badge badge--new">新增</span></td></tr>
+    <tr><td>2</td><td>维修主卡（浮起大卡）</td><td>平台定位锚点，最强 CTA</td><td><span class="badge">强化</span></td></tr>
+    <tr><td>3</td><td>回收 / 购买 双卡</td><td>两条业务并列，各有价格钩子与 CTA</td><td><span class="badge badge--new">新增购买</span></td></tr>
+    <tr><td>4</td><td>哪里坏了（快捷故障）</td><td>维修最高频入口，从横滑改宫格</td><td><span class="badge">改造</span></td></tr>
+    <tr><td>5</td><td>严选二手机 横滑</td><td>购买业务转化位，卡片带成色 + 质检标</td><td><span class="badge badge--new">新增</span></td></tr>
+    <tr><td>6</td><td>热门机型回收 横滑</td><td>保留原品牌预选估价链路</td><td><span class="badge badge--keep">保留</span></td></tr>
+    <tr><td>7</td><td>服务保障四宫格</td><td>把三个保障和「官方质检」并在底部统一背书</td><td><span class="badge">调整</span></td></tr>
+  </table>
+
+  <h2>三、关键设计决策</h2>
+  <ul>
+    <li><b>维修仍是唯一主卡。</b>三业务不是平均用力——维修占满一整行大卡并浮在头部之上，回收与购买各占半宽。
+    这样维持「维修主导」的定位，同时给新业务合理曝光。</li>
+    <li><b>头部渐变延伸到状态栏。</b>品牌色大色块建立记忆点，搜索框压在渐变上形成层次，维修主卡向上负边距浮起制造「卡片感」。</li>
+    <li><b>每个业务卡都带「钩子数字」。</b>回收「最高 ¥3200」、购买「¥1299 起」——用价格锚点替代抽象描述。</li>
+    <li><b>故障入口从横滑 chips 改宫格。</b>横滑会把「其他故障」藏在屏外，宫格 5 个一屏看全，点击目标也更大。</li>
+    <li><b>质检前置。</b>「官方质检」同时出现在搜索副标题、购买卡副文案、商品卡绿色标、底部保障四宫格——
+    这是二手交易最需要反复强化的信任点。</li>
+    <li><b>保障区下沉合并。</b>原来「工程师上门/180天质保/先报价后修」占一行且在顶部，现在合并到页面底部与「官方质检」并列，
+    把首屏黄金位置让给业务入口。</li>
+  </ul>
+
+  <h2>四、跳转与数据来源</h2>
+  <table>
+    <tr><th>模块</th><th>点击去向</th><th>数据来源</th></tr>
+    <tr><td>维修主卡 / 快捷故障</td><td>维修 tab</td><td>静态（故障项为前端常量）</td></tr>
+    <tr><td>旧机回收卡</td><td>回收 tab（估价）</td><td>静态钩子价</td></tr>
+    <tr><td>严选二手机卡 / 商品卡</td><td>购买 tab → 商品详情</td><td><code>GET /api/wx/goods</code>（已有）</td></tr>
+    <tr><td>热门机型卡</td><td>回收 tab + 品牌预选</td><td><code>fetchHome()</code> 的 hotModels（已有）</td></tr>
+    <tr><td>搜索框</td><td>v1 先跳购买 tab；v2 做聚合搜索页</td><td>—</td></tr>
+  </table>
+
+  <h2>五、与旧版差异一览</h2>
+  <ul>
+    <li>新增：定位 + 搜索框、购买业务卡、严选二手机横滑、官方质检标签体系。</li>
+    <li>调整：热门维修 chips 横滑 → 5 宫格；三保障行 → 底部四宫格保障。</li>
+    <li>保留：维修主卡（视觉强化）、回收次卡（降为半宽）、热门机型横滑与品牌预选链路。</li>
+    <li>移除：无（不删任何现有入口）。</li>
+  </ul>
+
+  <h2>六、需要你拍板的三点</h2>
+  <ul>
+    <li><b>购买 tab 的位置</b>：目前是「首页 / 购买 / 维修 / 回收 / 我的」，购买排在维修之前。
+    如果维修仍是主推，是否考虑改成「首页 / 维修 / 购买 / 回收 / 我的」？</li>
+    <li><b>搜索框 v1 行为</b>：先跳购买 tab（成本低），还是直接做一个聚合搜索页（机型/故障/商品三合一）？</li>
+    <li><b>钩子数字</b>：卡上的「最高 ¥3200」「¥1299 起」需要真实数据支撑，
+    可否用接口实时取（回收取最高估价、购买取最低在售价），还是先写运营配置值？</li>
+  </ul>
+
+  <p style="margin-top:22px"><span class="badge">本文件可交互</span>
+  &nbsp;左侧原型可上下滚动；加 <code>#full</code> 打开则是隐藏说明栏的整页长图版，便于整体评审。</p>
+</div>
+
+<script>
+  if (location.hash === '#full') {
+    document.body.classList.add('full');
+  }
+</script>
+</body>
+</html>
