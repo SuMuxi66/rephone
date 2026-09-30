@@ -1,6 +1,7 @@
 # 首页改版设计 v2（三业务枢纽）
 
-日期：2026-09-30 ｜ 分支：feature/recycle-mvp ｜ 状态：**待用户确认**
+日期：2026-09-30 ｜ 分支：feature/recycle-mvp ｜ 状态：**已被 v3 取代**（用户反馈「AI 味重」）
+后继文档：docs/superpowers/specs/2026-09-30-home-redesign-v3.md
 可视化设计稿：docs/design/2026-09-30-home-redesign-v2.html（浏览器打开；URL 加 #full 为整页长图模式）
 静态长图：docs/design/2026-09-30-home-redesign-v2.png
 上一版设计：docs/superpowers/specs/2026-09-29-repair-first-home-design.md

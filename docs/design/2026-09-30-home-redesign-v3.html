@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<title>RePhone 首页改版 v3 · 深松绿方向</title>
+<style>
+  :root {
+    --ink: #10201C;
+    --ink-2: #2C3B36;
+    --pine: #0E5A47;
+    --pine-deep: #0A3D30;
+    --pine-tint: #E8F0ED;
+    --amber: #B86A0E;
+    --amber-tint: #FBF0DE;
+    --paper: #F6F4EF;
+    --card: #FFFFFF;
+    --line: #E7E4DC;
+    --line-strong: #D8D4C9;
+    --text-2: #5D6A64;
+    --text-3: #99A39D;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, "PingFang SC", "Microsoft YaHei", "Segoe UI", sans-serif;
+    background: #EDEAE3; color: var(--ink); padding: 32px;
+    display: flex; gap: 44px; align-items: flex-start;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ================= 手机 ================= */
+  .phone { width: 390px; height: 844px; flex: none; background: #171A19; border-radius: 42px; padding: 9px;
+    box-shadow: 0 26px 60px rgba(16,32,28,.30); }
+  .screen { width: 100%; height: 100%; background: var(--paper); border-radius: 34px; overflow: hidden;
+    display: flex; flex-direction: column; position: relative; }
+  .statusbar { height: 44px; flex: none; display: flex; align-items: center; justify-content: space-between;
+    padding: 0 24px; font-size: 12.5px; font-weight: 600; color: rgba(255,255,255,.92);
+    background: var(--pine-deep); }
+  .scroll { flex: 1; overflow-y: auto; }
+  .scroll::-webkit-scrollbar { width: 0; }
+
+  /* 头部：实色，不用渐变 */
+  .masthead { background: var(--pine-deep); padding: 2px 20px 22px; color: #fff; }
+  .mast-top { display: flex; align-items: center; justify-content: space-between; font-size: 12px;
+    color: rgba(255,255,255,.62); padding-bottom: 18px; }
+  .mast-city { color: rgba(255,255,255,.92); font-weight: 600; }
+  .mast-claim { font-size: 27px; font-weight: 700; letter-spacing: -.6px; line-height: 1.24; }
+  .mast-sub { margin-top: 10px; font-size: 12px; line-height: 1.7; color: rgba(255,255,255,.58); }
+  .mast-cta { margin-top: 18px; display: flex; align-items: center; gap: 16px; }
+  .btn-primary { display: inline-flex; align-items: center; gap: 6px; background: #fff; color: var(--pine-deep);
+    font-size: 14px; font-weight: 700; padding: 11px 20px; border-radius: 8px; letter-spacing: .2px; }
+  .link-quiet { font-size: 12.5px; color: rgba(255,255,255,.72); border-bottom: 1px solid rgba(255,255,255,.3);
+    padding-bottom: 2px; }
+
+  /* 搜索：一条细边栏，不是胶囊 */
+  .searchbar { display: flex; align-items: center; gap: 9px; background: var(--card);
+    border-bottom: 1px solid var(--line); padding: 14px 20px; }
+  .searchbar span { font-size: 13px; color: var(--text-3); }
+
+  /* 通用区块：靠发丝线分隔，不靠阴影 */
+  .block { padding: 24px 20px 0; }
+  .block-head { display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 16px; }
+  .block-title { font-size: 17px; font-weight: 700; letter-spacing: -.3px; }
+  .block-note { font-size: 11px; color: var(--text-3); letter-spacing: .06em; margin-left: 8px; font-weight: 400; }
+  .block-more { font-size: 12px; color: var(--text-2); }
+
+  /* 故障：方框描边，无粉彩圆底 */
+  .faults { display: flex; gap: 8px; }
+  .fault { flex: 1; border: 1px solid var(--line-strong); border-radius: 8px; background: var(--card);
+    padding: 13px 4px 11px; display: flex; flex-direction: column; align-items: center; gap: 8px; }
+  .fault span { font-size: 11.5px; color: var(--ink-2); letter-spacing: .02em; }
+
+  /* 三业务：分栏 + 竖线，像目录 */
+  .index-row { display: flex; background: var(--card); border: 1px solid var(--line); border-radius: 10px;
+    overflow: hidden; }
+  .index-col { flex: 1; padding: 16px 14px 14px; position: relative; }
+  .index-col + .index-col { border-left: 1px solid var(--line); }
+  .index-no { font-size: 10px; letter-spacing: .14em; color: var(--text-3); font-weight: 600; }
+  .index-name { margin-top: 7px; font-size: 14.5px; font-weight: 700; }
+  .index-val { margin-top: 8px; font-size: 13px; font-weight: 700; color: var(--amber);
+    font-variant-numeric: tabular-nums; }
+  .index-note { margin-top: 3px; font-size: 10.5px; color: var(--text-3); line-height: 1.5; }
+  .index-arrow { margin-top: 12px; font-size: 11px; color: var(--text-2); }
+
+  /* 严选：1 张大卡 + 2 行紧凑列表（非等宽卡阵） */
+  .feat { background: var(--card); border: 1px solid var(--line); border-radius: 10px; overflow: hidden; }
+  .feat-img { height: 156px; background: #F1EFEA; position: relative;
+    display: flex; align-items: center; justify-content: center; }
+  .feat-badge { position: absolute; left: 12px; top: 12px; background: var(--pine); color: #fff;
+    font-size: 10.5px; font-weight: 600; padding: 4px 9px; border-radius: 4px; letter-spacing: .04em; }
+  .feat-cap { position: absolute; right: 12px; bottom: 10px; font-size: 10.5px; color: var(--text-3);
+    letter-spacing: .04em; }
+  .dev { width: 72px; height: 120px; border-radius: 13px; background: #DFDDD6; border: 1.5px solid #CFCCC3;
+    position: relative; }
+  .dev::before { content: ""; position: absolute; left: 6px; top: 6px; width: 19px; height: 19px;
+    border-radius: 6px; background: #CBC8BF; }
+  .feat-body { padding: 15px 16px 16px; }
+  .feat-name { font-size: 15px; font-weight: 700; letter-spacing: -.2px; }
+  .spec { margin-top: 9px; display: flex; gap: 6px; flex-wrap: wrap; }
+  .spec i { font-style: normal; font-size: 10.5px; color: var(--ink-2); border: 1px solid var(--line-strong);
+    border-radius: 4px; padding: 2px 7px; }
+  .price-row { margin-top: 14px; display: flex; align-items: baseline; gap: 10px; }
+  .price { font-size: 23px; font-weight: 800; color: var(--amber); letter-spacing: -.6px;
+    font-variant-numeric: tabular-nums; }
+  .price small { font-size: 13px; font-weight: 700; margin-right: 1px; }
+  .price-old { font-size: 11.5px; color: var(--text-3); text-decoration: line-through; }
+  .price-cta { margin-left: auto; font-size: 12px; color: var(--pine); font-weight: 600; }
+
+  .mini-list { margin-top: 2px; background: var(--card); border: 1px solid var(--line); border-radius: 10px;
+    overflow: hidden; }
+  .mini { display: flex; align-items: center; gap: 12px; padding: 13px 14px; }
+  .mini + .mini { border-top: 1px solid var(--line); }
+  .mini-thumb { width: 46px; height: 46px; flex: none; border-radius: 7px; background: #F1EFEA;
+    border: 1px solid var(--line); display: flex; align-items: center; justify-content: center; }
+  .dev-s { width: 20px; height: 34px; border-radius: 4px; background: #DFDDD6; border: 1.2px solid #CFCCC3; }
+  .mini-main { flex: 1; min-width: 0; }
+  .mini-name { font-size: 13px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .mini-spec { margin-top: 4px; font-size: 10.5px; color: var(--text-3); }
+  .mini-price { font-size: 15px; font-weight: 800; color: var(--amber); font-variant-numeric: tabular-nums; }
+
+  /* 回收行情：表格行 */
+  .quote { background: var(--card); border: 1px solid var(--line); border-radius: 10px; overflow: hidden; }
+  .quote-row { display: flex; align-items: center; padding: 14px 16px; }
+  .quote-row + .quote-row { border-top: 1px solid var(--line); }
+  .quote-brand { width: 52px; flex: none; font-size: 10.5px; color: var(--text-3); letter-spacing: .04em; }
+  .quote-name { flex: 1; font-size: 13.5px; font-weight: 600; }
+  .quote-val { font-size: 14px; font-weight: 800; color: var(--amber); font-variant-numeric: tabular-nums; }
+  .quote-cap { font-size: 10px; color: var(--text-3); margin-right: 6px; }
+  .quote-foot { padding: 13px 16px; border-top: 1px solid var(--line); text-align: center;
+    font-size: 12px; color: var(--pine); font-weight: 600; background: #FCFBF8; }
+
+  /* 保障：一行小字 */
+  .assure { margin-top: 26px; border-top: 1px solid var(--line); padding: 16px 20px 0;
+    font-size: 10.5px; color: var(--text-3); letter-spacing: .04em; line-height: 1.9; }
+  .assure b { color: var(--text-2); font-weight: 600; }
+  .foot { text-align: center; font-size: 10px; color: #C6C2B8; letter-spacing: .1em; padding: 22px 0 20px; }
+
+  /* tabBar */
+  .tabbar { flex: none; height: 60px; background: rgba(255,255,255,.98); border-top: 1px solid var(--line);
+    display: flex; padding-bottom: 5px; }
+  .tab { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px; }
+  .tab span { font-size: 10px; color: var(--text-3); }
+  .tab.on span { color: var(--pine); font-weight: 700; }
+  .tab svg { stroke: var(--text-3); }
+  .tab.on svg { stroke: var(--pine); }
+
+  /* ================= 说明栏 ================= */
+  .doc { flex: 1; min-width: 430px; max-width: 700px; }
+  .doc h1 { font-size: 25px; letter-spacing: -.6px; }
+  .doc .meta { color: var(--text-3); font-size: 12.5px; margin-top: 8px; }
+  .doc h2 { font-size: 14px; margin: 26px 0 10px; padding-left: 9px; border-left: 3px solid var(--pine); letter-spacing: -.1px; }
+  .doc p, .doc li { font-size: 13px; line-height: 1.85; color: var(--text-2); }
+  .doc ul { padding-left: 19px; }
+  .doc b { color: var(--ink); }
+  .doc code { background: #E6E3DA; padding: 1px 6px; border-radius: 4px; font-size: 11.5px;
+    font-family: Consolas, monospace; color: #8A4A08; }
+  .swatches { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 6px; }
+  .sw { width: 118px; border: 1px solid #DFDCD3; border-radius: 8px; overflow: hidden; background: #fff; }
+  .sw i { display: block; height: 44px; }
+  .sw div { padding: 7px 9px; font-size: 10.5px; color: var(--text-2); line-height: 1.5; }
+  .sw b { display: block; font-size: 11px; color: var(--ink); }
+  .type-spec { margin-top: 6px; background: #fff; border: 1px solid #DFDCD3; border-radius: 8px; padding: 4px 14px; }
+  .type-row { display: flex; align-items: baseline; gap: 14px; padding: 10px 0; border-bottom: 1px solid var(--line); }
+  .type-row:last-child { border-bottom: none; }
+  .type-key { width: 92px; flex: none; font-size: 10.5px; color: var(--text-3); font-family: Consolas, monospace; }
+  table.doc-t { width: 100%; border-collapse: collapse; margin-top: 8px; font-size: 12.5px; }
+  .doc-t th, .doc-t td { text-align: left; padding: 8px 10px; border-bottom: 1px solid #E3E0D7; }
+  .doc-t th { background: #E6E3DA; font-weight: 700; font-size: 12px; }
+  .doc-t td { color: var(--text-2); }
+  .pill { display: inline-block; font-size: 10.5px; padding: 2px 8px; border-radius: 20px;
+    background: var(--pine-tint); color: var(--pine); font-weight: 700; }
+  .pill--warn { background: var(--amber-tint); color: var(--amber); }
+
+  /* 长图模式 */
+  body.full { justify-content: center; padding: 20px; }
+  body.full .doc { display: none; }
+  body.full .phone { height: auto; }
+  body.full .screen { height: auto; overflow: visible; }
+  body.full .scroll { overflow: visible; }
+</style>
+</head>
+<body>
+
+<div class="phone">
+  <div class="screen">
+    <div class="statusbar"><span>9:41</span><span>5G &nbsp; 100%</span></div>
+    <div class="scroll">
+
+      <div class="masthead">
+        <div class="mast-top">
+          <span class="mast-city">上海 · 全城 2 小时上门</span>
+          <span>客服</span>
+        </div>
+        <div class="mast-claim">修好，<br/>再付钱。</div>
+        <div class="mast-sub">换屏 · 换电池 · 进水 · 主板 · 摄像头<br/>先报价后维修，修好验收才付款</div>
+        <div class="mast-cta">
+          <span class="btn-primary">立即报修
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M9 6l6 6-6 6"/></svg>
+          </span>
+          <span class="link-quiet">查看维修价目</span>
+        </div>
+      </div>
+
+      <div class="searchbar">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#99A39D" stroke-width="2.2"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.6-3.6"/></svg>
+        <span>搜机型、故障，或想买的二手机</span>
+      </div>
+
+      <div class="block">
+        <div class="block-head">
+          <div><span class="block-title">哪里坏了</span><span class="block-note">直接看价</span></div>
+          <span class="block-more">全部 ›</span>
+        </div>
+        <div class="faults">
+          <div class="fault">
+            <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="#10201C" stroke-width="1.7"><rect x="6" y="3" width="12" height="18" rx="2.5"/><path d="M10 6.5h4"/></svg>
+            <span>换屏幕</span>
+          </div>
+          <div class="fault">
+            <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="#10201C" stroke-width="1.7"><rect x="3" y="7" width="14" height="9" rx="2"/><path d="M20 10v4"/><path d="M7 11h5"/></svg>
+            <span>换电池</span>
+          </div>
+          <div class="fault">
+            <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="#10201C" stroke-width="1.7"><path d="M12 3.5s5.5 6 5.5 9.2a5.5 5.5 0 0 1-11 0C6.5 9.5 12 3.5 12 3.5z"/></svg>
+            <span>进水处理</span>
+          </div>
+          <div class="fault">
+            <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="#10201C" stroke-width="1.7"><circle cx="12" cy="12" r="8"/><path d="M12 8.5v7M8.5 12h7"/></svg>
+            <span>不开机</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="block">
+        <div class="index-row">
+          <div class="index-col">
+            <div class="index-no">01</div>
+            <div class="index-name">修手机</div>
+            <div class="index-val">先报价</div>
+            <div class="index-note">上门 / 到店<br/>180 天质保</div>
+            <div class="index-arrow">去报修 ›</div>
+          </div>
+          <div class="index-col">
+            <div class="index-no">02</div>
+            <div class="index-name">卖旧机</div>
+            <div class="index-val">最高 ¥6850</div>
+            <div class="index-note">30 秒出价<br/>顺丰包邮打款</div>
+            <div class="index-arrow">去估价 ›</div>
+          </div>
+          <div class="index-col">
+            <div class="index-no">03</div>
+            <div class="index-name">买二手机</div>
+            <div class="index-val">¥1299 起</div>
+            <div class="index-note">一机一报告<br/>支持售后</div>
+            <div class="index-arrow">去选购 ›</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="block">
+        <div class="block-head">
+          <div><span class="block-title">严选二手机</span><span class="block-note">一机一报告</span></div>
+          <span class="block-more">全部 ›</span>
+        </div>
+        <div class="feat">
+          <div class="feat-img">
+            <div class="feat-badge">官方质检</div>
+            <div class="dev"></div>
+            <div class="feat-cap">已通过 14 项检测</div>
+          </div>
+          <div class="feat-body">
+            <div class="feat-name">Apple iPhone 13 256G</div>
+            <div class="spec"><i>95 新</i><i>电池 92%</i><i>无拆修</i></div>
+            <div class="price-row">
+              <span class="price"><small>¥</small>3299</span>
+              <span class="price-old">¥4599</span>
+              <span class="price-cta">看报告 ›</span>
+            </div>
+          </div>
+        </div>
+        <div class="mini-list">
+          <div class="mini">
+            <div class="mini-thumb"><div class="dev-s"></div></div>
+            <div class="mini-main">
+              <div class="mini-name">华为 Mate 60 512G</div>
+              <div class="mini-spec">99 新 · 电池 98% · 已质检</div>
+            </div>
+            <div class="mini-price">¥4180</div>
+          </div>
+          <div class="mini">
+            <div class="mini-thumb"><div class="dev-s"></div></div>
+            <div class="mini-main">
+              <div class="mini-name">小米 14 256G</div>
+              <div class="mini-spec">9 成新 · 换过后盖 · 已质检</div>
+            </div>
+            <div class="mini-price">¥2299</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="block">
+        <div class="block-head">
+          <div><span class="block-title">回收行情</span><span class="block-note">今日</span></div>
+          <span class="block-more">更多机型 ›</span>
+        </div>
+        <div class="quote">
+          <div class="quote-row">
+            <span class="quote-brand">APPLE</span>
+            <span class="quote-name">iPhone 15 Pro</span>
+            <span class="quote-cap">最高</span><span class="quote-val">¥6850</span>
+          </div>
+          <div class="quote-row">
+            <span class="quote-brand">HUAWEI</span>
+            <span class="quote-name">Mate 60 Pro</span>
+            <span class="quote-cap">最高</span><span class="quote-val">¥4300</span>
+          </div>
+          <div class="quote-row">
+            <span class="quote-brand">XIAOMI</span>
+            <span class="quote-name">14 Ultra</span>
+            <span class="quote-cap">最高</span><span class="quote-val">¥3600</span>
+          </div>
+          <div class="quote-row">
+            <span class="quote-brand">OPPO</span>
+            <span class="quote-name">Find X7</span>
+            <span class="quote-cap">最高</span><span class="quote-val">¥2950</span>
+          </div>
+          <div class="quote-foot">输入你的机型，30 秒出准确报价 ›</div>
+        </div>
+      </div>
+
+      <div class="assure">
+        <b>先报价后维修</b> · 原厂品质配件 · 180 天质保<br/>
+        <b>官方质检</b> · 顺丰包邮 · 验收后付款<br/>
+        服务时间 09:00 – 21:00 · 客服 400-000-0000
+      </div>
+      <div class="foot">REPHONE</div>
+    </div>
+
+    <div class="tabbar">
+      <div class="tab on">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke-width="1.9"><path d="M4 10.5L12 4l8 6.5V20H4z"/></svg>
+        <span>首页</span>
+      </div>
+      <div class="tab">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke-width="1.9"><path d="M5 7h14l-1.3 12.1a2 2 0 0 1-2 1.9H8.3a2 2 0 0 1-2-1.9L5 7z"/><path d="M9 7V5.5a3 3 0 0 1 6 0V7"/></svg>
+        <span>购买</span>
+      </div>
+      <div class="tab">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke-width="1.9"><path d="M6 3h12v18H6z"/><path d="M9 7h6"/></svg>
+        <span>维修</span>
+      </div>
+      <div class="tab">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke-width="1.9"><rect x="3" y="6" width="18" height="13" rx="2"/><path d="M16 12h2"/></svg>
+        <span>回收</span>
+      </div>
+      <div class="tab">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke-width="1.9"><circle cx="12" cy="8" r="3.6"/><path d="M5 20c0-3.6 3.1-5.6 7-5.6s7 2 7 5.6"/></svg>
+        <span>我的</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="doc">
+  <h1>首页改版 v3 · 深松绿方向</h1>
+  <div class="meta">2026-09-30 ｜ 替换 v2（暖橙模板风）｜ 状态：待确认</div>
+
+  <h2>一、先承认 v2 的「AI 味」在哪</h2>
+  <ul>
+    <li><b>渐变头 + 每块圆角白卡 + 统一阴影</b>——这是 Tailwind/shadcn 模板的默认长相，没有取舍就没有风格。</li>
+    <li><b>橙色铺满</b>：头部渐变、CTA、价格、标签底色全是同一个橙的浓淡，等于没有主次。</li>
+    <li><b>粉彩圆形图标 + 居中文字</b>：五个一模一样的圆，是「自动生成」最典型的痕迹。</li>
+    <li><b>每一块都是卡片</b>：卡片本身不是设计，是偷懒的分组；页面没有发丝线、没有留白节奏。</li>
+    <li><b>信息权重无差别</b>：维修/回收/购买三块大小一样，等于告诉用户「你自己猜哪个重要」。</li>
+  </ul>
+
+  <h2>二、配色：从「促销橙」换成「工具感的深松绿」</h2>
+  <p>橙色是二手平台的通用色（转转、爱回收），意味着热闹与低价；而 RePhone 要卖的是
+  <b>「先报价、修好再付、有质检报告」</b>——这是<b>专业与可信</b>，不是折扣。深松绿同时命中三件事：
+  回收/环保、质检通过、工具与可靠。它也和所有竞品拉开距离。</p>
+  <div class="swatches">
+    <div class="sw"><i style="background:#0A3D30"></i><div><b>#0A3D30</b>头部实底<br/>主色（深）</div></div>
+    <div class="sw"><i style="background:#0E5A47"></i><div><b>#0E5A47</b>强调 / 选中态<br/>主色</div></div>
+    <div class="sw"><i style="background:#B86A0E"></i><div><b>#B86A0E</b>只用于钱<br/>价格唯一色</div></div>
+    <div class="sw"><i style="background:#F6F4EF"></i><div><b>#F6F4EF</b>暖白纸底<br/>页面背景</div></div>
+    <div class="sw"><i style="background:#10201C"></i><div><b>#10201C</b>正文墨色<br/>非纯黑</div></div>
+    <div class="sw"><i style="background:#E7E4DC"></i><div><b>#E7E4DC</b>发丝线<br/>替代阴影</div></div>
+  </div>
+  <p style="margin-top:12px"><span class="pill">规则</span> 一屏之内，深绿只出现在头部与选中态，
+  琥珀只出现在「钱」上，其余全部交给暖白与墨色。颜色越少，越像被设计过。</p>
+
+  <h2>三、版式：用发丝线和留白，不用卡片和阴影</h2>
+  <ul>
+    <li><b>去掉全部投影</b>，改为 1px 发丝线（<code>#E7E4DC</code>）+ 8~10px 小圆角。硬边比浮起更「专业」。</li>
+    <li><b>不用胶囊搜索框</b>，改成一条带下边线的通栏，弱化「App 感」。</li>
+    <li><b>故障入口做成描边方框</b>而不是粉彩圆底，图标统一 1.7px 描边墨色。</li>
+    <li><b>三业务改成「目录」分栏</b>（01/02/03 + 竖线），比三张并排卡更有秩序，也更省高度。</li>
+    <li><b>严选做成「1 张大卡 + 2 行紧凑列表」</b>的不对称结构，而不是三张等宽卡横滑——
+    第一件商品值得被放大，其余降级为列表。</li>
+    <li><b>回收做成行情表</b>（品牌 / 机型 / 最高价，细线分栏），信息密度高于卡片，符合「比价」心智。</li>
+    <li><b>保障降为一行小字</b>，不再占一个宫格区块。</li>
+  </ul>
+
+  <h2>四、字阶与数字</h2>
+  <div class="type-spec">
+    <div class="type-row"><span class="type-key">claim / 27</span><span style="font-size:27px;font-weight:700;letter-spacing:-.6px">修好，再付钱。</span></div>
+    <div class="type-row"><span class="type-key">title / 17</span><span style="font-size:17px;font-weight:700;letter-spacing:-.3px">哪里坏了</span></div>
+    <div class="type-row"><span class="type-key">body / 13</span><span style="font-size:13px;color:#5D6A64">先报价后维修，修好验收才付款</span></div>
+    <div class="type-row"><span class="type-key">label / 10.5</span><span style="font-size:10.5px;letter-spacing:.14em;color:#99A39D;font-weight:600">APPLE</span></div>
+    <div class="type-row"><span class="type-key">price / 23</span><span style="font-size:23px;font-weight:800;color:#B86A0E;font-variant-numeric:tabular-nums">¥3299</span></div>
+  </div>
+  <p style="margin-top:12px">所有价格用 <code>font-variant-numeric: tabular-nums</code> 等宽数字，
+  列表里的金额才会上下对齐——这是「看起来专业」最便宜的一招。</p>
+
+  <h2>五、与 v2 的差异对照</h2>
+  <table class="doc-t">
+    <tr><th>维度</th><th>v2（模板味）</th><th>v3（本稿）</th></tr>
+    <tr><td>主色</td><td>橙 #FF5F15 + 满屏浅橙</td><td>深松绿 #0A3D30，浅绿只在选中态</td></tr>
+    <tr><td>头部</td><td>橙渐变铺满</td><td>深绿实底，无渐变</td></tr>
+    <tr><td>卡片</td><td>全部圆角白卡 + 阴影</td><td>发丝线 + 小圆角，几乎无阴影</td></tr>
+    <tr><td>价格色</td><td>与品牌同色（橙）</td><td>独立琥珀色，只出现在钱上</td></tr>
+    <tr><td>三业务</td><td>三张等宽卡</td><td>目录式分栏 01/02/03</td></tr>
+    <tr><td>严选</td><td>三张等宽卡横滑</td><td>1 张大卡 + 2 行紧凑列表</td></tr>
+    <tr><td>回收</td><td>机型小卡横滑</td><td>行情表（品牌/机型/最高价）</td></tr>
+    <tr><td>保障</td><td>四宫格圆形图标</td><td>一行小字</td></tr>
+  </table>
+
+  <h2>六、落地前需要你知道的两件事</h2>
+  <ul>
+    <li><b>这是全局换肤，不只是首页。</b>深松绿要生效，必须同步改 <code>style/design-tokens.wxss</code> 的
+    <code>--brand</code> 等令牌，维修/回收/购买/我的 各页都会跟着变。建议单开一个提交做「设计令牌切换」，
+    再单开一个提交做「首页改版」，这样随时可以回退其中一个。</li>
+    <li><b>价格色与品牌色分离</b>是本稿的硬规则：以后任何页面都不允许用品牌绿写价格，
+    必须用 <code>--money</code>（琥珀）。这条建议写进 AGENT.md 的设计约束。</li>
+  </ul>
+
+  <p style="margin-top:20px"><span class="pill pill--warn">待你确认</span> 主色方向（深松绿 vs 换深靛蓝）、
+  是否接受全局换肤、以及首页是否保留「三条路」这个叫法。</p>
+</div>
+
+<script>
+  if (location.hash === "#full") { document.body.classList.add("full"); }
+</script>
+</body>
+</html>
