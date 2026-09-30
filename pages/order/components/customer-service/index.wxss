@@ -17,15 +17,15 @@
 }
 .dialog--customer-service .content .title {
   display: inline;
-  color: #999999;
+  color: #99A39D;
   font-weight: bold;
 }
 .dialog--customer-service .content .subtitle {
   display: inline;
-  color: #999999;
+  color: #99A39D;
 }
 .dialog--customer-service .options .option {
-  color: #333333;
+  color: #10201C;
   font-size: 30rpx;
   text-align: center;
   height: 100rpx;

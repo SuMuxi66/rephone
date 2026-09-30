@@ -1,7 +1,7 @@
 <view class="page">
   <view class="search-wrap">
     <view class="search-box">
-      <t-icon name="search" size="36rpx" color="#999999" />
+      <t-icon name="search" size="36rpx" color="#99A39D" />
       <input
         class="search-input"
         placeholder="搜索品牌 / 型号 / 成色"
@@ -15,15 +15,15 @@
 
   <view class="promise">
     <view class="promise-item">
-      <t-icon name="verified" size="32rpx" color="#FF5F15" />
+      <t-icon name="verified" size="32rpx" color="#0E5A47" />
       <text>官方质检</text>
     </view>
     <view class="promise-item">
-      <t-icon name="check-circle" size="32rpx" color="#FF5F15" />
+      <t-icon name="check-circle" size="32rpx" color="#0E5A47" />
       <text>库存实时</text>
     </view>
     <view class="promise-item">
-      <t-icon name="service" size="32rpx" color="#FF5F15" />
+      <t-icon name="service" size="32rpx" color="#0E5A47" />
       <text>支持售后</text>
     </view>
   </view>

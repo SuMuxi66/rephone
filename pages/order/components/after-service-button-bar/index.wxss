@@ -31,13 +31,13 @@
 }
 
 .btn-bar .right .normal {
-  --td-button-default-color: #333333;
+  --td-button-default-color: #10201C;
   --td-button-default-border-color: #dddddd;
 }
 
 .btn-bar .right .primary {
   --td-button-default-color: #fff;
-  --td-button-default-bg-color: #fa4126;
-  --td-button-default-border-color: #fa4126;
+  --td-button-default-bg-color: #0E5A47;
+  --td-button-default-border-color: #0E5A47;
   --td-button-default-active-bg-color: #fa42269c;
 }

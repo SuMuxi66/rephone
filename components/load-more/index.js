@@ -34,7 +34,7 @@ Component({
     },
     loadingBackgroundColor: {
       type: String,
-      value: '#F5F5F5',
+      value: '#F6F4EF',
     },
     listIsEmpty: {
       type: Boolean,

@@ -9,15 +9,15 @@
   <!-- 服务三保障 -->
   <view class="entries">
     <view class="entry" bindtap="goRepair">
-      <t-icon name="tools" size="52rpx" color="#FF5F15" />
+      <t-icon name="tools" size="52rpx" color="#0E5A47" />
       <view class="entry-name">工程师上门</view>
     </view>
     <view class="entry" bindtap="goRepair">
-      <t-icon name="check-circle-filled" size="52rpx" color="#FF5F15" />
+      <t-icon name="check-circle-filled" size="52rpx" color="#0E5A47" />
       <view class="entry-name">180天质保</view>
     </view>
     <view class="entry" bindtap="goRepair">
-      <t-icon prefix="wr" name="wallet" size="52rpx" color="#FF5F15" />
+      <t-icon prefix="wr" name="wallet" size="52rpx" color="#0E5A47" />
       <view class="entry-name">先报价后修</view>
     </view>
   </view>

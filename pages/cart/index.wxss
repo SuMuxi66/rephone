@@ -9,5 +9,5 @@
 
 .t-button {
   --td-button-default-color: #000;
-  --td-button-primary-text-color: #fa4126;
+  --td-button-primary-text-color: #0E5A47;
 }

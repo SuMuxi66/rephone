@@ -1,7 +1,7 @@
 @import '../../../style/theme.wxss';
 
 :host {
-  background-color: #f5f5f5;
+  background-color: #F6F4EF;
 }
 
 .notice-bar {
@@ -70,7 +70,7 @@
 }
 
 .fill-tracking-no__button-bar .btn.confirmBtn {
-  background: #fa4126;
+  background: #0E5A47;
   color: #fff;
 }
 
@@ -103,5 +103,5 @@
 
 .t-button {
   --td-button-default-color: #aeb3b7;
-  --td-button-primary-text-color: #fa4126;
+  --td-button-primary-text-color: #0E5A47;
 }

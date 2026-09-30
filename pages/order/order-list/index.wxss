@@ -1,5 +1,5 @@
 :host {
-  background-color: #f5f5f5;
+  background-color: #F6F4EF;
 }
 .page-container .tab-bar__placeholder,
 .page-container .tab-bar__inner {
@@ -9,7 +9,7 @@
 }
 .page-container .tab-bar__inner {
   font-size: 26rpx;
-  color: #333333;
+  color: #10201C;
   position: fixed;
   width: 100vw;
   top: 0;
@@ -19,27 +19,27 @@
   bottom: 12rpx;
 }
 .tab-bar__inner .t-tabs-is-active {
-  color: #fa4126 !important;
+  color: #0E5A47 !important;
 }
 
 .tab-bar__inner .t-tabs-track {
-  background: #fa4126 !important;
+  background: #0E5A47 !important;
 }
 
 .page-container .tab-bar__active {
   font-size: 28rpx;
 }
 .page-container .specs-popup .bottom-btn {
-  color: #fa4126;
-  color: var(--color-primary, #fa4126);
+  color: #0E5A47;
+  color: var(--color-primary, #0E5A47);
 }
 .page-container .specs-popup .bottom-btn::after {
-  border-color: #fa4126;
-  border-color: var(--color-primary, #fa4126);
+  border-color: #0E5A47;
+  border-color: var(--color-primary, #0E5A47);
 }
 .dialog .dialog__button-confirm {
-  color: #fa4126;
-  color: var(--color-primary, #fa4126);
+  color: #0E5A47;
+  color: var(--color-primary, #0E5A47);
 }
 .list-loading {
   height: 100rpx;
@@ -60,7 +60,7 @@ wr-order-goods-card:not(:first-child) .wr-goods-card {
 .price-total {
   font-size: 24rpx;
   line-height: 32rpx;
-  color: #999999;
+  color: #99A39D;
   padding-top: 10rpx;
   width: 100%;
   display: flex;
@@ -68,15 +68,15 @@ wr-order-goods-card:not(:first-child) .wr-goods-card {
   justify-content: flex-end;
 }
 .price-total .bold-price {
-  color: #333333;
+  color: #10201C;
   font-size: 28rpx;
   line-height: 40rpx;
-  color: #333333;
+  color: #10201C;
 }
 .price-total .real-pay {
   font-size: 36rpx;
   line-height: 48rpx;
-  color: #fa4126;
+  color: #0E5A47;
   font-weight: bold;
 }
 
@@ -89,21 +89,21 @@ wr-order-goods-card:not(:first-child) .wr-goods-card {
 }
 
 .page-container .order-number {
-  color: #666666;
+  color: #5D6A64;
   font-size: 28rpx;
 }
 .t-class-indicator {
   color: #b9b9b9 !important;
 }
 .tab-bar .tab-bar__active {
-  color: #333333 !important;
+  color: #10201C !important;
 }
 
 .tab-bar .t-tabs-track {
-  background: #333333 !important;
+  background: #10201C !important;
 }
 
 .t-button {
   --td-button-default-color: #000;
-  --td-button-primary-text-color: #fa4126;
+  --td-button-primary-text-color: #0E5A47;
 }

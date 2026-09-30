@@ -44,7 +44,7 @@
   width: 192rpx;
   height: 80rpx;
   border-radius: 40rpx;
-  background-color: #fa4126;
+  background-color: #0E5A47;
   font-size: 28rpx;
   font-weight: bold;
   line-height: 80rpx;
@@ -71,7 +71,7 @@
 }
 
 .cart-bar__total .cart-bar__total--price {
-  color: #fa4126;
+  color: #0E5A47;
   font-weight: bold;
 }
 

@@ -1,47 +1,133 @@
-/* 主题定制 */
-.t-input {
-  --td-input-placeholder-text-color: #bbbbbb;
-  --td-input-text-color: #333333;
+/* TDesign 组件主题覆盖（RePhone 深松绿体系）
+   注意：miniprogram_npm 未被 git 跟踪（npm 构建产物），
+   所有组件主题只能在这里覆盖；统一引用 design-tokens 的令牌，不要硬编码色值。 */
+
+/* ---------- 调色板根变量 ----------
+   覆盖后，所有引用 --td-brand-color 的组件自动跟随（按钮/标签/选项卡/步骤条/开关…） */
+page {
+  --td-brand-color: var(--brand);
+  --td-brand-color-light: var(--brand-light);
+  --td-brand-color-light-active: var(--brand-light);
+  --td-brand-color-active: var(--brand-deep);
+  --td-brand-color-disabled: #A9CBC1;
+  --td-text-color-brand: var(--brand);
+  --td-text-color-anti: #FFFFFF;
+  --td-success-color: var(--success);
+  --td-warning-color: var(--warning);
+  --td-error-color: var(--danger);
 }
 
-.t-tab-bar {
-  --td-tab-bar-color: #bbb;
-  --td-tab-bar-active-color: #333;
-}
-
-.t-cascader {
-  --td-cascader-active-color: #fa4126;
-}
-
-.t-switch {
-  --td-switch-checked-color: #34c759;
-}
-
+/* ---------- 按钮 ---------- */
 .t-button {
   --td-button-font-weight: 500;
   --td-button-medium-font-size: 32rpx;
-  --td-button-default-color: #fff;
-  --td-button-default-bg-color: #fa4126;
-  --td-button-default-border-color: #fa4126;
-  --td-button-default-disabled-color: #fff;
-  --td-button-default-disabled-bg: #cccccc;
-  --td-button-default-disabled-border-color: #cccccc;
-  --td-button-default-active-bg-color: #fa4126;
-  --td-button-default-active-border-color: #fa4126;
+  /* theme="default"（实心主按钮） */
+  --td-button-default-color: #FFFFFF;
+  --td-button-default-bg-color: var(--brand);
+  --td-button-default-border-color: var(--brand);
+  --td-button-default-active-bg-color: var(--brand-deep);
+  --td-button-default-active-border-color: var(--brand-deep);
+  --td-button-default-disabled-color: #FFFFFF;
+  --td-button-default-disabled-bg: #C3D5CF;
+  --td-button-default-disabled-border-color: #C3D5CF;
+  /* theme="primary" */
+  --td-button-primary-color: #FFFFFF;
+  --td-button-primary-bg-color: var(--brand);
+  --td-button-primary-border-color: var(--brand);
+  --td-button-primary-active-bg-color: var(--brand-deep);
+  --td-button-primary-active-border-color: var(--brand-deep);
+  --td-button-primary-disabled-color: #FFFFFF;
+  --td-button-primary-disabled-bg: #C3D5CF;
+  --td-button-primary-disabled-border-color: #C3D5CF;
+  /* theme="danger" */
+  --td-button-danger-bg-color: var(--danger);
+  --td-button-danger-border-color: var(--danger);
+  --td-button-danger-active-bg-color: #9E2F22;
+  --td-button-danger-active-border-color: #9E2F22;
 }
 
-.t-textarea {
-  --td-textarea-placeholder-color: #bbb;
+/* ---------- 标签 ---------- */
+.t-tag {
+  --td-tag-primary-color: var(--brand);
+  --td-tag-primary-light-color: var(--brand-light);
+  --td-tag-success-color: var(--success);
+  --td-tag-success-light-color: #E7F4EA;
+  --td-tag-warning-color: var(--warning);
+  --td-tag-warning-light-color: var(--money-light);
+  --td-tag-danger-color: var(--danger);
+  --td-tag-danger-light-color: #FBE9E6;
+  --td-tag-default-color: var(--text-2);
+  --td-tag-default-light-color: #EDEBE4;
+}
+
+/* ---------- 自定义 tabBar ---------- */
+.t-tab-bar {
+  --td-tab-bar-color: var(--text-3);
+  --td-tab-bar-active-color: var(--brand);
+}
+
+/* ---------- 选项卡（订单列表） ---------- */
+.t-tabs {
+  --td-tab-item-active-color: var(--brand);
+  --td-tab-item-tag-active-bg: var(--brand-light);
+}
+
+/* ---------- 单元格 ---------- */
+.t-cell {
+  --td-cell-left-icon-color: var(--brand);
+  --td-cell-right-icon-color: var(--text-3);
+}
+
+/* ---------- 步骤条（订单时间线） ---------- */
+.t-steps,
+.t-step-item {
+  --td-step-item-process-circle-color: var(--brand);
+  --td-step-item-process-dot-border-color: var(--brand);
+  --td-step-item-finish-circle-color: var(--brand);
+  --td-step-item-finish-dot-border-color: var(--brand);
+  --td-step-item-finish-line-color: var(--brand);
+}
+
+/* ---------- 表单类 ---------- */
+.t-switch {
+  --td-switch-checked-color: var(--brand);
 }
 
 .t-checkbox {
-  --td-checkbox-icon-checked-color: #fa4126;
+  --td-checkbox-icon-checked-color: var(--brand);
+}
+
+.t-radio {
+  --td-radio-icon-checked-color: var(--brand);
+  --td-radio-label-checked-color: var(--brand);
+}
+
+.t-picker {
+  --td-picker-confirm-color: var(--brand);
+}
+
+.t-stepper {
+  --td-stepper-border-color: var(--line-strong);
+}
+
+.t-input {
+  --td-input-text-color: var(--text-1);
+  --td-input-placeholder-text-color: var(--text-3);
+}
+
+.t-textarea {
+  --td-textarea-placeholder-color: var(--text-3);
+}
+
+/* ---------- 其他遗留覆盖 ---------- */
+.t-cascader {
+  --td-cascader-active-color: var(--brand);
 }
 
 .dialog__button-confirm {
-  color: #fa4126 !important;
+  color: var(--brand) !important;
 }
 
 .dialog__button-cancel {
-  color: #aeb3b7 !important;
+  color: var(--text-3) !important;
 }

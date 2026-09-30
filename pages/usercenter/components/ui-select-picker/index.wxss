@@ -27,7 +27,7 @@
   line-height: 100rpx;
   text-align: center;
   font-size: 32rpx;
-  color: #333333;
+  color: #10201C;
 }
 .city-picker-more {
   display: flex;
@@ -45,7 +45,7 @@
   height: 80rpx;
   line-height: 80rpx;
   text-align: center;
-  color: #666666;
+  color: #5D6A64;
   font-size: 32rpx;
   position: relative;
 }
@@ -61,7 +61,7 @@
   top: -50%;
   bottom: -50%;
   transform: scale(0.5);
-  border: 1rpx solid #999999;
+  border: 1rpx solid #99A39D;
   border-radius: 16rpx;
 }
 .city-picker-footer .btn.primary {
@@ -82,7 +82,7 @@
   z-index: 100;
   background-color: #fff;
   padding: 0 30rpx;
-  color: #333333;
+  color: #10201C;
   font-size: 34rpx;
   border-radius: 20rpx 20rpx 0 0;
   padding-bottom: env(safe-area-inset-bottom);

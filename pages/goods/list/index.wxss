@@ -82,7 +82,7 @@ page {
 .goods-list-container .price-ipts-wrap .price-divided {
   width: 16rpx;
   margin: 0 24rpx;
-  color: #333333;
+  color: #10201C;
 }
 
 .goods-list-container .price-ipts-wrap .t-input__wrapper {

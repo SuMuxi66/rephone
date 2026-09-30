@@ -23,11 +23,11 @@
 .goods-stepper .stepper .stepper__plus {
   width: 44rpx;
   height: 44rpx;
-  background-color: #f5f5f5;
+  background-color: #F6F4EF;
 }
 .goods-stepper .stepper .stepper__minus--hover,
 .goods-stepper .stepper .stepper__plus--hover {
-  background-color: #f5f5f5;
+  background-color: #F6F4EF;
 }
 .goods-stepper .stepper .stepper__minus .wr-icon,
 .goods-stepper .stepper .stepper__plus .wr-icon {
@@ -62,7 +62,7 @@
 .goods-stepper .stepper .stepper__input {
   width: 72rpx;
   height: 44rpx;
-  background-color: #f5f5f5;
+  background-color: #F6F4EF;
   font-size: 24rpx;
   color: #222427;
   font-weight: 600;

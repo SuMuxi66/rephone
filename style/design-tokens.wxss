@@ -1,22 +1,33 @@
-/* RePhone 设计令牌（唯一色板/圆角/间距来源，页面禁止裸写色值） */
+/* RePhone 设计令牌（唯一色板 / 圆角 / 间距来源，页面禁止裸写色值） */
+/* v3 2026-09-30：橙 → 深松绿体系；金额色从品牌色中拆出，独立为 --money */
 page {
-  /* 品牌 */
-  --brand: #FF5F15;
-  --brand-light: #FFF1E8;
+  /* 品牌 · 深松绿 */
+  --brand: #0E5A47;
+  --brand-deep: #0A3D30;
+  --brand-light: #E8F0ED;
+
+  /* 金额专用色。硬规则：所有价格 / 回收价只用这两个令牌，禁止用品牌色写钱 */
+  --money: #B86A0E;
+  --money-light: #FBF0DE;
+
   /* 语义状态 */
   --success: #2BA246;
-  --warning: #E37318;
-  --info: #4572FF;
-  --danger: #FA550F;
-  /* 文字三级 */
-  --text-1: #333333;
-  --text-2: #666666;
-  --text-3: #999999;
-  /* 背景/边框 */
-  --bg-page: #F5F5F7;
+  --warning: #D97706;
+  --info: #2A6FD6;
+  --danger: #C0392B;
+
+  /* 文字三级（暖墨色，非纯黑） */
+  --text-1: #10201C;
+  --text-2: #5D6A64;
+  --text-3: #99A39D;
+
+  /* 背景 / 发丝线（用细线替代投影） */
+  --bg-page: #F6F4EF;
   --bg-card: #FFFFFF;
-  --border-light: #EEEEEE;
-  /* 圆角/间距 */
+  --border-light: #E7E4DC;
+  --line-strong: #D8D4C9;
+
+  /* 圆角 / 间距 */
   --radius-card: 16rpx;
   --space-page: 24rpx;
 }

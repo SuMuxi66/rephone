@@ -17,7 +17,7 @@
   border-radius: 32rpx;
   font-size: 26rpx;
   color: var(--text-2);
-  background: #f2f2f4;
+  background: #EDEBE4;
 }
 
 .filter-item.active {

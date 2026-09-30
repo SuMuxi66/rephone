@@ -10,7 +10,7 @@
 }
 .wx-address .cell__title {
   font-size: 30rpx;
-  color: #333333;
+  color: #10201C;
 }
 .wx-address-custom {
   display: flex;

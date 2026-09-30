@@ -57,7 +57,7 @@
   width: 100%;
   background-color: #ffffff;
   overflow: hidden;
-  color: #333333;
+  color: #10201C;
   font-size: 32rpx;
   line-height: 48rpx;
   display: flex;
@@ -78,17 +78,17 @@
 .order-logistics .logistics-content .logistics-time {
   font-size: 28rpx;
   line-height: 40rpx;
-  color: #999999;
+  color: #99A39D;
   margin-top: 12rpx;
 }
 
 .order-logistics .logistics-back {
-  color: #999999;
+  color: #99A39D;
   align-self: center;
 }
 
 .order-logistics .edit-text {
-  color: #fa4126;
+  color: #0E5A47;
   font-size: 26rpx;
   line-height: 36rpx;
 }
@@ -123,11 +123,11 @@
   justify-content: space-between;
   font-size: 26rpx;
   line-height: 36rpx;
-  color: #666666;
+  color: #5D6A64;
   background-color: #ffffff;
 }
 .order-detail .pay-detail .pay-item .pay-item__right {
-  color: #333333;
+  color: #10201C;
   font-size: 24rpx;
   display: flex;
   align-items: center;
@@ -146,7 +146,7 @@
   font-weight: bold;
 }
 .order-detail .pay-detail .pay-item .primary {
-  color: #fa4126;
+  color: #0E5A47;
 }
 .order-detail .pay-detail .pay-item .max-size {
   font-size: 36rpx;
@@ -159,7 +159,7 @@
   text-align: center;
   font-size: 24rpx;
   line-height: 40rpx;
-  color: #333333;
+  color: #10201C;
   position: relative;
 }
 
@@ -177,14 +177,14 @@
 }
 
 .pay-item .pay-item__right .order-no {
-  color: #333333;
+  color: #10201C;
   font-size: 26rpx;
   line-height: 40rpx;
   padding-right: 16rpx;
 }
 
 .pay-item .pay-item__right .normal-color {
-  color: #333333;
+  color: #10201C;
 }
 
 .order-detail .pay-detail .pay-service {
@@ -195,7 +195,7 @@
   justify-content: center;
   font-size: 32rpx;
   line-height: 36rpx;
-  color: #333333;
+  color: #10201C;
   background-color: #ffffff;
 }
 
@@ -236,10 +236,10 @@
 }
 
 .add-notes__confirm {
-  color: #fa4126 !important;
+  color: #0E5A47 !important;
 }
 
 .t-button {
   --td-button-default-color: #000;
-  --td-button-primary-text-color: #fa4126;
+  --td-button-primary-text-color: #0E5A47;
 }

@@ -1,7 +1,7 @@
 .promotion-detail-container .wrap {
   display: block;
   padding: 0 24rpx;
-  background: linear-gradient(#fff, #f5f5f5);
+  background: linear-gradient(#fff, #F6F4EF);
 }
 
 .promotion-detail-container .t-class-promotion-head {
@@ -102,10 +102,10 @@
 }
 
 .promotion-detail-container .goods-list-container {
-  background: #f5f5f5 !important;
+  background: #F6F4EF !important;
 }
 
 .promotion-detail-container .promotion-goods-list {
   padding: 20rpx 24rpx;
-  background-color: #f5f5f5;
+  background-color: #F6F4EF;
 }

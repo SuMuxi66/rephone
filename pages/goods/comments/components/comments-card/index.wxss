@@ -13,7 +13,7 @@
   bottom: 0rpx;
   width: 686rpx;
   height: 2rpx;
-  background-color: #f5f5f5;
+  background-color: #F6F4EF;
 }
 
 .comments-card-item-userImg {
@@ -127,13 +127,13 @@
 
 .comments-title .userName {
   font-size: 26rpx;
-  color: #333333;
+  color: #10201C;
   margin-left: 24rpx;
 }
 
 .comments-title .commentTime {
   font-size: 24rpx;
-  color: #999999;
+  color: #99A39D;
   position: absolute;
   right: 0;
 }
@@ -151,11 +151,11 @@
 .comments-info .goods-info-text {
   font-size: 24rpx;
 
-  color: #999999;
+  color: #99A39D;
 }
 
 .comments-card-item-container .comments-card-reply {
-  background-color: #f5f5f5;
+  background-color: #F6F4EF;
   padding: 24rpx 16rpx;
   margin-top: 24rpx;
 }
@@ -163,10 +163,10 @@
 .comments-card-item-container .comments-card-reply .prefix {
   font-size: 26rpx;
   font-weight: bold;
-  color: #666666;
+  color: #5D6A64;
 }
 
 .comments-card-item-container .comments-card-reply .content {
   font-size: 26rpx;
-  color: #666666;
+  color: #5D6A64;
 }

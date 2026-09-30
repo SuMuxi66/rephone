@@ -12,7 +12,7 @@
     wx:key="storeIndex"
   >
     <view class="store-wrapper">
-      <t-icon prefix="wr" size="40rpx" color="#333333" name="store" class="store-logo" />
+      <t-icon prefix="wr" size="40rpx" color="#10201C" name="store" class="store-logo" />
       {{stores.storeName}}
     </view>
     <view

@@ -10,7 +10,7 @@ page {
 }
 .tabs-external__inner {
   font-size: 26rpx;
-  color: #333333;
+  color: #10201C;
   position: fixed;
   width: 100vw;
   top: 0;
@@ -18,7 +18,7 @@ page {
 }
 
 .tabs-external__inner .tabs-external__track {
-  background: #fa4126 !important;
+  background: #0E5A47 !important;
 }
 
 .tabs-external__inner .tabs-external__item {
@@ -27,7 +27,7 @@ page {
 
 .tabs-external__inner .tabs-external__active {
   font-size: 28rpx;
-  color: #fa4126 !important;
+  color: #0E5A47 !important;
 }
 
 .tabs-external__inner.order-nav .order-nav-item .bottom-line {
@@ -60,7 +60,7 @@ page {
 }
 
 .center-entry-btn {
-  color: #fa4126;
+  color: #0E5A47;
   font-size: 28rpx;
   text-align: center;
   line-height: 100rpx;

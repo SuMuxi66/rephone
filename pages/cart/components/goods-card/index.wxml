@@ -28,7 +28,7 @@
 				<slot name="after-desc" />
 				<view wx:if="{{ goods.specs && goods.specs.length > 0 && !goods.hideKey.specs }}" class="wr-goods-card__specs__desc specs-class" bind:tap="clickSpecsHandle">
 					<view class="wr-goods-card__specs__desc-text">{{ goods.specs }}</view>
-					<t-icon name="chevron-down" size="32rpx" color="#999999" />
+					<t-icon name="chevron-down" size="32rpx" color="#99A39D" />
 				</view>
 				<view class="goods_tips" wx:if="{{goods.stockQuantity !== 0 && goods.quantity >= goods.stockQuantity}}">库存不足</view>
 			</view>

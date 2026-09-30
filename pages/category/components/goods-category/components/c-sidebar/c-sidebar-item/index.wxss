@@ -2,7 +2,7 @@
   display: flex;
   justify-content: center;
   text-align: center;
-  background-color: #f5f5f5;
+  background-color: #F6F4EF;
   color: #222427;
   padding: 20rpx 0;
   font-size: 26rpx;
@@ -18,7 +18,7 @@
   position: absolute;
   width: 6rpx;
   height: 48rpx;
-  background-color: #fa4126;
+  background-color: #0E5A47;
   left: 0;
   top: 50%;
   transform: translate(0, -50%);
@@ -32,13 +32,13 @@
   line-height: 36rpx;
   text-align: center;
   font-size: 28rpx;
-  color: #666666;
+  color: #5D6A64;
 }
 
 .c-sidebar-item.active .c-sidebar-item__text {
   background-color: white;
   border-radius: 36rpx;
-  color: #fa4126;
+  color: #0E5A47;
 }
 
 .text-overflow {

@@ -56,12 +56,12 @@
 .goods-category-normal-item-container-item-title {
   justify-content: center;
   font-size: 24rpx;
-  color: #666666;
+  color: #5D6A64;
   margin-top: 20rpx;
 }
 
 .goods-category .custom-sidebar {
-  background-color: #f5f5f5;
+  background-color: #F6F4EF;
 }
 
 .custom-sidebar {

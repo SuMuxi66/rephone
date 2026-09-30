@@ -51,7 +51,7 @@
   width: 100%;
   margin-top: 16rpx;
   text-align: right;
-  color: #fa4126;
+  color: #0E5A47;
   font-size: 24rpx;
   line-height: 32rpx;
   font-weight: bold;
@@ -75,7 +75,7 @@
 }
 .wr-goods-card__desc {
   font-size: 24rpx;
-  color: #f5f5f5;
+  color: #F6F4EF;
   line-height: 40rpx;
   display: -webkit-box;
   -webkit-box-orient: vertical;
@@ -87,14 +87,14 @@
   font-size: 24rpx;
   height: 32rpx;
   line-height: 32rpx;
-  color: #999999;
+  color: #99A39D;
   margin: 8rpx 0;
 }
 .wr-goods-card__specs__desc {
   display: flex;
   align-self: flex-start;
   flex-direction: row;
-  background: #f5f5f5;
+  background: #F6F4EF;
   border-radius: 8rpx;
   padding: 4rpx 8rpx;
 }
@@ -158,7 +158,7 @@
   white-space: nowrap;
   font-weight: bold;
   order: 1;
-  color: #fa4126;
+  color: #0E5A47;
   font-size: 36rpx;
   margin: 0;
   line-height: 48rpx;
@@ -226,7 +226,7 @@
 }
 .wr-goods-card.vertical .wr-goods-card__price {
   order: 2;
-  color: #fa4126;
+  color: #0E5A47;
   margin: 20rpx 0 0 0;
 }
 .wr-goods-card.vertical .wr-goods-card__origin-price {
@@ -253,8 +253,8 @@
   width: 80rpx;
   height: 40rpx;
   border-radius: 20rpx;
-  border: 2rpx solid #fa4126;
+  border: 2rpx solid #0E5A47;
   line-height: 40rpx;
   text-align: center;
-  color: #fa4126;
+  color: #0E5A47;
 }

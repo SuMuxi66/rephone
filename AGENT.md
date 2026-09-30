@@ -27,7 +27,9 @@ RePhone 是「手机维修（主）+ 二手机回收 + 二手出售」平台，*
 4. **小程序不得直连三方**：微信支付、快递100、订阅消息、COS 签名一律走后端。
 5. **不删除 `model/`**：出售端尚未全部接线，`model/` 仍是契约参考与适配层。
 6. **状态码唯一来源**：`common/recycle-status.js`、`common/repair-status.js`、`common/sale-status.js`、`pages/order/config.js`。页面禁止硬编码状态数字与文案。
-7. **设计令牌唯一来源**：`style/design-tokens.wxss`。页面禁止裸写色值，禁止引入新色板（品牌色 `--brand: #FF5F15`）。
+7. **设计令牌唯一来源**：`style/design-tokens.wxss`。页面禁止裸写色值，禁止引入新色板。
+   品牌为深松绿 `--brand: #0E5A47`（深 `--brand-deep` / 浅 `--brand-light`）。
+   **金额硬规则：所有价格、回收价、打款金额一律用 `--money: #B86A0E`，禁止用品牌色写钱。**
 8. **组件来源**：`miniprogram_npm/tdesign-miniprogram/<name>/<name>` 或本仓库 `components/<name>/index`。不得引入未在本仓库出现过的图标名（字体缺字会渲染空白）。
 9. **禁止跳阶段**：按计划逐项交付，每项必须可独立运行、可验证。
 
@@ -81,6 +83,10 @@ RePhone 是「手机维修（主）+ 二手机回收 + 二手出售」平台，*
 - `app.json` 的 `tabBar.list` 顺序与 `custom-tab-bar/data.js` 数组顺序**必须完全一致**（自定义 tabBar 按 route 匹配高亮），两处要同一次提交内改完。
 - 下单类页面统一复用 `common/address-prefill.js` Behavior（维修/回收/出售三条线下单页口径一致），不要在页面里另写一套地址簿。
 - 页面文件四件套齐备：`index.js / index.json / index.wxml / index.wxss`。
+- **TDesign 组件主题只在 `style/theme.wxss` 覆盖**：`miniprogram_npm/` 未纳入 git（npm 构建产物），
+  改它会在重新构建 npm 后丢失；组件变量名形如 `--td-button-primary-bg-color`，可从对应组件 wxss 里查。
+- **wxml 属性里用不了 CSS 变量**：`t-icon` 的 `color`、`app.json` 的 `tabBar.selectedColor` 等只能写十六进制，
+  改设计令牌时**必须用 grep 全局替换**这些散落值，否则会出现「半绿半橙」。
 
 ---
 

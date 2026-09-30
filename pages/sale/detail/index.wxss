@@ -7,7 +7,7 @@
 .gallery {
   width: 100%;
   height: 640rpx;
-  background: #f2f2f4;
+  background: #EDEBE4;
 }
 
 .gallery-img {
@@ -174,7 +174,7 @@
   margin-top: 24rpx;
   display: flex;
   padding: 20rpx 0;
-  background: #fff8f3;
+  background: #E8F0ED;
   border-radius: 12rpx;
 }
 
@@ -216,7 +216,7 @@
   justify-content: space-between;
   align-items: center;
   padding: 12rpx 16rpx;
-  background: #fff5ef;
+  background: #E8F0ED;
   border-radius: 10rpx;
 }
 

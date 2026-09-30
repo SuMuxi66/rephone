@@ -25,7 +25,7 @@ page view {
   height: 100rpx;
   align-items: center;
   font-size: 30rpx;
-  color: #333333;
+  color: #10201C;
 }
 .popup-content .button-bar {
   width: 100%;
@@ -37,7 +37,7 @@ page view {
 }
 .popup-content .button-bar .btn {
   width: 100%;
-  background: #fa4126;
+  background: #0E5A47;
   color: #fff;
   border-radius: 48rpx;
 }

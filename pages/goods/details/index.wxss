@@ -20,7 +20,7 @@ page {
 }
 
 .goods-detail-page .goods-info .goods-price-up {
-  color: #fa4126;
+  color: #0E5A47;
   font-size: 28rpx;
   position: relative;
   bottom: 4rpx;
@@ -29,14 +29,14 @@ page {
 
 .goods-detail-page .goods-info .goods-price .class-goods-price {
   font-size: 64rpx;
-  color: #fa4126;
+  color: #0E5A47;
   font-weight: bold;
   font-family: DIN Alternate;
 }
 
 .goods-detail-page .goods-info .goods-price .class-goods-symbol {
   font-size: 36rpx;
-  color: #fa4126;
+  color: #0E5A47;
 }
 
 .goods-detail-page .goods-info .goods-price .class-goods-del {
@@ -44,7 +44,7 @@ page {
   font-weight: normal;
   left: 16rpx;
   bottom: 2rpx;
-  color: #999999;
+  color: #99A39D;
   font-size: 32rpx;
 }
 
@@ -56,7 +56,7 @@ page {
 
 .goods-detail-page .goods-info .goods-number .sold-num {
   font-size: 24rpx;
-  color: #999999;
+  color: #99A39D;
   display: flex;
   align-items: flex-end;
   margin-right: 32rpx;
@@ -74,7 +74,7 @@ page {
 
 .goods-detail-page .goods-info .goods-activity .tags-container .goods-activity-tag {
   background: #ffece9;
-  color: #fa4126;
+  color: #0E5A47;
   font-size: 24rpx;
   margin-right: 16rpx;
   padding: 4rpx 8rpx;
@@ -85,7 +85,7 @@ page {
   display: flex;
   justify-content: center;
   align-items: center;
-  color: #fa4126;
+  color: #0E5A47;
   font-size: 24rpx;
   padding-right: 32rpx;
 }
@@ -110,7 +110,7 @@ page {
   overflow: hidden;
   font-size: 32rpx;
   word-break: break-all;
-  color: #333333;
+  color: #10201C;
 }
 
 .goods-detail-page .goods-info .goods-title .goods-tag {
@@ -173,7 +173,7 @@ page {
   margin-right: 30rpx;
   text-align: center;
   flex-shrink: 0;
-  color: #999999;
+  color: #99A39D;
   font-weight: normal;
 }
 
@@ -232,13 +232,13 @@ page {
 .popup-sku-header .popup-sku-header__goods-info .popup-sku__price {
   display: flex;
   align-items: baseline;
-  color: #fa4126;
+  color: #0E5A47;
   margin-top: 48rpx;
 }
 
 .popup-sku-header .popup-sku-header__goods-info .popup-sku__price .popup-sku__price-num {
   font-size: 64rpx;
-  color: #fa4126;
+  color: #0E5A47;
   font-weight: bold;
   font-family: DIN Alternate;
 }
@@ -248,13 +248,13 @@ page {
   font-weight: normal;
   left: 12rpx;
   bottom: 2rpx;
-  color: #999999;
+  color: #99A39D;
   font-size: 32rpx;
 }
 
 .popup-sku-header .popup-sku-header__goods-info .popup-sku__price .popup-sku__price-symbol {
   font-size: 36rpx;
-  color: #fa4126;
+  color: #0E5A47;
 }
 
 .popup-sku-header .popup-sku-header__goods-info .popup-sku__price .popup-sku__price-max-num {
@@ -288,7 +288,7 @@ page {
 
 .comments-title-label,
 .comments-title-count {
-  color: #333333;
+  color: #10201C;
   font-size: 32rpx;
   font-weight: 500;
   line-height: 48rpx;
@@ -302,7 +302,7 @@ page {
 }
 
 .comments-rate-wrap .comments-good-rate {
-  color: #999999;
+  color: #99A39D;
   font-size: 26rpx;
   font-weight: 400;
   font-style: normal;
@@ -328,14 +328,14 @@ page {
 
 .comment-head-right .comment-username {
   font-size: 26rpx;
-  color: #333333;
+  color: #10201C;
   line-height: 36rpx;
   font-weight: 400;
 }
 
 .comment-item-wrap .comment-item-content {
   margin-top: 20rpx;
-  color: #333333;
+  color: #10201C;
   line-height: 40rpx;
   font-size: 28rpx;
   font-weight: 400;
