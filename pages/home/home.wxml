@@ -1,68 +1,153 @@
 <view class="page" wx:if="{{!pageLoading}}">
-  <!-- 主推：维修 -->
-  <view class="hero" bindtap="goRepair">
-    <view class="hero-title">手机维修 · 上门快修</view>
-    <view class="hero-sub">先报价后维修 · 修好验收付款 · 180天质保</view>
-    <view class="hero-cta">立即报修</view>
-  </view>
-
-  <!-- 服务三保障 -->
-  <view class="entries">
-    <view class="entry" bindtap="goRepair">
-      <t-icon name="tools" size="52rpx" color="#0E5A47" />
-      <view class="entry-name">工程师上门</view>
-    </view>
-    <view class="entry" bindtap="goRepair">
-      <t-icon name="check-circle-filled" size="52rpx" color="#0E5A47" />
-      <view class="entry-name">180天质保</view>
-    </view>
-    <view class="entry" bindtap="goRepair">
-      <t-icon prefix="wr" name="wallet" size="52rpx" color="#0E5A47" />
-      <view class="entry-name">先报价后修</view>
-    </view>
-  </view>
-
-  <!-- 热门维修 -->
-  <view class="section-head">
-    <text class="section-title">热门维修</text>
-  </view>
-  <scroll-view scroll-x class="models" enhanced show-scrollbar="{{false}}">
-    <view wx:for="{{hotRepairs}}" wx:key="*this" class="repair-chip" bindtap="goRepair">
-      {{item}}
-    </view>
-  </scroll-view>
-
-  <!-- 次业务：回收 -->
-  <view class="hero hero--secondary" bindtap="goEstimate">
-    <view class="hero-title">旧机回收 · 高价秒估</view>
-    <view class="hero-sub">顺丰包邮 / 上门取件 · 质检后快速打款</view>
-    <view class="hero-cta">免费估价</view>
-  </view>
-
-  <!-- 热门机型 -->
-  <view class="section-head">
-    <text class="section-title">热门机型</text>
-    <text class="section-more" bindtap="goEstimate">更多</text>
-  </view>
-  <scroll-view scroll-x class="models" enhanced show-scrollbar="{{false}}">
-    <view
-      wx:for="{{hotModels}}"
-      wx:key="modelName"
-      class="model-card"
-      data-brand-id="{{item.brandId}}"
-      bindtap="goEstimateWithBrand"
-    >
-      <image wx:if="{{item.image}}" src="{{item.image}}" mode="aspectFit" class="model-img" lazy-load />
-      <view wx:else class="model-ph">
-        <view class="model-ph-body"><view class="model-ph-camera"></view></view>
+  <!-- 头部：深绿实底（不用渐变） -->
+  <view class="masthead">
+    <view class="mast-top">
+      <view class="mast-city">
+        <t-icon name="location" size="24rpx" color="#FFFFFF" />
+        <text>全城上门 · 2 小时响应</text>
       </view>
-      <view class="model-brand">{{item.brandName}}</view>
-      <view class="model-name">{{item.modelName}}</view>
-      <view class="model-price">最高 {{item.priceText}}</view>
+      <text class="mast-service" bindtap="goRepair">客服</text>
     </view>
-  </scroll-view>
+    <view class="mast-claim">修好，</view>
+    <view class="mast-claim">再付钱。</view>
+    <view class="mast-sub">换屏 · 换电池 · 进水 · 主板 · 摄像头</view>
+    <view class="mast-sub">先报价后维修，修好验收才付款</view>
+    <view class="mast-cta">
+      <view class="btn-primary" bindtap="goRepair">
+        <text>立即报修</text>
+        <t-icon name="chevron-right" size="24rpx" color="#0A3D30" />
+      </view>
+      <text class="link-quiet" bindtap="goRepair">查看维修价目</text>
+    </view>
+  </view>
+
+  <!-- 搜索：一条带下边线的通栏（不用胶囊） -->
+  <view class="searchbar" bindtap="goSale">
+    <t-icon name="search" size="30rpx" color="#99A39D" />
+    <text class="searchbar-text">搜机型、故障，或想买的二手机</text>
+  </view>
+
+  <!-- 哪里坏了 -->
+  <view class="block">
+    <view class="block-head">
+      <view class="block-head-left">
+        <text class="block-title">哪里坏了</text>
+        <text class="block-note">直接看价</text>
+      </view>
+      <text class="block-more" bindtap="goRepair">全部 ›</text>
+    </view>
+    <view class="faults">
+      <view wx:for="{{faults}}" wx:key="name" class="fault" bindtap="goRepair">
+        <t-icon wx:if="{{item.icon}}" name="{{item.icon}}" size="36rpx" color="#10201C" />
+        <text class="fault-name">{{item.name}}</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 三条路：目录式分栏 -->
+  <view class="block">
+    <view class="index-row">
+      <view class="index-col" bindtap="goRepair">
+        <text class="index-no">01</text>
+        <text class="index-name">修手机</text>
+        <text class="index-val index-val--brand">{{hooks.repair}}</text>
+        <text class="index-note">上门 / 到店 · 180 天质保</text>
+        <text class="index-arrow">去报修 ›</text>
+      </view>
+      <view class="index-col" bindtap="goEstimate">
+        <text class="index-no">02</text>
+        <text class="index-name">卖旧机</text>
+        <text class="index-val">{{hooks.recycle}}</text>
+        <text class="index-note">30 秒出价 · 顺丰包邮</text>
+        <text class="index-arrow">去估价 ›</text>
+      </view>
+      <view class="index-col" bindtap="goSale">
+        <text class="index-no">03</text>
+        <text class="index-name">买二手机</text>
+        <text class="index-val">{{hooks.buy}}</text>
+        <text class="index-note">一机一报告 · 支持售后</text>
+        <text class="index-arrow">去选购 ›</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 严选二手机：1 张主推大卡 + 2 行紧凑列表（无库存时整块隐藏） -->
+  <view class="block" wx:if="{{featured}}">
+    <view class="block-head">
+      <view class="block-head-left">
+        <text class="block-title">严选二手机</text>
+        <text class="block-note">一机一报告</text>
+      </view>
+      <text class="block-more" bindtap="goSale">全部 ›</text>
+    </view>
+    <view class="feat" data-id="{{featured.id}}" bindtap="goGoodsDetail">
+      <view class="feat-img">
+        <image wx:if="{{featured.image}}" class="feat-photo" src="{{featured.image}}" mode="aspectFill" />
+        <view wx:else class="dev"></view>
+        <view class="feat-badge">官方质检</view>
+        <text wx:if="{{featured.conditionLevel}}" class="feat-cap">成色 {{featured.conditionLevel}}</text>
+      </view>
+      <view class="feat-body">
+        <view class="feat-name">{{featured.name}}</view>
+        <view class="spec">
+          <text wx:if="{{featured.storage}}" class="spec-chip">{{featured.storage}}</text>
+          <text class="spec-chip spec-chip--ok">已质检</text>
+        </view>
+        <view class="price-row">
+          <text class="price">¥{{featured.priceText}}</text>
+          <text wx:if="{{featured.originText}}" class="price-old">¥{{featured.originText}}</text>
+          <text class="price-cta">看报告 ›</text>
+        </view>
+      </view>
+    </view>
+    <view wx:if="{{featuredMore.length}}" class="mini-list">
+      <view wx:for="{{featuredMore}}" wx:key="id" class="mini" data-id="{{item.id}}" bindtap="goGoodsDetail">
+        <image wx:if="{{item.image}}" class="mini-thumb-img" src="{{item.image}}" mode="aspectFill" />
+        <view wx:else class="mini-thumb"><view class="dev-s"></view></view>
+        <view class="mini-main">
+          <view class="mini-name">{{item.name}}</view>
+          <view class="mini-spec">{{item.specText || '已质检'}}</view>
+        </view>
+        <text class="mini-price">¥{{item.priceText}}</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 回收行情：表格行（无机型数据时整块隐藏，避免只剩一个空标题） -->
+  <view class="block" wx:if="{{hotModels.length}}">
+    <view class="block-head">
+      <view class="block-head-left">
+        <text class="block-title">回收行情</text>
+        <text class="block-note">今日</text>
+      </view>
+      <text class="block-more" bindtap="goEstimate">更多机型 ›</text>
+    </view>
+    <view class="quote">
+      <view
+        wx:for="{{hotModels}}"
+        wx:key="modelName"
+        class="quote-row"
+        data-brand-id="{{item.brandId}}"
+        bindtap="goEstimateWithBrand"
+      >
+        <text class="quote-brand">{{item.brandName}}</text>
+        <text class="quote-name">{{item.modelName}}</text>
+        <text class="quote-cap">最高</text>
+        <text class="quote-val">{{item.priceText}}</text>
+      </view>
+      <view class="quote-foot" bindtap="goEstimate">输入你的机型，30 秒出准确报价 ›</view>
+    </view>
+  </view>
+
+  <!-- 保障：三行小字 -->
+  <view class="assure">
+    <view class="assure-line"><text class="assure-strong">先报价后维修</text> · 原厂品质配件 · 180 天质保</view>
+    <view class="assure-line"><text class="assure-strong">官方质检</text> · 顺丰包邮 · 验收后付款</view>
+    <view class="assure-line assure-line--mute">服务时间 09:00 – 21:00 · 客服 {{servicePhone}}</view>
+  </view>
+  <view class="foot">REPHONE</view>
 </view>
 
-<view wx:if="{{pageLoading}}" style="text-align: center; color: #b9b9b9; padding-top: 200rpx">
+<view wx:if="{{pageLoading}}" class="loading-wrap">
   <t-loading theme="circular" size="40rpx" text="加载中..." inherit-color />
 </view>

@@ -1,6 +1,7 @@
 # 首页改版设计 v3（深松绿方向）
 
-日期：2026-09-30 ｜ 分支：feature/recycle-mvp ｜ 状态：**待用户确认**
+日期：2026-09-30 ｜ 分支：feature/recycle-mvp ｜ 状态：**版式已落地**（配色已全局应用）
+落地实现：pages/home/home.{js,wxml,wxss}
 可视化设计稿：docs/design/2026-09-30-home-redesign-v3.html（浏览器打开；URL 加 #full 为整页长图模式）
 静态长图：docs/design/2026-09-30-home-redesign-v3.png
 **取代 v2**：docs/superpowers/specs/2026-09-30-home-redesign-v2.md（暖橙模板风，用户反馈「AI 味重」）

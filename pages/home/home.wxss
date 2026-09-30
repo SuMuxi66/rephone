@@ -1,223 +1,500 @@
+/* 首页 v3（深松绿体系）：发丝线 + 留白，不用投影与渐变 */
 .page {
   min-height: 100vh;
   background: var(--bg-page);
-  /* 首页是自定义 tabBar 页：tabBar 为底部浮层，必须让出其高度（与维修/回收页一致 160rpx），
-     否则最后一段「热门机型」会被遮挡且滚不出来 */
+  /* 自定义 tabBar 为底部浮层，预留其高度 + 安全区，否则最后一段滚不出来 */
   padding-bottom: calc(env(safe-area-inset-bottom) + 160rpx);
 }
 
-.hero {
-  margin: var(--space-page);
-  padding: 72rpx 48rpx;
-  border-radius: 24rpx;
-  background: linear-gradient(135deg, var(--brand), #ff8a4c);
-  color: #fff;
+.loading-wrap {
+  padding-top: 240rpx;
+  text-align: center;
 }
 
-.hero-title {
-  font-size: 44rpx;
+/* ===== 头部：深绿实底 ===== */
+.masthead {
+  padding: 4rpx 40rpx 44rpx;
+  background: var(--brand-deep);
+}
+
+.mast-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-bottom: 36rpx;
+}
+
+.mast-city {
+  display: flex;
+  align-items: center;
+  gap: 8rpx;
+  font-size: 24rpx;
+  color: rgba(255, 255, 255, 0.72);
+}
+
+.mast-service {
+  font-size: 24rpx;
+  color: rgba(255, 255, 255, 0.72);
+}
+
+.mast-claim {
+  font-size: 54rpx;
+  font-weight: 700;
+  letter-spacing: -1rpx;
+  line-height: 1.24;
+  color: #FFFFFF;
+}
+
+.mast-sub {
+  margin-top: 12rpx;
+  font-size: 24rpx;
+  line-height: 1.7;
+  color: rgba(255, 255, 255, 0.58);
+}
+
+.mast-cta {
+  margin-top: 34rpx;
+  display: flex;
+  align-items: center;
+  gap: 32rpx;
+}
+
+.btn-primary {
+  display: flex;
+  align-items: center;
+  gap: 6rpx;
+  padding: 22rpx 40rpx;
+  border-radius: 16rpx;
+  background: #FFFFFF;
+  color: var(--brand-deep);
+  font-size: 28rpx;
   font-weight: 700;
 }
 
-.hero-sub {
-  margin-top: 12rpx;
-  font-size: 26rpx;
-  opacity: 0.9;
+.link-quiet {
+  font-size: 25rpx;
+  color: rgba(255, 255, 255, 0.72);
+  border-bottom: 1rpx solid rgba(255, 255, 255, 0.3);
+  padding-bottom: 4rpx;
 }
 
-.hero-cta {
-  display: inline-block;
-  margin-top: 28rpx;
-  padding: 14rpx 40rpx;
-  border-radius: 36rpx;
-  background: #fff;
-  color: var(--brand);
-  font-size: 28rpx;
-  font-weight: 600;
-}
-
-.entries {
+/* ===== 搜索：通栏 + 下边线 ===== */
+.searchbar {
   display: flex;
-  margin: 0 var(--space-page);
-  padding: 28rpx 0;
+  align-items: center;
+  gap: 18rpx;
+  padding: 28rpx 40rpx;
   background: var(--bg-card);
-  border-radius: var(--radius-card);
+  border-bottom: 1rpx solid var(--border-light);
 }
 
-.entry {
+.searchbar-text {
+  font-size: 26rpx;
+  color: var(--text-3);
+}
+
+/* ===== 通用区块 ===== */
+.block {
+  padding: 48rpx 40rpx 0;
+}
+
+.block-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  margin-bottom: 28rpx;
+}
+
+.block-head-left {
+  display: flex;
+  align-items: baseline;
+  gap: 14rpx;
+}
+
+.block-title {
+  font-size: 34rpx;
+  font-weight: 700;
+  letter-spacing: -0.5rpx;
+  color: var(--text-1);
+}
+
+.block-note {
+  font-size: 21rpx;
+  letter-spacing: 1rpx;
+  color: var(--text-3);
+}
+
+.block-more {
+  font-size: 23rpx;
+  color: var(--text-2);
+}
+
+/* ===== 故障：描边方框 ===== */
+.faults {
+  display: flex;
+  gap: 16rpx;
+}
+
+.fault {
   flex: 1;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 10rpx;
-  color: var(--text-1);
-}
-
-.entry-name {
-  font-size: 26rpx;
-}
-
-.section-head {
-  display: flex;
-  justify-content: space-between;
-  align-items: baseline;
-  padding: 36rpx var(--space-page) 16rpx;
-}
-
-.section-title {
-  font-size: 32rpx;
-  font-weight: 600;
-  color: var(--text-1);
-}
-
-.section-more {
-  font-size: 24rpx;
-  color: var(--text-3);
-}
-
-.models {
-  white-space: nowrap;
-  padding: 0 var(--space-page);
-}
-
-.model-card {
-  display: inline-block;
-  width: 240rpx;
-  margin-right: 20rpx;
-  padding: 28rpx 24rpx;
-  border-radius: var(--radius-card);
+  gap: 14rpx;
+  padding: 26rpx 6rpx 22rpx;
   background: var(--bg-card);
-  vertical-align: top;
+  border: 1rpx solid var(--line-strong);
+  border-radius: 16rpx;
 }
 
-.model-img {
-  width: 120rpx;
-  height: 120rpx;
-  margin-bottom: 12rpx;
+.fault-name {
+  font-size: 23rpx;
+  color: var(--text-1);
 }
 
-/* 无图占位：CSS 手机轮廓（与估价页弹层同款） */
-.model-ph {
-  width: 120rpx;
-  height: 120rpx;
-  margin-bottom: 12rpx;
+/* ===== 三条路：目录式分栏 ===== */
+.index-row {
   display: flex;
-  align-items: center;
-  justify-content: center;
-  background: #f5f6f8;
-  border-radius: 12rpx;
+  background: var(--bg-card);
+  border: 1rpx solid var(--border-light);
+  border-radius: 20rpx;
+  overflow: hidden;
 }
 
-.model-ph-body {
-  width: 56rpx;
-  height: 100rpx;
-  border: 5rpx solid #c9cdd4;
-  border-radius: 12rpx;
-  position: relative;
-  background: #fff;
+.index-col {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  padding: 32rpx 24rpx 28rpx;
 }
 
-.model-ph-camera {
-  position: absolute;
-  top: 6rpx;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 20rpx;
-  height: 6rpx;
-  border-radius: 3rpx;
-  background: #c9cdd4;
+.index-col + .index-col {
+  border-left: 1rpx solid var(--border-light);
 }
 
-.model-brand {
-  font-size: 22rpx;
+.index-no {
+  font-size: 20rpx;
+  font-weight: 600;
+  letter-spacing: 2rpx;
   color: var(--text-3);
 }
 
-.model-name {
-  margin-top: 6rpx;
-  font-size: 28rpx;
-  font-weight: 600;
+.index-name {
+  margin-top: 14rpx;
+  font-size: 29rpx;
+  font-weight: 700;
   color: var(--text-1);
-  overflow: hidden;
-  text-overflow: ellipsis;
 }
 
-.model-price {
-  margin-top: 14rpx;
+.index-val {
+  margin-top: 16rpx;
   font-size: 26rpx;
   font-weight: 700;
   color: var(--money);
 }
 
-.flow {
-  display: flex;
-  margin: 0 var(--space-page);
-  padding: 32rpx 12rpx;
-  background: var(--bg-card);
-  border-radius: var(--radius-card);
-}
-
-.flow-step {
-  flex: 1;
-  text-align: center;
-}
-
-.flow-no {
-  width: 44rpx;
-  height: 44rpx;
-  line-height: 44rpx;
-  margin: 0 auto;
-  border-radius: 50%;
-  background: var(--brand-light);
+.index-val--brand {
   color: var(--brand);
-  font-size: 24rpx;
-  font-weight: 700;
 }
 
-.flow-name {
-  margin-top: 12rpx;
-  font-size: 26rpx;
+.index-note {
+  margin-top: 6rpx;
+  font-size: 21rpx;
+  line-height: 1.6;
+  color: var(--text-3);
+}
+
+.index-arrow {
+  margin-top: 24rpx;
+  font-size: 22rpx;
+  color: var(--text-2);
+}
+
+/* ===== 严选：1 大卡 + 2 紧凑行 ===== */
+.feat {
+  background: var(--bg-card);
+  border: 1rpx solid var(--border-light);
+  border-radius: 20rpx;
+  overflow: hidden;
+}
+
+.feat-img {
+  height: 312rpx;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #F1EFEA;
+}
+
+.feat-photo {
+  width: 100%;
+  height: 100%;
+}
+
+.feat-badge {
+  position: absolute;
+  left: 24rpx;
+  top: 24rpx;
+  padding: 8rpx 18rpx;
+  border-radius: 8rpx;
+  background: var(--brand);
+  color: #FFFFFF;
+  font-size: 21rpx;
   font-weight: 600;
+}
+
+.feat-cap {
+  position: absolute;
+  right: 24rpx;
+  bottom: 20rpx;
+  font-size: 21rpx;
+  color: var(--text-3);
+}
+
+/* 无图占位：CSS 手机轮廓 */
+.dev {
+  width: 144rpx;
+  height: 240rpx;
+  border-radius: 26rpx;
+  background: #DFDDD6;
+  border: 3rpx solid #CFCCC3;
+  position: relative;
+}
+
+.dev::before {
+  content: "";
+  position: absolute;
+  left: 12rpx;
+  top: 12rpx;
+  width: 38rpx;
+  height: 38rpx;
+  border-radius: 12rpx;
+  background: #CBC8BF;
+}
+
+.feat-body {
+  padding: 30rpx 32rpx 32rpx;
+}
+
+.feat-name {
+  font-size: 30rpx;
+  font-weight: 700;
   color: var(--text-1);
 }
 
-.flow-desc {
-  margin-top: 6rpx;
+.spec {
+  margin-top: 18rpx;
+  display: flex;
+  gap: 12rpx;
+}
+
+.spec-chip {
+  padding: 4rpx 14rpx;
+  border: 1rpx solid var(--line-strong);
+  border-radius: 8rpx;
+  font-size: 21rpx;
+  color: var(--text-2);
+}
+
+.spec-chip--ok {
+  border-color: var(--brand-light);
+  background: var(--brand-light);
+  color: var(--brand);
+}
+
+.price-row {
+  margin-top: 26rpx;
+  display: flex;
+  align-items: baseline;
+  gap: 16rpx;
+}
+
+.price {
+  font-size: 44rpx;
+  font-weight: 800;
+  letter-spacing: -1rpx;
+  color: var(--money);
+}
+
+.price-old {
+  font-size: 22rpx;
+  color: var(--text-3);
+  text-decoration: line-through;
+}
+
+.price-cta {
+  margin-left: auto;
+  font-size: 23rpx;
+  font-weight: 600;
+  color: var(--brand);
+}
+
+.mini-list {
+  margin-top: 4rpx;
+  background: var(--bg-card);
+  border: 1rpx solid var(--border-light);
+  border-radius: 20rpx;
+  overflow: hidden;
+}
+
+.mini {
+  display: flex;
+  align-items: center;
+  gap: 24rpx;
+  padding: 26rpx 28rpx;
+}
+
+.mini + .mini {
+  border-top: 1rpx solid var(--border-light);
+}
+
+.mini-thumb {
+  width: 92rpx;
+  height: 92rpx;
+  flex: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 14rpx;
+  border: 1rpx solid var(--border-light);
+  background: #F1EFEA;
+}
+
+.mini-thumb-img {
+  width: 92rpx;
+  height: 92rpx;
+  flex: none;
+  border-radius: 14rpx;
+  background: #F1EFEA;
+}
+
+.dev-s {
+  width: 40rpx;
+  height: 68rpx;
+  border-radius: 8rpx;
+  background: #DFDDD6;
+  border: 2rpx solid #CFCCC3;
+}
+
+.mini-main {
+  flex: 1;
+  min-width: 0;
+}
+
+.mini-name {
+  font-size: 26rpx;
+  font-weight: 600;
+  color: var(--text-1);
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.mini-spec {
+  margin-top: 8rpx;
+  font-size: 21rpx;
+  color: var(--text-3);
+}
+
+.mini-price {
+  flex: none;
+  font-size: 30rpx;
+  font-weight: 800;
+  color: var(--money);
+}
+
+/* ===== 回收行情：表格 ===== */
+.quote {
+  background: var(--bg-card);
+  border: 1rpx solid var(--border-light);
+  border-radius: 20rpx;
+  overflow: hidden;
+}
+
+.quote-row {
+  display: flex;
+  align-items: center;
+  padding: 28rpx 32rpx;
+}
+
+.quote-row + .quote-row {
+  border-top: 1rpx solid var(--border-light);
+}
+
+.quote-brand {
+  width: 108rpx;
+  flex: none;
+  font-size: 21rpx;
+  letter-spacing: 1rpx;
+  color: var(--text-3);
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.quote-name {
+  flex: 1;
+  min-width: 0;
+  font-size: 27rpx;
+  font-weight: 600;
+  color: var(--text-1);
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.quote-cap {
+  flex: none;
+  margin-right: 10rpx;
   font-size: 20rpx;
   color: var(--text-3);
 }
 
-/* ===== 维修主导改版（2026-09-29） ===== */
-.hero--secondary {
-  padding: 40rpx 48rpx;
-  background: var(--bg-card);
-  border: 2rpx solid var(--brand-light);
-  color: var(--text-1);
-}
-
-.hero--secondary .hero-title {
-  font-size: 36rpx;
-  color: var(--text-1);
-}
-
-.hero--secondary .hero-sub {
-  color: var(--text-3);
-  opacity: 1;
-}
-
-.hero--secondary .hero-cta {
-  background: var(--brand);
-  color: #fff;
-}
-
-.repair-chip {
-  display: inline-flex;
-  align-items: center;
-  padding: 16rpx 32rpx;
-  margin-right: 20rpx;
-  border-radius: 36rpx;
-  background: var(--bg-card);
-  color: var(--text-1);
+.quote-val {
+  flex: none;
   font-size: 28rpx;
-  font-weight: 500;
+  font-weight: 800;
+  color: var(--money);
+}
+
+.quote-foot {
+  padding: 26rpx 32rpx;
+  border-top: 1rpx solid var(--border-light);
+  background: #FCFBF8;
+  text-align: center;
+  font-size: 24rpx;
+  font-weight: 600;
+  color: var(--brand);
+}
+
+/* ===== 保障与页脚 ===== */
+.assure {
+  margin-top: 52rpx;
+  padding: 32rpx 40rpx 0;
+  border-top: 1rpx solid var(--border-light);
+}
+
+.assure-line {
+  font-size: 21rpx;
+  line-height: 1.9;
+  letter-spacing: 0.5rpx;
+  color: var(--text-3);
+}
+
+.assure-strong {
+  font-weight: 600;
+  color: var(--text-2);
+}
+
+.assure-line--mute {
+  color: #B9BDB7;
+}
+
+.foot {
+  padding: 44rpx 0 40rpx;
+  text-align: center;
+  font-size: 20rpx;
+  letter-spacing: 4rpx;
+  color: #C6C2B8;
 }
