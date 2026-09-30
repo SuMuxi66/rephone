@@ -9,6 +9,7 @@ import com.rephone.pojo.entity.Goods;
 import com.rephone.service.dto.GoodsAttrs;
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Map;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
@@ -26,11 +27,60 @@ public class GoodsService {
 
     // ===== 用户端 =====
 
-    public List<Goods> listOnSale() {
-        return goodsMapper.selectList(new LambdaQueryWrapper<Goods>()
+    /**
+     * 在售（上架且有货）商品列表。
+     * 入参均可空：keyword 模糊匹配商品名/品牌，brand 与 conditionLevel 精确匹配，sort 见 {@link #applySort}。
+     * 暂不分页（前端分批渲染），库存上量后再改为 Page（需同步调整 P6SaleOrderTest 断言）。
+     */
+    public List<Goods> listOnSale(String keyword, String brand, String conditionLevel, String sort) {
+        LambdaQueryWrapper<Goods> wrapper = new LambdaQueryWrapper<Goods>()
                 .eq(Goods::getStatus, 1)
-                .gt(Goods::getStock, 0)
-                .orderByDesc(Goods::getId));
+                .gt(Goods::getStock, 0);
+        if (StringUtils.hasText(keyword)) {
+            String kw = keyword.trim();
+            wrapper.and(w -> w.like(Goods::getName, kw).or().like(Goods::getBrand, kw));
+        }
+        if (StringUtils.hasText(brand)) {
+            wrapper.eq(Goods::getBrand, brand.trim());
+        }
+        if (StringUtils.hasText(conditionLevel)) {
+            wrapper.eq(Goods::getConditionLevel, conditionLevel.trim());
+        }
+        applySort(wrapper, sort);
+        return goodsMapper.selectList(wrapper);
+    }
+
+    /** sort：default/newest=最新优先；priceAsc/priceDesc=按售价。未知值回落为 default。 */
+    private void applySort(LambdaQueryWrapper<Goods> wrapper, String sort) {
+        String s = sort == null ? "" : sort.trim();
+        switch (s) {
+            case "priceAsc" -> wrapper.orderByAsc(Goods::getPriceFen);
+            case "priceDesc" -> wrapper.orderByDesc(Goods::getPriceFen);
+            default -> wrapper.orderByDesc(Goods::getId);
+        }
+    }
+
+    /** 在售（有货）商品的品牌与成色去重选项，驱动小程序货架筛选条。 */
+    public Map<String, List<String>> onSaleFilterOptions() {
+        List<Goods> onSale = goodsMapper.selectList(new LambdaQueryWrapper<Goods>()
+                .select(Goods::getBrand, Goods::getConditionLevel)
+                .eq(Goods::getStatus, 1)
+                .gt(Goods::getStock, 0));
+        List<String> brands = onSale.stream()
+                .map(Goods::getBrand)
+                .filter(StringUtils::hasText)
+                .map(String::trim)
+                .distinct()
+                .sorted()
+                .toList();
+        List<String> conditions = onSale.stream()
+                .map(Goods::getConditionLevel)
+                .filter(StringUtils::hasText)
+                .map(String::trim)
+                .distinct()
+                .sorted()
+                .toList();
+        return Map.of("brands", brands, "conditions", conditions);
     }
 
     public Goods getOnSale(Long id) {
