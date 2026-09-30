@@ -16,7 +16,7 @@
   <view class="promise">
     <view class="promise-item">
       <t-icon name="verified" size="32rpx" color="#FF5F15" />
-      <text>官方自营</text>
+      <text>官方质检</text>
     </view>
     <view class="promise-item">
       <t-icon name="check-circle" size="32rpx" color="#FF5F15" />
@@ -28,6 +28,36 @@
     </view>
   </view>
 
+  <scroll-view wx:if="{{brands.length}}" scroll-x class="filter-row">
+    <view
+      class="chip {{activeBrand === '' ? 'chip--active' : ''}}"
+      data-brand=""
+      bindtap="switchBrand"
+    >全部品牌</view>
+    <view
+      wx:for="{{brands}}"
+      wx:key="*this"
+      class="chip {{activeBrand === item ? 'chip--active' : ''}}"
+      data-brand="{{item}}"
+      bindtap="switchBrand"
+    >{{item}}</view>
+  </scroll-view>
+
+  <scroll-view wx:if="{{conditions.length}}" scroll-x class="filter-row filter-row--tight">
+    <view
+      class="chip {{activeCondition === '' ? 'chip--active' : ''}}"
+      data-condition=""
+      bindtap="switchCondition"
+    >全部成色</view>
+    <view
+      wx:for="{{conditions}}"
+      wx:key="*this"
+      class="chip {{activeCondition === item ? 'chip--active' : ''}}"
+      data-condition="{{item}}"
+      bindtap="switchCondition"
+    >{{item}}</view>
+  </scroll-view>
+
   <view class="sort-bar">
     <view
       wx:for="{{sorts}}"
@@ -36,11 +66,13 @@
       data-key="{{item.key}}"
       bindtap="switchSort"
     >{{item.label}}</view>
-    <text class="count">共 {{total}} 台</text>
+    <text wx:if="{{filterActive}}" class="clear" bindtap="resetFilters">清空筛选</text>
+    <text wx:else class="count">共 {{total}} 台</text>
   </view>
+  <view wx:if="{{filterActive}}" class="result-count">共 {{total}} 台</view>
 
   <view wx:if="{{!visible.length && loadStatus !== 1}}" class="empty">
-    <t-empty description="库存暂无在售机型" />
+    <t-empty description="没有符合条件的机型" />
   </view>
 
   <view class="grid">
@@ -55,6 +87,10 @@
       <view wx:else class="card-img card-img--empty"><text>暂无图片</text></view>
       <view class="card-body">
         <view class="card-title">{{item.name}}</view>
+        <view wx:if="{{item.conditionLevel || item.storage}}" class="card-meta">
+          <text wx:if="{{item.conditionLevel}}" class="meta-tag">{{item.conditionLevel}}</text>
+          <text wx:if="{{item.storage}}" class="meta-tag">{{item.storage}}</text>
+        </view>
         <view wx:if="{{item.descText}}" class="card-desc">{{item.descText}}</view>
         <view class="card-foot">
           <view class="price-wrap">

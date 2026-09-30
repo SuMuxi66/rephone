@@ -1,7 +1,10 @@
 import { get, post, put } from '../request';
 
-/** 在售商品列表：GET /api/wx/goods */
-export const fetchSaleGoods = () => get('/api/wx/goods');
+/** 在售商品列表：GET /api/wx/goods（支持 keyword/brand/conditionLevel/sort） */
+export const fetchSaleGoods = (params) => get('/api/wx/goods', params);
+
+/** 货架筛选条选项（在售商品的品牌与成色去重）：GET /api/wx/goods/filters */
+export const fetchSaleGoodsFilters = () => get('/api/wx/goods/filters');
 
 /** 商品详情：GET /api/wx/goods/{id} */
 export const fetchSaleGoodsDetail = (id) => get(`/api/wx/goods/${id}`);
