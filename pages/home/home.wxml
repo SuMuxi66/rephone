@@ -44,35 +44,50 @@
     </view>
     <view class="faults">
       <view wx:for="{{faults}}" wx:key="name" class="fault" bindtap="goRepair">
-        <t-icon wx:if="{{item.icon}}" name="{{item.icon}}" size="36rpx" color="#10201C" />
-        <text class="fault-name">{{item.name}}</text>
+        <view class="fault-top">
+          <text class="fault-name">{{item.name}}</text>
+          <text class="fault-caret">›</text>
+        </view>
+        <text class="fault-hint">{{item.hint}}</text>
       </view>
     </view>
   </view>
 
-  <!-- 三条路：目录式分栏 -->
+  <!-- 三条路：三行堆叠（三列会导致中文文案断行，故改为整行列表） -->
   <view class="block">
-    <view class="index-row">
-      <view class="index-col" bindtap="goRepair">
-        <text class="index-no">01</text>
-        <text class="index-name">修手机</text>
-        <text class="index-val index-val--brand">{{hooks.repair}}</text>
-        <text class="index-note">上门 / 到店 · 180 天质保</text>
-        <text class="index-arrow">去报修 ›</text>
+    <view class="services">
+      <view class="service" bindtap="goRepair">
+        <text class="service-no">01</text>
+        <view class="service-body">
+          <view class="service-line">
+            <text class="service-name">修手机</text>
+            <text class="service-val service-val--brand">{{hooks.repair}}</text>
+            <text class="service-caret">›</text>
+          </view>
+          <text class="service-desc">上门 / 到店 · 先报价后维修 · 180 天质保</text>
+        </view>
       </view>
-      <view class="index-col" bindtap="goEstimate">
-        <text class="index-no">02</text>
-        <text class="index-name">卖旧机</text>
-        <text class="index-val">{{hooks.recycle}}</text>
-        <text class="index-note">30 秒出价 · 顺丰包邮</text>
-        <text class="index-arrow">去估价 ›</text>
+      <view class="service" bindtap="goEstimate">
+        <text class="service-no">02</text>
+        <view class="service-body">
+          <view class="service-line">
+            <text class="service-name">卖旧机</text>
+            <text class="service-val">{{hooks.recycle}}</text>
+            <text class="service-caret">›</text>
+          </view>
+          <text class="service-desc">30 秒出价 · 顺丰包邮 · 质检后打款</text>
+        </view>
       </view>
-      <view class="index-col" bindtap="goSale">
-        <text class="index-no">03</text>
-        <text class="index-name">买二手机</text>
-        <text class="index-val">{{hooks.buy}}</text>
-        <text class="index-note">一机一报告 · 支持售后</text>
-        <text class="index-arrow">去选购 ›</text>
+      <view class="service" bindtap="goSale">
+        <text class="service-no">03</text>
+        <view class="service-body">
+          <view class="service-line">
+            <text class="service-name">买二手机</text>
+            <text class="service-val">{{hooks.buy}}</text>
+            <text class="service-caret">›</text>
+          </view>
+          <text class="service-desc">官方质检 · 一机一报告 · 支持售后</text>
+        </view>
       </view>
     </view>
   </view>

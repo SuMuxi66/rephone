@@ -5,10 +5,10 @@ import { fen2yuan } from '../../common/recycle-status';
 
 /** 快捷故障入口（静态常量；v1 不携带机型/故障预选参数） */
 const FAULTS = [
-  { name: '换屏幕', icon: 'mobile' },
-  { name: '换电池', icon: 'battery' },
-  { name: '进水处理', icon: 'cloud' },
-  { name: '不开机', icon: 'poweroff' },
+  { name: '换屏幕', hint: '外屏 · 内屏 · 总成' },
+  { name: '换电池', hint: '容量衰减 · 鼓包' },
+  { name: '进水处理', hint: '清洗 · 烘干 · 除锈' },
+  { name: '不开机', hint: '主板 · 供电 · 系统' },
 ];
 
 /** 首页严选位展示件数：1 件主推 + 2 件紧凑行 */

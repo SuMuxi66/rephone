@@ -168,85 +168,124 @@
   color: var(--text-2);
 }
 
-/* ===== 故障：描边方框 ===== */
+/* ===== 故障：2×2 文字格（左对齐 + 副文案，替代原来 4 个空描边方块） ===== */
+/* 两列网格的三个必要条件（缺一个就会掉成一列）：
+   1) box-sizing: border-box —— 否则 padding+border 会加在 50% 之外；
+   2) 不用 gap + calc(50%)：两者相加正好 100%，亚像素取整会溢出；
+   3) justify-content: space-between —— 间距由剩余空间决定，对取整更宽容。 */
 .faults {
   display: flex;
-  gap: 16rpx;
+  flex-wrap: wrap;
+  justify-content: space-between;
 }
 
 .fault {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 14rpx;
-  padding: 26rpx 6rpx 22rpx;
+  box-sizing: border-box;
+  width: calc(50% - 8rpx);
+  margin-bottom: 16rpx;
+  padding: 26rpx 24rpx;
   background: var(--bg-card);
-  border: 1rpx solid var(--line-strong);
+  border: 1rpx solid var(--border-light);
   border-radius: 16rpx;
 }
 
+.fault-top {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+}
+
 .fault-name {
-  font-size: 23rpx;
+  font-size: 28rpx;
+  font-weight: 600;
   color: var(--text-1);
 }
 
-/* ===== 三条路：目录式分栏 ===== */
-.index-row {
-  display: flex;
+.fault-caret {
+  font-size: 26rpx;
+  color: var(--text-3);
+}
+
+.fault-hint {
+  display: block;
+  margin-top: 10rpx;
+  font-size: 21rpx;
+  color: var(--text-3);
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+/* ===== 三条路：三行堆叠列表（三列会把中文说明挤到断行，故改整行） ===== */
+.services {
   background: var(--bg-card);
   border: 1rpx solid var(--border-light);
   border-radius: 20rpx;
   overflow: hidden;
 }
 
-.index-col {
-  flex: 1;
+.service {
   display: flex;
-  flex-direction: column;
-  padding: 32rpx 24rpx 28rpx;
+  align-items: flex-start;
+  gap: 24rpx;
+  padding: 30rpx 28rpx;
 }
 
-.index-col + .index-col {
-  border-left: 1rpx solid var(--border-light);
+.service + .service {
+  border-top: 1rpx solid var(--border-light);
 }
 
-.index-no {
+.service-no {
+  flex: none;
+  padding-top: 8rpx;
   font-size: 20rpx;
   font-weight: 600;
   letter-spacing: 2rpx;
   color: var(--text-3);
 }
 
-.index-name {
-  margin-top: 14rpx;
-  font-size: 29rpx;
+.service-body {
+  flex: 1;
+  min-width: 0;
+}
+
+.service-line {
+  display: flex;
+  align-items: baseline;
+}
+
+.service-name {
+  flex: none;
+  font-size: 30rpx;
   font-weight: 700;
   color: var(--text-1);
 }
 
-.index-val {
-  margin-top: 16rpx;
+.service-val {
+  margin-left: auto;
   font-size: 26rpx;
   font-weight: 700;
   color: var(--money);
 }
 
-.index-val--brand {
+.service-val--brand {
   color: var(--brand);
 }
 
-.index-note {
-  margin-top: 6rpx;
-  font-size: 21rpx;
-  line-height: 1.6;
+.service-caret {
+  margin-left: 10rpx;
+  font-size: 26rpx;
   color: var(--text-3);
 }
 
-.index-arrow {
-  margin-top: 24rpx;
+.service-desc {
+  display: block;
+  margin-top: 10rpx;
   font-size: 22rpx;
-  color: var(--text-2);
+  color: var(--text-3);
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
 
 /* ===== 严选：1 大卡 + 2 紧凑行 ===== */

@@ -83,6 +83,9 @@ RePhone 是「手机维修（主）+ 二手机回收 + 二手出售」平台，*
 - `app.json` 的 `tabBar.list` 顺序与 `custom-tab-bar/data.js` 数组顺序**必须完全一致**（自定义 tabBar 按 route 匹配高亮），两处要同一次提交内改完。
 - 下单类页面统一复用 `common/address-prefill.js` Behavior（维修/回收/出售三条线下单页口径一致），不要在页面里另写一套地址簿。
 - 页面文件四件套齐备：`index.js / index.json / index.wxml / index.wxss`。
+- **两列网格必须同时满足三点**，缺一个第二列就会掉到下一行（本项目默认 `box-sizing: content-box`）：
+  1）`.card { box-sizing: border-box }`；2）不要 `gap` + `calc(50%)` 混用（相加正好 100%，亚像素取整即溢出）；
+  3）容器用 `justify-content: space-between`，让间距由剩余空间决定。
 - **TDesign 组件主题只在 `style/theme.wxss` 覆盖**：`miniprogram_npm/` 未纳入 git（npm 构建产物），
   改它会在重新构建 npm 后丢失；组件变量名形如 `--td-button-primary-bg-color`，可从对应组件 wxss 里查。
 - **wxml 属性里用不了 CSS 变量**：`t-icon` 的 `color`、`app.json` 的 `tabBar.selectedColor` 等只能写十六进制，
