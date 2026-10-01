@@ -5,6 +5,7 @@ import com.rephone.common.exception.BizException;
 import com.rephone.common.result.R;
 import com.rephone.common.security.JwtTokenService;
 import com.rephone.controller.support.AdminTokenFilter;
+import com.rephone.controller.support.LoginAttemptGuard;
 import com.rephone.mapper.UserMapper;
 import com.rephone.pojo.entity.User;
 import jakarta.servlet.http.HttpServletRequest;
@@ -32,11 +33,14 @@ public class AdminAuthController {
 
     private final UserMapper userMapper;
     private final JwtTokenService tokenService;
+    private final LoginAttemptGuard attemptGuard;
     private final BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 
-    public AdminAuthController(UserMapper userMapper, JwtTokenService tokenService) {
+    public AdminAuthController(UserMapper userMapper, JwtTokenService tokenService,
+                               LoginAttemptGuard attemptGuard) {
         this.userMapper = userMapper;
         this.tokenService = tokenService;
+        this.attemptGuard = attemptGuard;
     }
 
     @PostMapping("/login")
@@ -46,6 +50,12 @@ public class AdminAuthController {
         if (!StringUtils.hasText(username) || !StringUtils.hasText(password)) {
             throw new BizException(40101, "用户名或密码错误");
         }
+        String attemptKey = username.trim().toLowerCase();
+        if (attemptGuard.isLocked(attemptKey)) {
+            long retryAfter = attemptGuard.retryAfterSeconds(attemptKey);
+            log.warn("[admin-login] 触发限流 username={} retryAfter={}s", attemptKey, retryAfter);
+            throw new BizException(42901, "登录失败次数过多，请 " + Math.max(1, retryAfter / 60) + " 分钟后再试");
+        }
         User user = userMapper.selectOne(new LambdaQueryWrapper<User>()
                 .eq(User::getUsername, username.trim())
                 .last("limit 1"));
@@ -53,9 +63,11 @@ public class AdminAuthController {
                 && StringUtils.hasText(user.getPasswordHash())
                 && encoder.matches(password, user.getPasswordHash());
         if (!ok) {
+            attemptGuard.recordFailure(attemptKey);
             log.warn("[admin-login] 登录失败 username={}", username);
             throw new BizException(40101, "用户名或密码错误");
         }
+        attemptGuard.reset(attemptKey);
         String token = tokenService.createAdminToken(user.getId(), user.getTenantId(), "admin");
         return R.ok(Map.of(
                 "token", token,
