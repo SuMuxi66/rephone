@@ -18,7 +18,7 @@ page {
 }
 
 .tabs-external__inner .tabs-external__track {
-  background: #0E5A47 !important;
+  background: #1A5CE8 !important;
 }
 
 .tabs-external__inner .tabs-external__item {
@@ -27,7 +27,7 @@ page {
 
 .tabs-external__inner .tabs-external__active {
   font-size: 28rpx;
-  color: #0E5A47 !important;
+  color: #1A5CE8 !important;
 }
 
 .tabs-external__inner.order-nav .order-nav-item .bottom-line {
@@ -60,7 +60,7 @@ page {
 }
 
 .center-entry-btn {
-  color: #0E5A47;
+  color: #1A5CE8;
   font-size: 28rpx;
   text-align: center;
   line-height: 100rpx;

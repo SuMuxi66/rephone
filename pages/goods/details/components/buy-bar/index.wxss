@@ -80,12 +80,12 @@
 
 .bar-separately {
   background: #ffece9;
-  color: #0E5A47;
+  color: #1A5CE8;
   border-radius: 40rpx 0 0 40rpx;
 }
 
 .bar-buy {
-  background-color: #0E5A47;
+  background-color: #1A5CE8;
   border-radius: 0rpx 40rpx 40rpx 0rpx;
 }
 

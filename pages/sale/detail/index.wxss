@@ -174,7 +174,7 @@
   margin-top: 24rpx;
   display: flex;
   padding: 20rpx 0;
-  background: #E8F0ED;
+  background: #E8F0FE;
   border-radius: 12rpx;
 }
 
@@ -216,7 +216,7 @@
   justify-content: space-between;
   align-items: center;
   padding: 12rpx 16rpx;
-  background: #E8F0ED;
+  background: #E8F0FE;
   border-radius: 10rpx;
 }
 

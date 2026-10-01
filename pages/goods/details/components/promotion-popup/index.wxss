@@ -77,7 +77,7 @@
   background-color: #ffece9;
   margin-right: 16rpx;
   display: inline-flex;
-  color: #0E5A47;
+  color: #1A5CE8;
   border-radius: 54rpx;
   flex-shrink: 0;
   position: relative;

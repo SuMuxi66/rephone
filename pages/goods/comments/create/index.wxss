@@ -118,8 +118,8 @@ page {
 
 .submit-button-container .submit-button {
   --td-button-default-color: #fff;
-  --td-button-default-bg-color: #0E5A47;
-  --td-button-default-border-color: #0E5A47;
+  --td-button-default-bg-color: #1A5CE8;
+  --td-button-default-border-color: #1A5CE8;
   --td-button-default-active-bg-color: #fa42269c;
 }
 

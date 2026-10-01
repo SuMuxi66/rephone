@@ -18,7 +18,7 @@
   position: absolute;
   width: 6rpx;
   height: 48rpx;
-  background-color: #0E5A47;
+  background-color: #1A5CE8;
   left: 0;
   top: 50%;
   transform: translate(0, -50%);
@@ -38,7 +38,7 @@
 .c-sidebar-item.active .c-sidebar-item__text {
   background-color: white;
   border-radius: 36rpx;
-  color: #0E5A47;
+  color: #1A5CE8;
 }
 
 .text-overflow {

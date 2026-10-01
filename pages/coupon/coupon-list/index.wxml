@@ -31,7 +31,7 @@
   <view class="center-entry">
     <view class="center-entry-btn" bind:tap="goCouponCenterHandle">
       <view>领券中心</view>
-      <t-icon name="chevron-right" color="#0E5A47" size="40rpx" style="line-height: 28rpx" />
+      <t-icon name="chevron-right" color="#1A5CE8" size="40rpx" style="line-height: 28rpx" />
     </view>
   </view>
 </view>

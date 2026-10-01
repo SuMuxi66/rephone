@@ -61,15 +61,15 @@
   <view wx:else class="empty-tip">
     <view class="promise">
       <view class="promise-item">
-        <t-icon prefix="wr" name="wallet" size="44rpx" color="#0E5A47" />
+        <t-icon prefix="wr" name="wallet" size="44rpx" color="#1A5CE8" />
         <text>先报价后维修</text>
       </view>
       <view class="promise-item">
-        <t-icon name="tools" size="44rpx" color="#0E5A47" />
+        <t-icon name="tools" size="44rpx" color="#1A5CE8" />
         <text>品质配件</text>
       </view>
       <view class="promise-item">
-        <t-icon name="check-circle-filled" size="44rpx" color="#0E5A47" />
+        <t-icon name="check-circle-filled" size="44rpx" color="#1A5CE8" />
         <text>180天质保</text>
       </view>
     </view>

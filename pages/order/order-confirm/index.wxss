@@ -25,7 +25,7 @@
   align-items: center;
 }
 .order-sure .wx-pay-cover .wx-pay .price {
-  color: #0E5A47;
+  color: #1A5CE8;
   font-weight: bold;
   font-size: 63rpx;
   line-height: 88rpx;
@@ -35,7 +35,7 @@
   height: 80rpx;
   width: 240rpx;
   border-radius: 40rpx;
-  background-color: #0E5A47;
+  background-color: #1A5CE8;
   color: #ffffff;
   line-height: 80rpx;
   font-weight: bold;
@@ -153,7 +153,7 @@
   font-weight: bold;
 }
 .order-sure .pay-detail .pay-item .primary {
-  color: #0E5A47;
+  color: #1A5CE8;
 }
 
 .add-notes .add-notes__content {
@@ -215,7 +215,7 @@
 
 .order-sure .pay-amount .total-price {
   font-size: 36rpx;
-  color: #0E5A47;
+  color: #1A5CE8;
   font-weight: bold;
   padding-left: 8rpx;
 }

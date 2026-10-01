@@ -48,7 +48,7 @@
   line-height: 80rpx;
   text-align: center;
   background-color: white;
-  color: #0E5A47;
+  color: #1A5CE8;
 }
 .specs-popup .bottom-btn--active {
   opacity: 0.5;
@@ -61,7 +61,7 @@
   top: 0;
   width: 200%;
   height: 200%;
-  border: 1px solid #0E5A47;
+  border: 1px solid #1A5CE8;
   border-radius: 80rpx;
   transform: scale(0.5);
   transform-origin: left top;

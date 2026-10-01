@@ -18,7 +18,7 @@
   flex-direction: column;
   justify-content: center;
   text-align: center;
-  color: #0E5A47;
+  color: #1A5CE8;
   overflow: hidden;
   position: relative;
 }
@@ -53,7 +53,7 @@
 .wr-coupon__left--desc {
   font-size: 24rpx;
   line-height: 32rpx;
-  color: #0E5A47;
+  color: #1A5CE8;
 }
 
 .theme-weak .wr-coupon__left--desc {
@@ -124,8 +124,8 @@
   opacity: 0.9;
   font-size: 20rpx;
   line-height: 28rpx;
-  color: #0E5A47;
-  border: 0.5px solid #0E5A47;
+  color: #1A5CE8;
+  border: 0.5px solid #1A5CE8;
   box-sizing: border-box;
   transform: rotate(45deg);
 }

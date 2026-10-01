@@ -10,7 +10,7 @@
   align-items: center;
   width: 144rpx;
   height: 100%;
-  background-color: #0E5A47;
+  background-color: #1A5CE8;
   color: #fff;
   font-size: 28rpx;
   line-height: 40rpx;
@@ -90,7 +90,7 @@
 }
 .address-item-wrapper .address .address-content .label-adds .tag-default {
   background: #ffece9;
-  color: #0E5A47;
+  color: #1A5CE8;
 }
 .address-item-wrapper .address .address-content .label-adds .tag-primary {
   background: #f0f1ff;

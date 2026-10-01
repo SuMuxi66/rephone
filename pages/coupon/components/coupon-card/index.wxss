@@ -4,6 +4,6 @@
 
 .coupon-btn-primary {
   --td-button-extra-small-padding-horizontal: 26rpx;
-  --td-button-primary-outline-color: #0E5A47;
-  --td-button-primary-outline-border-color: #0E5A47;
+  --td-button-primary-outline-color: #1A5CE8;
+  --td-button-primary-outline-border-color: #1A5CE8;
 }

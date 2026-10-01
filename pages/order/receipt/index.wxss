@@ -47,8 +47,8 @@
 }
 .receipt .btn-wrap .active-btn {
   background-color: transparent;
-  border-color: #0E5A47;
-  color: #0E5A47;
+  border-color: #1A5CE8;
+  color: #1A5CE8;
 }
 .receipt .title {
   width: 100%;
@@ -71,8 +71,8 @@
 }
 .receipt .receipt-label .active-btn {
   background-color: transparent;
-  border-color: #0E5A47;
-  color: #0E5A47;
+  border-color: #1A5CE8;
+  color: #1A5CE8;
 }
 .receipt .receipt-label .wr-cell__title {
   font-size: 30rpx;
@@ -191,7 +191,7 @@
   display: inline-block;
   width: 100%;
   line-height: 80rpx;
-  background: #0E5A47;
+  background: #1A5CE8;
   text-align: center;
   color: #fff;
   border-radius: 48rpx;
@@ -216,5 +216,5 @@
 
 .t-button {
   --td-button-default-color: #000;
-  --td-button-primary-text-color: #0E5A47;
+  --td-button-primary-text-color: #1A5CE8;
 }

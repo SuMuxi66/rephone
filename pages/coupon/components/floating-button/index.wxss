@@ -20,7 +20,7 @@
   right: 0rpx;
   top: 0rpx;
   height: 28rpx;
-  background: #0E5A47;
+  background: #1A5CE8;
   border-radius: 64rpx;
   font-weight: bold;
   font-size: 22rpx;

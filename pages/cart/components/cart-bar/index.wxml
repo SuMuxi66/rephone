@@ -2,7 +2,7 @@
 <view class="cart-bar {{fixed ? 'cart-bar--fixed' : ''}} flex flex-v-center" style="bottom: {{fixed ? 'calc(' + bottomHeight + 'rpx + env(safe-area-inset-bottom))' : ''}};">
 	<t-icon
 	 size="40rpx"
-	 color="{{isAllSelected ? '#0E5A47' : '#BBBBBB'}}"
+	 color="{{isAllSelected ? '#1A5CE8' : '#BBBBBB'}}"
 	 name="{{isAllSelected ? 'check-circle-filled' : 'circle'}}"
 	 class="cart-bar__check"
 	 catchtap="handleSelectAll"

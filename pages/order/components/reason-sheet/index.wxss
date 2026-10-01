@@ -37,7 +37,7 @@ page view {
 }
 .popup-content .button-bar .btn {
   width: 100%;
-  background: #0E5A47;
+  background: #1A5CE8;
   color: #fff;
   border-radius: 48rpx;
 }

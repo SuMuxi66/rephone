@@ -82,7 +82,7 @@ page {
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: #0E5A47;
+  background-color: #1A5CE8;
   border-radius: 44rpx;
   color: #fff;
 }
