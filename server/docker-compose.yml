@@ -41,9 +41,10 @@ services:
     ports:
       - "8080:8080"
     volumes:
-      # 机型图 / 质检图落在容器的 /app/data（AdminUploadController 存 data/img/）。
-      # 不挂 volume 的话这些文件只在容器可写层，docker compose up -d --build 重建即全部丢失。
-      - rephone-uploads:/app/data
+      # 机型图 / 质检图 / 商品图落在 /app/data（AdminUploadController 存 data/img/，
+      # WebResourceConfig 提供 /img/**）。bind 挂载：重建不丢 + 可直接从宿主机预置种子图。
+      # （原先用 named volume rephone-uploads，为便于宿主机直接预置图改为 bind 挂载）
+      - ./data:/app/data
     environment:
       TZ: Asia/Shanghai
       # 容器网络内用服务名互连（非 localhost）
@@ -80,5 +81,3 @@ services:
 volumes:
   rephone-mysql-data:
   rephone-redis-data:
-  # 上传图片（机型图、质检图）。生产建议改走 COS，见 docs 里机型图来源的讨论。
-  rephone-uploads:

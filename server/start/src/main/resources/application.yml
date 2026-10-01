@@ -21,7 +21,7 @@ spring:
     init:
       # 启动时执行幂等建表（CREATE TABLE IF NOT EXISTS），可关：--spring.sql.init.mode=never
       mode: ${SQL_INIT_MODE:always}
-      schema-locations: classpath:db/schema.sql,classpath:db/schema-quote.sql,classpath:db/schema-recycle.sql,classpath:db/schema-repair.sql,classpath:db/schema-sale.sql,classpath:db/data-model-models.sql
+      schema-locations: classpath:db/schema.sql,classpath:db/schema-quote.sql,classpath:db/schema-recycle.sql,classpath:db/schema-repair.sql,classpath:db/schema-sale.sql,classpath:db/data-model-models.sql,classpath:db/data-goods-demo.sql
   data:
     redis:
       host: ${REDIS_HOST:localhost}
