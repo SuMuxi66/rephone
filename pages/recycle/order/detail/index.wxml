@@ -20,6 +20,10 @@
     <view wx:if="{{order.status === 80}}" class="canceled-tip">订单已取消，如有疑问请联系客服</view>
   </view>
 
+  <view wx:if="{{order.pickupType === 20 && !order.expressTaskNo && !order.expressNo}}" class="pickup-fallback">
+    上门取件未预约成功，请改为自行寄出并填写运单号（运费到付）
+  </view>
+
   <view class="timeline-card" wx:if="{{timeline}}">
     <t-steps layout="vertical" theme="dot" current="{{timeline.current}}">
       <t-step-item wx:for="{{timeline.nodes}}" wx:key="label" title="{{item.label}}" content="{{item.desc}}" />

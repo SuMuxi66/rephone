@@ -172,7 +172,7 @@ Page({
     }
     this.setData({ submitting: true });
     try {
-      const { orderNo } = await createRecycleOrder({
+      const { orderNo, pickupFailReason } = await createRecycleOrder({
         modelId: this.data.quote.modelId,
         storage: this.data.quote.storage,
         condition: this.data.quote.condition,
@@ -187,11 +187,32 @@ Page({
       });
       await this.saveAddressIfNew();
       wx.removeStorageSync('recycle.quoteResult');
+      this.setData({ submitting: false });
+      if (pickupFailReason) {
+        this.showPickupFallback(orderNo, pickupFailReason);
+        return;
+      }
       wx.redirectTo({ url: `/pages/recycle/order/detail/index?orderNo=${orderNo}` });
     } catch (e) {
       wx.showToast({ title: e.message || '下单失败，请稍后重试', icon: 'none' });
     } finally {
       this.setData({ submitting: false });
     }
+  },
+
+  /** 上门取件没约上：必须明确告知并给出去处，不能让用户干等一个不会来的快递员 */
+  showPickupFallback(orderNo, reason) {
+    wx.showModal({
+      title: '上门取件未能预约',
+      content: reason,
+      confirmText: '去自助寄出',
+      cancelText: '稍后处理',
+      success: (res) => {
+        const url = res.confirm
+          ? `/pages/recycle/order/detail/index?orderNo=${orderNo}`
+          : '/pages/recycle/order/list/index';
+        wx.redirectTo({ url });
+      },
+    });
   },
 });

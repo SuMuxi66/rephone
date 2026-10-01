@@ -35,6 +35,16 @@
   color: var(--danger);
 }
 
+.pickup-fallback {
+  margin: 0 var(--space-page) 24rpx;
+  padding: 24rpx 28rpx;
+  border-radius: var(--radius-card);
+  font-size: 26rpx;
+  line-height: 38rpx;
+  color: var(--money);
+  background: var(--money-light);
+}
+
 .timeline-card {
   margin: 0 var(--space-page) 24rpx;
   padding: 28rpx 24rpx 12rpx;
