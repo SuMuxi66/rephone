@@ -1,4 +1,4 @@
-@import '../../../style/theme.wxss';
+@import '../../../../../style/theme.wxss';
 
 .receipt {
   height: 100vh;

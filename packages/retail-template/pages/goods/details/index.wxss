@@ -1,4 +1,4 @@
-@import '../../../style/global.wxss';
+@import '../../../../../style/global.wxss';
 page {
   width: 100vw;
 }

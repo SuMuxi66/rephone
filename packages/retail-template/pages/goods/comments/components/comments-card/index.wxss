@@ -1,4 +1,4 @@
-@import '../../../../../style/theme.wxss';
+@import '../../../../../../../style/theme.wxss';
 
 .comments-card-item {
   padding: 32rpx;
