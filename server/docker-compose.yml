@@ -49,7 +49,10 @@ services:
       REDIS_HOST: redis
       # 开发态默认值：mock 登录 + 本地管理令牌；上线用环境变量覆盖
       WX_MOCK_LOGIN: ${WX_MOCK_LOGIN:-true}
-      ADMIN_TOKEN: ${ADMIN_TOKEN:-local-admin-token}
+      # 故意不给默认值：原来默认 "local-admin-token" 是一个开箱可用的管理端凭证，
+      # 部署时忘了覆盖就等于把后台（含用户 PII 与打款操作）公开。留空则只禁用机器令牌，
+      # 管理员仍可用账号密码登录。本地要用的值写在 .env 里。
+      ADMIN_TOKEN: ${ADMIN_TOKEN:-}
       ADMIN_BOOTSTRAP_PASSWORD: ${ADMIN_BOOTSTRAP_PASSWORD:-}
       # 快递100 真实出网配置：值来自同目录 .env（compose 自动读它做插值），缺省保持 mock
       EXPRESS_MOCK: ${EXPRESS_MOCK:-true}
