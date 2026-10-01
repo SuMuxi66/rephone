@@ -88,7 +88,7 @@ prod 仍然拒绝启动。已在容器启动日志确认横幅出现。
 
 ## 5. 未覆盖 / 遗留风险
 
-1. **依赖漏洞未扫**：未跑 `mvn dependency-check` / `npm audit`，第三方组件 CVE 未评估。
+1. ~~依赖漏洞未扫~~ → 已完成，见第 7 节（`npm audit` 因国内镜像未实现 audit 端点而不可用，改用 OSV API）。
 2. **未做压力/并发安全测试**：如并发下单导致的库存超卖、并发状态流转（CAS 已实现但未压测）。
 3. **`/api/wx/login` 本身无限流**：mock 模式下可无限创建用户（生产模式下 code 由微信签发、一次性，风险低）。
 4. **限流为进程内实现**：多实例部署时阈值被放大。
@@ -107,3 +107,52 @@ PASS  [C10] 回归：快递公司字典                         期望=code=0   
 ```
 
 后端全量单测 40 通过（新增 `LoginAttemptGuardTest` 3 项）。
+
+## 7. 依赖 CVE 扫描（2026-10-01）
+
+### 方法
+
+- **后端**：`npm audit` 因镜像 `registry.npmmirror.com` 未实现 audit 端点而不可用；`mvn dependency-check` 需下载 NVD 全库且需 API Key，过重。
+  改为**从实际运行的 fat jar 的 `BOOT-INF/lib` 提取 67 个第三方 Maven 坐标**（groupId 由本地仓库路径反查），
+  再查 **OSV API**（聚合 GHSA / NVD / OSV，Maven 与 npm 同一套接口）。
+- **前台**：`admin/package-lock.json` 的 73 个运行时依赖，同样走 OSV。
+- 脚本为一次性工具，存仓库外（`E:/code-start/.shots/osv-scan.js`），不入库。
+
+### 首轮结果：15 个依赖命中，63 条漏洞
+
+| 依赖 | 条数 | 其中 CRITICAL/HIGH |
+|---|---|---|
+| tomcat-embed-core 10.1.48 | 16 | 6 CRITICAL / 6 HIGH |
+| spring-webmvc 6.2.12 | 11 | 2 HIGH |
+| jackson-databind 2.19.2 | 11 | 4 HIGH |
+| io.netty netty-handler 4.1.128 | 5 | 3 HIGH / 1 CRITICAL |
+| spring-data-commons 3.5.5 | 4 | 2 HIGH |
+| 其余 10 个 | 16 | — |
+
+### 修复：升级 Spring Boot 3.5.7 → 3.5.16
+
+这些组件全部由 `spring-boot-starter-parent` 的 BOM 统一管理，升一个版本即可整体带动。
+3.5.16 是 3.5 线最新（OSV 标注的修复版本为 3.5.14/3.5.15，已越过）。
+
+实际带动：Spring Framework 6.2.12 → 6.2.1x、Tomcat 10.1.48 → **10.1.55**、
+Jackson 2.19.2 → **2.21.4**、Netty 4.1.128 → **4.1.135.Final**、Spring Data、Logback 等。
+
+**复扫：受影响依赖 15 → 5，漏洞条目 63 → 16。**
+
+### 剩余 16 条：逐条适用性判定
+
+| 依赖 | 条数 | 判定 |
+|---|---|---|
+| tomcat-embed-core 10.1.55 | 3 | **不适用**：全部是 DIGEST / FORM 认证器的绕过与错误授权。本项目未启用任何容器托管认证（无 `web.xml` 安全约束、无 Spring Security），鉴权由自定义 `JwtAuthFilter` / `AdminTokenFilter` 承担。 |
+| io.netty handler/codec 4.1.135 | 3 | **不适用**：SNI 路由绕过、ClientHello 重组、Bzip2Decoder 死循环，均为**服务端 TLS / 解码器**路径。Netty 在这里只是 Lettuce 连 Redis 的**客户端**，不终止 TLS、不用 bzip2。 |
+| jackson-databind 2.21.4 | 9 | **8 条不适用**：`@JsonView` 绕过、`@JsonIgnoreProperties` 大小写绕过、`PolymorphicTypeValidator` 绕过、`@JsonTypeInfo` 绕过、`Path` 反序列化——代码里**未使用** `@JsonView`/`@JsonUnwrapped`/`@JsonIgnoreProperties`/默认类型/`@JsonTypeInfo`，DTO 也**不含** `Duration`/`XMLGregorianCalendar`/`Path`（均已 grep 核实）。 |
+| jackson-databind（续） | 1 | **可能适用**：`GHSA-cxp5-3px4-pw24` 二次方 forward-reference 解析（HIGH），是通用解析器 DoS，任何接受 JSON 的接口都可能有理论影响。**当前未配置 JSON 请求体大小上限**（`application.yml` 无相关项），见遗留风险。 |
+| log4j-api 2.24.3 | 1 | **不适用**：问题在 Log4j `MapMessage` 的 JSON 序列化；日志链路是 SLF4J → Logback，未直接使用 Log4j API。 |
+
+**结论：16 条中 15 条经核实不适用，1 条（Jackson 解析 DoS）为通用输入加固项。**
+
+### 遗留
+
+- Spring Boot 3.5 线已到 3.5.16 顶部，**剩余 Tomcat / Netty 修复位于 4.x**，属大版本升级，本轮未做。
+- **未配置 JSON 请求体大小上限**：建议加一个限流/体积过滤（如 Tomcat `maxPostSize` 对表单有效，JSON 流需自定义过滤器），
+  同时也能挡住超大体导致的解析放大。

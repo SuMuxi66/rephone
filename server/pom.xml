@@ -7,7 +7,9 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.5.7</version>
+        <!-- 3.5.7 的 BOM 带入了 Spring Framework 6.2.12 / Tomcat 10.1.48 / Jackson 2.19.2 / Netty 4.1.128，
+             OSV 扫出 63 条已知漏洞；3.5.16 一次性带动这些组件到已修复版本。 -->
+        <version>3.5.16</version>
         <relativePath/>
     </parent>
 
