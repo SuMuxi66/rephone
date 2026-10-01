@@ -9,7 +9,7 @@
 	 wx:for-index="index"
 	 wx:key="index"
 	>
-		<view class="custom-tab-bar-wrapper">
+		<view class="custom-tab-bar-wrapper {{index === active ? 'is-active' : ''}}">
 			<t-icon wx:if="{{item.prefix === 'wr'}}" prefix="wr" name="{{item.icon}}" size="48rpx" />
 			<t-icon wx:else name="{{item.icon}}" size="48rpx" />
 			<view class="text">{{ item.text }}</view>

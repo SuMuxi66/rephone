@@ -1,7 +1,31 @@
+/* 自定义 tabBar。
+   ⚠️ 本组件渲染在 page 节点树之外，继承不到 app.wxss 里 `page { --token }` 的令牌，
+   TDesign 的 `.t-tab-bar-item__content--checked` 会一路回退到默认蓝 #0052D9。
+   而 WXSS 在自定义组件内又会整条丢弃「含 page 的选择器列表」（实测：page,:host 组合不生效），
+   所以只能用独立的 :host 规则自带一份令牌。
+   下面 4 个令牌值与 style/design-tokens.wxss 一致，改色板时两处都要改。 */
+:host {
+  --brand: #26292E;
+  --text-3: #9BA0A7;
+  --bg-card: #FFFFFF;
+  --border-light: #E4E3E0;
+
+  /* 同时钉住 TDesign 的兜底变量 */
+  --td-tab-bar-color: var(--text-3);
+  --td-tab-bar-active-color: var(--brand);
+  --td-tab-bar-bg-color: var(--bg-card);
+  --td-tab-bar-border-color: var(--border-light);
+}
+
 .custom-tab-bar-wrapper {
   display: flex;
   flex-direction: column;
   align-items: center;
+  color: var(--text-3);
+}
+
+.custom-tab-bar-wrapper.is-active {
+  color: var(--brand);
 }
 
 .custom-tab-bar-wrapper .text {
