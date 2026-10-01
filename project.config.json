@@ -13,6 +13,58 @@
       {
         "type": "folder",
         "value": "admin"
+      },
+      {
+        "type": "folder",
+        "value": "plugins"
+      },
+      {
+        "type": "folder",
+        "value": ".zcode"
+      },
+      {
+        "type": "folder",
+        "value": ".zcode-tmp"
+      },
+      {
+        "type": "folder",
+        "value": ".mimosa"
+      },
+      {
+        "type": "file",
+        "value": "AGENT.md"
+      },
+      {
+        "type": "file",
+        "value": "AI_PLAN.md"
+      },
+      {
+        "type": "file",
+        "value": "mock.md"
+      },
+      {
+        "type": "file",
+        "value": "README.md"
+      },
+      {
+        "type": "file",
+        "value": "LICENSE"
+      },
+      {
+        "type": "file",
+        "value": ".DS_Store"
+      },
+      {
+        "type": "file",
+        "value": ".zcodeignore"
+      },
+      {
+        "type": "file",
+        "value": "commitlint.config.js"
+      },
+      {
+        "type": "file",
+        "value": "jsconfig.json"
       }
     ],
     "include": []
