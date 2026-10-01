@@ -129,12 +129,6 @@ Page({
     });
   },
 
-  handleCartTap() {
-    wx.switchTab({
-      url: '/pages/cart/index',
-    });
-  },
-
   handleSubmit() {
     this.setData(
       {
