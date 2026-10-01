@@ -67,7 +67,8 @@ function rawRequest(options) {
         options.skipAuth || !getToken() ? {} : { Authorization: `Bearer ${getToken()}` },
       ),
       success: resolve,
-      fail: (err) => reject(new Error(err.errMsg || '网络请求失败')),
+      // 热重载/页面刷新会中止在途请求，此时 err 为 undefined，不能直接读 err.errMsg
+      fail: (err) => reject(new Error((err && err.errMsg) || '网络请求失败')),
     });
   });
 }
