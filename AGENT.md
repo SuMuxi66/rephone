@@ -28,8 +28,12 @@ RePhone 是「手机维修（主）+ 二手机回收 + 二手出售」平台，*
 5. **不删除 `model/`**：出售端尚未全部接线，`model/` 仍是契约参考与适配层。
 6. **状态码唯一来源**：`common/recycle-status.js`、`common/repair-status.js`、`common/sale-status.js`、`pages/order/config.js`。页面禁止硬编码状态数字与文案。
 7. **设计令牌唯一来源**：`style/design-tokens.wxss`。页面禁止裸写色值，禁止引入新色板。
-   品牌为深松绿 `--brand: #0E5A47`（深 `--brand-deep` / 浅 `--brand-light`）。
-   **金额硬规则：所有价格、回收价、打款金额一律用 `--money: #B86A0E`，禁止用品牌色写钱。**
+   品牌为炭黑 `--brand: #26292E`（深 `--brand-deep` / 浅 `--brand-light`），强调色赤陶 `--accent: #B4530F`。
+   **金额硬规则：所有价格、回收价、打款金额一律用 `--money: #B4530F`，禁止用品牌色写钱。**
+   **圆角硬规则：全仓只允许 3 种圆角 —— `--radius-card` / `--radius-sm` / `--radius-pill`，禁止裸写圆角 rpx。**
+   半透明白色叠加（`rgba(255,255,255,.x)`）属遮罩/高光，允许保留；
+   不透明的 `rgb()/rgba()` 等价于 hex，必须一并令牌化。
+   唯一的令牌镜像例外：`custom-tab-bar/index.wxss` 的 `:host` 块自带 4 个色值，改色板时**两处必须同改**（原因见 §5）。
 8. **组件来源**：`miniprogram_npm/tdesign-miniprogram/<name>/<name>` 或本仓库 `components/<name>/index`。不得引入未在本仓库出现过的图标名（字体缺字会渲染空白）。
 9. **禁止跳阶段**：按计划逐项交付，每项必须可独立运行、可验证。
 10. **第三方查询频率**：快递100 实时查询限制「同一单号间隔 ≥ 30 分钟、单日 ≤ 48 次」，超频会**锁单**。
@@ -92,8 +96,24 @@ RePhone 是「手机维修（主）+ 二手机回收 + 二手出售」平台，*
   3）容器用 `justify-content: space-between`，让间距由剩余空间决定。
 - **TDesign 组件主题只在 `style/theme.wxss` 覆盖**：`miniprogram_npm/` 未纳入 git（npm 构建产物），
   改它会在重新构建 npm 后丢失；组件变量名形如 `--td-button-primary-bg-color`，可从对应组件 wxss 里查。
+  **但变量必须声明在 `page` 上**：TDesign 组件用默认 `styleIsolation`（无 `addGlobalClass`），
+  而「app.wxss 的样式对自定义组件无效」（微信文档，仅 font/color 等继承属性例外）。
+  写成 `.t-button { --td-*: … }` 这类**类名选择器匹配不到组件内部，声明形同虚设**，
+  组件会一路回退到 TDesign 默认蓝 `#0052D9`。CSS 自定义属性是「计算值继承」，
+  挂在 `page` 上才能不受隔离影响地传进组件。
+- **WXSS 在自定义组件内会整条丢弃「含 `page` 的选择器列表」**（实测 `page, :host {}` 不生效，
+  `:host {}` 单独成条才生效）。因此 `style/design-tokens.wxss` 只写 `page`，
+  渲染在 page 节点树之外的组件自己带 `:host` 令牌。
+- **WXSS 不支持 `*` 选择器**：写了会让 `app.wxss` 编译失败，进而**整个项目构建挂掉**
+  （表现为所有页面白屏、`compile_wxss` 对任意文件都报 10041、自动化取不到页面）。禁止使用 `*`。
+- **`custom-tab-bar` 特殊**：它渲染在 page 节点树之外，继承不到 `page` 级令牌，
+  TDesign 的 `.t-tab-bar-item__content--checked` 会回退到默认蓝。故该组件自带 `:host` 令牌块，
+  并用自身 `.is-active` 类上色，不依赖 TDesign 的选中态继承色。
 - **wxml 属性里用不了 CSS 变量**：`t-icon` 的 `color`、`app.json` 的 `tabBar.selectedColor` 等只能写十六进制，
   改设计令牌时**必须用 grep 全局替换**这些散落值，否则会出现「半绿半橙」。
+  （`t-icon` 不传 `color` 时会继承父级 `color`，优先用父级 class 上色，避免在 wxml 里裸写色值。）
+- **验收命令**：`有色值扫描` —— 除 `style/design-tokens.wxss` 与 `custom-tab-bar` 的 `:host` 镜像外，
+  `*.wxss` 中不应出现 hex 与不透明 `rgb()/rgba()`。
 
 ---
 
