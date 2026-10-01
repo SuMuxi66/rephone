@@ -1,10 +1,14 @@
 /* TDesign 组件主题覆盖（RePhone v5 炭黑 + 赤陶体系）
-   注意：miniprogram_npm 未被 git 跟踪（npm 构建产物），
-   所有组件主题只能在这里覆盖；统一引用 design-tokens 的令牌，不要硬编码色值。 */
 
-/* ---------- 调色板根变量 ----------
-   覆盖后，所有引用 --td-brand-color 的组件自动跟随（按钮/标签/选项卡/步骤条/开关…） */
+   注意 1：miniprogram_npm 未被 git 跟踪（npm 构建产物），组件主题只能在这里覆盖。
+   注意 2：TDesign 组件用的是默认样式隔离（没有 addGlobalClass / styleIsolation），
+           app.wxss 里 `.t-button { --td-* }` 这类类名选择器**匹配不到组件内部**，
+           写在那里的覆盖全部无效 —— 组件会一路回退到 TDesign 默认蓝 #0052D9。
+           唯一有效的做法是把变量声明在 `page` 上：CSS 自定义属性是「计算值继承」，
+           不受样式隔离影响，会一路继承进组件内部。
+   注意 3：色值一律引用 design-tokens 的令牌，不要硬编码。 */
 page {
+  /* ---------- 调色板根变量（按钮 / 标签 / 选项卡 / 步骤条 / 开关 等自动跟随） ---------- */
   --td-brand-color: var(--brand);
   --td-brand-color-light: var(--brand-light);
   --td-brand-color-light-active: var(--brand-light);
@@ -15,10 +19,8 @@ page {
   --td-success-color: var(--success);
   --td-warning-color: var(--warning);
   --td-error-color: var(--danger);
-}
 
-/* ---------- 按钮 ---------- */
-.t-button {
+  /* ---------- 按钮 ---------- */
   --td-button-font-weight: 500;
   --td-button-medium-font-size: 32rpx;
   /* theme="default"（实心主按钮） */
@@ -44,10 +46,8 @@ page {
   --td-button-danger-border-color: var(--danger);
   --td-button-danger-active-bg-color: var(--danger-deep);
   --td-button-danger-active-border-color: var(--danger-deep);
-}
 
-/* ---------- 标签 ---------- */
-.t-tag {
+  /* ---------- 标签 ---------- */
   --td-tag-primary-color: var(--brand);
   --td-tag-primary-light-color: var(--brand-light);
   --td-tag-success-color: var(--success);
@@ -58,72 +58,36 @@ page {
   --td-tag-danger-light-color: var(--danger-light);
   --td-tag-default-color: var(--text-2);
   --td-tag-default-light-color: var(--bg-sunken);
-}
 
-/* ---------- 自定义 tabBar ---------- */
-.t-tab-bar {
-  --td-tab-bar-color: var(--text-3);
-  --td-tab-bar-active-color: var(--brand);
-}
-
-/* ---------- 选项卡（订单列表） ---------- */
-.t-tabs {
+  /* ---------- 选项卡（订单列表） ---------- */
   --td-tab-item-active-color: var(--brand);
   --td-tab-item-tag-active-bg: var(--brand-light);
-}
 
-/* ---------- 单元格 ---------- */
-.t-cell {
+  /* ---------- 单元格 ---------- */
   --td-cell-left-icon-color: var(--brand);
   --td-cell-right-icon-color: var(--text-3);
-}
 
-/* ---------- 步骤条（订单时间线） ---------- */
-.t-steps,
-.t-step-item {
+  /* ---------- 步骤条（订单时间线） ---------- */
   --td-step-item-process-circle-color: var(--brand);
   --td-step-item-process-dot-border-color: var(--brand);
   --td-step-item-finish-circle-color: var(--brand);
   --td-step-item-finish-dot-border-color: var(--brand);
   --td-step-item-finish-line-color: var(--brand);
-}
 
-/* ---------- 表单类 ---------- */
-.t-switch {
+  /* ---------- 表单类 ---------- */
   --td-switch-checked-color: var(--brand);
-}
-
-.t-checkbox {
   --td-checkbox-icon-checked-color: var(--brand);
-}
-
-.t-radio {
   --td-radio-icon-checked-color: var(--brand);
   --td-radio-label-checked-color: var(--brand);
-}
-
-.t-picker {
   --td-picker-confirm-color: var(--brand);
-}
-
-.t-stepper {
   --td-stepper-border-color: var(--line-strong);
-}
-
-.t-input {
   --td-input-text-color: var(--text-1);
   --td-input-placeholder-text-color: var(--text-3);
-}
-
-.t-textarea {
   --td-textarea-placeholder-color: var(--text-3);
-}
-
-/* ---------- 其他遗留覆盖 ---------- */
-.t-cascader {
   --td-cascader-active-color: var(--brand);
 }
 
+/* ---------- 弹窗按钮 ---------- */
 .dialog__button-confirm {
   color: var(--brand) !important;
 }

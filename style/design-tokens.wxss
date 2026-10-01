@@ -2,7 +2,10 @@
 /* v5 2026-10-01：炭黑 + 赤陶体系（专业二手机交易平台）
    品牌色＝结构色（按钮 / 导航 / 激活态），赤陶＝强调与金额色（CTA / 徽标 / 价格）。
    硬规则 1：所有价格 / 回收价只用 --money，禁止用品牌色写钱。
-   硬规则 2：全仓只允许 3 种圆角：--radius-card / --radius-sm / --radius-pill。 */
+   硬规则 2：全仓只允许 3 种圆角：--radius-card / --radius-sm / --radius-pill。
+
+   注意：本文件只作用于 `page`。渲染在 page 节点树之外的自定义组件（custom-tab-bar）
+   继承不到这里的令牌，需要自带一份 :host 镜像 —— 见 custom-tab-bar/index.wxss 顶部说明。 */
 page {
   /* 品牌 · 炭黑（结构色） */
   --brand: #26292E;
