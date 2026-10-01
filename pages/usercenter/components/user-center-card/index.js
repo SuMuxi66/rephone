@@ -23,7 +23,9 @@ Component({
     },
   },
   data: {
-    defaultAvatarUrl: 'https://tdesign.gtimg.com/miniprogram/template/retail/usercenter/icon-user-center-avatar@2x.png',
+    // 原为 TDesign 模板的远程默认头像（tdesign.gtimg.com），依赖第三方 CDN；
+    // 置空后由 t-avatar 渲染自带默认图标（纯 CSS/字体，无外网依赖）。
+    defaultAvatarUrl: '',
     AuthStepType,
   },
   methods: {
