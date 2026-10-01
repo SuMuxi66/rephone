@@ -145,7 +145,7 @@ Page({
         break;
       }
       case 'address': {
-        wx.navigateTo({ url: '/pages/user/address/list/index' });
+        wx.navigateTo({ url: '/packages/retail-template/pages/user/address/list/index' });
         break;
       }
       case 'service': {
@@ -192,7 +192,7 @@ Page({
   gotoUserEditPage() {
     const { currAuthStep } = this.data;
     if (currAuthStep === 2) {
-      wx.navigateTo({ url: '/pages/user/person-info/index' });
+      wx.navigateTo({ url: '/packages/retail-template/pages/user/person-info/index' });
     } else {
       this.fetUseriInfoHandle();
     }

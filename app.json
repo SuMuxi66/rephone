@@ -23,37 +23,30 @@
   ],
   "subpackages": [
     {
-      "root": "pages/user",
-      "name": "user",
-      "pages": ["person-info/index", "address/list/index", "address/edit/index", "name-edit/index"]
-    },
-    {
-      "root": "pages/goods",
-      "name": "goods",
+      "root": "packages/retail-template",
+      "name": "retail-template",
       "pages": [
-        "list/index",
-        "details/index",
-        "search/index",
-        "result/index",
-        "comments/index",
-        "comments/create/index"
-      ]
-    },
-    {
-      "root": "pages/order",
-      "name": "order",
-      "pages": [
-        "order-confirm/index",
-        "receipt/index",
-        "pay-result/index",
-        "order-list/index",
-        "order-detail/index",
-        "apply-service/index",
-        "after-service-list/index",
-        "after-service-detail/index",
-        "fill-tracking-no/index",
-        "delivery-detail/index",
-        "invoice/index"
+        "pages/user/person-info/index",
+        "pages/user/address/list/index",
+        "pages/user/address/edit/index",
+        "pages/user/name-edit/index",
+        "pages/goods/list/index",
+        "pages/goods/details/index",
+        "pages/goods/search/index",
+        "pages/goods/result/index",
+        "pages/goods/comments/index",
+        "pages/goods/comments/create/index",
+        "pages/order/order-confirm/index",
+        "pages/order/receipt/index",
+        "pages/order/pay-result/index",
+        "pages/order/order-list/index",
+        "pages/order/order-detail/index",
+        "pages/order/apply-service/index",
+        "pages/order/after-service-list/index",
+        "pages/order/after-service-detail/index",
+        "pages/order/fill-tracking-no/index",
+        "pages/order/delivery-detail/index",
+        "pages/order/invoice/index"
       ]
     }
   ],
@@ -86,7 +79,9 @@
       }
     ]
   },
-  "requiredPrivateInfos": ["chooseAddress"],
+  "requiredPrivateInfos": [
+    "chooseAddress"
+  ],
   "lazyCodeLoading": "requiredComponents",
   "usingComponents": {},
   "window": {

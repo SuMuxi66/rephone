@@ -132,7 +132,7 @@
         },
         {
           "name": "示例页-商品分类",
-          "pathName": "pages/goods/category/index",
+          "pathName": "packages/retail-template/pages/goods/category/index",
           "query": "",
           "scene": null
         },
@@ -144,61 +144,61 @@
         },
         {
           "name": "示例页-商品列表",
-          "pathName": "pages/goods/list/index",
+          "pathName": "packages/retail-template/pages/goods/list/index",
           "query": "",
           "scene": null
         },
         {
           "name": "示例页-商品详情",
-          "pathName": "pages/goods/details/index",
+          "pathName": "packages/retail-template/pages/goods/details/index",
           "query": "",
           "scene": null
         },
         {
           "name": "示例页-商品评论",
-          "pathName": "pages/goods/comments/index",
+          "pathName": "packages/retail-template/pages/goods/comments/index",
           "query": "",
           "scene": null
         },
         {
           "name": "示例页-售后列表",
-          "pathName": "pages/order/after-service-list/index",
+          "pathName": "packages/retail-template/pages/order/after-service-list/index",
           "query": "",
           "scene": null
         },
         {
           "name": "示例页-售后详情",
-          "pathName": "pages/order/after-service-detail/index",
+          "pathName": "packages/retail-template/pages/order/after-service-detail/index",
           "query": "rightsNo=123123423",
           "scene": null
         },
         {
           "name": "示例页-搜索页",
-          "pathName": "pages/goods/search/index",
+          "pathName": "packages/retail-template/pages/goods/search/index",
           "query": "",
           "scene": null
         },
         {
           "name": "示例页-搜索结果",
-          "pathName": "pages/goods/result/index",
+          "pathName": "packages/retail-template/pages/goods/result/index",
           "query": "",
           "scene": null
         },
         {
           "name": "示例页-商品评价",
-          "pathName": "pages/goods/comments/create/index",
+          "pathName": "packages/retail-template/pages/goods/comments/create/index",
           "query": "",
           "scene": null
         },
         {
           "name": "示例页-申请售后",
-          "pathName": "pages/order/apply-service/index",
+          "pathName": "packages/retail-template/pages/order/apply-service/index",
           "query": "orderNo=132222623132329291&skuId=135691625",
           "scene": null
         },
         {
           "name": "示例页-发票详情",
-          "pathName": "pages/order/invoice/index",
+          "pathName": "packages/retail-template/pages/order/invoice/index",
           "query": "orderNo=132381532610540875",
           "scene": null
         }
