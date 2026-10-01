@@ -46,8 +46,9 @@
           bindtap="onPick"
         >
           <image wx:if="{{item.image}}" class="cell-img" src="{{item.image}}" mode="aspectFit" lazy-load />
-          <view wx:else class="cell-ph">
-            <view class="cell-ph-body"><view class="cell-ph-camera"></view></view>
+          <view wx:else class="cell-ph" style="background: {{item.brandSoft}}">
+            <view class="cell-ph-bar" style="background: {{item.brandColor}}"></view>
+            <text class="cell-ph-name" style="color: {{item.brandColor}}">{{item.shortName}}</text>
           </view>
           <text class="cell-name">{{item.name}}</text>
         </view>

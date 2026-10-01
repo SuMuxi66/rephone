@@ -1,6 +1,7 @@
 import { fetchBrands } from '../../services/recycle/quote';
 import { fetchModels as fetchRepairModels } from '../../services/repair/repair';
 import { fetchModels as fetchQuoteModels } from '../../services/recycle/quote';
+import { brandColorOf, shortModelName, softTint } from '../../common/brand-visual';
 
 /** 机型库按业务取不同接口：维修=全量机型库，回收=受估价基准价过滤的机型 */
 const MODEL_FETCHERS = {
@@ -81,9 +82,20 @@ Page({
 
   applyFilter() {
     const kw = String(this.data.keyword || '').trim().toLowerCase();
-    const list = (this.data.models || []).filter(
-      (m) => !kw || String(m.name || '').toLowerCase().includes(kw),
-    );
+    const brand = (this.data.brands || []).find((b) => b.id === this.data.activeBrandId) || {};
+    const list = (this.data.models || [])
+      .filter((m) => !kw || String(m.name || '').toLowerCase().includes(kw))
+      .map((m) => {
+        if (m.image) return m;
+        // 没有真图：用「品牌识别色 + 机型短名」占位，比一模一样的灰轮廓有辨识度
+        const color = brandColorOf(brand.name);
+        return {
+          ...m,
+          brandColor: color,
+          brandSoft: softTint(color),
+          shortName: shortModelName(m.name, brand.name),
+        };
+      });
     this.setData({ list });
   },
 
