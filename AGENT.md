@@ -133,6 +133,10 @@ RePhone 是「手机维修（主）+ 二手机回收 + 二手出售」平台，*
   **跑之前先想清楚**；一旦失败，立刻执行 `git checkout HEAD -- admin/dist` 恢复，且不要提交 `admin/dist` 的删除。
   仅校验 Vue 代码时，优先用第 7 节的 `@vue/compiler-sfc` 静态校验，不要动构建。
 - `.gitignore` 已忽略 `node_modules/`、`miniprogram_npm/`、`server/**/target/`、`.mimosa/`、`.zcode/`、`*.log`、`.env`。**不要**把构建产物或日志提交进仓库。
+- **密钥注入方式**：`application.yml` 里已用 `spring.config.import: optional:file:./.env[.properties]` 等
+  三个候选路径，Spring Boot **直接读** `server/.env`（无需额外依赖，也无需手动设环境变量）。
+  新增密钥时：真实值只写 `server/.env`，同时往 `server/.env.example` 补一行空值与注释；
+  **绝不**把真实值写进 `application.yml`、代码或文档。
 
 ---
 
