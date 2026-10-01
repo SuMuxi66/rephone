@@ -65,8 +65,9 @@ public class AdminModelService {
         return brand.getId();
     }
 
-    /** 管理端机型分页（按机型名搜索），随页组装内存基准价。 */
-    public Page<AdminModelItem> adminPage(Long brandId, String keyword, long pageNum, long pageSize) {
+    /** 管理端机型分页（按机型名搜索，可选只看无图），随页组装内存基准价。 */
+    public Page<AdminModelItem> adminPage(Long brandId, String keyword, Boolean noImage,
+                                          long pageNum, long pageSize) {
         if (brandId == null) {
             throw new BizException(40030, "brandId 不能为空");
         }
@@ -79,6 +80,10 @@ public class AdminModelService {
                 .orderByAsc(PhoneModel::getId);
         if (StringUtils.hasText(keyword)) {
             wrapper.like(PhoneModel::getName, keyword.trim());
+        }
+        if (Boolean.TRUE.equals(noImage)) {
+            // image 既可能是 NULL 也可能是空串，两个都要算「无图」
+            wrapper.and(w -> w.isNull(PhoneModel::getImage).or().eq(PhoneModel::getImage, ""));
         }
         Page<PhoneModel> page = modelMapper.selectPage(new Page<>(pageNum, pageSize), wrapper);
         Map<Long, List<QuoteRule>> pricesByModel = page.getRecords().isEmpty() ? Map.of()

@@ -39,12 +39,17 @@ public class AdminModelController {
         return R.ok(Map.of("brandId", modelService.createBrand(body == null ? null : body.get("name"))));
     }
 
+    /**
+     * @param noImage true 时只返回没有配图的机型 —— 机型库有 1400+ 条且几乎无图，
+     *                补图时需要一个「待补图」视角，否则只能在分页里一页页翻。
+     */
     @GetMapping("/models")
     public R<Page<AdminModelItem>> models(@RequestParam Long brandId,
                                           @RequestParam(required = false) String keyword,
+                                          @RequestParam(required = false) Boolean noImage,
                                           @RequestParam(defaultValue = "1") long pageNum,
                                           @RequestParam(defaultValue = "20") long pageSize) {
-        return R.ok(modelService.adminPage(brandId, keyword, pageNum, pageSize));
+        return R.ok(modelService.adminPage(brandId, keyword, noImage, pageNum, pageSize));
     }
 
     @PostMapping("/model")

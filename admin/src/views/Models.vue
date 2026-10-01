@@ -24,6 +24,9 @@
         <div class="card-head">
           <span>机型{{ activeBrand ? `（${activeBrand.name}）` : '' }}</span>
           <el-space>
+            <el-checkbox v-model="noImage" :disabled="!activeBrandId" @change="onSearch">
+              只看无图
+            </el-checkbox>
             <el-input
               v-model="keyword"
               placeholder="按机型名搜索"
@@ -187,6 +190,9 @@ const modelForm = reactive({ name: '', image: '', releaseYear: 2026, prices: [] 
 const priceVisible = ref(false);
 const priceForm = reactive({ modelId: null, storage: '', priceYuan: null, existing: null });
 
+/** 只看未配图的机型：机型库 1400+ 条且几乎无图，补图时需要「待补图」视角 */
+const noImage = ref(false);
+
 const activeBrand = computed(() => brands.value.find((b) => b.id === activeBrandId.value));
 
 async function loadBrands() {
@@ -208,6 +214,7 @@ async function loadModels() {
   try {
     const params = { pageNum: pageNum.value, pageSize };
     if (keyword.value.trim()) params.keyword = keyword.value.trim();
+    if (noImage.value) params.noImage = true;
     const page = await fetchModels(activeBrandId.value, params);
     models.value = page.records || [];
     total.value = page.total || 0;
