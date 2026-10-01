@@ -32,6 +32,10 @@ RePhone 是「手机维修（主）+ 二手机回收 + 二手出售」平台，*
    **金额硬规则：所有价格、回收价、打款金额一律用 `--money: #B86A0E`，禁止用品牌色写钱。**
 8. **组件来源**：`miniprogram_npm/tdesign-miniprogram/<name>/<name>` 或本仓库 `components/<name>/index`。不得引入未在本仓库出现过的图标名（字体缺字会渲染空白）。
 9. **禁止跳阶段**：按计划逐项交付，每项必须可独立运行、可验证。
+10. **第三方查询频率**：快递100 实时查询限制「同一单号间隔 ≥ 30 分钟、单日 ≤ 48 次」，超频会**锁单**。
+    物流查询必须走本地快照缓存（`recycle_order.express_trace` + `trace_at`，TTL 30 分钟），
+    禁止在页面请求里直接回源。快递公司编码以 `server/express/ExpressCompanies.java` 为唯一来源，
+    前端不得再写死快递公司列表。
 
 ---
 

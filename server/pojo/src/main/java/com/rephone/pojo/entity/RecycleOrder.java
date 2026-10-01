@@ -65,6 +65,15 @@ public class RecycleOrder {
 
     private String expressTaskNo;
 
+    /** 快递100 公司编码（小写），物流轨迹查询必需。 */
+    private String expressCom;
+
+    /** 最近一次物流轨迹快照 JSON，避免超频查询被快递100 锁单。 */
+    private String expressTrace;
+
+    /** 轨迹快照时间。 */
+    private LocalDateTime traceAt;
+
     private String remark;
 
     private String adminRemark;
@@ -247,6 +256,30 @@ public class RecycleOrder {
 
     public void setExpressTaskNo(String expressTaskNo) {
         this.expressTaskNo = expressTaskNo;
+    }
+
+    public String getExpressCom() {
+        return expressCom;
+    }
+
+    public void setExpressCom(String expressCom) {
+        this.expressCom = expressCom;
+    }
+
+    public String getExpressTrace() {
+        return expressTrace;
+    }
+
+    public void setExpressTrace(String expressTrace) {
+        this.expressTrace = expressTrace;
+    }
+
+    public LocalDateTime getTraceAt() {
+        return traceAt;
+    }
+
+    public void setTraceAt(LocalDateTime traceAt) {
+        this.traceAt = traceAt;
     }
 
     public String getRemark() {

@@ -1,6 +1,7 @@
 package com.rephone;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -205,6 +206,67 @@ class P3OrderFlowTest {
                         "images", List.of()), admin()), String.class);
         assertNotEquals(0, objectMapper.readTree(resp.getBody()).get("code").asInt(),
                 "最终价超估价两倍应被拒绝");
+    }
+
+    /** 快递100 实时查询接入：公司字典统一 + 30 分钟快照防超频锁单。 */
+    @Test
+    @Order(5)
+    void express_companies_and_trace_snapshot() throws Exception {
+        // 1. 快递公司字典（编码与后端查询共用一份，不再是前端写死的 mock）
+        JsonNode companies = objectMapper.readTree(rest.exchange("/api/wx/express/companies", HttpMethod.GET,
+                new HttpEntity<>(auth()), String.class).getBody()).path("data");
+        assertTrue(companies.size() >= 10, "快递公司字典应包含常用公司");
+        boolean hasShunfeng = false;
+        for (JsonNode c : companies) {
+            if ("shunfeng".equals(c.path("com").asText())) {
+                hasShunfeng = true;
+                assertTrue(c.path("needPhone").asBoolean(), "顺丰查询轨迹必须带收寄件人电话");
+            }
+        }
+        assertTrue(hasShunfeng, "字典应包含顺丰速运");
+
+        // 2. 只传编码填运单号，展示名由后端从字典补齐
+        String orderNo = objectMapper.readTree(createOrder(566000L, 10).getBody())
+                .path("data").path("orderNo").asText();
+        ResponseEntity<String> fillResp = rest.exchange("/api/wx/recycle/order/" + orderNo + "/express",
+                HttpMethod.PUT,
+                new HttpEntity<>(Map.of("expressCom", "shunfeng", "expressNo", "SF1234567890"), auth()),
+                String.class);
+        assertEquals(0, objectMapper.readTree(fillResp.getBody()).get("code").asInt());
+        JsonNode filled = getDetail(orderNo);
+        assertEquals(20, filled.path("status").asInt());
+        assertEquals("顺丰速运", filled.path("expressCompany").asText());
+
+        // 3. 首次查询回源快递100
+        JsonNode first = trace(orderNo);
+        assertTrue(first.path("items").size() >= 1, "轨迹应返回节点");
+        assertEquals("shunfeng", first.path("com").asText());
+        assertFalse(first.path("cached").asBoolean(), "首次查询不应命中快照");
+
+        // 4. 二次查询命中本地快照，不再消耗快递100 单量
+        assertTrue(trace(orderNo).path("cached").asBoolean(), "30 分钟内应命中快照");
+
+        // 5. 认不出的快递公司必须被拒，避免存进查不了轨迹的脏数据
+        String orderNo2 = objectMapper.readTree(createOrder(566000L, 10).getBody())
+                .path("data").path("orderNo").asText();
+        ResponseEntity<String> bad = rest.exchange("/api/wx/recycle/order/" + orderNo2 + "/express",
+                HttpMethod.PUT,
+                new HttpEntity<>(Map.of("expressCompany", "某某物流", "expressNo", "XX123456789"), auth()),
+                String.class);
+        assertNotEquals(0, objectMapper.readTree(bad.getBody()).get("code").asInt(), "未知快递公司应被拒绝");
+
+        // 6. 没有运单号时不允许查轨迹
+        ResponseEntity<String> noNo = rest.exchange("/api/wx/recycle/order/" + orderNo2 + "/trace",
+                HttpMethod.GET, new HttpEntity<>(auth()), String.class);
+        assertNotEquals(0, objectMapper.readTree(noNo.getBody()).get("code").asInt(), "无运单号不应返回轨迹");
+    }
+
+    private JsonNode trace(String orderNo) throws Exception {
+        ResponseEntity<String> resp = rest.exchange("/api/wx/recycle/order/" + orderNo + "/trace",
+                HttpMethod.GET, new HttpEntity<>(auth()), String.class);
+        JsonNode body = objectMapper.readTree(resp.getBody());
+        assertEquals(0, body.get("code").asInt(), "查轨迹失败: " + resp.getBody());
+        return body.path("data");
     }
 
     private JsonNode getDetail(String orderNo) throws Exception {

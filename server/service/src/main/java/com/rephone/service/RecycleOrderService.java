@@ -12,6 +12,7 @@ import com.rephone.mapper.InspectionMapper;
 import com.rephone.mapper.RecycleOrderMapper;
 import com.rephone.pojo.dto.InspectionSubmitRequest;
 import com.rephone.pojo.dto.ExpressFillRequest;
+import com.rephone.pojo.dto.ExpressTraceResult;
 import com.rephone.pojo.dto.RecycleOrderCreateRequest;
 import com.rephone.pojo.dto.RecycleOrderDetail;
 import com.rephone.pojo.dto.RecycleOrderItem;
@@ -19,12 +20,16 @@ import com.rephone.pojo.dto.QuoteCalculateRequest;
 import com.rephone.pojo.dto.QuoteResult;
 import com.rephone.pojo.entity.Inspection;
 import com.rephone.pojo.entity.RecycleOrder;
+import com.rephone.express.ExpressCompanies;
 import com.rephone.express.ExpressService;
+import com.rephone.express.model.ExpressCompany;
 import com.rephone.express.model.ExpressPickupRequest;
 import com.rephone.express.model.ExpressPickupResult;
+import com.rephone.express.model.ExpressTrace;
 import com.rephone.wechat.WxSubscribeService;
 import com.rephone.wechat.WxPayoutService;
 import java.security.SecureRandom;
+import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
@@ -56,6 +61,9 @@ public class RecycleOrderService {
             RecycleOrder.STATUS_INSPECTING, List.of(RecycleOrder.STATUS_WAIT_CONFIRM),
             RecycleOrder.STATUS_WAIT_CONFIRM, List.of(RecycleOrder.STATUS_PAID, RecycleOrder.STATUS_CANCELED),
             RecycleOrder.STATUS_PAID, List.of(RecycleOrder.STATUS_DONE));
+
+    /** 轨迹快照有效期：快递100 要求同一单号查询间隔 >= 30 分钟，超频会锁单，因此必须走本地快照。 */
+    private static final Duration TRACE_TTL = Duration.ofMinutes(30);
 
     private static final DateTimeFormatter TS = DateTimeFormatter.ofPattern("yyyyMMddHHmmss");
     private static final SecureRandom RANDOM = new SecureRandom();
@@ -182,19 +190,89 @@ public class RecycleOrderService {
                 .toList();
     }
 
-    /** 用户填写/修改运单号：10 → 20 运输中。 */
+    /** 用户填写/修改运单号：10 → 20 运输中。必须能解析出快递100 编码，否则后续查不了轨迹。 */
     @Transactional
     public void fillExpress(String orderNo, ExpressFillRequest req) {
         if (req == null || !StringUtils.hasText(req.expressNo())) {
             throw new BizException(40021, "快递单号不能为空");
         }
+        String expressNo = req.expressNo().trim();
         requireLen(req.expressCompany(), 32, "快递公司");
         requireLen(req.expressNo(), 32, "快递单号");
+        if (expressNo.length() < 6) {
+            throw new BizException(40021, "快递单号至少 6 位");
+        }
+        ExpressCompany company = resolveCompany(req.expressCom(), req.expressCompany());
         RecycleOrder order = getOwned(orderNo);
         transition(order, RecycleOrder.STATUS_SHIPPING, 10, order.getUserId(), "用户填写运单号");
-        order.setExpressCompany(req.expressCompany());
-        order.setExpressNo(req.expressNo().trim());
+        order.setExpressCompany(company.name());
+        order.setExpressCom(company.com());
+        order.setExpressNo(expressNo);
         orderMapper.updateById(order);
+    }
+
+    /**
+     * 物流轨迹：30 分钟内直接回本地快照，超时才回源快递100 并落快照
+     * （快递100 限制同一单号 30 分钟才能查一次，超频会锁单）。
+     */
+    @Transactional
+    public ExpressTraceResult trace(String orderNo) {
+        RecycleOrder order = getOwned(orderNo);
+        if (!StringUtils.hasText(order.getExpressNo())) {
+            throw new BizException(40031, "该订单还没有运单号");
+        }
+        ExpressTraceResult snapshot = freshSnapshot(order);
+        if (snapshot != null) {
+            return snapshot;
+        }
+        ExpressCompany company = resolveCompany(order.getExpressCom(), order.getExpressCompany());
+        // 顺丰/顺丰快运/中通必填收寄件人电话，这里用下单时登记的寄件电话
+        ExpressTrace trace = expressService.queryTrace(company.com(), order.getExpressNo(), order.getPickupPhone());
+        ExpressTraceResult result = new ExpressTraceResult(trace.com(), trace.companyName(), trace.expressNo(),
+                trace.state(), trace.stateName(),
+                trace.nodes().stream()
+                        .map(n -> new ExpressTraceResult.Item(n.time(), n.context(), n.status(), n.statusCode()))
+                        .toList(),
+                LocalDateTime.now().toString(), false);
+        order.setExpressCom(trace.com());
+        order.setExpressCompany(trace.companyName());
+        order.setExpressTrace(toJsonText(result));
+        order.setTraceAt(LocalDateTime.now());
+        orderMapper.updateById(order);
+        return result;
+    }
+
+    /** 快递公司解析：优先编码，其次展示名（含常见别名）；都认不出直接拒绝，避免存进查不了轨迹的脏数据。 */
+    private static ExpressCompany resolveCompany(String com, String name) {
+        return ExpressCompanies.byCom(com)
+                .or(() -> ExpressCompanies.byName(name))
+                .orElseThrow(() -> new BizException(40030, "请从列表中重新选择快递公司"));
+    }
+
+    /** 读 TRACE_TTL 内的轨迹快照；不存在、已过期或解析失败返回 null（视为需要回源）。 */
+    private static ExpressTraceResult freshSnapshot(RecycleOrder order) {
+        if (!StringUtils.hasText(order.getExpressTrace()) || order.getTraceAt() == null) {
+            return null;
+        }
+        if (order.getTraceAt().isBefore(LocalDateTime.now().minus(TRACE_TTL))) {
+            return null;
+        }
+        try {
+            ExpressTraceResult s = JSON.readValue(order.getExpressTrace(), ExpressTraceResult.class);
+            return new ExpressTraceResult(s.com(), s.companyName(), s.expressNo(), s.state(), s.stateName(),
+                    s.items(), s.queriedAt(), true);
+        } catch (JsonProcessingException e) {
+            return null;
+        }
+    }
+
+    /** 序列化快照，失败返回 null（不落缓存，下次仍会回源）。 */
+    private static String toJsonText(Object value) {
+        try {
+            return JSON.writeValueAsString(value);
+        } catch (JsonProcessingException e) {
+            return null;
+        }
     }
 
     /** 用户取消：仅待寄出可取消。 */

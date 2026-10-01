@@ -3,6 +3,7 @@ package com.rephone.controller;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.rephone.common.result.R;
 import com.rephone.pojo.dto.ExpressFillRequest;
+import com.rephone.pojo.dto.ExpressTraceResult;
 import com.rephone.pojo.dto.RecycleOrderCreateRequest;
 import com.rephone.pojo.dto.RecycleOrderDetail;
 import com.rephone.pojo.dto.RecycleOrderItem;
@@ -49,6 +50,12 @@ public class WxRecycleOrderController {
     public R<Void> fillExpress(@PathVariable String orderNo, @RequestBody ExpressFillRequest request) {
         orderService.fillExpress(orderNo, request);
         return R.ok();
+    }
+
+    /** 物流轨迹：30 分钟内走本地快照，超时回源快递100。 */
+    @GetMapping("/order/{orderNo}/trace")
+    public R<ExpressTraceResult> trace(@PathVariable String orderNo) {
+        return R.ok(orderService.trace(orderNo));
     }
 
     @PutMapping("/order/{orderNo}/cancel")
