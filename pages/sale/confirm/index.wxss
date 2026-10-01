@@ -18,7 +18,7 @@
   height: 140rpx;
   flex: none;
   border-radius: 12rpx;
-  background: #EDEBE4;
+  background: var(--bg-sunken);
 }
 
 .goods-img--empty {

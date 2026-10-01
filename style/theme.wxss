@@ -1,4 +1,4 @@
-/* TDesign 组件主题覆盖（RePhone 深松绿体系）
+/* TDesign 组件主题覆盖（RePhone v5 炭黑 + 赤陶体系）
    注意：miniprogram_npm 未被 git 跟踪（npm 构建产物），
    所有组件主题只能在这里覆盖；统一引用 design-tokens 的令牌，不要硬编码色值。 */
 
@@ -9,9 +9,9 @@ page {
   --td-brand-color-light: var(--brand-light);
   --td-brand-color-light-active: var(--brand-light);
   --td-brand-color-active: var(--brand-deep);
-  --td-brand-color-disabled: #A9CBC1;
+  --td-brand-color-disabled: var(--line-strong);
   --td-text-color-brand: var(--brand);
-  --td-text-color-anti: #FFFFFF;
+  --td-text-color-anti: var(--text-anti);
   --td-success-color: var(--success);
   --td-warning-color: var(--warning);
   --td-error-color: var(--danger);
@@ -22,28 +22,28 @@ page {
   --td-button-font-weight: 500;
   --td-button-medium-font-size: 32rpx;
   /* theme="default"（实心主按钮） */
-  --td-button-default-color: #FFFFFF;
+  --td-button-default-color: var(--text-anti);
   --td-button-default-bg-color: var(--brand);
   --td-button-default-border-color: var(--brand);
   --td-button-default-active-bg-color: var(--brand-deep);
   --td-button-default-active-border-color: var(--brand-deep);
-  --td-button-default-disabled-color: #FFFFFF;
-  --td-button-default-disabled-bg: #C3D5CF;
-  --td-button-default-disabled-border-color: #C3D5CF;
+  --td-button-default-disabled-color: var(--text-anti);
+  --td-button-default-disabled-bg: var(--line-strong);
+  --td-button-default-disabled-border-color: var(--line-strong);
   /* theme="primary" */
-  --td-button-primary-color: #FFFFFF;
+  --td-button-primary-color: var(--text-anti);
   --td-button-primary-bg-color: var(--brand);
   --td-button-primary-border-color: var(--brand);
   --td-button-primary-active-bg-color: var(--brand-deep);
   --td-button-primary-active-border-color: var(--brand-deep);
-  --td-button-primary-disabled-color: #FFFFFF;
-  --td-button-primary-disabled-bg: #C3D5CF;
-  --td-button-primary-disabled-border-color: #C3D5CF;
+  --td-button-primary-disabled-color: var(--text-anti);
+  --td-button-primary-disabled-bg: var(--line-strong);
+  --td-button-primary-disabled-border-color: var(--line-strong);
   /* theme="danger" */
   --td-button-danger-bg-color: var(--danger);
   --td-button-danger-border-color: var(--danger);
-  --td-button-danger-active-bg-color: #9E2F22;
-  --td-button-danger-active-border-color: #9E2F22;
+  --td-button-danger-active-bg-color: var(--danger-deep);
+  --td-button-danger-active-border-color: var(--danger-deep);
 }
 
 /* ---------- 标签 ---------- */
@@ -51,13 +51,13 @@ page {
   --td-tag-primary-color: var(--brand);
   --td-tag-primary-light-color: var(--brand-light);
   --td-tag-success-color: var(--success);
-  --td-tag-success-light-color: #E7F4EA;
+  --td-tag-success-light-color: var(--success-light);
   --td-tag-warning-color: var(--warning);
-  --td-tag-warning-light-color: var(--money-light);
+  --td-tag-warning-light-color: var(--warning-light);
   --td-tag-danger-color: var(--danger);
-  --td-tag-danger-light-color: #FBE9E6;
+  --td-tag-danger-light-color: var(--danger-light);
   --td-tag-default-color: var(--text-2);
-  --td-tag-default-light-color: #EDEBE4;
+  --td-tag-default-light-color: var(--bg-sunken);
 }
 
 /* ---------- 自定义 tabBar ---------- */

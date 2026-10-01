@@ -17,7 +17,7 @@
   border-radius: 32rpx;
   font-size: 26rpx;
   color: var(--text-2);
-  background: #EDEBE4;
+  background: var(--bg-sunken);
 }
 
 .filter-item.active {
@@ -51,7 +51,7 @@
   height: 96rpx;
   flex: none;
   border-radius: 12rpx;
-  background: #EDEBE4;
+  background: var(--bg-sunken);
 }
 
 .info {

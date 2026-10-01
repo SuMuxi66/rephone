@@ -42,7 +42,7 @@
 .goods-card__body {
   display: flex;
   flex: 1 1 auto;
-  background: #fff;
+  background: var(--bg-card);
   border-radius: 0 0 16rpx 16rpx;
   padding: 16rpx 24rpx 18rpx;
   flex-direction: column;
@@ -58,7 +58,7 @@
 .goods-card__title {
   flex-shrink: 0;
   font-size: 28rpx;
-  color: #333;
+  color: var(--text-1);
   font-weight: 400;
   display: -webkit-box;
   height: 72rpx;
@@ -77,10 +77,10 @@
 }
 
 .goods-card__tag {
-  color: #1A5CE8;
+  color: var(--brand);
   background: transparent;
   font-size: 20rpx;
-  border: 1rpx solid #1A5CE8;
+  border: 1rpx solid var(--brand);
   padding: 0 8rpx;
   border-radius: 16rpx;
   line-height: 30rpx;
@@ -106,7 +106,7 @@
   white-space: nowrap;
   font-weight: 700;
   order: 2;
-  color: #bbbbbb;
+  color: var(--text-3);
   font-size: 24rpx;
   margin: 0 0 0 8rpx;
 }
@@ -124,7 +124,8 @@
   white-space: nowrap;
   font-weight: 700;
   order: 1;
-  color: #1A5CE8;
+  /* 硬规则：价格只用 --money，不用品牌色 */
+  color: var(--money);
   margin: 0;
 }
 

@@ -6,7 +6,7 @@
   flex-direction: row;
   border-radius: 10rpx 0 0 10rpx;
   padding: 16rpx 32rpx;
-  border-top: 1rpx solid #e5e5e5;
+  border-top: 1rpx solid var(--border-light);
   box-sizing: border-box;
 }
 
@@ -21,19 +21,19 @@
 }
 
 .btn-reset {
-  color: #1A5CE8;
+  color: var(--brand);
   background: rgba(255, 255, 255, 1);
   position: relative;
-  border: 1rpx solid #1A5CE8;
+  border: 1rpx solid var(--brand);
   border-radius: 84rpx 0 0 84rpx;
 }
 
 .btn-confirm {
   border-radius: 0 84rpx 84rpx 0;
-  border: 1rpx solid #1A5CE8;
+  border: 1rpx solid var(--brand);
 }
 
 .btn-confirm {
-  color: #fff;
-  background: #1A5CE8;
+  color: var(--text-anti);
+  background: var(--brand);
 }

@@ -1,5 +1,5 @@
 page {
-  background-color: #F6F4EF;
+  background-color: var(--bg-page);
   box-sizing: border-box;
   /* 自定义 tabBar 为底部浮层，预留高度避免最后的内容被遮挡 */
   padding-bottom: calc(env(safe-area-inset-bottom) + 120rpx);
@@ -29,7 +29,7 @@ page {
   margin-bottom: 20rpx;
 }
 .icon-color {
-  color: #aaa;
+  color: var(--text-3);
 }
 .cell-class {
   height: 100rpx;
@@ -41,7 +41,7 @@ page {
   overflow: hidden;
   width: 100%;
   display: flex;
-  background-color: #fff;
+  background-color: var(--bg-card);
   border-radius: 16rpx;
 }
 
@@ -66,21 +66,21 @@ page {
 .order-content-t {
   margin-top: 10rpx;
   font-size: 24rpx;
-  color: #333;
+  color: var(--text-1);
   letter-spacing: 0;
   text-align: center;
 }
 
 .popup-content {
-  background: #F6F4EF;
+  background: var(--bg-page);
   margin-bottom: env(safe-area-inset-bottom);
   border-radius: 16rpx 16rpx 0 0;
 }
 .popup-content .popup-title {
-  background: #fff;
+  background: var(--bg-card);
   text-align: center;
   font-size: 24rpx;
-  color: #999;
+  color: var(--text-3);
   height: 112rpx;
   text-align: center;
   line-height: 112rpx;
@@ -102,11 +102,11 @@ page {
   height: 200%;
   transform: scale(0.5);
   transform-origin: left top;
-  border-bottom: 2rpx solid #e5e5e5;
+  border-bottom: 2rpx solid var(--border-light);
 }
 .popup-content .popup-phone,
 .popup-content .popup-close {
-  background: #fff;
+  background: var(--bg-card);
   height: 100rpx;
   display: flex;
   justify-content: center;
@@ -115,7 +115,7 @@ page {
   font-size: 30rpx;
   font-family: PingFangSC-Regular, PingFang SC;
   font-weight: 400;
-  color: #333;
+  color: var(--text-1);
 }
 .popup-content .popup-phone.online {
   margin-bottom: 20rpx;
@@ -124,7 +124,7 @@ page {
   content: none;
 }
 .popup-content .popup-close {
-  color: #333;
+  color: var(--text-1);
   border: 0;
   margin-top: 16rpx;
 }
@@ -136,7 +136,7 @@ page {
 .footer__version {
   text-align: center;
   margin-top: 50rpx;
-  color: #999;
+  color: var(--text-3);
   margin-bottom: 4rpx;
   font-size: 24rpx;
   line-height: 32rpx;

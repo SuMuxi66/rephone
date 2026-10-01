@@ -15,12 +15,12 @@
 /* var() css变量适配*/
 .goods-list-wrap {
   padding-left: 24rpx;
-  background-color: #fff;
+  background-color: var(--bg-card);
 }
 .goods-list-wrap .wr-goods-card {
   padding: 24rpx 24rpx 24rpx 0;
-  border-bottom: 1rpx solid #e6e6e6;
-  background-color: #fff;
+  border-bottom: 1rpx solid var(--border-light);
+  background-color: var(--bg-card);
 }
 .goods-list-wrap .wr-goods-card.no-border {
   border-bottom: none;
@@ -62,8 +62,8 @@
   flex-grow: 2;
 }
 .goods-list-wrap .wr-goods-card .goods-card-tags-wrap {
-  color: #fa550f;
-  color: var(--color-primary, #fa550f);
+  color: var(--accent);
+  color: var(--accent);
   display: flex;
   height: 30rpx;
   flex-flow: row wrap;
@@ -78,12 +78,12 @@
   flex-shrink: 0;
   vertical-align: middle;
   margin-right: 8rpx;
-  background-color: #fff;
+  background-color: var(--bg-card);
 }
 .goods-list-wrap .wr-goods-card .goods-card-tags-wrap .tag::after {
   border-radius: 4rpx;
-  border: 2rpx solid #fa550f;
-  border: 2rpx solid var(--color-primary, #fa550f);
+  border: 2rpx solid var(--accent);
+  border: 2rpx solid var(--accent);
 }
 .goods-list-wrap .wr-goods-card .goods-add-cart {
   display: flex;
@@ -132,7 +132,7 @@
   -webkit-line-clamp: 1;
   line-clamp: 1;
   height: 36rpx;
-  color: #333;
+  color: var(--text-1);
   white-space: nowrap;
   display: block;
 }
@@ -142,7 +142,7 @@
   bottom: 72rpx;
   margin-left: 0;
   font-size: 24rpx;
-  color: #aaaaaa;
+  color: var(--text-3);
 }
 .goods-list-wrap.vertical .wr-goods-card .wr-goods-card__content .wr-goods-card__groupon-price {
   position: absolute;
@@ -150,7 +150,7 @@
   bottom: 72rpx;
   margin-left: 0;
   font-size: 24rpx;
-  color: #aaaaaa;
+  color: var(--text-3);
 }
 .goods-list-wrap.vertical .wr-goods-card .goods-add-cart {
   right: 20rpx;

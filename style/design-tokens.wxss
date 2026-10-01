@@ -1,34 +1,51 @@
 /* RePhone 设计令牌（唯一色板 / 圆角 / 间距来源，页面禁止裸写色值） */
-/* v3 2026-09-30：橙 → 深松绿体系；金额色从品牌色中拆出，独立为 --money */
+/* v5 2026-10-01：炭黑 + 赤陶体系（专业二手机交易平台）
+   品牌色＝结构色（按钮 / 导航 / 激活态），赤陶＝强调与金额色（CTA / 徽标 / 价格）。
+   硬规则 1：所有价格 / 回收价只用 --money，禁止用品牌色写钱。
+   硬规则 2：全仓只允许 3 种圆角：--radius-card / --radius-sm / --radius-pill。 */
 page {
-  /* 品牌 · 深松绿 */
-  --brand: #0E5A47;
-  --brand-deep: #0A3D30;
-  --brand-light: #E8F0ED;
+  /* 品牌 · 炭黑（结构色） */
+  --brand: #26292E;
+  --brand-deep: #141619;
+  --brand-light: #ECEDEF;
+
+  /* 强调 · 赤陶（CTA / 徽标 / 划线价对照） */
+  --accent: #B4530F;
+  --accent-deep: #8F3F0B;
+  --accent-light: #F7ECE4;
 
   /* 金额专用色。硬规则：所有价格 / 回收价只用这两个令牌，禁止用品牌色写钱 */
-  --money: #B86A0E;
-  --money-light: #FBF0DE;
+  --money: #B4530F;
+  --money-light: #F7ECE4;
 
-  /* 语义状态 */
-  --success: #2BA246;
-  --warning: #D97706;
-  --info: #2A6FD6;
-  --danger: #C0392B;
+  /* 语义状态（低饱和，服从主色系） */
+  --success: #2E7D53;
+  --success-light: #E7F1EA;
+  --warning: #96650C;
+  --warning-light: #F6EDDD;
+  --info: #4C5560;
+  --info-light: #ECEEF0;
+  --danger: #B3352A;
+  --danger-deep: #8E2A21;
+  --danger-light: #F8E9E6;
 
-  /* 文字三级（暖墨色，非纯黑） */
-  --text-1: #10201C;
-  --text-2: #5D6A64;
-  --text-3: #99A39D;
+  /* 文字三级（中性灰，非纯黑） */
+  --text-1: #1A1C20;
+  --text-2: #5C6067;
+  --text-3: #9BA0A7;
+  --text-anti: #FFFFFF;
 
   /* 背景 / 发丝线（用细线替代投影） */
-  --bg-page: #F6F4EF;
+  --bg-page: #F5F4F2;
   --bg-card: #FFFFFF;
-  --border-light: #E7E4DC;
-  --line-strong: #D8D4C9;
+  --bg-sunken: #EFEEEB;
+  --border-light: #E4E3E0;
+  --line-strong: #D3D2CE;
 
-  /* 圆角 / 间距 */
+  /* 圆角（全仓只允许这 3 种） / 间距 */
   --radius-card: 16rpx;
+  --radius-sm: 8rpx;
+  --radius-pill: 999rpx;
   --space-page: 24rpx;
 }
 

@@ -122,7 +122,7 @@
   align-items: center;
   gap: 16rpx;
   padding: 24rpx 4rpx;
-  border-bottom: 1rpx solid #f0f0f0;
+  border-bottom: 1rpx solid var(--border-light);
 }
 
 .addr-item-info {

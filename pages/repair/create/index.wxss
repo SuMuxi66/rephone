@@ -68,7 +68,7 @@
   height: 40rpx;
   border-radius: 50%;
   background: rgba(0, 0, 0, 0.55);
-  color: #fff;
+  color: var(--text-anti);
   font-size: 28rpx;
   display: flex;
   align-items: center;
@@ -142,7 +142,7 @@
   align-items: center;
   gap: 16rpx;
   padding: 24rpx 4rpx;
-  border-bottom: 1rpx solid #f0f0f0;
+  border-bottom: 1rpx solid var(--border-light);
 }
 
 .addr-item-info {

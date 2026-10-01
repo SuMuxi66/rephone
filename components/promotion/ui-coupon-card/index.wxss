@@ -18,12 +18,12 @@
   flex-direction: column;
   justify-content: center;
   text-align: center;
-  color: #1A5CE8;
+  color: var(--brand);
   overflow: hidden;
   position: relative;
 }
 .theme-weak .wr-coupon__left {
-  color: #333;
+  color: var(--text-1);
 }
 
 .wr-coupon__left--value {
@@ -53,11 +53,11 @@
 .wr-coupon__left--desc {
   font-size: 24rpx;
   line-height: 32rpx;
-  color: #1A5CE8;
+  color: var(--brand);
 }
 
 .theme-weak .wr-coupon__left--desc {
-  color: #333;
+  color: var(--text-1);
 }
 
 .wr-coupon__right {
@@ -74,13 +74,13 @@
   -webkit-display: flex;
   flex-direction: column;
   align-items: flex-start;
-  color: #99A39D;
+  color: var(--text-3);
   font-size: 24rpx;
   flex: 1;
 }
 .wr-coupon__right--title .coupon-title {
   max-width: 320rpx;
-  color: #10201C;
+  color: var(--text-1);
   font-size: 28rpx;
   line-height: 40rpx;
   font-weight: bold;
@@ -111,7 +111,7 @@
   position: absolute;
   top: 0;
   left: 0;
-  background-color: #ffffff;
+  background-color: var(--bg-card);
   opacity: 0.5;
 }
 .wr-coupon__tag {
@@ -124,8 +124,8 @@
   opacity: 0.9;
   font-size: 20rpx;
   line-height: 28rpx;
-  color: #1A5CE8;
-  border: 0.5px solid #1A5CE8;
+  color: var(--brand);
+  border: 0.5px solid var(--brand);
   box-sizing: border-box;
   transform: rotate(45deg);
 }
