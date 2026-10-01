@@ -44,7 +44,20 @@ mock 通过 ≠ 真的能用。
 
 ---
 
-## 2. ⚠️ 三个阻塞项：先修，否则后面全是假象
+## 2. 三个阻塞项：**均已修复**（2026-10-01 运行时验证完成）
+
+> **本节已过时，保留仅作历史记录。** 三个阻塞项都已经处理完，运行时验证已经跑通，
+> 结论见文末「附录：运行时验证结果」。新会话**不要**重复修这三项。
+
+### 修复情况
+
+| 项 | 状态 | 修复方式 |
+|---|---|---|
+| B1 缺列 → 回收单详情 500 | ✅ 已修 | 执行了 `patch-express-trace.sql`；验证：无归属单 500→403(40302)、归属单返回 `code:0` |
+| B2 容器跑在 mock 模式 | ✅ 已修 | `6ca59ab` compose 透传 `EXPRESS_*`；容器内已有真实 key，`EXPRESS_MOCK=false` |
+| B3 容器代码旧于 HEAD | ✅ 已修 | 重建容器（含当时全部 HEAD 代码）；`pickupFailReason` 在真实出网下已验证正确回传 |
+
+### 以下为原始记录（历史）
 
 ### B1（最严重）`recycle_order` 少了 3 个列 → 回收单详情现在就是 500
 
@@ -97,7 +110,55 @@ docker exec -i rephone-mysql sh -c 'mysql -uroot -p"$MYSQL_ROOT_PASSWORD" rephon
 
 ## 3. 怎么操控微信开发者工具
 
-### 3.1 首选：官方 CLI 把项目跑起来
+### 3.0 首选中的首选：`wechatide` 官方 CLI（已实测跑通，强烈建议）
+
+本机已安装 `wechatide-skill`（`~/.dsh/skills/wechatide-skill`），配官方 `wechatide` CLI。
+**下面的 3.1 / 3.2 都是它不可用时的兜底**，别再手搓 `cli.bat` 或自己装 automator。
+
+前置（只做一次，之后复用）：
+```bash
+wechatide -c DSH check_wechatide_status --skill-version 0.3.11   # versionRelation 需为 equal
+```
+首次会返回 `pending + taskId`（需在开发者工具里点授权），按 skill 的异步规则 10 秒轮询一次、最多 10 次：
+```bash
+wechatide -c DSH polling_task_result --task-id <taskId>
+```
+
+实测跑通的工作流（**注意：每次交互前先确认当前页**）：
+
+```bash
+# 编译并打开某页（--query 传页面参数）
+wechatide -c DSH simulator_open_page --project "E:\code-start\RePhone" \
+  --page pages/recycle/order/detail/index --query "orderNo=RTEST-FILL-001"
+
+# 确认当前页（否则会在错误的页面上操作，报 is not a function）
+wechatide -c DSH automation_runtime_info --project "..." --action currentPage
+
+# 截图（optimize 默认 true → 写的是 JPEG，文件名要用 .jpg）
+wechatide -c DSH simulator_screenshot --project "..." --path "E:\code-start\.shots\x.jpg" --wait 2
+
+# 读 console / network（command 必须是 grep）
+wechatide -c DSH get_simulator_console --project "..." --command "grep -i error"
+wechatide -c DSH get_simulator_network --project "..." --command "grep -n ."
+
+# 读写页面 data / 调用页面方法（TDesign 自定义组件用 selector 选不中，用这个）
+wechatide -c DSH automation_page_action --project "..." --action getData --data-path "form"
+wechatide -c DSH automation_page_action --project "..." --action callMethod --method "showExpressPicker"
+
+# 普通 view 元素可以按 selector 点
+wechatide -c DSH automation_element_action --project "..." --selector ".cell" --action tap
+
+# 页面滚动
+wechatide -c DSH automation_viewport_action --project "..." --action pageScrollTo --scroll-top 6000
+```
+
+**两个实测踩过的坑**：
+1. `t-button` / `t-cell` 这类 TDesign 自定义组件 `querySelectorAll` **选不中**（返回空数组），
+   要用 `automation_page_action --action callMethod` 直接调页面方法，或改用普通 `view` 的选择器。
+2. 用 `Select-String '"success"'` 过滤输出会**把 `"success": false` 也匹配上**（子串重叠），
+   必须看完整 JSON，或用 `"success": true` 精确匹配。踩过一次，误判成「通过」。
+
+### 3.1 兜底：官方 CLI 把项目跑起来
 
 **前置条件（常见卡点）**：IDE 里必须打开
 **设置 → 安全设置 → 服务端口**。不开，所有 CLI 命令都会报 `Please enable service port`。
@@ -295,3 +356,38 @@ npm run dev     # 起在 localhost:5173，用无头 Chrome 或直接看
 ```
 
 **不要**用「应该没问题」「看起来正常」这种措辞。要么有输出，要么写「没验」。
+
+---
+
+## 附录：运行时验证结果（2026-10-01，wechatide CLI 实测）
+
+模拟器登录用户：**userId=530 / openid=mock-900428ce32686c2a**（mock 登录）。
+测试单：**RTEST-TRACE-001**（status=20，有运单号 + 轨迹快照）、**RTEST-FILL-001**（status=10，待寄出）。
+截图存于仓库外 E:/code-start/.shots/wx-*.jpg。
+
+| # | 验证点 | 结果 | 证据 |
+|---|---|---|---|
+| 1 | 回收单详情（有归属） | ✅ | code:0；机型/配置/时间轴/价格全部正确渲染 |
+| 2 | 回收单详情（无归属） | ✅ | code:40302「无权查看该订单」，证明 SQL 与权限链路正常 |
+| 3 | 物流轨迹页（有数据） | ✅ | 绿色头卡「派件中 + 本地快照」、公司·单号、4 节点时间轴、最新节点加粗 |
+| 4 | 物流轨迹页（无运单号） | ✅ | 显示「该订单还没有运单号」+「重新查询」，非白屏非 500 |
+| 5 | 填写运单号弹层 | ✅ | 快递公司来自后端字典（22 家）显示「顺丰速运」；顺丰出现琥珀提示「查询物流需提供收寄件人手机号，将使用本单登记的 13800000001」 |
+| 6 | **快递公司选择器按钮文案** | ✅ | 显示「**取消 / 确定**」而不是字面量 true —— TDesign 默认值 bug 已修实锤 |
+| 7 | 机型库页 | ✅ | 左侧品牌栏 Apple 高亮带绿色指示条、右侧两列机型网格、顶部搜索框 |
+| 8 | 维修页 → 机型库跳转 | ✅ | 路由 /pages/model-picker/index?biz=repair |
+| 9 | 机型库选型 → 回填 | ✅ | 返回维修页后 form = {brandId:1, brandName:Apple, modelId:25, modelName:iPhone 3G}，并自动加载维修项目与价格（199/399/149 元起） |
+| 10 | 首页竖向滚动 | ✅ | 能滚到底：严选二手机 → 回收行情表 → 保障说明 → REPHONE 页脚 → TabBar |
+| 11 | 全局 console | ✅ | grep -i error 返回空；仅一条 wx.getSystemInfoSync is deprecated 警告（TDesign 内部，非我方代码） |
+
+### 测试数据清理
+
+验证用的两张假单，需要时删掉（SQL 写成文件再喂给 stdio，避免命令行引号地狱）：
+
+    DELETE FROM recycle_order WHERE order_no LIKE 'RTEST-%';
+
+    docker exec -i rephone-mysql sh -c 'mysql -uroot -p"$MYSQL_ROOT_PASSWORD" rephone' < cleanup.sql
+
+### 仍未验证的部分（诚实声明）
+
+- 订阅消息真实推送：需要小程序后台申请到真实模板 ID + 真机授权，无法伪造。
+- admin 管理后台：本轮未跑（admin 构建在本机有破坏性风险，见第 5 节）。
