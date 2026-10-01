@@ -48,6 +48,13 @@ export const createGoods = (payload) => http.post('/admin/goods', payload);
 export const updateGoods = (id, payload) => http.put(`/admin/goods/${id}`, payload);
 export const setGoodsStatus = (id, status) => http.put(`/admin/goods/${id}/status`, { status });
 
+/**
+ * 上传图片：POST /api/admin/upload（multipart）。
+ * 后端已限制 2MB 与 jpg/png/webp，category 决定落到 data/img/<category>/。
+ * 不手动设置 Content-Type，交给 axios 带 boundary。
+ */
+export const uploadImage = (formData) => http.post('/admin/upload', formData);
+
 export const fetchGoodsInspection = (id) => http.get(`/admin/goods/${id}/inspection`);
 export const saveGoodsInspection = (id, payload) => http.post(`/admin/goods/${id}/inspection`, payload);
 

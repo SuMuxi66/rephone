@@ -75,6 +75,17 @@
               <span>{{ item.result }}</span>
               <b>{{ fen2yuan(item.finalFen) }} 元</b>
             </div>
+            <div v-if="item.images?.length" class="insp-images">
+              <el-image
+                v-for="(img, k) in item.images"
+                :key="k"
+                :src="img"
+                :preview-src-list="item.images"
+                :initial-index="k"
+                fit="cover"
+                class="insp-thumb"
+              />
+            </div>
             <div class="insp-time">{{ item.createTime }}</div>
           </el-card>
         </div>
@@ -90,7 +101,7 @@
             <el-button
               v-if="detail.status === 30"
               type="warning"
-              @click="inspectionVisible = true"
+              @click="openInspection"
             >提交质检结果</el-button>
             <el-button
               v-if="detail.status === 40"
@@ -109,6 +120,18 @@
           </el-form-item>
           <el-form-item label="最终回收价（元）" required>
             <el-input-number v-model="inspectionForm.finalYuan" :min="0.01" :precision="2" :step="10" style="width: 100%" />
+          </el-form-item>
+          <el-form-item label="质检照片">
+            <el-upload
+              v-model:file-list="inspectionFiles"
+              :http-request="uploadInspectionFile"
+              :limit="9"
+              accept="image/jpeg,image/png,image/webp"
+              list-type="picture-card"
+              :on-exceed="() => ElMessage.warning('最多上传 9 张')"
+            >
+              <span class="upload-plus">+</span>
+            </el-upload>
           </el-form-item>
           <div class="tip">最终价必须为正且不超过估价两倍（{{ fen2yuan(detail?.quoteFen) }} × 2 = {{ quoteUpperText }} 元）</div>
         </el-form>
@@ -132,6 +155,7 @@ import {
   fen2yuan,
   payoutRecycle,
   submitInspection,
+  uploadImage,
   yuan2fen,
 } from '../api/admin';
 
@@ -148,6 +172,34 @@ const detail = ref(null);
 const submitting = ref(false);
 const inspectionVisible = ref(false);
 const inspectionForm = reactive({ result: '', finalYuan: null });
+const inspectionFiles = ref([]);
+
+/** 提交前收集已上传成功的图片地址（el-upload 把 http-request 的返回值放进 file.response） */
+const uploadedImages = computed(() =>
+  inspectionFiles.value
+    .map((f) => (f.response && f.response.url) || f.url)
+    .filter(Boolean),
+);
+
+function openInspection() {
+  inspectionForm.result = '';
+  inspectionForm.finalYuan = null;
+  inspectionFiles.value = [];
+  inspectionVisible.value = true;
+}
+
+/** el-upload 自定义上传：复用管理端上传接口 */
+async function uploadInspectionFile(options) {
+  const form = new FormData();
+  form.append('file', options.file);
+  form.append('category', 'recycle');
+  try {
+    options.onSuccess(await uploadImage(form));
+  } catch (e) {
+    options.onError(e);
+    ElMessage.error(e?.message || '图片上传失败');
+  }
+}
 
 const quoteUpperText = computed(() =>
   detail.value ? fen2yuan((detail.value.quoteFen || 0) * 2) : '--',
@@ -214,12 +266,13 @@ async function onSubmitInspection() {
     await submitInspection(detail.value.orderNo, {
       result: inspectionForm.result.trim(),
       finalFen,
-      images: [],
+      images: uploadedImages.value,
     });
     ElMessage.success('质检结果已提交，订单进入待确认');
     inspectionVisible.value = false;
     inspectionForm.result = '';
     inspectionForm.finalYuan = null;
+    inspectionFiles.value = [];
     refreshDetail();
   } finally {
     submitting.value = false;
@@ -262,6 +315,22 @@ onMounted(load);
   margin-top: 4px;
   color: #909399;
   font-size: 12px;
+}
+.upload-plus {
+  font-size: 22px;
+  color: #8c939d;
+  line-height: 1;
+}
+.insp-images {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 6px;
+}
+.insp-thumb {
+  width: 56px;
+  height: 56px;
+  border-radius: 4px;
 }
 .no-action {
   color: #909399;
