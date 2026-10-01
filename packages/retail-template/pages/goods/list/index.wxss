@@ -1,5 +1,5 @@
 page {
-  background-color: #fff;
+  background-color: var(--bg-card);
 }
 
 .goods-list-container {
@@ -8,7 +8,7 @@ page {
 
 .goods-list-container .t-search {
   padding: 0 30rpx;
-  background-color: #fff;
+  background-color: var(--bg-card);
 }
 
 .goods-list-container .t-class__input-container {
@@ -23,11 +23,11 @@ page {
 
 .goods-list-container .t-search__input {
   font-size: 28rpx !important;
-  color: rgb(116, 116, 116) !important;
+  color: var(--text-2) !important;
 }
 
 .goods-list-container .category-goods-list {
-  background-color: #f2f2f2;
+  background-color: var(--bg-sunken);
   overflow-y: scroll;
   -webkit-overflow-scrolling: touch;
   padding: 20rpx 24rpx;
@@ -35,7 +35,7 @@ page {
 }
 
 .goods-list-container .wr-goods-list {
-  background: #f2f2f2 !important;
+  background: var(--bg-sunken) !important;
 }
 
 .goods-list-container .t-image__mask {
@@ -56,7 +56,7 @@ page {
   padding: 32rpx;
   height: 100vh;
   max-width: 632rpx;
-  background-color: #fff;
+  background-color: var(--bg-card);
   border-radius: 30rpx 0 0 30rpx;
   box-sizing: border-box;
 }
@@ -64,7 +64,7 @@ page {
 .goods-list-container .price-between {
   font-size: 26rpx;
   font-weight: 500;
-  color: rgba(51, 51, 51, 1);
+  color: var(--text-1);
 }
 
 .goods-list-container .price-ipts-wrap {
@@ -74,7 +74,7 @@ page {
   justify-content: space-around;
   margin-top: 24rpx;
 
-  --td-input-bg-color: rgba(245, 245, 245, 1);
+  --td-input-bg-color: var(--bg-sunken);
   --td-input-vertical-padding: 4rpx;
   --td-input-border-color: transparent;
 }
@@ -82,7 +82,7 @@ page {
 .goods-list-container .price-ipts-wrap .price-divided {
   width: 16rpx;
   margin: 0 24rpx;
-  color: #10201C;
+  color: var(--text-1);
 }
 
 .goods-list-container .price-ipts-wrap .t-input__wrapper {

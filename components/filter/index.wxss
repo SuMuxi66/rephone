@@ -31,7 +31,7 @@
   font-size: 26rpx;
   line-height: 36rpx;
   font-weight: 400;
-  color: rgba(51, 51, 51, 1);
+  color: var(--text-1);
 }
 
 .filter-left-content .filter-item .filter-price {

@@ -1,9 +1,9 @@
 :host {
-  background-color: #F6F4EF;
+  background-color: var(--bg-page);
 }
 
 .invoice-detail .invoice-detail-box {
-  background-color: #fff;
+  background-color: var(--bg-card);
   padding: 24rpx 32rpx;
   margin-top: 24rpx;
 }
@@ -20,12 +20,12 @@
 
 .invoice-detail-box-title {
   font-size: 13px;
-  color: #5D6A64;
+  color: var(--text-2);
   width: 156rpx;
   margin-right: 32rpx;
 }
 
 .invoice-detail-box-value {
   font-size: 13px;
-  color: #10201C;
+  color: var(--text-1);
 }

@@ -1,9 +1,9 @@
 .address-card {
-  background: #fff;
+  background: var(--bg-card);
   margin: 0rpx 0rpx 24rpx;
 }
 .address-card .wr-cell__title {
-  color: #999;
+  color: var(--text-3);
   margin-left: 6rpx;
 }
 .address-card .order-address {
@@ -22,18 +22,18 @@
   height: 40rpx;
   font-size: 28rpx;
   font-weight: normal;
-  color: #99A39D;
+  color: var(--text-3);
   line-height: 40rpx;
 }
 .address-card .order-address .title .address-tag {
   width: 52rpx;
   height: 29rpx;
-  border: 1rpx solid #0091ff;
-  background-color: rgba(122, 167, 251, 0.1);
+  border: 1rpx solid var(--brand);
+  background-color: var(--brand-light);
   text-align: center;
   line-height: 29rpx;
   border-radius: 8rpx;
-  color: #0091ff;
+  color: var(--brand);
   font-size: 20rpx;
   margin-right: 12rpx;
 }
@@ -45,7 +45,7 @@
   -webkit-line-clamp: 2;
   font-size: 36rpx;
   font-weight: bold;
-  color: #10201C;
+  color: var(--text-1);
   line-height: 48rpx;
   margin: 8rpx 0;
 }
@@ -53,13 +53,13 @@
   height: 40rpx;
   font-size: 28rpx;
   font-weight: normal;
-  color: #10201C;
+  color: var(--text-1);
   line-height: 40rpx;
 }
 .address-card .top-line {
   width: 100%;
   height: 6rpx;
-  background-color: #fff;
+  background-color: var(--bg-card);
   background-image: url(https://tdesign.gtimg.com/miniprogram/template/retail/order/stripe.png);
   background-repeat: repeat-x;
   display: block;

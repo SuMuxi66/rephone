@@ -22,7 +22,7 @@
 
 .btn-reset {
   color: var(--brand);
-  background: rgba(255, 255, 255, 1);
+  background: var(--bg-card);
   position: relative;
   border: 1rpx solid var(--brand);
   border-radius: 84rpx 0 0 84rpx;

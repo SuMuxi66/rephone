@@ -31,13 +31,13 @@
 }
 
 .btn-bar .right .normal {
-  --td-button-default-color: #10201C;
-  --td-button-default-border-color: #dddddd;
+  --td-button-default-color: var(--text-1);
+  --td-button-default-border-color: var(--line-strong);
 }
 
 .btn-bar .right .primary {
-  --td-button-default-color: #fff;
-  --td-button-default-bg-color: #1A5CE8;
-  --td-button-default-border-color: #1A5CE8;
-  --td-button-default-active-bg-color: #fa42269c;
+  --td-button-default-color: var(--text-anti);
+  --td-button-default-bg-color: var(--brand);
+  --td-button-default-border-color: var(--brand);
+  --td-button-default-active-bg-color: var(--brand-deep);
 }

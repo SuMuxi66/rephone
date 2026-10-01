@@ -1,5 +1,5 @@
 page {
-  background-color: #fff;
+  background-color: var(--bg-card);
 }
 
 page view {
@@ -12,7 +12,7 @@ page view {
 
 .result-container .t-search {
   padding: 0 30rpx;
-  background-color: #fff;
+  background-color: var(--bg-card);
 }
 
 .result-container .t-class__input-container {
@@ -27,18 +27,18 @@ page view {
 
 .result-container .t-search__input {
   font-size: 28rpx !important;
-  color: #333 !important;
+  color: var(--text-1) !important;
 }
 
 .result-container .category-goods-list {
-  background-color: #f2f2f2;
+  background-color: var(--bg-sunken);
   overflow-y: scroll;
   padding: 20rpx 24rpx;
   -webkit-overflow-scrolling: touch;
 }
 
 .result-container .wr-goods-list {
-  background: #f2f2f2 !important;
+  background: var(--bg-sunken) !important;
 }
 
 .result-container .t-image__mask {
@@ -59,14 +59,14 @@ page view {
   padding: 32rpx;
   height: 100vh;
   max-width: 632rpx;
-  background-color: #fff;
+  background-color: var(--bg-card);
   border-radius: 30rpx 0 0 30rpx;
 }
 
 .result-container .price-between {
   font-size: 26rpx;
   font-weight: 500;
-  color: rgba(51, 51, 51, 1);
+  color: var(--text-1);
 }
 
 .result-container .price-ipts-wrap {
@@ -81,7 +81,7 @@ page view {
   position: relative;
   width: 22rpx;
   margin: 0 20rpx;
-  color: #222427;
+  color: var(--text-1);
 }
 
 .result-container .price-ipts-wrap .price-ipt {
@@ -92,8 +92,8 @@ page view {
   padding: 0 24rpx;
   text-align: center;
   border-radius: 8rpx;
-  color: #333;
-  background: rgba(245, 245, 245, 1);
+  color: var(--text-1);
+  background: var(--bg-sunken);
 }
 
 .t-class-input {

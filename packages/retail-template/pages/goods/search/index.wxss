@@ -12,7 +12,7 @@
 
 .search-page .t-search__input {
   font-size: 28rpx !important;
-  color: #333 !important;
+  color: var(--text-1) !important;
 }
 
 .search-page .search-wrap {
@@ -34,7 +34,7 @@
   font-size: 30rpx;
   font-family: PingFangSC-Semibold, PingFang SC;
   font-weight: 600;
-  color: rgba(51, 51, 51, 1);
+  color: var(--text-1);
   line-height: 42rpx;
 }
 
@@ -42,7 +42,7 @@
   font-size: 24rpx;
   font-family: PingFang SC;
   line-height: 32rpx;
-  color: #99A39D;
+  color: var(--text-3);
   font-weight: normal;
 }
 
@@ -56,13 +56,13 @@
 }
 
 .search-page .search-item {
-  color: #10201C;
+  color: var(--text-1);
   font-size: 24rpx;
   line-height: 32rpx;
   font-weight: normal;
   margin-right: 24rpx;
   margin-bottom: 24rpx;
-  background: #F6F4EF;
+  background: var(--bg-page);
   border-radius: 38rpx;
   padding: 12rpx 24rpx;
 }
@@ -75,5 +75,5 @@
 }
 
 .add-notes__confirm {
-  color: #1A5CE8 !important;
+  color: var(--brand) !important;
 }

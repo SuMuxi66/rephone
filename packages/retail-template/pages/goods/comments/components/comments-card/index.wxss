@@ -3,7 +3,7 @@
 .comments-card-item {
   padding: 32rpx;
   display: flex;
-  background-color: #fff;
+  background-color: var(--bg-card);
   position: relative;
 }
 
@@ -13,7 +13,7 @@
   bottom: 0rpx;
   width: 686rpx;
   height: 2rpx;
-  background-color: #F6F4EF;
+  background-color: var(--bg-page);
 }
 
 .comments-card-item-userImg {
@@ -33,7 +33,7 @@
 .comments-card-item-container-name {
   display: flex;
   font-size: 28rpx;
-  color: #333;
+  color: var(--text-1);
   font-weight: 600;
   align-items: center;
 }
@@ -44,7 +44,7 @@
 
 .comments-card-item-container-date {
   font-size: 22rpx;
-  color: #999;
+  color: var(--text-3);
   margin-top: 4rpx;
   display: flex;
 }
@@ -83,11 +83,11 @@
     rgba(255, 255, 255, 0.7) 25%,
     rgba(255, 255, 255, 0.9) 30%,
     rgba(255, 255, 255, 0.95) 35%,
-    #ffffff 50%,
-    #fff 100%
+    var(--bg-card) 50%,
+    var(--bg-card) 100%
   );
   font-size: 26rpx;
-  color: #fa550f;
+  color: var(--accent);
   line-height: 36rpx;
   text-align: right;
 }
@@ -127,13 +127,13 @@
 
 .comments-title .userName {
   font-size: 26rpx;
-  color: #10201C;
+  color: var(--text-1);
   margin-left: 24rpx;
 }
 
 .comments-title .commentTime {
   font-size: 24rpx;
-  color: #99A39D;
+  color: var(--text-3);
   position: absolute;
   right: 0;
 }
@@ -151,11 +151,11 @@
 .comments-info .goods-info-text {
   font-size: 24rpx;
 
-  color: #99A39D;
+  color: var(--text-3);
 }
 
 .comments-card-item-container .comments-card-reply {
-  background-color: #F6F4EF;
+  background-color: var(--bg-page);
   padding: 24rpx 16rpx;
   margin-top: 24rpx;
 }
@@ -163,10 +163,10 @@
 .comments-card-item-container .comments-card-reply .prefix {
   font-size: 26rpx;
   font-weight: bold;
-  color: #5D6A64;
+  color: var(--text-2);
 }
 
 .comments-card-item-container .comments-card-reply .content {
   font-size: 26rpx;
-  color: #5D6A64;
+  color: var(--text-2);
 }

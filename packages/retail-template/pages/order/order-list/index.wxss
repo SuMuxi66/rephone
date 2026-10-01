@@ -1,15 +1,15 @@
 :host {
-  background-color: #F6F4EF;
+  background-color: var(--bg-page);
 }
 .page-container .tab-bar__placeholder,
 .page-container .tab-bar__inner {
   height: 88rpx;
   line-height: 88rpx;
-  background: #fff;
+  background: var(--bg-card);
 }
 .page-container .tab-bar__inner {
   font-size: 26rpx;
-  color: #10201C;
+  color: var(--text-1);
   position: fixed;
   width: 100vw;
   top: 0;
@@ -19,27 +19,27 @@
   bottom: 12rpx;
 }
 .tab-bar__inner .t-tabs-is-active {
-  color: #1A5CE8 !important;
+  color: var(--brand) !important;
 }
 
 .tab-bar__inner .t-tabs-track {
-  background: #1A5CE8 !important;
+  background: var(--brand) !important;
 }
 
 .page-container .tab-bar__active {
   font-size: 28rpx;
 }
 .page-container .specs-popup .bottom-btn {
-  color: #1A5CE8;
-  color: var(--color-primary, #1A5CE8);
+  color: var(--brand);
+  color: var(--color-primary, var(--brand));
 }
 .page-container .specs-popup .bottom-btn::after {
-  border-color: #1A5CE8;
-  border-color: var(--color-primary, #1A5CE8);
+  border-color: var(--brand);
+  border-color: var(--color-primary, var(--brand));
 }
 .dialog .dialog__button-confirm {
-  color: #1A5CE8;
-  color: var(--color-primary, #1A5CE8);
+  color: var(--brand);
+  color: var(--color-primary, var(--brand));
 }
 .list-loading {
   height: 100rpx;
@@ -60,7 +60,7 @@ wr-order-goods-card:not(:first-child) .wr-goods-card {
 .price-total {
   font-size: 24rpx;
   line-height: 32rpx;
-  color: #99A39D;
+  color: var(--text-3);
   padding-top: 10rpx;
   width: 100%;
   display: flex;
@@ -68,15 +68,15 @@ wr-order-goods-card:not(:first-child) .wr-goods-card {
   justify-content: flex-end;
 }
 .price-total .bold-price {
-  color: #10201C;
+  color: var(--text-1);
   font-size: 28rpx;
   line-height: 40rpx;
-  color: #10201C;
+  color: var(--text-1);
 }
 .price-total .real-pay {
   font-size: 36rpx;
   line-height: 48rpx;
-  color: #1A5CE8;
+  color: var(--brand);
   font-weight: bold;
 }
 
@@ -85,25 +85,25 @@ wr-order-goods-card:not(:first-child) .wr-goods-card {
 }
 .t-empty-text {
   font-size: 28rpx;
-  color: #999;
+  color: var(--text-3);
 }
 
 .page-container .order-number {
-  color: #5D6A64;
+  color: var(--text-2);
   font-size: 28rpx;
 }
 .t-class-indicator {
-  color: #b9b9b9 !important;
+  color: var(--text-3) !important;
 }
 .tab-bar .tab-bar__active {
-  color: #10201C !important;
+  color: var(--text-1) !important;
 }
 
 .tab-bar .t-tabs-track {
-  background: #10201C !important;
+  background: var(--text-1) !important;
 }
 
 .t-button {
-  --td-button-default-color: #000;
-  --td-button-primary-text-color: #1A5CE8;
+  --td-button-default-color: var(--text-1);
+  --td-button-primary-text-color: var(--brand);
 }

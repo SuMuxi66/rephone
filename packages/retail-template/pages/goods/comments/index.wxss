@@ -14,14 +14,14 @@
 */
 /* var() css变量适配*/
 page {
-  background-color: #FFFFFF;
+  background-color: var(--bg-card);
 }
 
 .comments-header {
   display: flex;
   flex-wrap: wrap;
   padding: 32rpx 32rpx 0rpx;
-  background-color: #fff;
+  background-color: var(--bg-card);
   margin-top: -24rpx;
   margin-left: -24rpx;
 }
@@ -32,15 +32,15 @@ page {
   height: 56rpx !important;
   font-size: 24rpx !important;
   justify-content: center;
-  background-color: #F6F4EF !important;
+  background-color: var(--bg-page) !important;
   border-radius: 8rpx !important;
-  border: 1px solid #F6F4EF !important;
+  border: 1px solid var(--bg-page) !important;
 }
 
 .comments-header-active {
-  background-color: #FFECE9 !important;
-  color: #1A5CE8 !important;
-  border: 1px solid #1A5CE8 !important;
+  background-color: var(--accent-light) !important;
+  color: var(--brand) !important;
+  border: 1px solid var(--brand) !important;
 }
 
 .no-more {

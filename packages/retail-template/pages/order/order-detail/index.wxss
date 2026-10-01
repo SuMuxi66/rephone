@@ -1,5 +1,5 @@
 :host {
-  background-color: #f8f8f8;
+  background-color: var(--bg-sunken);
 }
 
 .order-detail {
@@ -9,11 +9,11 @@
 }
 
 .order-detail .count-down {
-  color: #ffffff;
+  color: var(--text-anti);
 }
 .order-detail .header {
   width: 100%;
-  background-color: #ffffff;
+  background-color: var(--bg-card);
 }
 .order-detail .order-detail__header {
   width: 700rpx;
@@ -31,7 +31,7 @@
 }
 .order-detail .order-detail__header .title,
 .order-detail .order-detail__header .desc {
-  color: #ffffff;
+  color: var(--text-anti);
   overflow: hidden;
   display: -webkit-box;
   -webkit-box-orient: vertical;
@@ -55,9 +55,9 @@
   box-sizing: border-box;
   padding: 32rpx;
   width: 100%;
-  background-color: #ffffff;
+  background-color: var(--bg-card);
   overflow: hidden;
-  color: #10201C;
+  color: var(--text-1);
   font-size: 32rpx;
   line-height: 48rpx;
   display: flex;
@@ -78,17 +78,17 @@
 .order-logistics .logistics-content .logistics-time {
   font-size: 28rpx;
   line-height: 40rpx;
-  color: #99A39D;
+  color: var(--text-3);
   margin-top: 12rpx;
 }
 
 .order-logistics .logistics-back {
-  color: #99A39D;
+  color: var(--text-3);
   align-self: center;
 }
 
 .order-logistics .edit-text {
-  color: #1A5CE8;
+  color: var(--brand);
   font-size: 26rpx;
   line-height: 36rpx;
 }
@@ -98,7 +98,7 @@
   width: 686rpx;
   scale: 1 0.5;
   height: 2rpx;
-  background-color: #e5e5e5;
+  background-color: var(--line-strong);
 }
 
 .order-detail .border-bottom-margin {
@@ -106,7 +106,7 @@
 }
 
 .order-detail .pay-detail {
-  background-color: #ffffff;
+  background-color: var(--bg-card);
   width: 100%;
   box-sizing: border-box;
 }
@@ -123,11 +123,11 @@
   justify-content: space-between;
   font-size: 26rpx;
   line-height: 36rpx;
-  color: #5D6A64;
-  background-color: #ffffff;
+  color: var(--text-2);
+  background-color: var(--bg-card);
 }
 .order-detail .pay-detail .pay-item .pay-item__right {
-  color: #10201C;
+  color: var(--text-1);
   font-size: 24rpx;
   display: flex;
   align-items: center;
@@ -146,7 +146,7 @@
   font-weight: bold;
 }
 .order-detail .pay-detail .pay-item .primary {
-  color: #1A5CE8;
+  color: var(--brand);
 }
 .order-detail .pay-detail .pay-item .max-size {
   font-size: 36rpx;
@@ -159,7 +159,7 @@
   text-align: center;
   font-size: 24rpx;
   line-height: 40rpx;
-  color: #10201C;
+  color: var(--text-1);
   position: relative;
 }
 
@@ -169,7 +169,7 @@
   width: 200%;
   height: 200%;
   border-radius: 40rpx;
-  border: 2rpx solid #dddddd;
+  border: 2rpx solid var(--border-light);
   transform: scale(0.5);
   left: 0;
   top: 0;
@@ -177,14 +177,14 @@
 }
 
 .pay-item .pay-item__right .order-no {
-  color: #10201C;
+  color: var(--text-1);
   font-size: 26rpx;
   line-height: 40rpx;
   padding-right: 16rpx;
 }
 
 .pay-item .pay-item__right .normal-color {
-  color: #10201C;
+  color: var(--text-1);
 }
 
 .order-detail .pay-detail .pay-service {
@@ -195,8 +195,8 @@
   justify-content: center;
   font-size: 32rpx;
   line-height: 36rpx;
-  color: #10201C;
-  background-color: #ffffff;
+  color: var(--text-1);
+  background-color: var(--bg-card);
 }
 
 .bottom-bar {
@@ -205,7 +205,7 @@
   bottom: 0;
   right: 0;
   z-index: 10;
-  background: #fff;
+  background: var(--bg-card);
   height: 112rpx;
   width: 686rpx;
   padding: 0rpx 32rpx env(safe-area-inset-bottom);
@@ -218,7 +218,7 @@
   content: '';
   width: 200%;
   height: 200%;
-  border-top: 2rpx solid #dddddd;
+  border-top: 2rpx solid var(--border-light);
   transform: scale(0.5);
   left: 0;
   top: 0;
@@ -232,14 +232,14 @@
 }
 
 .t-class-indicator {
-  color: #b9b9b9 !important;
+  color: var(--text-3) !important;
 }
 
 .add-notes__confirm {
-  color: #1A5CE8 !important;
+  color: var(--brand) !important;
 }
 
 .t-button {
-  --td-button-default-color: #000;
-  --td-button-primary-text-color: #1A5CE8;
+  --td-button-default-color: var(--text-1);
+  --td-button-primary-text-color: var(--brand);
 }

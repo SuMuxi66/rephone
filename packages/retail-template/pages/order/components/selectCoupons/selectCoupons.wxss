@@ -1,5 +1,5 @@
 .select-coupons {
-  background: #fff;
+  background: var(--bg-card);
   width: 100%;
   position: relative;
   border-radius: 20rpx 20rpx 0 0;
@@ -10,7 +10,7 @@
   width: 100%;
   text-align: center;
   font-size: 32rpx;
-  color: #333;
+  color: var(--text-1);
   font-weight: 600;
   line-height: 44rpx;
 }
@@ -18,13 +18,13 @@
   width: 100%;
   height: 34rpx;
   font-size: 24rpx;
-  color: #999;
+  color: var(--text-3);
   line-height: 34rpx;
   margin: 20rpx 0;
   padding: 0 20rpx;
 }
 .select-coupons .info .price {
-  color: #1A5CE8;
+  color: var(--brand);
 }
 .select-coupons .coupons-list {
   max-height: 500rpx;
@@ -34,7 +34,7 @@
 }
 .select-coupons .coupons-list .disable {
   font-size: 24rpx;
-  color: #ff2525;
+  color: var(--danger);
   padding-top: 20rpx;
 }
 .select-coupons .coupons-list .slot-radio {
@@ -51,14 +51,14 @@
   width: 36rpx;
 }
 .select-coupons .coupons-list .slot-radio .text-primary {
-  color: #1A5CE8;
+  color: var(--brand);
 }
 .select-coupons .coupons-list .slot-radio .wr-check {
   font-size: 36rpx;
 }
 .select-coupons .coupons-list .slot-radio .wr-uncheck {
   font-size: 36rpx;
-  color: #999;
+  color: var(--text-3);
 }
 .select-coupons .couponp-empty-wrap {
   padding: 40rpx;
@@ -71,7 +71,7 @@
 }
 .select-coupons .couponp-empty-wrap .couponp-empty-title {
   font-size: 28rpx;
-  color: #999;
+  color: var(--text-3);
   text-align: center;
   line-height: 40rpx;
   margin-top: 40rpx;
@@ -94,11 +94,11 @@
   font-size: 32rpx;
   border-radius: 44rpx;
   box-sizing: border-box;
-  border: 2rpx solid #dddddd;
-  color: #10201C;
+  border: 2rpx solid var(--border-light);
+  color: var(--text-1);
 }
 .select-coupons .coupons-cover .red {
-  border-color: #1A5CE8;
-  background-color: #1A5CE8;
-  color: #ffffff;
+  border-color: var(--brand);
+  background-color: var(--brand);
+  color: var(--text-anti);
 }

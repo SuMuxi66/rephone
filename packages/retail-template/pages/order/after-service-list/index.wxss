@@ -1,5 +1,5 @@
 :host {
-  background-color: #F6F4EF;
+  background-color: var(--bg-page);
 }
 
 .list-loading {
@@ -20,24 +20,24 @@
 }
 
 .page-container .order-goods-card-footer .order-goods-card-footer-num {
-  color: #999;
+  color: var(--text-3);
   line-height: 40rpx;
 }
 
 .page-container .order-goods-card-footer .order-goods-card-footer-price-class {
   font-size: 36rpx;
-  color: #333;
+  color: var(--text-1);
   font-family: DIN Alternate;
 }
 
 .page-container .order-goods-card-footer .order-goods-card-footer-price-decimal {
   font-size: 28rpx;
-  color: #333;
+  color: var(--text-1);
   font-family: DIN Alternate;
 }
 
 .page-container .order-goods-card-footer .order-goods-card-footer-price-symbol {
-  color: #333;
+  color: var(--text-1);
   font-size: 24rpx;
   font-family: DIN Alternate;
 }
@@ -69,8 +69,8 @@
   font-size: 26rpx;
   line-height: 1.3;
   text-align: left;
-  color: #10201C;
-  background-color: #F6F4EF;
+  color: var(--text-1);
+  background-color: var(--bg-page);
   border-radius: 8rpx;
   word-wrap: break-word;
   margin-top: 24rpx;
@@ -79,19 +79,19 @@
 
 .page-container .header__right {
   font-size: 24rpx;
-  color: #1A5CE8;
+  color: var(--brand);
   display: flex;
   align-items: center;
 }
 
 .page-container .header__right__icon {
-  color: #d05b27;
+  color: var(--accent);
   font-size: 16px !important;
   margin-right: 10rpx;
 }
 
 .t-class-indicator {
-  color: #b9b9b9 !important;
+  color: var(--text-3) !important;
 }
 
 .page-container .header-class {
@@ -99,6 +99,6 @@
 }
 
 .t-button {
-  --td-button-default-color: #000;
-  --td-button-primary-text-color: #1A5CE8;
+  --td-button-default-color: var(--text-1);
+  --td-button-primary-text-color: var(--brand);
 }

@@ -1,5 +1,5 @@
 :host {
-  background-color: #F6F4EF;
+  background-color: var(--bg-page);
 }
 
 .service-detail {
@@ -20,24 +20,24 @@
 }
 
 .order-goods-card-footer-num {
-  color: #999;
+  color: var(--text-3);
   line-height: 40rpx;
 }
 
 .service-detail .order-goods-card-footer .order-goods-card-footer-price-class {
   font-size: 36rpx;
-  color: #333;
+  color: var(--text-1);
   font-family: DIN Alternate;
 }
 
 .service-detail .order-goods-card-footer .order-goods-card-footer-price-decimal {
   font-size: 28rpx;
-  color: #333;
+  color: var(--text-1);
   font-family: DIN Alternate;
 }
 
 .service-detail .order-goods-card-footer .order-goods-card-footer-price-symbol {
-  color: #333;
+  color: var(--text-1);
   font-size: 24rpx;
   font-family: DIN Alternate;
 }
@@ -46,7 +46,7 @@
   padding: 60rpx 0 48rpx 40rpx;
   box-sizing: border-box;
   height: 220rpx;
-  background-color: #fff;
+  background-color: var(--bg-card);
 }
 .service-detail .service-detail__header .title,
 .service-detail .service-detail__header .desc {
@@ -59,7 +59,7 @@
   -webkit-line-clamp: 1;
   font-size: 48rpx;
   font-weight: bold;
-  color: #333;
+  color: var(--text-1);
   display: flex;
 }
 
@@ -67,11 +67,11 @@
   -webkit-line-clamp: 2;
   margin-top: 10rpx;
   font-size: 28rpx;
-  color: #999;
+  color: var(--text-3);
 }
 
 .service-detail .service-detail__header .desc .count-down {
-  color: #fff185;
+  color: var(--warning-light);
   display: inline;
 }
 
@@ -97,7 +97,7 @@
   padding: 0 0 24rpx;
 }
 .service-detail .service-section__title {
-  color: #10201C;
+  color: var(--text-1);
   margin-bottom: 10rpx;
   padding-bottom: 18rpx;
   height: 224rpx;
@@ -118,7 +118,7 @@
 
 .service-detail .main {
   font-size: 28rpx;
-  color: #222427;
+  color: var(--text-1);
   font-weight: bold;
 }
 
@@ -127,14 +127,14 @@
   display: inline;
 }
 .service-detail .label {
-  color: #99A39D;
+  color: var(--text-3);
   font-size: 26rpx;
 }
 
 .service-detail .custom-remark {
   font-size: 26rpx;
   line-height: 36rpx;
-  color: #10201C;
+  color: var(--text-1);
   word-wrap: break-word;
 }
 .service-detail .proofs {
@@ -144,12 +144,12 @@
 .service-detail .proofs .proof {
   width: 100%;
   height: 100%;
-  background-color: #f9f9f9;
+  background-color: var(--bg-sunken);
 }
 
 .service-detail .pay-result .t-cell-title,
 .service-detail .pay-result .t-cell-value {
-  color: #5D6A64;
+  color: var(--text-2);
   font-size: 28rpx;
 }
 
@@ -166,7 +166,7 @@
 }
 .service-detail .right {
   font-size: 36rpx;
-  color: #fa550f;
+  color: var(--accent);
   font-weight: bold;
 }
 
@@ -189,7 +189,7 @@
   left: -50%;
   right: -50%;
   transform: scale(0.5);
-  background-color: #e6e6e6;
+  background-color: var(--line-strong);
 }
 
 .service-detail .pay-result .section-content {
@@ -197,7 +197,7 @@
 }
 
 .service-detail .pay-result .section-content .label {
-  color: #99A39D;
+  color: var(--text-3);
   font-size: 24rpx;
 }
 
@@ -226,8 +226,8 @@
 .service-detail .text-btn {
   display: inline;
   box-sizing: border-box;
-  color: #333;
-  border: 2rpx solid #ddd;
+  color: var(--text-1);
+  border: 2rpx solid var(--border-light);
   border-radius: 32rpx;
   margin-left: 10rpx;
   padding: 0 16rpx;
@@ -240,21 +240,21 @@
 }
 
 .service-detail .specs-popup .bottom-btn {
-  color: #fa550f;
+  color: var(--accent);
 }
 .service-detail .specs-popup .bottom-btn::after {
-  color: #fa550f;
+  color: var(--accent);
 }
 
 .dialog .dialog__button-confirm {
-  color: #fa550f;
+  color: var(--accent);
 }
 
 .page-container .order-goods-card > wr-goods-card .wr-goods-card__bottom .price {
   top: 100rpx;
   left: 10rpx;
   position: absolute;
-  color: #333;
+  color: var(--text-1);
 }
 
 .page-container .order-goods-card > wr-goods-card .wr-goods-card__num {
@@ -268,7 +268,7 @@
   content: '退款金额:';
   margin-right: 1em;
   font-size: 24rpx;
-  color: #10201C;
+  color: var(--text-1);
   font-weight: normal;
 }
 
@@ -299,8 +299,8 @@
   font-size: 26rpx;
   line-height: 1.3;
   text-align: left;
-  color: #10201C;
-  background-color: #F6F4EF;
+  color: var(--text-1);
+  background-color: var(--bg-page);
   border-radius: 8rpx;
   word-wrap: break-word;
   margin-top: 40rpx;
@@ -309,13 +309,13 @@
 
 .page-container .header__right {
   font-size: 24rpx;
-  color: #10201C;
+  color: var(--text-1);
   display: flex;
   align-items: center;
 }
 
 .page-container .header__right__icon {
-  color: #d05b27;
+  color: var(--accent);
   font-size: 16px !important;
   margin-right: 10rpx;
 }
@@ -329,7 +329,7 @@
   top: 0;
   left: 0;
   width: 100vw;
-  color: #fff;
+  color: var(--text-anti);
   overflow: hidden;
 }
 .page-container .page-background-img {
@@ -338,21 +338,21 @@
 }
 .page-container .navbar-bg .nav-back,
 .page-container .navbar-bg .page-background {
-  background: linear-gradient(to right, rgba(250, 85, 15, 1) 0%, rgba(250, 85, 15, 0.6) 100%) !important;
+  background: linear-gradient(to right, var(--accent) 0%, rgba(250, 85, 15, 0.6) 100%) !important;
 }
 
 .page-container .navigation-bar__btn {
   font-size: 40rpx !important;
   font-weight: bold !important;
-  color: #333;
+  color: var(--text-1);
 }
 
 .t-class-title {
-  color: #000;
+  color: var(--text-1);
 }
 
 .refresh-bar {
-  background: linear-gradient(90deg, #ff6b44 0%, #ed3427 100%) !important;
+  background: linear-gradient(90deg, var(--accent) 0%, var(--danger) 100%) !important;
 }
 
 .page-container .navigation-bar__inner .navigation-bar__left {
@@ -361,7 +361,7 @@
 
 .t-refund-info {
   font-size: 26rpx;
-  color: #666;
+  color: var(--text-2);
 }
 
 .t-refund-grid-image {
@@ -381,13 +381,13 @@
 
 .t-refund-title {
   font-size: 28rpx;
-  color: #333;
+  color: var(--text-1);
   font-weight: bold;
 }
 
 .t-refund-note {
   font-size: 26rpx;
-  color: #333 !important;
+  color: var(--text-1) !important;
 }
 
 .service-detail .logistics {
@@ -399,7 +399,7 @@
 .service-section__title__header {
   display: flex;
   align-items: center;
-  color: #333;
+  color: var(--text-1);
   font-weight: normal;
   font-size: 32rpx;
 }
@@ -411,13 +411,13 @@
 .service-section-logistics {
   display: flex;
   justify-content: center;
-  color: #1A5CE8;
+  color: var(--brand);
   align-items: center;
   margin-top: 24rpx;
 }
 
 .t-class-indicator {
-  color: #b9b9b9 !important;
+  color: var(--text-3) !important;
 }
 
 .service-detail .goods-refund-address {
@@ -436,6 +436,6 @@
 }
 
 .t-button {
-  --td-button-default-color: #000;
-  --td-button-primary-text-color: #1A5CE8;
+  --td-button-default-color: var(--text-1);
+  --td-button-primary-text-color: var(--brand);
 }

@@ -1,10 +1,10 @@
 page {
-  background-color: #F6F4EF;
+  background-color: var(--bg-page);
 }
 page .divider-line {
   width: 100%;
   height: 20rpx;
-  background-color: #F6F4EF;
+  background-color: var(--bg-page);
 }
 .address-flex-box {
   display: flex;
@@ -14,7 +14,7 @@ page .divider-line {
   font-size: 30rpx;
 }
 .address-detail-wx-location {
-  background: #fff;
+  background: var(--bg-card);
   padding: 24rpx 32rpx;
   display: flex;
   align-items: center;
@@ -41,7 +41,7 @@ page .divider-line {
 .form-address .map {
   font-size: 48rpx !important;
   margin-left: 20rpx;
-  color: #9d9d9f;
+  color: var(--text-3);
 }
 
 .address__tag {
@@ -49,8 +49,8 @@ page .divider-line {
 }
 
 .form-address .label-list {
-  background: #F6F4EF;
-  color: #333;
+  background: var(--bg-page);
+  color: var(--text-1);
   min-width: 100rpx;
   margin-right: 32rpx;
   font-size: 26rpx;
@@ -61,12 +61,12 @@ page .divider-line {
   content: none;
 }
 .form-address .active-btn {
-  color: #1A5CE8;
-  border: 2rpx solid #1A5CE8;
+  color: var(--brand);
+  border: 2rpx solid var(--brand);
   background: rgba(255, 95, 21, 0.04);
 }
 .form-address .active-btn::after {
-  border: 4rpx solid #1A5CE8;
+  border: 4rpx solid var(--brand);
 }
 
 .submit {
@@ -74,12 +74,12 @@ page .divider-line {
   padding: 64rpx 30rpx 88rpx 30rpx;
 }
 .submit .btn-submit-address {
-  background: #1A5CE8 !important;
-  color: #fff !important;
+  background: var(--brand) !important;
+  color: var(--text-anti) !important;
 }
 
 .dialog__button-confirm {
-  color: #1A5CE8 !important;
+  color: var(--brand) !important;
 }
 
 .form-address .form-content {
@@ -91,5 +91,5 @@ page .divider-line {
   border-radius: 8rpx;
   box-sizing: border-box;
   --td-input-vertical-padding: 12px;
-  --td-input-bg-color: #f3f3f3;
+  --td-input-bg-color: var(--bg-sunken);
 }

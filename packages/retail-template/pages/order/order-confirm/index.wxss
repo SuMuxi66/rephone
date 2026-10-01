@@ -1,6 +1,6 @@
 .order-sure {
   box-sizing: border-box;
-  background: #f6f6f6;
+  background: var(--bg-sunken);
   padding: 24rpx 0 calc(env(safe-area-inset-bottom) + 136rpx);
   min-height: 100vh;
 }
@@ -11,7 +11,7 @@
   bottom: 0;
   right: 0;
   z-index: 10;
-  background: #fff;
+  background: var(--bg-card);
   height: 112rpx;
   padding-bottom: env(safe-area-inset-bottom);
 }
@@ -25,7 +25,7 @@
   align-items: center;
 }
 .order-sure .wx-pay-cover .wx-pay .price {
-  color: #1A5CE8;
+  color: var(--brand);
   font-weight: bold;
   font-size: 63rpx;
   line-height: 88rpx;
@@ -35,15 +35,15 @@
   height: 80rpx;
   width: 240rpx;
   border-radius: 40rpx;
-  background-color: #1A5CE8;
-  color: #ffffff;
+  background-color: var(--brand);
+  color: var(--text-anti);
   line-height: 80rpx;
   font-weight: bold;
   font-size: 28rpx;
   text-align: center;
 }
 .order-sure .wx-pay-cover .wx-pay .btn-gray {
-  background: #cccccc;
+  background: var(--line-strong);
 }
 
 .order-wrapper .store-wrapper {
@@ -55,8 +55,8 @@
   align-items: center;
   font-size: 28rpx;
   line-height: 40rpx;
-  color: #10201C;
-  background-color: #ffffff;
+  color: var(--text-1);
+  background-color: var(--bg-card);
 }
 .order-wrapper .store-wrapper .store-logo {
   margin-right: 16rpx;
@@ -70,8 +70,8 @@
   justify-content: space-between;
   font-size: 24rpx;
   line-height: 32rpx;
-  color: #99A39D;
-  background-color: #ffffff;
+  color: var(--text-3);
+  background-color: var(--bg-card);
 }
 .goods-wrapper .goods-image {
   width: 176rpx;
@@ -93,7 +93,7 @@
   font-size: 28rpx;
   line-height: 40rpx;
   margin-bottom: 12rpx;
-  color: #10201C;
+  color: var(--text-1);
   margin-right: 16rpx;
 }
 
@@ -105,7 +105,7 @@
 }
 
 .goods-right .goods-price {
-  color: #10201C;
+  color: var(--text-1);
   font-size: 32rpx;
   line-height: 48rpx;
   font-weight: bold;
@@ -117,7 +117,7 @@
 }
 
 .order-sure .pay-detail {
-  background-color: #ffffff;
+  background-color: var(--bg-card);
   padding: 16rpx 32rpx;
   width: 100%;
   box-sizing: border-box;
@@ -131,10 +131,10 @@
   justify-content: space-between;
   font-size: 26rpx;
   line-height: 36rpx;
-  color: #5D6A64;
+  color: var(--text-2);
 }
 .order-sure .pay-detail .pay-item .pay-item__right {
-  color: #10201C;
+  color: var(--text-1);
   font-size: 24rpx;
   display: flex;
   align-items: center;
@@ -153,15 +153,15 @@
   font-weight: bold;
 }
 .order-sure .pay-detail .pay-item .primary {
-  color: #1A5CE8;
+  color: var(--brand);
 }
 
 .add-notes .add-notes__content {
-  --td-textarea-background-color: #F6F4EF;
+  --td-textarea-background-color: var(--bg-page);
 }
 
 .add-notes .t-textarea__placeholder {
-  color: #aeb3b7;
+  color: var(--text-3);
 }
 
 .add-notes .add-notes__textarea__font {
@@ -182,7 +182,7 @@
 .order-sure .amount-wrapper {
   width: 100%;
   box-sizing: border-box;
-  background-color: #ffffff;
+  background-color: var(--bg-card);
   padding: 0rpx 32rpx;
   height: 96rpx;
 }
@@ -194,7 +194,7 @@
   align-items: center;
   justify-content: flex-end;
   font-size: 28rpx;
-  color: #10201C;
+  color: var(--text-1);
   position: relative;
 }
 .order-sure .pay-amount::after {
@@ -206,16 +206,16 @@
   height: 200%;
   transform: scale(0.5);
   transform-origin: 0 0;
-  border-top: 2rpx solid #F6F4EF;
+  border-top: 2rpx solid var(--bg-page);
 }
 .order-sure .pay-amount .order-num {
-  color: #99A39D;
+  color: var(--text-3);
   padding-right: 8rpx;
 }
 
 .order-sure .pay-amount .total-price {
   font-size: 36rpx;
-  color: #1A5CE8;
+  color: var(--brand);
   font-weight: bold;
   padding-left: 8rpx;
 }

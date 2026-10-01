@@ -1,5 +1,5 @@
 :host {
-  background-color: #F6F4EF;
+  background-color: var(--bg-page);
 }
 .select-service .service-form .service-from-group {
   margin-top: 20rpx;
@@ -18,21 +18,21 @@
 }
 
 .order-goods-card-footer-num {
-  color: #999;
+  color: var(--text-3);
 }
 
 .select-service .order-goods-card-footer .order-goods-card-footer-price-class {
   font-size: 36rpx;
-  color: #333;
+  color: var(--text-1);
   font-family: DIN Alternate;
 }
 .select-service .order-goods-card-footer .order-goods-card-footer-price-decimal {
   font-size: 28rpx;
-  color: #333;
+  color: var(--text-1);
   font-family: DIN Alternate;
 }
 .select-service .order-goods-card-footer .order-goods-card-footer-price-symbol {
-  color: #333;
+  color: var(--text-1);
   font-size: 24rpx;
   font-family: DIN Alternate;
 }
@@ -41,7 +41,7 @@
   min-height: 110rpx;
   border-radius: 10rpx;
   margin-top: 20rpx;
-  background-color: #F6F4EF;
+  background-color: var(--bg-page);
 }
 .select-service .remark::after {
   border: none;
@@ -58,23 +58,23 @@
 
 .select-service .special-cell .special-cell-note-price-class {
   font-size: 36rpx;
-  color: #1A5CE8;
+  color: var(--brand);
   font-family: DIN Alternate;
 }
 .select-service .special-cell .special-cell-note-price-decimal {
   font-size: 28rpx;
-  color: #1A5CE8;
+  color: var(--brand);
   font-family: DIN Alternate;
 }
 .select-service .special-cell .special-cell-note-price-symbol {
-  color: #1A5CE8;
+  color: var(--brand);
   font-size: 24rpx;
   font-family: DIN Alternate;
 }
 
 .select-service .bottom-bar__btn {
   width: 686rpx;
-  background-color: #1A5CE8;
+  background-color: var(--brand);
   color: white;
   font-size: 32rpx;
   border-radius: 48rpx;
@@ -87,9 +87,9 @@
   border: none;
 }
 .select-service .bottom-bar__btn.disabled {
-  background-color: #c6c6c6;
-  --td-button-default-active-bg-color: #c6c6c6;
-  --td-button-default-border-bg-color: #c6c6c6;
+  background-color: var(--line-strong);
+  --td-button-default-active-bg-color: var(--line-strong);
+  --td-button-default-border-bg-color: var(--line-strong);
 }
 .select-service .bottom-bar__btn.disabled::after {
   border: none;
@@ -108,7 +108,7 @@
 }
 
 .order-goods-card-footer-num {
-  color: #999;
+  color: var(--text-3);
   line-height: 40rpx;
 }
 
@@ -127,7 +127,7 @@
 
 .input-dialog__label {
   font-size: 48rpx;
-  color: #333;
+  color: var(--text-1);
 }
 
 .input-dialog__content .input-dialog__input,
@@ -146,7 +146,7 @@
 .input-dialog__content .tips {
   margin-top: 24rpx;
   font-size: 24rpx;
-  color: #99A39D;
+  color: var(--text-3);
 }
 
 .t-input__name {
@@ -154,17 +154,17 @@
 }
 
 .input-dialog__title {
-  color: #333;
+  color: var(--text-1);
   font-size: 32rpx;
   font-weight: normal;
 }
 
 .dialog--service-status {
-  background-color: #f3f4f5;
+  background-color: var(--bg-sunken);
   overflow: hidden;
 }
 .dialog--service-status .options .option {
-  color: #10201C;
+  color: var(--text-1);
   font-size: 30rpx;
   text-align: center;
   height: 100rpx;
@@ -172,16 +172,16 @@
   background-color: white;
 }
 .dialog--service-status .options .option:not(:last-child) {
-  border-bottom: 1rpx solid #e6e6e6;
+  border-bottom: 1rpx solid var(--border-light);
 }
 .dialog--service-status .options .option--active {
   opacity: 0.5;
 }
 .dialog--service-status .options .option.main {
-  color: #1A5CE8;
+  color: var(--brand);
 }
 .dialog--service-status .cancel {
-  color: #10201C;
+  color: var(--text-1);
   font-size: 30rpx;
   text-align: center;
   height: 100rpx;
@@ -198,11 +198,11 @@
   transform: translate(-50%, 0);
 }
 .dialog .dialog__button-confirm {
-  color: #1A5CE8;
-  color: var(--color-primary, #1A5CE8);
+  color: var(--brand);
+  color: var(--color-primary, var(--brand));
 }
 .select-service .bottom-bar {
-  background-color: #fff;
+  background-color: var(--bg-card);
   position: fixed;
   bottom: 0;
   left: 0;
@@ -211,7 +211,7 @@
   z-index: 3;
 }
 .order-goods-card {
-  background: #fff;
+  background: var(--bg-card);
   margin-bottom: 24rpx;
 }
 
@@ -222,12 +222,12 @@
   font-weight: bold;
   font-size: 36rpx;
   text-align: right;
-  color: #1A5CE8;
+  color: var(--brand);
 }
 .service-from-group__price {
   display: flex;
   align-items: center;
-  color: #bbb;
+  color: var(--text-3);
   font-size: 24rpx;
   position: relative;
   left: 30rpx;
@@ -236,13 +236,13 @@
 }
 .service-from-group__textarea {
   margin-top: 20rpx;
-  background-color: #fff;
+  background-color: var(--bg-card);
   padding: 32rpx 32rpx 24rpx;
 }
 
 .textarea--content {
   margin-top: 32rpx;
-  background: #F6F4EF !important;
+  background: var(--bg-page) !important;
   border-radius: 16rpx;
 }
 .service-from-group__textarea .t-textarea__wrapper .t-textarea__wrapper-textarea {
@@ -251,12 +251,12 @@
 }
 .service-from-group__grid {
   padding: 0 32rpx 48rpx;
-  background: #fff;
+  background: var(--bg-card);
   margin-bottom: 148rpx;
 }
 
 .upload-addcontent-slot {
-  background-color: #F6F4EF;
+  background-color: var(--bg-page);
   height: inherit;
   display: flex;
   flex-direction: column;
@@ -273,7 +273,7 @@
   display: flex;
   flex-direction: column;
   font-size: 24rpx;
-  color: #999;
+  color: var(--text-3);
 }
 
 .t-cell__left__icon {
@@ -283,7 +283,7 @@
 }
 
 .service-choice .t-cell__title-text {
-  color: #333;
+  color: var(--text-1);
   font-weight: bold;
 }
 
@@ -303,6 +303,6 @@
 }
 
 .t-button {
-  --td-button-default-color: #000;
-  --td-button-primary-text-color: #1A5CE8;
+  --td-button-default-color: var(--text-1);
+  --td-button-primary-text-color: var(--brand);
 }

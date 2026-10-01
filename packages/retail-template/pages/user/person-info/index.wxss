@@ -1,5 +1,5 @@
 :host {
-  background-color: #F6F4EF;
+  background-color: var(--bg-page);
 }
 page view {
   box-sizing: border-box;
@@ -10,7 +10,7 @@ page view {
 
 .person-info__btn {
   width: 100%;
-  border: 2rpx solid #ddd;
+  border: 2rpx solid var(--border-light);
   border-radius: 48rpx;
   padding: 18rpx 0;
   display: flex;
@@ -34,7 +34,7 @@ page view {
 }
 
 .t-class-confirm {
-  color: #fa550f !important;
+  color: var(--accent) !important;
 }
 
 .person-info .order-group__left {

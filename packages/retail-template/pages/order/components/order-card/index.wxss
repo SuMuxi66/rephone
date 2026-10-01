@@ -13,7 +13,7 @@
 .order-card .header .store-name {
   font-size: 28rpx;
   font-weight: normal;
-  color: #10201C;
+  color: var(--text-1);
   display: flex;
   align-items: center;
   line-height: 40rpx;
@@ -34,12 +34,12 @@
 .order-card .header .order-status {
   font-size: 26rpx;
   line-height: 40rpx;
-  color: #1A5CE8;
+  color: var(--brand);
 }
 .order-card .more-mask {
   padding: 20rpx 0;
   text-align: center;
   background-color: white;
-  color: #1A5CE8;
+  color: var(--brand);
   font-size: 24rpx;
 }

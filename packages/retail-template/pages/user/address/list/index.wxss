@@ -1,5 +1,5 @@
 page {
-  background: #F6F4EF;
+  background: var(--bg-page);
   height: 100%;
 }
 .address-container {
@@ -10,7 +10,7 @@ page {
 }
 .address-container .address-list {
   font-size: 24rpx;
-  background-color: #ffffff;
+  background-color: var(--bg-card);
   -webkit-overflow-scrolling: touch;
 }
 .address-list .no-address {
@@ -28,17 +28,17 @@ page {
 .address-list .no-address__text {
   font-size: 28rpx;
   line-height: 40rpx;
-  color: #99A39D;
+  color: var(--text-3);
   margin-top: 24rpx;
 }
 .address-container .bottom-fixed {
-  border-top: 1rpx solid #e5e5e5;
+  border-top: 1rpx solid var(--border-light);
   position: fixed;
   bottom: 0;
   left: 0;
   right: 0;
   z-index: 1000;
-  background: #fff;
+  background: var(--bg-card);
   display: flex;
   justify-content: center;
   flex-direction: column;
@@ -59,8 +59,8 @@ page {
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: #ffffff;
-  color: #333;
+  background-color: var(--bg-card);
+  color: var(--text-1);
   position: relative;
 }
 .address-container .btn-wrap .location-btn::after {
@@ -74,7 +74,7 @@ page {
   transform-origin: 0 0;
   box-sizing: border-box;
   border-radius: 88rpx;
-  border: #dddddd 2rpx solid;
+  border: var(--border-light) 2rpx solid;
 }
 .address-container .btn-wrap .address-btn {
   width: 332rpx;
@@ -82,12 +82,12 @@ page {
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: #1A5CE8;
+  background-color: var(--brand);
   border-radius: 44rpx;
-  color: #fff;
+  color: var(--text-anti);
 }
 .address-container .btn-wrap .btn-default {
-  background: #c6c6c6;
+  background: var(--line-strong);
 }
 .address-container .bottom-fixed .footer {
   margin-top: 10rpx;
@@ -96,7 +96,7 @@ page {
   text-align: center;
   font-size: 24rpx;
   font-weight: 400;
-  color: #ff2525;
+  color: var(--danger);
   line-height: 60rpx;
   height: 60rpx;
 }

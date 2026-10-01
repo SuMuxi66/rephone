@@ -10,8 +10,8 @@
   align-items: center;
   width: 144rpx;
   height: 100%;
-  background-color: #1A5CE8;
-  color: #fff;
+  background-color: var(--brand);
+  color: var(--text-anti);
   font-size: 28rpx;
   line-height: 40rpx;
 }
@@ -28,14 +28,14 @@
   transform: scale(0.5);
   transform-origin: 0 0;
   box-sizing: border-box;
-  border-bottom: #e5e5e5 2rpx solid;
+  border-bottom: var(--border-light) 2rpx solid;
 }
 .address-item-wrapper .address {
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 32rpx;
-  background-color: #fff;
+  background-color: var(--bg-card);
 }
 .address-item-wrapper .address .address-edit {
   padding: 20rpx 0 20rpx 46rpx;
@@ -54,7 +54,7 @@
   font-size: 32rpx;
   line-height: 48rpx;
   margin-bottom: 16rpx;
-  color: #10201C;
+  color: var(--text-1);
   font-weight: bold;
   display: flex;
 }
@@ -74,7 +74,7 @@
   text-overflow: ellipsis;
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 2;
-  color: #99A39D;
+  color: var(--text-3);
 }
 .address-item-wrapper .address .address-content .label-adds .tag {
   display: inline-block;
@@ -89,15 +89,15 @@
   vertical-align: text-top;
 }
 .address-item-wrapper .address .address-content .label-adds .tag-default {
-  background: #ffece9;
-  color: #1A5CE8;
+  background: var(--accent-light);
+  color: var(--brand);
 }
 .address-item-wrapper .address .address-content .label-adds .tag-primary {
-  background: #f0f1ff;
-  color: #5a66ff;
+  background: var(--brand-light);
+  color: var(--brand);
 }
 .address-item-wrapper .address .address-content .label-adds .address-text {
   font-size: 28rpx;
   line-height: 40rpx;
-  color: #99A39D;
+  color: var(--text-3);
 }

@@ -2,7 +2,7 @@
 
 .receipt {
   height: 100vh;
-  background: #F6F4EF;
+  background: var(--bg-page);
   position: relative;
   padding-top: 20rpx;
 
@@ -27,7 +27,7 @@
   justify-content: space-between;
 }
 .receipt .head-title {
-  color: #333;
+  color: var(--text-1);
   font-size: 30rpx;
   font-weight: bold;
 }
@@ -36,23 +36,23 @@
 }
 .receipt .btn-wrap .btn {
   width: 128rpx;
-  background: #F6F4EF;
+  background: var(--bg-page);
   font-size: 24rpx;
-  color: #333;
+  color: var(--text-1);
   margin-right: 22rpx;
   text-align: center;
   border-radius: 8rpx;
   position: relative;
-  border: 2rpx solid #F6F4EF;
+  border: 2rpx solid var(--bg-page);
 }
 .receipt .btn-wrap .active-btn {
   background-color: transparent;
-  border-color: #1A5CE8;
-  color: #1A5CE8;
+  border-color: var(--brand);
+  color: var(--brand);
 }
 .receipt .title {
   width: 100%;
-  background-color: #fff;
+  background-color: var(--bg-card);
   margin-bottom: 20rpx;
 }
 
@@ -61,26 +61,26 @@
 }
 .receipt .receipt-label .btn {
   width: 128rpx;
-  background: #F6F4EF;
+  background: var(--bg-page);
   font-size: 24rpx;
-  color: #333;
+  color: var(--text-1);
   margin-left: 22rpx;
   text-align: center;
   border-radius: 8rpx;
-  border: 2rpx solid #F6F4EF;
+  border: 2rpx solid var(--bg-page);
 }
 .receipt .receipt-label .active-btn {
   background-color: transparent;
-  border-color: #1A5CE8;
-  color: #1A5CE8;
+  border-color: var(--brand);
+  color: var(--brand);
 }
 .receipt .receipt-label .wr-cell__title {
   font-size: 30rpx;
-  color: #333;
+  color: var(--text-1);
   font-weight: bold;
 }
 .receipt .receipt-content {
-  background: #fff;
+  background: var(--bg-card);
   margin-top: 20rpx;
 }
 .receipt .receipt-content .addressTags {
@@ -93,7 +93,7 @@
 .receipt .receipt-content .line {
   width: 720rpx;
   margin-left: 30rpx;
-  background-color: #e6e6e6;
+  background-color: var(--line-strong);
   height: 1rpx;
 }
 .receipt .receipt-content .receipt-input {
@@ -101,10 +101,10 @@
   padding: 0 30rpx;
   align-items: center;
   height: 100rpx;
-  color: #666;
+  color: var(--text-2);
 }
 .receipt .receipt-content .receipt-input .title {
-  color: #333;
+  color: var(--text-1);
   display: inline-block;
   width: 140rpx;
   margin-right: 30rpx;
@@ -118,7 +118,7 @@
   font-weight: 400;
   line-height: 30rpx;
   padding: 0 !important;
-  color: #666;
+  color: var(--text-2);
 }
 .input-com::after {
   border: none !important;
@@ -129,7 +129,7 @@
   margin-left: 20rpx;
 }
 .receipt .receipt-info {
-  background: #fff;
+  background: var(--bg-card);
   margin-top: 20rpx;
 }
 .receipt .receipt-info .info-con {
@@ -138,7 +138,7 @@
 }
 .receipt .receipt-info .title {
   font-size: 24rpx;
-  color: #99A39D;
+  color: var(--text-3);
   line-height: 36rpx;
   padding: 0 30rpx 20rpx;
   box-sizing: border-box;
@@ -148,7 +148,7 @@
   align-items: center;
   font-size: 26rpx;
   font-weight: 400;
-  color: #99A39D;
+  color: var(--text-3);
   padding: 20rpx 30rpx;
   line-height: 26rpx;
 }
@@ -169,7 +169,7 @@
   display: inline-block;
   font-size: 28rpx;
   font-weight: 400;
-  color: #999;
+  color: var(--text-3);
   line-height: 40rpx;
   margin-bottom: 40rpx;
   text-align: left;
@@ -180,7 +180,7 @@
   left: 0;
   right: 0;
   z-index: 100;
-  background: #fff;
+  background: var(--bg-card);
   width: 100%;
   padding: 0 20rpx;
   box-sizing: border-box;
@@ -191,9 +191,9 @@
   display: inline-block;
   width: 100%;
   line-height: 80rpx;
-  background: #1A5CE8;
+  background: var(--brand);
   text-align: center;
-  color: #fff;
+  color: var(--text-anti);
   border-radius: 48rpx;
 }
 
@@ -215,6 +215,6 @@
 }
 
 .t-button {
-  --td-button-default-color: #000;
-  --td-button-primary-text-color: #1A5CE8;
+  --td-button-default-color: var(--text-1);
+  --td-button-primary-text-color: var(--brand);
 }

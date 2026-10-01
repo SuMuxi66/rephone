@@ -15,7 +15,7 @@
 /* var() css变量适配*/
 .goods-fail {
   display: block;
-  background: #fff;
+  background: var(--bg-card);
   font-size: 30rpx;
   border-radius: 20rpx 20rpx 0 0;
 }
@@ -36,7 +36,7 @@
   margin: 20rpx auto 10rpx;
   text-align: center;
   width: 560rpx;
-  color: #999;
+  color: var(--text-3);
 }
 .goods-fail .goods-fail-btn {
   display: flex;
@@ -51,17 +51,17 @@
   line-height: 80rpx;
   border-radius: 8rpx;
   text-align: center;
-  border: 1rpx solid #999;
-  background: #fff;
+  border: 1rpx solid var(--text-3);
+  background: var(--bg-card);
   font-size: 32rpx;
-  color: #666;
+  color: var(--text-2);
 }
 .goods-fail .goods-fail-btn .btn.origin,
 .goods-fail .goods-fail-btn .btn.limit {
-  color: #fa550f;
-  color: var(--color-primary, #fa550f);
-  border: 1rpx solid #fa550f;
-  border: 1rpx solid var(--color-primary, #fa550f);
+  color: var(--accent);
+  color: var(--accent);
+  border: 1rpx solid var(--accent);
+  border: 1rpx solid var(--accent);
 }
 .goods-fail .goods-fail-btn .btn.limit {
   flex-grow: 1;

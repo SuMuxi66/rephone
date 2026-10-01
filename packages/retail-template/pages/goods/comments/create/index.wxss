@@ -1,10 +1,10 @@
 page {
-  background-color: #F6F4EF;
+  background-color: var(--bg-page);
 }
 
 .page-container .comment-card {
   padding: 24rpx 32rpx 28rpx;
-  background-color: #ffffff;
+  background-color: var(--bg-card);
 }
 
 .comment-card .goods-info-container .goods-image {
@@ -30,7 +30,7 @@ page {
 .comment-card .goods-info-container .goods-detail {
   font-size: 24rpx;
   font-weight: normal;
-  color: #99A39D;
+  color: var(--text-3);
   margin-top: 16rpx;
 }
 
@@ -52,7 +52,7 @@ page {
 
 .comment-card .textarea-container .textarea {
   height: 294rpx;
-  background-color: #F6F4EF;
+  background-color: var(--bg-page);
   border-radius: 16rpx;
   font-size: 28rpx;
   font-weight: normal;
@@ -71,7 +71,7 @@ page {
 .page-container .anonymous-box .name {
   font-size: 28rpx;
   font-weight: normal;
-  color: #99A39D;
+  color: var(--text-3);
   padding-left: 28rpx;
 }
 
@@ -89,7 +89,7 @@ page {
 }
 
 .convey-card {
-  background-color: #ffffff;
+  background-color: var(--bg-card);
   margin-top: 24rpx;
   padding: 32rpx;
   padding-bottom: calc(env(safe-area-inset-bottom) + 140rpx);
@@ -112,22 +112,22 @@ page {
   position: fixed;
   bottom: 0;
   padding-bottom: calc(env(safe-area-inset-bottom) + 20rpx);
-  background-color: #ffffff;
+  background-color: var(--bg-card);
   z-index: 99;
 }
 
 .submit-button-container .submit-button {
-  --td-button-default-color: #fff;
-  --td-button-default-bg-color: #1A5CE8;
-  --td-button-default-border-color: #1A5CE8;
-  --td-button-default-active-bg-color: #fa42269c;
+  --td-button-default-color: var(--text-anti);
+  --td-button-default-bg-color: var(--brand);
+  --td-button-default-border-color: var(--brand);
+  --td-button-default-active-bg-color: var(--brand-deep);
 }
 
 .submit-button-container .submit-button-disabled {
-  --td-button-default-color: #fff;
-  --td-button-default-bg-color: #ccc;
-  --td-button-default-border-color: #ccc;
-  --td-button-default-active-bg-color: rgba(204, 204, 204, 0.789);
+  --td-button-default-color: var(--text-anti);
+  --td-button-default-bg-color: var(--line-strong);
+  --td-button-default-border-color: var(--line-strong);
+  --td-button-default-active-bg-color: var(--line-strong);
 }
 
 .page-container .upload-container {
@@ -147,7 +147,7 @@ page {
   z-index: 12;
   padding: 12rpx 32rpx;
   padding-bottom: env(safe-area-inset-bottom);
-  background-color: #fff;
+  background-color: var(--bg-card);
   height: 112rpx;
 }
 
