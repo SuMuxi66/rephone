@@ -51,6 +51,11 @@ services:
       WX_MOCK_LOGIN: ${WX_MOCK_LOGIN:-true}
       ADMIN_TOKEN: ${ADMIN_TOKEN:-local-admin-token}
       ADMIN_BOOTSTRAP_PASSWORD: ${ADMIN_BOOTSTRAP_PASSWORD:-}
+      # 快递100 真实出网配置：值来自同目录 .env（compose 自动读它做插值），缺省保持 mock
+      EXPRESS_MOCK: ${EXPRESS_MOCK:-true}
+      EXPRESS_KEY: ${EXPRESS_KEY:-}
+      EXPRESS_CUSTOMER: ${EXPRESS_CUSTOMER:-}
+      EXPRESS_CALLBACK_URL: ${EXPRESS_CALLBACK_URL:-}
     depends_on:
       mysql:
         condition: service_healthy
