@@ -1,49 +1,74 @@
 <view class="page" wx:if="{{!pageLoading}}">
   <!-- 搜索栏 -->
   <view class="searchbar" bindtap="goSale">
-    <t-icon name="search" size="30rpx" color="#9AA1AB" />
-    <text class="searchbar-text">搜索品牌 / 型号 / 成色，逛二手机</text>
+    <t-icon name="search" size="28rpx" />
+    <text class="searchbar-text">搜索品牌 / 型号 / 成色</text>
   </view>
 
-  <!-- 信任条：平台承诺横排 -->
-  <view class="trustbar">
-    <view wx:for="{{trusts}}" wx:key="*this" class="trust-item">
-      <t-icon name="check-circle-filled" size="26rpx" color="#1A5CE8" />
-      <text>{{item}}</text>
-    </view>
-  </view>
+  <!-- 平台承诺：一行纯文字，不用容器、不用图标 -->
+  <view class="trust">{{trustLine}}</view>
 
-  <!-- Banner 轮播：三大业务场景 -->
-  <swiper class="banner" indicator-dots indicator-color="rgba(255,255,255,0.4)" indicator-active-color="#FFFFFF" autoplay circular interval="4500">
-    <swiper-item wx:for="{{banners}}" wx:key="key" class="banner-item banner--{{item.theme}}" bindtap="{{item.tap}}">
+  <!-- Banner：纯色底 + 几何圆，不用 135° 渐变 -->
+  <swiper
+    class="banner"
+    indicator-dots
+    indicator-color="rgba(255,255,255,0.35)"
+    indicator-active-color="rgba(255,255,255,0.95)"
+    autoplay
+    circular
+    interval="4500"
+  >
+    <swiper-item
+      wx:for="{{banners}}"
+      wx:key="key"
+      class="banner-item banner--{{item.theme}}"
+      bindtap="{{item.tap}}"
+    >
+      <view class="banner-circle"></view>
+      <view class="banner-circle banner-circle--sm"></view>
       <view class="banner-body">
         <view class="banner-title">{{item.title}}</view>
         <view class="banner-sub">{{item.sub}}</view>
-        <view class="banner-cta">{{item.cta}} ›</view>
+        <view class="banner-cta">{{item.cta}}</view>
       </view>
-      <view class="banner-deco banner-deco--{{item.theme}}"></view>
     </swiper-item>
   </swiper>
 
-  <!-- 三大业务入口：横排大卡 -->
-  <view class="entries">
-    <view wx:for="{{entries}}" wx:key="key" class="entry-card" data-key="{{item.key}}" bindtap="{{item.tap}}">
-      <view class="entry-icon entry-icon--{{item.theme}}">
-        <t-icon name="{{item.icon}}" size="44rpx" color="#FFFFFF" />
+  <!-- 业务入口：1 大 2 小 -->
+  <view
+    wx:if="{{entries.length}}"
+    class="sellrow"
+    bindtap="{{entries[0].tap}}"
+  >
+    <view class="sellrow-icon">
+      <t-icon name="{{entries[0].icon}}" size="40rpx" />
+    </view>
+    <view class="sellrow-text">
+      <view class="sellrow-name">{{entries[0].name}}</view>
+      <view class="sellrow-sub">{{entries[0].sub}}</view>
+    </view>
+    <view class="sellrow-btn">{{entries[0].btn}}</view>
+  </view>
+  <view class="two" wx:if="{{entriesMore.length}}">
+    <view
+      wx:for="{{entriesMore}}"
+      wx:key="key"
+      class="tcard"
+      bindtap="{{item.tap}}"
+    >
+      <view class="tcard-icon">
+        <t-icon name="{{item.icon}}" size="34rpx" />
       </view>
-      <view class="entry-name">{{item.name}}</view>
-      <view class="entry-sub">{{item.sub}}</view>
-      <view class="entry-btn entry-btn--{{item.theme}}">{{item.btn}}</view>
+      <view class="tcard-name">{{item.name}}</view>
+      <view class="tcard-sub">{{item.sub}}</view>
     </view>
   </view>
 
-  <!-- 严选好机：1 张主推大卡 + 2 行紧凑列表（无库存时整块隐藏） -->
+  <!-- 严选好机：1 张主推 + 2 行紧凑列表（无库存时整块隐藏） -->
   <view class="block" wx:if="{{featured}}">
     <view class="block-head">
-      <view class="block-head-left">
-        <text class="block-title">严选好机</text>
-        <text class="block-note">一机一报告</text>
-      </view>
+      <text class="block-title">严选好机</text>
+      <text class="block-note">一机一报告</text>
       <text class="block-more" bindtap="goSale">全部 ›</text>
     </view>
     <view class="feat" data-id="{{featured.id}}" bindtap="goGoodsDetail">
@@ -55,14 +80,13 @@
       <view class="feat-body">
         <view class="feat-name">{{featured.name}}</view>
         <view class="spec">
-          <text wx:if="{{featured.conditionLevel}}" class="spec-chip">{{featured.conditionLevel}}</text>
-          <text wx:if="{{featured.storage}}" class="spec-chip">{{featured.storage}}</text>
-          <text wx:for="{{featured.tagTop}}" wx:key="*this" class="spec-chip spec-chip--ok">{{item}}</text>
+          <text wx:if="{{featured.conditionLevel}}" class="chip">{{featured.conditionLevel}}</text>
+          <text wx:if="{{featured.storage}}" class="chip">{{featured.storage}}</text>
+          <text wx:for="{{featured.tagTop}}" wx:key="*this" class="chip">{{item}}</text>
         </view>
         <view class="price-row">
           <text class="price">¥{{featured.priceText}}</text>
           <text wx:if="{{featured.originText}}" class="price-old">¥{{featured.originText}}</text>
-          <text class="price-cta">看报告 ›</text>
         </view>
       </view>
     </view>
@@ -72,10 +96,7 @@
         <view wx:else class="mini-thumb"><view class="dev-s"></view></view>
         <view class="mini-main">
           <view class="mini-name">{{item.name}}</view>
-          <view class="mini-spec">
-            <text wx:if="{{item.conditionLevel}}" class="mini-chip">{{item.conditionLevel}}</text>
-            <text>{{item.specText}}</text>
-          </view>
+          <view class="mini-spec">{{item.specText}}</view>
         </view>
         <view class="mini-right">
           <text class="mini-price">¥{{item.priceText}}</text>
@@ -85,13 +106,10 @@
     </view>
   </view>
 
-  <!-- 回收行情：高价值热门机型（后端已滤零价并按价降序） -->
+  <!-- 回收行情：纯文字 + 发丝线，去掉卡片容器（后端已滤零价并按价降序） -->
   <view class="block" wx:if="{{hotModels.length}}">
     <view class="block-head">
-      <view class="block-head-left">
-        <text class="block-title">回收行情</text>
-        <text class="block-note">今日</text>
-      </view>
+      <text class="block-title">回收行情</text>
       <text class="block-more" bindtap="goEstimate">更多机型 ›</text>
     </view>
     <view class="quote">
@@ -107,19 +125,11 @@
         <text class="quote-cap">最高</text>
         <text class="quote-val">{{item.priceText}}</text>
       </view>
-      <view class="quote-foot" bindtap="goEstimate">输入你的机型，30 秒出准确报价 ›</view>
+      <view class="quote-foot" bindtap="goEstimate">输入你的机型，30 秒出准确报价</view>
     </view>
   </view>
 
-  <!-- 底部信任栏（简化） -->
-  <view class="assure">
-    <text class="assure-item">官方质检</text>
-    <text class="assure-dot">·</text>
-    <text class="assure-item">顺丰包邮</text>
-    <text class="assure-dot">·</text>
-    <text class="assure-item">验收后付款</text>
-  </view>
-  <view class="foot">REPHONE · 专业二手机交易平台</view>
+  <view class="foot">REPHONE</view>
 </view>
 
 <view wx:if="{{pageLoading}}" class="loading-wrap">

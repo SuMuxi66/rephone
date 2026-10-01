@@ -1,4 +1,7 @@
-/* 首页 v5（专业二手机交易平台）：科技蓝 + 橙强调 + 浅灰底 */
+/* 首页 v5：炭黑 + 赤陶 / 克制排版
+   规范：字号只用 5 档（44 / 32 / 28 / 24 / 20 rpx）
+        圆角只用 3 种（--radius-card / --radius-sm / --radius-pill）
+   设计稿：docs/design/2026-10-01-home-palette-c.html */
 .page {
   min-height: 100vh;
   background: var(--bg-page);
@@ -12,40 +15,29 @@
   align-items: center;
   gap: 12rpx;
   margin: 20rpx var(--space-page) 0;
-  padding: 18rpx 24rpx;
-  background: var(--bg-card);
-  border-radius: 999rpx;
-  border: 2rpx solid var(--border-light);
-}
-
-.searchbar-text {
-  font-size: 26rpx;
+  padding: 18rpx 26rpx;
+  border-radius: var(--radius-pill);
+  background: var(--bg-sunken);
   color: var(--text-3);
 }
 
-/* ===== 信任条 ===== */
-.trustbar {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin: 16rpx var(--space-page) 0;
-  padding: 14rpx 24rpx;
-  background: var(--brand-light);
-  border-radius: var(--radius-card);
+.searchbar-text {
+  font-size: 24rpx;
 }
 
-.trust-item {
-  display: flex;
-  align-items: center;
-  gap: 6rpx;
+/* ===== 平台承诺：一行纯文字，无容器无图标 ===== */
+.trust {
+  margin-top: 18rpx;
+  text-align: center;
   font-size: 20rpx;
-  color: var(--brand-deep);
+  color: var(--text-3);
+  letter-spacing: 1rpx;
 }
 
-/* ===== Banner 轮播 ===== */
+/* ===== Banner：纯色底 + 几何圆 ===== */
 .banner {
-  height: 260rpx;
-  margin: 20rpx var(--space-page) 0;
+  height: 280rpx;
+  margin: 24rpx var(--space-page) 0;
   border-radius: var(--radius-card);
   overflow: hidden;
 }
@@ -56,196 +48,201 @@
 }
 
 .banner--accent {
-  background: linear-gradient(135deg, var(--accent) 0%, var(--accent-deep) 100%);
-}
-
-.banner--deep {
-  background: linear-gradient(135deg, var(--brand) 0%, var(--brand-deep) 100%);
+  background: var(--accent);
 }
 
 .banner--brand {
-  background: linear-gradient(135deg, #2F6FF0 0%, var(--brand-deep) 100%);
+  background: var(--brand);
+}
+
+.banner--deep {
+  background: var(--brand-deep);
+}
+
+.banner-circle {
+  position: absolute;
+  right: -100rpx;
+  top: -112rpx;
+  width: 320rpx;
+  height: 320rpx;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.07);
+}
+
+.banner-circle--sm {
+  right: -28rpx;
+  top: 92rpx;
+  width: 156rpx;
+  height: 156rpx;
+  background: rgba(255, 255, 255, 0.05);
 }
 
 .banner-body {
   position: relative;
   z-index: 1;
-  padding: 44rpx 40rpx;
-  color: #FFFFFF;
+  padding: 40rpx;
+  color: var(--text-anti);
 }
 
 .banner-title {
   font-size: 44rpx;
   font-weight: 700;
-  letter-spacing: 2rpx;
+  letter-spacing: 1rpx;
 }
 
 .banner-sub {
   margin-top: 12rpx;
   font-size: 24rpx;
-  opacity: 0.92;
+  opacity: 0.82;
 }
 
 .banner-cta {
   display: inline-block;
-  margin-top: 20rpx;
-  padding: 10rpx 28rpx;
+  margin-top: 24rpx;
+  padding: 12rpx 30rpx;
+  border-radius: var(--radius-pill);
+  background: var(--bg-card);
+  color: var(--brand-deep);
   font-size: 24rpx;
   font-weight: 600;
-  color: var(--text-1);
-  background: #FFFFFF;
-  border-radius: 999rpx;
 }
 
-/* 装饰圆环（纯 CSS，无图片依赖） */
-.banner-deco {
-  position: absolute;
-  right: -60rpx;
-  top: -60rpx;
-  width: 280rpx;
-  height: 280rpx;
-  border-radius: 50%;
-  opacity: 0.16;
-  background: #FFFFFF;
-}
-
-.banner-deco::after {
-  content: '';
-  position: absolute;
-  right: 40rpx;
-  top: 120rpx;
-  width: 160rpx;
-  height: 160rpx;
-  border-radius: 50%;
-  border: 6rpx solid #FFFFFF;
-  opacity: 0.6;
-  background: transparent;
-}
-
-/* ===== 三大业务入口 ===== */
-.entries {
+/* ===== 业务入口：1 大 2 小 ===== */
+.sellrow {
   display: flex;
-  gap: 16rpx;
-  margin: 20rpx var(--space-page) 0;
-}
-
-.entry-card {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
   align-items: center;
-  padding: 28rpx 12rpx 24rpx;
-  background: var(--bg-card);
+  gap: 20rpx;
+  margin: 24rpx var(--space-page) 0;
+  padding: 24rpx;
   border-radius: var(--radius-card);
+  background: var(--bg-card);
   border: 2rpx solid var(--border-light);
 }
 
-.entry-icon {
-  width: 84rpx;
-  height: 84rpx;
-  border-radius: 28rpx;
+.sellrow-icon {
+  width: 80rpx;
+  height: 80rpx;
+  flex-shrink: 0;
   display: flex;
   align-items: center;
   justify-content: center;
+  border-radius: var(--radius-card);
+  background: var(--bg-sunken);
+  color: var(--brand);
 }
 
-.entry-icon--accent {
-  background: var(--accent);
+.sellrow-text {
+  flex: 1;
+  min-width: 0;
 }
 
-.entry-icon--deep {
-  background: var(--brand-deep);
-}
-
-.entry-icon--brand {
-  background: var(--brand);
-}
-
-.entry-name {
-  margin-top: 16rpx;
-  font-size: 30rpx;
-  font-weight: 700;
+.sellrow-name {
+  font-size: 28rpx;
+  font-weight: 600;
   color: var(--text-1);
 }
 
-.entry-sub {
-  margin-top: 8rpx;
+.sellrow-sub {
+  margin-top: 6rpx;
   font-size: 20rpx;
   color: var(--text-3);
-  text-align: center;
 }
 
-.entry-btn {
-  margin-top: 18rpx;
-  padding: 8rpx 26rpx;
-  border-radius: 999rpx;
-  font-size: 22rpx;
+.sellrow-btn {
+  flex-shrink: 0;
+  padding: 12rpx 26rpx;
+  border-radius: var(--radius-pill);
+  background: var(--brand);
+  color: var(--text-anti);
+  font-size: 24rpx;
   font-weight: 600;
 }
 
-.entry-btn--accent {
-  color: var(--accent);
-  background: var(--accent-light);
+.two {
+  display: flex;
+  gap: 20rpx;
+  margin: 16rpx var(--space-page) 0;
 }
 
-.entry-btn--deep {
-  color: var(--brand-deep);
-  background: var(--brand-light);
+.tcard {
+  flex: 1;
+  padding: 24rpx;
+  border-radius: var(--radius-card);
+  background: var(--bg-card);
+  border: 2rpx solid var(--border-light);
 }
 
-.entry-btn--brand {
+.tcard-icon {
+  width: 68rpx;
+  height: 68rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-card);
+  background: var(--bg-sunken);
   color: var(--brand);
-  background: var(--brand-light);
 }
 
-/* ===== 通用区块 ===== */
+.tcard-name {
+  margin-top: 18rpx;
+  font-size: 28rpx;
+  font-weight: 600;
+  color: var(--text-1);
+}
+
+.tcard-sub {
+  margin-top: 6rpx;
+  font-size: 20rpx;
+  color: var(--text-3);
+}
+
+/* ===== 区块头 ===== */
 .block {
-  margin: 32rpx var(--space-page) 0;
+  margin: 40rpx var(--space-page) 0;
 }
 
 .block-head {
   display: flex;
-  align-items: center;
+  align-items: baseline;
   margin-bottom: 20rpx;
 }
 
-.block-head-left {
-  display: flex;
-  align-items: baseline;
-  gap: 12rpx;
-}
-
 .block-title {
-  font-size: 34rpx;
+  font-size: 32rpx;
   font-weight: 700;
   color: var(--text-1);
 }
 
 .block-note {
-  font-size: 22rpx;
+  margin-left: 12rpx;
+  font-size: 20rpx;
   color: var(--text-3);
 }
 
 .block-more {
   margin-left: auto;
-  font-size: 24rpx;
-  color: var(--text-2);
+  font-size: 20rpx;
+  color: var(--text-3);
 }
 
-/* ===== 严选好机：主推大卡 ===== */
+/* ===== 严选好机：主推 ===== */
 .feat {
   display: flex;
-  background: var(--bg-card);
+  gap: 24rpx;
+  padding: 24rpx;
   border-radius: var(--radius-card);
+  background: var(--bg-card);
   border: 2rpx solid var(--border-light);
-  overflow: hidden;
 }
 
 .feat-img {
   position: relative;
-  width: 260rpx;
-  height: 260rpx;
+  width: 192rpx;
+  height: 192rpx;
   flex-shrink: 0;
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+  background: var(--bg-sunken);
 }
 
 .feat-photo {
@@ -260,62 +257,56 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: var(--bg-page);
 }
 
 .dev::before {
   content: '';
-  width: 88rpx;
-  height: 160rpx;
-  border: 6rpx solid var(--line-strong);
-  border-radius: 18rpx;
-  background: var(--bg-card);
+  width: 64rpx;
+  height: 118rpx;
+  border: 5rpx solid var(--line-strong);
+  border-radius: var(--radius-card);
+  opacity: 0.55;
 }
 
 .feat-badge {
   position: absolute;
   left: 0;
   top: 0;
-  padding: 6rpx 16rpx;
+  padding: 4rpx 12rpx;
+  border-radius: 0 0 var(--radius-sm) 0;
+  background: var(--brand);
+  color: var(--text-anti);
   font-size: 20rpx;
   font-weight: 600;
-  color: #FFFFFF;
-  background: var(--brand);
-  border-radius: 0 0 var(--radius-card) 0;
 }
 
 .feat-body {
   flex: 1;
-  padding: 24rpx;
+  min-width: 0;
   display: flex;
   flex-direction: column;
 }
 
 .feat-name {
-  font-size: 30rpx;
+  font-size: 24rpx;
   font-weight: 600;
   color: var(--text-1);
-  line-height: 1.35;
+  line-height: 1.45;
 }
 
 .spec {
+  margin-top: 14rpx;
   display: flex;
   flex-wrap: wrap;
   gap: 10rpx;
-  margin-top: 14rpx;
 }
 
-.spec-chip {
-  padding: 4rpx 14rpx;
-  font-size: 20rpx;
+.chip {
+  padding: 4rpx 12rpx;
+  border-radius: var(--radius-sm);
+  background: var(--bg-sunken);
   color: var(--text-2);
-  background: var(--bg-page);
-  border-radius: 8rpx;
-}
-
-.spec-chip--ok {
-  color: var(--brand);
-  background: var(--brand-light);
+  font-size: 20rpx;
 }
 
 .price-row {
@@ -326,25 +317,18 @@
 }
 
 .price {
-  font-size: 40rpx;
+  font-size: 32rpx;
   font-weight: 700;
   color: var(--money);
 }
 
 .price-old {
-  font-size: 22rpx;
+  font-size: 20rpx;
   color: var(--text-3);
   text-decoration: line-through;
 }
 
-.price-cta {
-  margin-left: auto;
-  font-size: 22rpx;
-  font-weight: 600;
-  color: var(--accent);
-}
-
-/* ===== 严选好机：紧凑列表 ===== */
+/* ===== 严选好机：紧凑行 ===== */
 .mini-list {
   margin-top: 16rpx;
   display: flex;
@@ -357,37 +341,34 @@
   align-items: center;
   gap: 20rpx;
   padding: 20rpx;
-  background: var(--bg-card);
   border-radius: var(--radius-card);
+  background: var(--bg-card);
   border: 2rpx solid var(--border-light);
 }
 
-.mini-thumb-img {
-  width: 110rpx;
-  height: 110rpx;
-  border-radius: 12rpx;
+.mini-thumb-img,
+.mini-thumb {
+  width: 96rpx;
+  height: 96rpx;
   flex-shrink: 0;
+  border-radius: var(--radius-sm);
+  background: var(--bg-sunken);
 }
 
 .mini-thumb {
-  width: 110rpx;
-  height: 110rpx;
-  border-radius: 12rpx;
-  flex-shrink: 0;
   display: flex;
   align-items: center;
   justify-content: center;
-  background: var(--bg-page);
 }
 
 .dev-s::before {
   content: '';
   display: block;
-  width: 44rpx;
-  height: 80rpx;
+  width: 32rpx;
+  height: 58rpx;
   border: 4rpx solid var(--line-strong);
-  border-radius: 10rpx;
-  background: var(--bg-card);
+  border-radius: var(--radius-sm);
+  opacity: 0.55;
 }
 
 .mini-main {
@@ -396,7 +377,7 @@
 }
 
 .mini-name {
-  font-size: 27rpx;
+  font-size: 24rpx;
   font-weight: 600;
   color: var(--text-1);
   overflow: hidden;
@@ -406,19 +387,8 @@
 
 .mini-spec {
   margin-top: 8rpx;
-  display: flex;
-  align-items: center;
-  gap: 10rpx;
-  font-size: 21rpx;
+  font-size: 20rpx;
   color: var(--text-3);
-}
-
-.mini-chip {
-  padding: 2rpx 12rpx;
-  color: var(--brand);
-  background: var(--brand-light);
-  border-radius: 8rpx;
-  font-size: 19rpx;
 }
 
 .mini-right {
@@ -429,7 +399,7 @@
 }
 
 .mini-price {
-  font-size: 30rpx;
+  font-size: 28rpx;
   font-weight: 700;
   color: var(--money);
 }
@@ -440,38 +410,30 @@
   text-decoration: line-through;
 }
 
-/* ===== 回收行情 ===== */
+/* ===== 回收行情：纯文字 + 发丝线，无卡片 ===== */
 .quote {
-  background: var(--bg-card);
-  border-radius: var(--radius-card);
-  border: 2rpx solid var(--border-light);
-  padding: 8rpx 24rpx;
+  margin-top: 4rpx;
 }
 
 .quote-row {
   display: flex;
-  align-items: center;
-  gap: 14rpx;
+  align-items: baseline;
+  gap: 18rpx;
   padding: 22rpx 0;
   border-bottom: 2rpx solid var(--border-light);
 }
 
-.quote-row:last-of-type {
-  border-bottom: none;
-}
-
 .quote-brand {
   flex-shrink: 0;
-  padding: 2rpx 14rpx;
+  width: 76rpx;
   font-size: 20rpx;
-  color: var(--brand);
-  background: var(--brand-light);
-  border-radius: 8rpx;
+  color: var(--text-3);
 }
 
 .quote-name {
   flex: 1;
-  font-size: 27rpx;
+  min-width: 0;
+  font-size: 24rpx;
   color: var(--text-1);
   overflow: hidden;
   text-overflow: ellipsis;
@@ -484,43 +446,25 @@
 }
 
 .quote-val {
-  font-size: 30rpx;
+  font-size: 28rpx;
   font-weight: 700;
   color: var(--money);
 }
 
 .quote-foot {
-  padding: 20rpx 0;
+  padding: 24rpx 0;
   text-align: center;
-  font-size: 23rpx;
+  font-size: 24rpx;
   color: var(--brand);
-  border-top: 2rpx solid var(--border-light);
 }
 
-/* ===== 底部信任栏（简化） ===== */
-.assure {
-  margin-top: 40rpx;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 12rpx;
-}
-
-.assure-item {
-  font-size: 22rpx;
-  color: var(--text-2);
-}
-
-.assure-dot {
-  color: var(--text-3);
-}
-
+/* ===== 页脚 ===== */
 .foot {
-  margin-top: 12rpx;
+  margin: 56rpx 0 24rpx;
   text-align: center;
   font-size: 20rpx;
   color: var(--text-3);
-  letter-spacing: 2rpx;
+  letter-spacing: 6rpx;
 }
 
 .loading-wrap {

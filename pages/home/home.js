@@ -3,64 +3,59 @@ import { fetchSaleGoods } from '../../services/sale/order';
 import { fen2yuan } from '../../common/recycle-status';
 import { resolveImageUrl } from '../../common/image-url';
 
-/** 信任条：平台承诺 */
-const TRUSTS = ['官方质检', '一机一报告', '180天质保', '顺丰包邮', '验收后付款'];
+/** 平台承诺：一行纯文字，不做对仗标语（说人话） */
+const TRUSTS = ['官方质检', '顺丰包邮', '验收后付款'];
 
-/** Banner 轮播：三大业务场景（商用平台文案） */
+/** Banner 轮播：三大业务场景 */
 const BANNERS = [
   {
     key: 'sell',
-    theme: 'accent',
+    theme: 'brand',
     title: '旧机高价卖',
-    sub: '在线估价 30 秒到价 · 顺丰包邮 · 质检后打款',
+    sub: '填个型号就知道值多少钱',
     cta: '免费估价',
     tap: 'goEstimate',
   },
   {
     key: 'repair',
-    theme: 'deep',
+    theme: 'accent',
     title: '手机维修',
-    sub: '上门快修 · 先报价后维修 · 修好验收才付款',
+    sub: '先报价再动手，修不好不收费',
     cta: '立即报修',
     tap: 'goRepair',
   },
   {
     key: 'buy',
-    theme: 'brand',
+    theme: 'deep',
     title: '严选二手机',
-    sub: '官方质检 · 一机一报告 · 180 天质保 · 7 天退换',
+    sub: '每台都有质检报告，7 天可退',
     cta: '去逛好机',
     tap: 'goSale',
   },
 ];
 
-/** 三大业务入口：横排大卡 */
+/** 业务入口：第 1 项走横向大卡，其余走两张小卡（打破三等等分） */
 const ENTRIES = [
   {
     key: 'sell',
-    theme: 'accent',
     icon: 'wallet',
     name: '卖旧机',
-    sub: '30秒估价·质检打款',
+    sub: '30 秒出价，不合适再商量',
     btn: '去估价',
     tap: 'goEstimate',
   },
   {
     key: 'repair',
-    theme: 'deep',
     icon: 'tools',
     name: '修手机',
-    sub: '上门快修·先修后付',
-    btn: '去报修',
+    sub: '修不好不收费',
     tap: 'goRepair',
   },
   {
     key: 'buy',
-    theme: 'brand',
     icon: 'cart',
     name: '买二手机',
-    sub: '官方质检·7天退换',
-    btn: '去选购',
+    sub: '一机一报告，7 天可退',
     tap: 'goSale',
   },
 ];
@@ -73,9 +68,10 @@ const QUOTE_ROWS = 4;
 Page({
   data: {
     pageLoading: true,
-    trusts: TRUSTS,
+    trustLine: TRUSTS.join(' · '),
     banners: BANNERS,
     entries: ENTRIES,
+    entriesMore: ENTRIES.slice(1),
     hotModels: [],
     featured: null,
     featuredMore: [],
