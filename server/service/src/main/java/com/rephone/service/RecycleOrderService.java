@@ -34,6 +34,8 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Map;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
@@ -44,6 +46,8 @@ import org.springframework.util.StringUtils;
  */
 @Service
 public class RecycleOrderService {
+
+    private static final Logger log = LoggerFactory.getLogger(RecycleOrderService.class);
 
     private static final Map<Integer, String> STATUS_DESC = Map.of(
             RecycleOrder.STATUS_WAIT_SEND, "待寄出",
@@ -132,7 +136,8 @@ public class RecycleOrderService {
                 }
                 orderMapper.updateById(order);
             } catch (Exception e) {
-                // 取件预约失败不阻塞下单，用户/后台可改约
+                // 取件预约失败不阻塞下单，但绝不能静默：否则用户以为有人上门，单子一直卡在待寄出
+                log.warn("[recycle] 上门取件预约失败 orderNo={} 原因={}", order.getOrderNo(), e.getMessage());
             }
         }
 
