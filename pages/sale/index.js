@@ -1,5 +1,6 @@
 import { fetchSaleGoods, fetchSaleGoodsFilters } from '../../services/sale/order';
 import { fen2yuan } from '../../common/recycle-status';
+import { resolveImageUrl } from '../../common/image-url';
 
 const SORTS = [
   { key: 'default', label: '综合' },
@@ -16,9 +17,11 @@ const SEARCH_DEBOUNCE = 350;
 function decorate(g) {
   return {
     ...g,
+    image: resolveImageUrl(g.image),
     priceText: fen2yuan(g.priceFen),
     originText: g.originalPriceFen ? fen2yuan(g.originalPriceFen) : '',
     stockText: g.stock > 0 ? `库存 ${g.stock} 件` : '暂时无货',
+    tagTop: (g.tags || '').split(',').filter(Boolean).slice(0, 1),
   };
 }
 

@@ -1,102 +1,47 @@
 <view class="page" wx:if="{{!pageLoading}}">
-  <!-- 头部：深绿实底（不用渐变） -->
-  <view class="masthead">
-    <view class="mast-top">
-      <view class="mast-city">
-        <t-icon name="location" size="24rpx" color="#FFFFFF" />
-        <text>全城上门 · 2 小时响应</text>
-      </view>
-      <text class="mast-service" bindtap="goRepair">客服</text>
-    </view>
-    <!-- 主张：错落排版（一左一右）+ 渐变艺术字 + 手写笔触 -->
-    <view class="claim">
-      <text class="claim-l1">修好，</text>
-      <view class="claim-l2">
-        <text class="claim-l2-text">再付钱。</text>
-        <view class="claim-brush"></view>
-      </view>
-    </view>
-    <view class="mast-sub">换屏 · 换电池 · 进水 · 主板 · 摄像头</view>
-    <view class="mast-sub">先报价后维修，修好验收才付款</view>
-    <view class="mast-cta">
-      <view class="btn-primary" bindtap="goRepair">
-        <text>立即报修</text>
-        <t-icon name="chevron-right" size="24rpx" color="#0A3D30" />
-      </view>
-      <text class="link-quiet" bindtap="goRepair">查看维修价目</text>
-    </view>
-  </view>
-
-  <!-- 搜索：一条带下边线的通栏（不用胶囊） -->
+  <!-- 搜索栏 -->
   <view class="searchbar" bindtap="goSale">
-    <t-icon name="search" size="30rpx" color="#99A39D" />
-    <text class="searchbar-text">搜机型、故障，或想买的二手机</text>
+    <t-icon name="search" size="30rpx" color="#9AA1AB" />
+    <text class="searchbar-text">搜索品牌 / 型号 / 成色，逛二手机</text>
   </view>
 
-  <!-- 哪里坏了 -->
-  <view class="block">
-    <view class="block-head">
-      <view class="block-head-left">
-        <text class="block-title">哪里坏了</text>
-        <text class="block-note">直接看价</text>
-      </view>
-      <text class="block-more" bindtap="goRepair">全部 ›</text>
-    </view>
-    <view class="faults">
-      <view wx:for="{{faults}}" wx:key="name" class="fault" bindtap="goRepair">
-        <view class="fault-top">
-          <text class="fault-name">{{item.name}}</text>
-          <text class="fault-caret">›</text>
-        </view>
-        <text class="fault-hint">{{item.hint}}</text>
-      </view>
+  <!-- 信任条：平台承诺横排 -->
+  <view class="trustbar">
+    <view wx:for="{{trusts}}" wx:key="*this" class="trust-item">
+      <t-icon name="check-circle-filled" size="26rpx" color="#1A5CE8" />
+      <text>{{item}}</text>
     </view>
   </view>
 
-  <!-- 三条路：三行堆叠（三列会导致中文文案断行，故改为整行列表） -->
-  <view class="block">
-    <view class="services">
-      <view class="service" bindtap="goRepair">
-        <text class="service-no">01</text>
-        <view class="service-body">
-          <view class="service-line">
-            <text class="service-name">修手机</text>
-            <text class="service-val service-val--brand">{{hooks.repair}}</text>
-            <text class="service-caret">›</text>
-          </view>
-          <text class="service-desc">上门 / 到店 · 先报价后维修 · 180 天质保</text>
-        </view>
+  <!-- Banner 轮播：三大业务场景 -->
+  <swiper class="banner" indicator-dots indicator-color="rgba(255,255,255,0.4)" indicator-active-color="#FFFFFF" autoplay circular interval="4500">
+    <swiper-item wx:for="{{banners}}" wx:key="key" class="banner-item banner--{{item.theme}}" bindtap="{{item.tap}}">
+      <view class="banner-body">
+        <view class="banner-title">{{item.title}}</view>
+        <view class="banner-sub">{{item.sub}}</view>
+        <view class="banner-cta">{{item.cta}} ›</view>
       </view>
-      <view class="service" bindtap="goEstimate">
-        <text class="service-no">02</text>
-        <view class="service-body">
-          <view class="service-line">
-            <text class="service-name">卖旧机</text>
-            <text class="service-val">{{hooks.recycle}}</text>
-            <text class="service-caret">›</text>
-          </view>
-          <text class="service-desc">30 秒出价 · 顺丰包邮 · 质检后打款</text>
-        </view>
+      <view class="banner-deco banner-deco--{{item.theme}}"></view>
+    </swiper-item>
+  </swiper>
+
+  <!-- 三大业务入口：横排大卡 -->
+  <view class="entries">
+    <view wx:for="{{entries}}" wx:key="key" class="entry-card" data-key="{{item.key}}" bindtap="{{item.tap}}">
+      <view class="entry-icon entry-icon--{{item.theme}}">
+        <t-icon name="{{item.icon}}" size="44rpx" color="#FFFFFF" />
       </view>
-      <view class="service" bindtap="goSale">
-        <text class="service-no">03</text>
-        <view class="service-body">
-          <view class="service-line">
-            <text class="service-name">买二手机</text>
-            <text class="service-val">{{hooks.buy}}</text>
-            <text class="service-caret">›</text>
-          </view>
-          <text class="service-desc">官方质检 · 一机一报告 · 支持售后</text>
-        </view>
-      </view>
+      <view class="entry-name">{{item.name}}</view>
+      <view class="entry-sub">{{item.sub}}</view>
+      <view class="entry-btn entry-btn--{{item.theme}}">{{item.btn}}</view>
     </view>
   </view>
 
-  <!-- 严选二手机：1 张主推大卡 + 2 行紧凑列表（无库存时整块隐藏） -->
+  <!-- 严选好机：1 张主推大卡 + 2 行紧凑列表（无库存时整块隐藏） -->
   <view class="block" wx:if="{{featured}}">
     <view class="block-head">
       <view class="block-head-left">
-        <text class="block-title">严选二手机</text>
+        <text class="block-title">严选好机</text>
         <text class="block-note">一机一报告</text>
       </view>
       <text class="block-more" bindtap="goSale">全部 ›</text>
@@ -106,13 +51,13 @@
         <image wx:if="{{featured.image}}" class="feat-photo" src="{{featured.image}}" mode="aspectFill" />
         <view wx:else class="dev"></view>
         <view class="feat-badge">官方质检</view>
-        <text wx:if="{{featured.conditionLevel}}" class="feat-cap">成色 {{featured.conditionLevel}}</text>
       </view>
       <view class="feat-body">
         <view class="feat-name">{{featured.name}}</view>
         <view class="spec">
+          <text wx:if="{{featured.conditionLevel}}" class="spec-chip">{{featured.conditionLevel}}</text>
           <text wx:if="{{featured.storage}}" class="spec-chip">{{featured.storage}}</text>
-          <text class="spec-chip spec-chip--ok">已质检</text>
+          <text wx:for="{{featured.tagTop}}" wx:key="*this" class="spec-chip spec-chip--ok">{{item}}</text>
         </view>
         <view class="price-row">
           <text class="price">¥{{featured.priceText}}</text>
@@ -127,14 +72,20 @@
         <view wx:else class="mini-thumb"><view class="dev-s"></view></view>
         <view class="mini-main">
           <view class="mini-name">{{item.name}}</view>
-          <view class="mini-spec">{{item.specText || '已质检'}}</view>
+          <view class="mini-spec">
+            <text wx:if="{{item.conditionLevel}}" class="mini-chip">{{item.conditionLevel}}</text>
+            <text>{{item.specText}}</text>
+          </view>
         </view>
-        <text class="mini-price">¥{{item.priceText}}</text>
+        <view class="mini-right">
+          <text class="mini-price">¥{{item.priceText}}</text>
+          <text wx:if="{{item.originText}}" class="mini-price-old">¥{{item.originText}}</text>
+        </view>
       </view>
     </view>
   </view>
 
-  <!-- 回收行情：表格行（无机型数据时整块隐藏，避免只剩一个空标题） -->
+  <!-- 回收行情：高价值热门机型（后端已滤零价并按价降序） -->
   <view class="block" wx:if="{{hotModels.length}}">
     <view class="block-head">
       <view class="block-head-left">
@@ -160,13 +111,15 @@
     </view>
   </view>
 
-  <!-- 保障：三行小字 -->
+  <!-- 底部信任栏（简化） -->
   <view class="assure">
-    <view class="assure-line"><text class="assure-strong">先报价后维修</text> · 原厂品质配件 · 180 天质保</view>
-    <view class="assure-line"><text class="assure-strong">官方质检</text> · 顺丰包邮 · 验收后付款</view>
-    <view class="assure-line assure-line--mute">服务时间 09:00 – 21:00 · 客服 {{servicePhone}}</view>
+    <text class="assure-item">官方质检</text>
+    <text class="assure-dot">·</text>
+    <text class="assure-item">顺丰包邮</text>
+    <text class="assure-dot">·</text>
+    <text class="assure-item">验收后付款</text>
   </view>
-  <view class="foot">REPHONE</view>
+  <view class="foot">REPHONE · 专业二手机交易平台</view>
 </view>
 
 <view wx:if="{{pageLoading}}" class="loading-wrap">

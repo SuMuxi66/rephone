@@ -1,32 +1,85 @@
-import { config } from '../../config/index';
 import { fetchHome } from '../../services/home/home';
 import { fetchSaleGoods } from '../../services/sale/order';
 import { fen2yuan } from '../../common/recycle-status';
+import { resolveImageUrl } from '../../common/image-url';
 
-/** 快捷故障入口（静态常量；v1 不携带机型/故障预选参数） */
-const FAULTS = [
-  { name: '换屏幕', hint: '外屏 · 内屏 · 总成' },
-  { name: '换电池', hint: '容量衰减 · 鼓包' },
-  { name: '进水处理', hint: '清洗 · 烘干 · 除锈' },
-  { name: '不开机', hint: '主板 · 供电 · 系统' },
+/** 信任条：平台承诺 */
+const TRUSTS = ['官方质检', '一机一报告', '180天质保', '顺丰包邮', '验收后付款'];
+
+/** Banner 轮播：三大业务场景（商用平台文案） */
+const BANNERS = [
+  {
+    key: 'sell',
+    theme: 'accent',
+    title: '旧机高价卖',
+    sub: '在线估价 30 秒到价 · 顺丰包邮 · 质检后打款',
+    cta: '免费估价',
+    tap: 'goEstimate',
+  },
+  {
+    key: 'repair',
+    theme: 'deep',
+    title: '手机维修',
+    sub: '上门快修 · 先报价后维修 · 修好验收才付款',
+    cta: '立即报修',
+    tap: 'goRepair',
+  },
+  {
+    key: 'buy',
+    theme: 'brand',
+    title: '严选二手机',
+    sub: '官方质检 · 一机一报告 · 180 天质保 · 7 天退换',
+    cta: '去逛好机',
+    tap: 'goSale',
+  },
 ];
 
-/** 首页严选位展示件数：1 件主推 + 2 件紧凑行 */
+/** 三大业务入口：横排大卡 */
+const ENTRIES = [
+  {
+    key: 'sell',
+    theme: 'accent',
+    icon: 'wallet',
+    name: '卖旧机',
+    sub: '30秒估价·质检打款',
+    btn: '去估价',
+    tap: 'goEstimate',
+  },
+  {
+    key: 'repair',
+    theme: 'deep',
+    icon: 'tools',
+    name: '修手机',
+    sub: '上门快修·先修后付',
+    btn: '去报修',
+    tap: 'goRepair',
+  },
+  {
+    key: 'buy',
+    theme: 'brand',
+    icon: 'cart',
+    name: '买二手机',
+    sub: '官方质检·7天退换',
+    btn: '去选购',
+    tap: 'goSale',
+  },
+];
+
+/** 严选位展示件数：1 件主推 + 2 件紧凑行 */
 const FEATURED_MORE = 2;
 /** 回收行情展示条数 */
 const QUOTE_ROWS = 4;
 
-const toYuan = (fen) => fen2yuan(fen);
-
 Page({
   data: {
     pageLoading: true,
-    faults: FAULTS,
+    trusts: TRUSTS,
+    banners: BANNERS,
+    entries: ENTRIES,
     hotModels: [],
     featured: null,
     featuredMore: [],
-    hooks: { repair: '先报价', recycle: '在线估价', buy: '官方质检' },
-    servicePhone: config.servicePhone,
+    servicePhone: '',
   },
 
   onShow() {
@@ -49,30 +102,20 @@ Page({
     ]);
 
     const hotModels = (home.hotModels || []).slice(0, QUOTE_ROWS);
-    const list = (goods || []).slice(0, 1 + FEATURED_MORE).map((g) => ({
+    const list = (goods || []).map((g) => ({
       ...g,
-      priceText: toYuan(g.priceFen),
-      originText: g.originalPriceFen ? toYuan(g.originalPriceFen) : '',
+      image: resolveImageUrl(g.image),
+      priceText: fen2yuan(g.priceFen),
+      originText: g.originalPriceFen ? fen2yuan(g.originalPriceFen) : '',
       specText: [g.conditionLevel, g.storage].filter(Boolean).join(' · '),
+      tagTop: (g.tags || '').split(',').filter(Boolean).slice(0, 1),
     }));
-
-    // 钩子数字优先用真实数据，缺失时回落到中性文案
-    const maxRecycleFen = (home.hotModels || []).reduce(
-      (max, m) => Math.max(max, Number(m.maxPriceFen) || 0),
-      0,
-    );
-    const minBuyFen = list.reduce((min, g) => (min === 0 ? g.priceFen : Math.min(min, g.priceFen)), 0);
 
     this.setData({
       pageLoading: false,
       hotModels,
       featured: list[0] || null,
-      featuredMore: list.slice(1),
-      hooks: {
-        repair: '先报价',
-        recycle: maxRecycleFen > 0 ? '最高 ¥' + Math.round(maxRecycleFen / 100) : '在线估价',
-        buy: minBuyFen > 0 ? '¥' + Math.round(minBuyFen / 100) + ' 起' : '官方质检',
-      },
+      featuredMore: list.slice(1, 1 + FEATURED_MORE),
     });
     wx.stopPullDownRefresh();
   },

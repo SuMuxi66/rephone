@@ -171,6 +171,11 @@
   background: var(--brand-light);
 }
 
+.meta-tag--quality {
+  color: var(--accent);
+  background: var(--accent-light);
+}
+
 .card-desc {
   margin-top: 8rpx;
   font-size: 22rpx;

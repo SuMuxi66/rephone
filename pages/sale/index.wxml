@@ -15,15 +15,15 @@
 
   <view class="promise">
     <view class="promise-item">
-      <t-icon name="verified" size="32rpx" color="#0E5A47" />
+      <t-icon name="verified" size="32rpx" color="#1A5CE8" />
       <text>官方质检</text>
     </view>
     <view class="promise-item">
-      <t-icon name="check-circle" size="32rpx" color="#0E5A47" />
+      <t-icon name="check-circle" size="32rpx" color="#1A5CE8" />
       <text>库存实时</text>
     </view>
     <view class="promise-item">
-      <t-icon name="service" size="32rpx" color="#0E5A47" />
+      <t-icon name="service" size="32rpx" color="#1A5CE8" />
       <text>支持售后</text>
     </view>
   </view>
@@ -87,9 +87,10 @@
       <view wx:else class="card-img card-img--empty"><text>暂无图片</text></view>
       <view class="card-body">
         <view class="card-title">{{item.name}}</view>
-        <view wx:if="{{item.conditionLevel || item.storage}}" class="card-meta">
+        <view wx:if="{{item.conditionLevel || item.storage || item.tagTop.length}}" class="card-meta">
           <text wx:if="{{item.conditionLevel}}" class="meta-tag">{{item.conditionLevel}}</text>
           <text wx:if="{{item.storage}}" class="meta-tag">{{item.storage}}</text>
+          <text wx:if="{{item.tagTop.length}}" class="meta-tag meta-tag--quality">{{item.tagTop[0]}}</text>
         </view>
         <view wx:if="{{item.descText}}" class="card-desc">{{item.descText}}</view>
         <view class="card-foot">
