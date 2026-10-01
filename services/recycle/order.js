@@ -13,6 +13,12 @@ export const fetchRecycleOrderDetail = (orderNo) => get(`/api/wx/recycle/order/$
 export const fillExpressNo = (orderNo, data) =>
   request({ url: `/api/wx/recycle/order/${orderNo}/express`, method: 'PUT', data });
 
+/** 快递公司字典：GET /api/wx/express/companies */
+export const fetchExpressCompanies = () => get('/api/wx/express/companies');
+
+/** 物流轨迹：GET /api/wx/recycle/order/{orderNo}/trace（后端 30 分钟内返回本地快照） */
+export const fetchOrderTrace = (orderNo) => get(`/api/wx/recycle/order/${orderNo}/trace`);
+
 /** 取消订单：PUT /api/wx/recycle/order/{orderNo}/cancel */
 export const cancelRecycleOrder = (orderNo, reason) =>
   request({ url: `/api/wx/recycle/order/${orderNo}/cancel`, method: 'PUT', data: { reason } });

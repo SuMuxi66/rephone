@@ -13,6 +13,7 @@
     "pages/recycle/create/index",
     "pages/recycle/order/list/index",
     "pages/recycle/order/detail/index",
+    "pages/recycle/order/trace/index",
     "pages/repair/index",
     "pages/repair/quote/index",
     "pages/repair/create/index",

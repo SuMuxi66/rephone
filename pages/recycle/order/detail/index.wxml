@@ -3,7 +3,7 @@
     <view class="status-row">
       <text class="status-text">{{order.statusDesc}}</text>
       <view class="status-tags">
-        <t-tag theme="default" variant="light" size="small">{{order.pickupType === 20 ? '上门取件' : '顺丰邮寄'}}</t-tag>
+        <t-tag theme="default" variant="light" size="small">{{order.pickupType === 20 ? '上门取件' : '自行寄出'}}</t-tag>
         <status-tag status="{{order.status}}" />
       </view>
     </view>
@@ -32,7 +32,8 @@
     <t-cell title="功能问题" note="{{order.issues.length ? order.issues : '无'}}" />
     <t-cell title="取件人" note="{{order.pickupName}} {{order.pickupPhone}}" />
     <t-cell title="取件地址" note="{{order.pickupAddress}}" />
-    <t-cell wx:if="{{order.expressNo}}" title="运单号" note="{{order.expressCompany || ''}} {{order.expressNo}}" />
+    <t-cell wx:if="{{order.expressNo}}" title="运单号" arrow hover
+      note="{{order.expressCompany || ''}} {{order.expressNo}}" bindtap="goTrace" />
     <t-cell wx:if="{{order.remark}}" title="备注" note="{{order.remark}}" />
     <t-cell wx:if="{{order.adminRemark}}" title="质检说明" note="{{order.adminRemark}}" />
   </t-cell-group>
@@ -59,9 +60,22 @@
   <t-popup visible="{{expressPopupVisible}}" placement="bottom" bind:visible-change="hideExpressPopup">
     <view class="express-popup">
       <view class="popup-title">填写寄出运单号</view>
-      <t-input label="快递公司" value="{{expressForm.company}}" data-field="company" bindchange="onExpressInput" />
+      <t-cell title="快递公司" arrow hover note="{{expressForm.company || '请选择快递公司'}}" bindtap="showExpressPicker" />
       <t-input label="运单号" placeholder="请输入快递单号" value="{{expressForm.no}}" data-field="no" bindchange="onExpressInput" />
+      <view wx:if="{{expressNeedPhone}}" class="popup-hint">
+        {{expressForm.company}} 查询物流需提供收寄件人手机号，将使用本单登记的 {{order.pickupPhone}}
+      </view>
       <t-button theme="primary" block loading="{{submitting}}" bindtap="submitExpress">提交</t-button>
     </view>
   </t-popup>
+
+  <t-picker cancelBtn="取消" confirmBtn="确定"
+    visible="{{expressPickerVisible}}"
+    value="{{expressPickerValue}}"
+    title="选择快递公司"
+    bind:confirm="onExpressCompanyConfirm"
+    bind:close="hideExpressPicker"
+  >
+    <t-picker-item options="{{expressCompanyOptions}}" />
+  </t-picker>
 </view>

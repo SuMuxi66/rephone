@@ -1,0 +1,36 @@
+<view class="page recycle-page">
+  <view wx:if="{{loading}}" class="state">
+    <text class="state-text">正在查询物流…</text>
+  </view>
+
+  <block wx:elif="{{trace}}">
+    <view class="head">
+      <view class="head-top">
+        <text class="head-state">{{trace.stateName || '运输中'}}</text>
+        <text wx:if="{{trace.cached}}" class="head-badge">本地快照</text>
+      </view>
+      <view class="head-sub">{{trace.companyName}} · {{trace.expressNo}}</view>
+      <view class="head-copy" bindtap="onCopy">复制单号</view>
+    </view>
+
+    <view class="timeline">
+      <view wx:for="{{items}}" wx:key="key" class="node {{index === 0 ? 'node--active' : ''}}">
+        <view class="node-rail">
+          <view class="node-dot"></view>
+          <view wx:if="{{index !== items.length - 1}}" class="node-line"></view>
+        </view>
+        <view class="node-body">
+          <view class="node-context">{{item.context}}</view>
+          <view class="node-time">{{item.status || ''}} {{item.time}}</view>
+        </view>
+      </view>
+    </view>
+
+    <view class="foot">物流数据来自快递100 · 30 分钟内自动使用本地快照</view>
+  </block>
+
+  <view wx:else class="state">
+    <text class="state-text">{{error || '暂无物流信息'}}</text>
+    <view wx:if="{{error}}" class="state-retry" bindtap="onRetry">重新查询</view>
+  </view>
+</view>
