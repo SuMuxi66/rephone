@@ -56,6 +56,14 @@ services:
       EXPRESS_KEY: ${EXPRESS_KEY:-}
       EXPRESS_CUSTOMER: ${EXPRESS_CUSTOMER:-}
       EXPRESS_CALLBACK_URL: ${EXPRESS_CALLBACK_URL:-}
+      # 微信订阅消息：模板 ID 与字段名同样来自 .env；未配置时接口返回空串，小程序自动跳过订阅弹窗
+      WX_APPID: ${WX_APPID:-}
+      WX_SECRET: ${WX_SECRET:-}
+      WX_SUBSCRIBE_TEMPLATE_ID: ${WX_SUBSCRIBE_TEMPLATE_ID:-}
+      WX_SUBSCRIBE_FIELD_STATUS: ${WX_SUBSCRIBE_FIELD_STATUS:-}
+      WX_SUBSCRIBE_FIELD_ORDER_NO: ${WX_SUBSCRIBE_FIELD_ORDER_NO:-}
+      WX_SUBSCRIBE_FIELD_TIME: ${WX_SUBSCRIBE_FIELD_TIME:-}
+      WX_SUBSCRIBE_PAGE: ${WX_SUBSCRIBE_PAGE:-pages/recycle/order/list/index}
     depends_on:
       mysql:
         condition: service_healthy
