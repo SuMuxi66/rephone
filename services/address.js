@@ -1,4 +1,4 @@
-import { get, post, put, del } from '../request';
+import { get, post, put, del } from './request';
 
 /** 地址簿列表：GET /api/wx/address */
 export const fetchAddressList = () => get('/api/wx/address');
