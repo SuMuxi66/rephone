@@ -32,6 +32,31 @@ services:
     volumes:
       - rephone-redis-data:/data
 
+  # 后端服务：源码进镜像（server/Dockerfile 多阶段构建），随 compose 一起启动/自愈。
+  # 代码变更后执行 docker compose up -d --build 重建。
+  server:
+    build: .
+    container_name: rephone-server
+    restart: unless-stopped
+    ports:
+      - "8080:8080"
+    environment:
+      TZ: Asia/Shanghai
+      # 容器网络内用服务名互连（非 localhost）
+      MYSQL_URL: "jdbc:mysql://mysql:3306/rephone?useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Shanghai&useSSL=false&allowPublicKeyRetrieval=true"
+      MYSQL_USERNAME: root
+      MYSQL_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      REDIS_HOST: redis
+      # 开发态默认值：mock 登录 + 本地管理令牌；上线用环境变量覆盖
+      WX_MOCK_LOGIN: ${WX_MOCK_LOGIN:-true}
+      ADMIN_TOKEN: ${ADMIN_TOKEN:-local-admin-token}
+      ADMIN_BOOTSTRAP_PASSWORD: ${ADMIN_BOOTSTRAP_PASSWORD:-}
+    depends_on:
+      mysql:
+        condition: service_healthy
+      redis:
+        condition: service_started
+
 volumes:
   rephone-mysql-data:
   rephone-redis-data:

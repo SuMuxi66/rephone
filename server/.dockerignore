@@ -1,0 +1,10 @@
+# 构建上下文瘦身：不把本地产物与敏感文件送进镜像
+target/
+*/target/
+data/
+logs/
+*.log
+.env
+.git/
+.idea/
+.vscode/
