@@ -156,3 +156,34 @@ Jackson 2.19.2 → **2.21.4**、Netty 4.1.128 → **4.1.135.Final**、Spring Dat
 - Spring Boot 3.5 线已到 3.5.16 顶部，**剩余 Tomcat / Netty 修复位于 4.x**，属大版本升级，本轮未做。
 - **未配置 JSON 请求体大小上限**：建议加一个限流/体积过滤（如 Tomcat `maxPostSize` 对表单有效，JSON 流需自定义过滤器），
   同时也能挡住超大体导致的解析放大。
+
+## 8. 小程序端专项（2026-10-01）
+
+| 检查项 | 结论 |
+|---|---|
+| 硬编码密钥（appid/secret/mchid/password 等） | ✅ 未发现 |
+| 是否直连三方 | ✅ 仅一处 `wx.request`，是 COS 直传（服务端签名 + 客户端上传，既定架构，非绕过） |
+| 明文 http 地址 | ✅ 仅 `develop` 环境指向 `http://localhost:8080`，trial/release 均为 https |
+| token 存储 | `wx.setStorageSync`（小程序按 app 隔离的沙箱存储，业内标准做法） |
+
+### 发现
+
+**MP-1（发布阻断）**：`config/index.js` 的 `trial` / `release` 环境 API 地址仍是占位域名
+`https://api-trial.rephone.example.com` / `https://api.rephone.example.com`（标注 `TODO(P6)`）。
+直接发布会导致全站请求失败。`.example.com` 是 IANA 保留域，不存在被抢注风险，但必须替换为真实域名。
+
+**MP-2（低，仅影响 mock 模式）**：`services/request.js` 的 deviceId 为
+`'dev-' + Date.now().toString(36) + '-' + Math.random().toString(36).slice(2, 10)`，
+随机部分约 41 bit 且 `Math.random()` 非密码学安全。
+只在 mock 登录下 deviceId 决定身份，理论上可被枚举冒充；生产模式身份由微信 openid 决定，该字段被忽略。
+建议拉长随机段或改用 `wx.getRandomValues`（若基础库支持）。
+
+**MP-3（低）**：`services/address/edit.js:22` 用 `console.info('用户保存了一个地址', address)`
+把**完整地址对象（PII）**打进控制台，真机 vConsole 可见。建议去掉 payload 或降级为只记 id。
+
+**MP-4（低）**：COS 直传签名本身很规范——签名只授权**单个 key 的 PUT**、有效期 15 分钟、
+key 由服务端 UUID 生成、扩展名白名单 `[a-zA-Z0-9]{1,8}`、不泄露 secret。
+但**未限制上传体积**：客户端可反复往自己名下的 `recycle/<date>/<uuid>.<ext>` 灌大文件。
+建议用 COS 桶策略（单对象大小上限）+ 生命周期规则兜底。
+
+**MP-5（待确认）**：`project.config.json` 的 appid 仍为 `wx4a895c2ba165483b`，需确认是正式 appid 还是模板遗留。
