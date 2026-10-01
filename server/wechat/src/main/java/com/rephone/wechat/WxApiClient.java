@@ -40,9 +40,9 @@ public class WxApiClient {
         this.restClient = RestClient.builder().requestFactory(factory).build();
     }
 
-    public WxSession code2Session(String code) {
+    public WxSession code2Session(String code, String deviceId) {
         if (properties.isMockLogin()) {
-            return mockSession(code);
+            return mockSession(code, deviceId);
         }
         if (!StringUtils.hasText(properties.getAppid()) || !StringUtils.hasText(properties.getSecret())) {
             throw new BizException(50001, "微信 AppID/Secret 未配置，请设置环境变量 WX_APPID / WX_SECRET");
@@ -64,10 +64,14 @@ public class WxApiClient {
         return new WxSession(resp.openid(), resp.sessionKey(), resp.unionid());
     }
 
-    /** 开发模式：同一 code 稳定映射到同一模拟 openid，便于本地反复联调。 */
-    private WxSession mockSession(String code) {
+    /**
+     * 开发模式：同一 code 稳定映射到同一模拟 openid。前端若持久化了设备标识（deviceId），
+     * 则以 deviceId 为准——开发者工具清缓存重新登录后仍是同一用户，地址簿/订单不丢。
+     */
+    private WxSession mockSession(String code, String deviceId) {
         log.warn("[wx] mock-login 已开启（仅限开发环境），使用模拟会话");
-        String digest = sha256Hex(code == null ? "" : code);
+        String identity = StringUtils.hasText(deviceId) ? deviceId : code;
+        String digest = sha256Hex(identity == null ? "" : identity);
         return new WxSession("mock-" + digest.substring(0, 16), null, null);
     }
 

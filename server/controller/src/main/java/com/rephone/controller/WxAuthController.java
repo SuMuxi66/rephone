@@ -35,7 +35,7 @@ public class WxAuthController {
         if (request == null || !StringUtils.hasText(request.code())) {
             throw new BizException(40001, "code 不能为空");
         }
-        WxSession session = wxApiClient.code2Session(request.code().trim());
+        WxSession session = wxApiClient.code2Session(request.code().trim(), request.deviceId());
         LoginResult result = userService.loginOrRegister(session);
         String token = tokenService.create(result.user().getId(), result.user().getOpenid(),
                 result.user().getTenantId());

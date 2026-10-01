@@ -1,6 +1,17 @@
 import { config } from '../config/index';
 
 const TOKEN_KEY = 'rephone.token';
+const DEVICE_KEY = 'rephone.deviceId';
+
+/** 设备稳定标识：登录时随 code 上送，mock 登录据此映射固定用户（清缓存会重置，正常使用不变） */
+function getDeviceId() {
+  let deviceId = wx.getStorageSync(DEVICE_KEY);
+  if (!deviceId) {
+    deviceId = 'dev-' + Date.now().toString(36) + '-' + Math.random().toString(36).slice(2, 10);
+    wx.setStorageSync(DEVICE_KEY, deviceId);
+  }
+  return deviceId;
+}
 
 export const getToken = () => wx.getStorageSync(TOKEN_KEY) || '';
 export const setToken = (token) => wx.setStorageSync(TOKEN_KEY, token);
@@ -27,7 +38,12 @@ export function ensureLogin() {
   }
   loginPromise = (async () => {
     const code = await wxLogin();
-    const data = await request({ url: '/api/wx/login', method: 'POST', data: { code }, skipAuth: true });
+    const data = await request({
+      url: '/api/wx/login',
+      method: 'POST',
+      data: { code, deviceId: getDeviceId() },
+      skipAuth: true,
+    });
     if (!data || !data.token) {
       throw new Error('登录响应缺少 token');
     }
