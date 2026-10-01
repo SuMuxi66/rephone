@@ -1,5 +1,13 @@
 # 2026-10-01 主包瘦身：模板栈并入单一分包 + 死代码清理
 
+> **状态：已完成（2026-10-01）。** 实际落地为 5 个提交：eb5a8d6（packOptions）、
+> be150e7（删 order-group）、f8da5db（删死目录）、544c63e（大迁移）、804c021（wxss @import 修复）。
+> 与原方案的差异：services/{recycle,repair,sale,subscribe,usercenter,address,request,home} 与
+> model 迁移决定均以依赖扫描脚本实测为准（留主包的被主包 live 页面/app.js 引用）；
+> ui-select-picker 实际迁入分包（仅 person-info 使用）；提交 3 后补了 wxss @import 重写（原方案遗漏）。
+> 运行时验证：主包 7 页 + 分包 3 页渲染通过；模拟器端到端下单→详情→填运单→轨迹通过；
+> IDE 体验评分 性能100/体验79/最佳实践91。「主包大小」一项待 IDE 代码质量面板人工重扫确认。
+
 ## 目标
 
 IDE 代码质量扫描（2026-10-01 14:45）三项未通过：
