@@ -163,6 +163,24 @@ class P5AdminConsoleTest {
                         "condition", "COND_95", "issues", List.of()), user()), String.class);
         assertEquals(255000L, objectMapper.readTree(quote2.getBody()).path("data").path("priceFen").asLong(),
                 "改价后估价应实时联动");
+
+        // 图片：配图后应从「只看无图」消失，清空后应回到列表。
+        // 这条专门盯 updateById 忽略 null 字段导致「移除图片」静默失效的坑。
+        long noImageBefore = noImageCount(brandId);
+        assertEquals(1L, noImageBefore, "新机型初始无图");
+        rest.exchange("/api/admin/model/" + modelId, HttpMethod.PUT,
+                new HttpEntity<>(Map.of("image", "/img/models/p5c.jpg"), admin), String.class);
+        assertEquals(0L, noImageCount(brandId), "配图后不应再出现在无图列表");
+        rest.exchange("/api/admin/model/" + modelId, HttpMethod.PUT,
+                new HttpEntity<>(Map.of("image", ""), admin), String.class);
+        assertEquals(1L, noImageCount(brandId), "清空图片后应重新出现在无图列表");
+    }
+
+    /** 「只看无图」的命中数。 */
+    private long noImageCount(Long brandId) throws Exception {
+        ResponseEntity<String> resp = rest.exchange("/api/admin/models?brandId=" + brandId + "&noImage=true",
+                HttpMethod.GET, new HttpEntity<>(admin), String.class);
+        return objectMapper.readTree(resp.getBody()).path("data").path("total").asLong();
     }
 
     @Test

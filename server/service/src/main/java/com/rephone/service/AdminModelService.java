@@ -1,6 +1,7 @@
 package com.rephone.service;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.rephone.common.exception.BizException;
 import com.rephone.mapper.BrandMapper;
@@ -155,10 +156,18 @@ public class AdminModelService {
             model.setReleaseYear(releaseYear);
         }
         // image 传空串表示清除，null 表示不修改
-        if (image != null) {
-            model.setImage(image.isBlank() ? null : image.trim());
+        boolean clearImage = image != null && image.isBlank();
+        if (image != null && !image.isBlank()) {
+            model.setImage(image.trim());
         }
         modelMapper.updateById(model);
+        if (clearImage) {
+            // MyBatis-Plus 的 updateById 默认忽略 null 字段（FieldStrategy.NOT_NULL），
+            // 靠它 setImage(null) 是写不进去的——「移除图片」会静默失效。必须显式 set。
+            modelMapper.update(null, new LambdaUpdateWrapper<PhoneModel>()
+                    .eq(PhoneModel::getId, id)
+                    .set(PhoneModel::getImage, null));
+        }
     }
 
     /** 单档内存基准价 upsert：存在则改价，不存在则新增该内存档。 */
