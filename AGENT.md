@@ -105,6 +105,11 @@ RePhone 是「手机维修（主）+ 二手机回收 + 二手出售」平台，*
 - 建表脚本在 `server/start/src/main/resources/db/`，用 `CREATE TABLE IF NOT EXISTS` 幂等。
   **注意**：`CREATE TABLE IF NOT EXISTS` **不会给已存在的表加列**。新增字段必须同时提供人工补丁 SQL（放同目录，命名 `patch-*.sql`）并在文档里说明，H2 集成测试由于每次重建库不受影响。
 - 接口测试用 H2 内存库（`@TestPropertySource` 指定 `schema-*.sql`），新增 schema 文件要同步加进测试的 `schema-locations`。
+- **第三方返回必须校验业务错误码**：微信/快递100 这类接口 HTTP 200 但 body 里带 `errcode`/`returnCode`，
+  只 `catch (Exception)` 是查不出问题的。推送/查询失败要打 **ERROR** 并把关键上下文（字段名、错误码）写进日志。
+- **微信订阅消息字段名只能配置、不能写死**：申请模板时微信随机分配字段编号（`thing1` / `character_string2` / `time3`），
+  写错会返回 **47003**。对应 `WX_SUBSCRIBE_FIELD_*`，见 `WxSubscribeService`。
+  小程序侧用 `wx.requestSubscribeMessage`，**必须在用户点击的手势上下文里同步调用**（模板 ID 要提前预取）。
 
 ---
 

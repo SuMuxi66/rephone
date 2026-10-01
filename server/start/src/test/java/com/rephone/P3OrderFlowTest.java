@@ -288,6 +288,16 @@ class P3OrderFlowTest {
                 "未知异常也要给出出路");
     }
 
+    /** 订阅消息：模板 ID 走配置下发，小程序不得写死；字段名合法性由单元测试覆盖。 */
+    @Test
+    @Order(7)
+    void subscribe_templates_endpoint() throws Exception {
+        JsonNode data = objectMapper.readTree(rest.exchange("/api/wx/subscribe/templates", HttpMethod.GET,
+                new HttpEntity<>(auth()), String.class).getBody()).path("data");
+        assertTrue(data.has("orderStatus"), "应返回 orderStatus 键供前端 requestSubscribeMessage 使用");
+        assertTrue(data.path("orderStatus").asText().isEmpty(), "测试环境未配模板时应返回空串，前端据此跳过");
+    }
+
     private JsonNode trace(String orderNo) throws Exception {
         ResponseEntity<String> resp = rest.exchange("/api/wx/recycle/order/" + orderNo + "/trace",
                 HttpMethod.GET, new HttpEntity<>(auth()), String.class);

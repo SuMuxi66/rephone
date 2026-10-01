@@ -1,4 +1,5 @@
 import { createRecycleOrder } from '../../../services/recycle/order';
+import { fetchSubscribeTemplates, requestOrderStatusSubscribe } from '../../../services/subscribe';
 import { fen2yuan } from '../../../common/recycle-status';
 import { areaData } from '../../../config/index';
 import addressPrefill from '../../../common/address-prefill';
@@ -12,6 +13,8 @@ Page({
     quote: null,
     quoteText: '',
     submitting: false,
+    /** 订单状态变更的订阅模板 ID，onLoad 预取；为空表示后端未配置，直接跳过订阅弹窗 */
+    subscribeTemplateId: '',
     form: {
       pickupType: 10,
       name: '',
@@ -29,6 +32,7 @@ Page({
   },
 
   onLoad() {
+    this.loadSubscribeTemplate();
     const quote = wx.getStorageSync('recycle.quoteResult');
     if (!quote || !quote.priceFen) {
       // 无估价数据：tab 页只能 switchTab，redirectTo 会静默失败卡白屏
@@ -43,6 +47,26 @@ Page({
 
   goEstimateTab() {
     wx.switchTab({ url: '/pages/recycle/estimate/index' });
+  },
+
+  /** 预取模板 ID：必须在下单点击之前拿到，才能保持在手势上下文里调用订阅 */
+  loadSubscribeTemplate() {
+    fetchSubscribeTemplates()
+      .then((cfg) => this.setData({ subscribeTemplateId: (cfg && cfg.orderStatus) || '' }))
+      .catch(() => {
+        // 拉不到配置就静默跳过订阅，不能影响下单主流程
+      });
+  },
+
+  /** 请求订阅订单状态变更。用户拒绝、未配模板都不阻塞下单。 */
+  requestSubscribe() {
+    const { subscribeTemplateId } = this.data;
+    if (!subscribeTemplateId) return;
+    requestOrderStatusSubscribe(subscribeTemplateId).then((res) => {
+      if (res && res.error) {
+        console.warn('[subscribe] 未完成订阅:', res.error);
+      }
+    });
   },
 
   onPickupType(e) {
@@ -170,6 +194,9 @@ Page({
       wx.showToast({ title: '请修正手机号后提交', icon: 'none' });
       return;
     }
+    // 订阅必须在手势上下文里同步发起：这里一旦先进网络 await，微信可能拒绝调用
+    this.requestSubscribe();
+
     this.setData({ submitting: true });
     try {
       const { orderNo, pickupFailReason } = await createRecycleOrder({

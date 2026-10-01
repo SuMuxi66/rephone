@@ -45,6 +45,12 @@ rephone:
     secret: ${WX_SECRET:}
     mock-login: ${WX_MOCK_LOGIN:false}
     subscribe-template-id: ${WX_SUBSCRIBE_TEMPLATE_ID:}
+    # 模板字段名：微信申请模板时随机分配（thing1 / character_string2 / time3 …），
+    # 必须按小程序后台模板里看到的实际字段名填写；写错或漏配会导致推送返回 47003
+    subscribe-field-status: ${WX_SUBSCRIBE_FIELD_STATUS:}
+    subscribe-field-order-no: ${WX_SUBSCRIBE_FIELD_ORDER_NO:}
+    subscribe-field-time: ${WX_SUBSCRIBE_FIELD_TIME:}
+    subscribe-page: ${WX_SUBSCRIBE_PAGE:pages/recycle/order/list/index}
   wxpay:
     mch-id: ${WXPAY_MCH_ID:}
     mch-key: ${WXPAY_MCH_KEY:}
