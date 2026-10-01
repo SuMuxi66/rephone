@@ -13,6 +13,7 @@ import com.rephone.mapper.RecycleOrderMapper;
 import com.rephone.pojo.dto.InspectionSubmitRequest;
 import com.rephone.pojo.dto.ExpressFillRequest;
 import com.rephone.pojo.dto.ExpressTraceResult;
+import com.rephone.pojo.dto.RecycleOrderCreateResult;
 import com.rephone.pojo.dto.RecycleOrderCreateRequest;
 import com.rephone.pojo.dto.RecycleOrderDetail;
 import com.rephone.pojo.dto.RecycleOrderItem;
@@ -22,6 +23,7 @@ import com.rephone.pojo.entity.Inspection;
 import com.rephone.pojo.entity.RecycleOrder;
 import com.rephone.express.ExpressCompanies;
 import com.rephone.express.ExpressService;
+import com.rephone.express.kuaidi100.Kuaidi100Client;
 import com.rephone.express.model.ExpressCompany;
 import com.rephone.express.model.ExpressPickupRequest;
 import com.rephone.express.model.ExpressPickupResult;
@@ -95,7 +97,7 @@ public class RecycleOrderService {
     }
 
     @Transactional
-    public String create(RecycleOrderCreateRequest req) {
+    public RecycleOrderCreateResult create(RecycleOrderCreateRequest req) {
         validateCreate(req);
         // 服务端复核估价：以 quote_rule 实时计算为准，客户端报价不一致则拒绝（防止篡改价格下单）
         QuoteResult serverQuote = quoteService.calculate(new QuoteCalculateRequest(
@@ -125,6 +127,8 @@ public class RecycleOrderService {
         orderMapper.insert(order);
 
         // 上门取件单：向快递100 预约取件并回写任务号/运单号（运单号可能由后续回调补齐）
+        boolean pickupBooked = false;
+        String pickupFailReason = "";
         if (order.getPickupType() != null && order.getPickupType() == 20) {
             try {
                 ExpressPickupResult pickup = expressService.createPickup(new ExpressPickupRequest(
@@ -135,15 +139,32 @@ public class RecycleOrderService {
                     order.setExpressNo(pickup.expressNo());
                 }
                 orderMapper.updateById(order);
+                pickupBooked = true;
             } catch (Exception e) {
-                // 取件预约失败不阻塞下单，但绝不能静默：否则用户以为有人上门，单子一直卡在待寄出
+                // 预约失败不阻塞下单，但必须让用户知道并给出出路（改自寄），否则订单会一直卡在待寄出
+                pickupFailReason = pickupFailReason(e);
                 log.warn("[recycle] 上门取件预约失败 orderNo={} 原因={}", order.getOrderNo(), e.getMessage());
             }
         }
 
         statusLogService.record(10, order.getOrderNo(), 0, RecycleOrder.STATUS_WAIT_SEND, 10,
                 order.getUserId(), "用户创建回收订单");
-        return order.getOrderNo();
+        return new RecycleOrderCreateResult(order.getOrderNo(), pickupBooked, pickupFailReason);
+    }
+
+    /**
+     * 上门取件失败的降级文案：按快递100 的错误分类换说法，但都必须落到「可以自己寄」这条出路，
+     * 不能让用户卡在一个没人上门的订单里。分类来自 {@link Kuaidi100Client.ErrorKind}。
+     */
+    public static String pickupFailReason(Throwable e) {
+        if (e instanceof Kuaidi100Client.Kuaidi100Exception k) {
+            return switch (k.kind()) {
+                case MANUAL -> "上门取件服务暂未开通，可改为自行寄出（运费到付）";
+                case RETRYABLE -> "上门取件预约超时，可改为自行寄出，或稍后重新下单（运费到付）";
+                case PARAM -> "该地址暂时无法安排上门取件，可改为自行寄出（运费到付）";
+            };
+        }
+        return "上门取件暂时无法安排，可改为自行寄出（运费到付）";
     }
 
     public Page<RecycleOrderItem> list(Integer status, long pageNum, long pageSize) {
@@ -181,7 +202,8 @@ public class RecycleOrderService {
         return new RecycleOrderDetail(o.getOrderNo(), o.getBrandName(), o.getModelName(), o.getStorage(),
                 o.getConditionLabel(), fromJsonList(o.getIssuesJson()), o.getQuoteFen(), o.getFinalFen(),
                 o.getStatus(), desc(o.getStatus()), o.getPickupType(), o.getPickupName(), o.getPickupPhone(),
-                o.getPickupAddress(), o.getExpressCompany(), o.getExpressNo(), o.getRemark(), o.getAdminRemark(),
+                o.getPickupAddress(), o.getExpressCompany(), o.getExpressNo(), o.getExpressTaskNo(),
+                o.getRemark(), o.getAdminRemark(),
                 o.getCreateTime() == null ? "" : o.getCreateTime().toString(), inspections(o.getOrderNo()));
     }
 

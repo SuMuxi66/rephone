@@ -5,6 +5,7 @@ import com.rephone.common.result.R;
 import com.rephone.pojo.dto.ExpressFillRequest;
 import com.rephone.pojo.dto.ExpressTraceResult;
 import com.rephone.pojo.dto.RecycleOrderCreateRequest;
+import com.rephone.pojo.dto.RecycleOrderCreateResult;
 import com.rephone.pojo.dto.RecycleOrderDetail;
 import com.rephone.pojo.dto.RecycleOrderItem;
 import com.rephone.service.RecycleOrderService;
@@ -30,8 +31,8 @@ public class WxRecycleOrderController {
     }
 
     @PostMapping("/order")
-    public R<Map<String, String>> create(@RequestBody RecycleOrderCreateRequest request) {
-        return R.ok(Map.of("orderNo", orderService.create(request)));
+    public R<RecycleOrderCreateResult> create(@RequestBody RecycleOrderCreateRequest request) {
+        return R.ok(orderService.create(request));
     }
 
     @GetMapping("/orders")

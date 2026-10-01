@@ -7,6 +7,8 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.rephone.express.kuaidi100.Kuaidi100Client;
+import com.rephone.service.RecycleOrderService;
 import java.util.List;
 import java.util.Map;
 import org.junit.jupiter.api.BeforeAll;
@@ -259,6 +261,31 @@ class P3OrderFlowTest {
         ResponseEntity<String> noNo = rest.exchange("/api/wx/recycle/order/" + orderNo2 + "/trace",
                 HttpMethod.GET, new HttpEntity<>(auth()), String.class);
         assertNotEquals(0, objectMapper.readTree(noNo.getBody()).get("code").asInt(), "无运单号不应返回轨迹");
+    }
+
+    /** 上门取件失败必须显式回传原因，前端才好引导用户改自寄，不能静默卡在待寄出。 */
+    @Test
+    @Order(6)
+    void pickup_result_carries_fallback_reason() throws Exception {
+        // 自行寄出：本就不需要预约
+        JsonNode selfShip = objectMapper.readTree(createOrder(566000L, 10).getBody()).path("data");
+        assertFalse(selfShip.path("pickupBooked").asBoolean(), "自行寄出不需要预约");
+        assertTrue(selfShip.path("pickupFailReason").asText().isEmpty(), "自行寄出不应带失败原因");
+
+        // 上门取件：mock 模式下预约成功
+        JsonNode pickup = objectMapper.readTree(createOrder(566000L, 20).getBody()).path("data");
+        assertTrue(pickup.path("pickupBooked").asBoolean(), "mock 模式应预约成功");
+        assertTrue(pickup.path("pickupFailReason").asText().isEmpty(), "成功时不应带失败原因");
+
+        // 降级文案按错误分类区分，但都必须给出「改自寄」这条出路
+        assertEquals("上门取件服务暂未开通，可改为自行寄出（运费到付）",
+                RecycleOrderService.pickupFailReason(new Kuaidi100Client.Kuaidi100Exception(
+                        Kuaidi100Client.ErrorKind.MANUAL, "601", "key已过期", null)));
+        assertTrue(RecycleOrderService.pickupFailReason(new Kuaidi100Client.Kuaidi100Exception(
+                        Kuaidi100Client.ErrorKind.RETRYABLE, "502", "服务器繁忙", null)).contains("自行寄出"),
+                "超时也应给出自寄出路");
+        assertTrue(RecycleOrderService.pickupFailReason(new RuntimeException("boom")).contains("自行寄出"),
+                "未知异常也要给出出路");
     }
 
     private JsonNode trace(String orderNo) throws Exception {

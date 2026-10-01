@@ -20,6 +20,8 @@ public record RecycleOrderDetail(
         String pickupAddress,
         String expressCompany,
         String expressNo,
+        /** 快递100 取件任务号；上门取件单为空即代表预约没成功。 */
+        String expressTaskNo,
         String remark,
         String adminRemark,
         String createTime,
