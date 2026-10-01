@@ -13,10 +13,15 @@ import com.rephone.express.model.ExpressTrace;
  */
 public interface ExpressService {
 
-    /** 预约上门取件，返回任务号与运单号（运单号可能为空，由后续回调补齐）。需单独开通寄件服务。 */
+    /**
+     * 预约上门取件，返回任务号与运单号（运单号可能为空，由后续回调补齐）。需单独开通寄件服务。
+     *
+     * <p>失败抛 {@link com.rephone.express.kuaidi100.Kuaidi100Client.Kuaidi100Exception}，
+     * 调用方按 {@code kind()} 决定降级（转自寄 / 提示重试 / 转人工），不要只 catch Exception 了事。
+     */
     ExpressPickupResult createPickup(ExpressPickupRequest request);
 
-    /** 取消取件任务。需单独开通寄件服务。 */
+    /** 取消取件任务。需单独开通寄件服务。失败抛 Kuaidi100Exception。 */
     void cancelPickup(String taskNo);
 
     /**

@@ -1,35 +1,25 @@
 package com.rephone.express;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.rephone.common.exception.BizException;
-import com.rephone.common.web.HttpGuard;
+import com.rephone.express.kuaidi100.Kuaidi100Client;
 import com.rephone.express.model.ExpressPickupRequest;
 import com.rephone.express.model.ExpressPickupResult;
 import com.rephone.express.model.ExpressTrace;
-import java.nio.charset.StandardCharsets;
-import java.security.MessageDigest;
-import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.HexFormat;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
-import org.springframework.http.client.SimpleClientHttpRequestFactory;
 import org.springframework.stereotype.Service;
-import org.springframework.util.LinkedMultiValueMap;
-import org.springframework.util.MultiValueMap;
 import org.springframework.util.StringUtils;
-import org.springframework.web.client.RestClient;
 
 /**
- * 快递100 实现。
+ * 快递100 业务实现：只负责组装 param 与映射结果，
+ * 签名、HTTP、重试、错误分类全部交给 {@link Kuaidi100Client}。
  *
- * <p>实时查询走 {@code poll.kuaidi100.com/poll/query.do}，签名 = MD5(param + key + customer) 转 32 位大写。
- * 寄件/上门取件（applyApi）属于另一个签约产品，账号未开通时会被快递100 拒绝。
+ * <p>实时查询（poll/query.do）与上门取件（寄件服务）是快递100 两个独立签约的产品，
+ * 只开通查询的账号调用取件接口会被拒。
  * mock 模式（EXPRESS_MOCK=true，默认）不发起真实请求。
  */
 @Service
@@ -69,16 +59,11 @@ public class ExpressServiceImpl implements ExpressService {
             Map.entry("601", "快递100 账号单量不足，请联系运营充值"));
 
     private final ExpressProperties props;
-    private final RestClient restClient;
-    private final ObjectMapper objectMapper = new ObjectMapper();
+    private final Kuaidi100Client client;
 
-    @Autowired
-    public ExpressServiceImpl(ExpressProperties props) {
+    public ExpressServiceImpl(ExpressProperties props, Kuaidi100Client client) {
         this.props = props;
-        SimpleClientHttpRequestFactory factory = new SimpleClientHttpRequestFactory();
-        factory.setConnectTimeout((int) Duration.ofSeconds(3).toMillis());
-        factory.setReadTimeout((int) Duration.ofSeconds(8).toMillis());
-        this.restClient = RestClient.builder().requestFactory(factory).build();
+        this.client = client;
     }
 
     @Override
@@ -87,30 +72,24 @@ public class ExpressServiceImpl implements ExpressService {
             String taskId = "TASK-MOCK-" + System.currentTimeMillis();
             return new ExpressPickupResult(taskId, "MOCKSF" + System.currentTimeMillis());
         }
-        requireConfigured();
-        HttpGuard.requirePublicHttps(ORDER_URL);
-        try {
-            Map<String, Object> param = new LinkedHashMap<>();
-            param.put("kuaidicom", PICKUP_COMPANY);
-            param.put("sendMan", Map.of("name", request.receiverName(), "tel", request.receiverPhone(),
-                    "address", request.receiverAddress()));
-            param.put("callback", props.getCallbackUrl());
-            param.put("orderid", request.orderNo());
-            String paramJson = objectMapper.writeValueAsString(param);
-            Map<?, ?> resp = postForm(ORDER_URL, signedForm(paramJson));
-            Map<?, ?> data = resp == null ? null : (resp.get("data") instanceof Map<?, ?> d ? d : null);
-            Object taskId = data == null ? null : data.get("taskId");
-            Object billCode = data == null ? null : data.get("billCode");
-            if (taskId == null) {
-                throw new BizException(50020, "快递100 下单失败（寄件服务可能未开通）: " + resp);
-            }
-            return new ExpressPickupResult(String.valueOf(taskId),
-                    billCode == null ? null : String.valueOf(billCode));
-        } catch (BizException e) {
-            throw e;
-        } catch (Exception e) {
-            throw new BizException(50021, "快递100 下单异常: " + e.getMessage());
+        Map<String, Object> param = new LinkedHashMap<>();
+        param.put("kuaidicom", PICKUP_COMPANY);
+        param.put("sendMan", Map.of("name", request.receiverName(), "tel", request.receiverPhone(),
+                "address", request.receiverAddress()));
+        param.put("callback", props.getCallbackUrl());
+        param.put("orderid", request.orderNo());
+
+        // 写操作不重试：重试可能重复下单
+        Map<String, Object> resp = client.postOnce(ORDER_URL, param);
+        Object data = resp.get("data");
+        Map<?, ?> body = data instanceof Map<?, ?> d ? d : null;
+        Object taskId = body == null ? null : body.get("taskId");
+        Object billCode = body == null ? null : body.get("billCode");
+        if (taskId == null) {
+            throw new BizException(50020, "快递100 下单失败（寄件服务可能未开通）: " + resp);
         }
+        return new ExpressPickupResult(String.valueOf(taskId),
+                billCode == null ? null : String.valueOf(billCode));
     }
 
     @Override
@@ -118,16 +97,8 @@ public class ExpressServiceImpl implements ExpressService {
         if (props.isMock()) {
             return;
         }
-        requireConfigured();
-        HttpGuard.requirePublicHttps(CANCEL_URL);
-        try {
-            String paramJson = objectMapper.writeValueAsString(Map.of("taskId", taskNo));
-            postForm(CANCEL_URL, signedForm(paramJson));
-        } catch (BizException e) {
-            throw e;
-        } catch (Exception e) {
-            throw new BizException(50022, "快递100 取消异常: " + e.getMessage());
-        }
+        // 写操作不重试
+        client.postOnce(CANCEL_URL, Map.of("taskId", taskNo));
     }
 
     @Override
@@ -135,9 +106,6 @@ public class ExpressServiceImpl implements ExpressService {
         if (props.isMock()) {
             return mockTrace(com, expressNo);
         }
-        requireConfigured();
-        HttpGuard.requirePublicHttps(QUERY_URL);
-
         Map<String, Object> param = new LinkedHashMap<>();
         param.put("com", com);
         param.put("num", expressNo);
@@ -149,15 +117,7 @@ public class ExpressServiceImpl implements ExpressService {
         param.put("resultv2", "4");
         param.put("order", "desc");
 
-        Map<?, ?> resp;
-        try {
-            resp = postForm(QUERY_URL, signedForm(objectMapper.writeValueAsString(param)));
-        } catch (Exception e) {
-            throw new BizException(50024, "快递100 轨迹查询异常: " + e.getMessage());
-        }
-        if (resp == null) {
-            throw new BizException(50024, "快递100 未返回数据");
-        }
+        Map<String, Object> resp = client.query(QUERY_URL, param);
         Object data = resp.get("data");
         if (!(data instanceof List<?> raw) || raw.isEmpty()) {
             throw new BizException(50024, queryError(resp));
@@ -182,31 +142,8 @@ public class ExpressServiceImpl implements ExpressService {
 
     // ===== 内部 =====
 
-    private Map<?, ?> postForm(String url, MultiValueMap<String, String> form) {
-        return restClient.post().uri(url)
-                .contentType(MediaType.APPLICATION_FORM_URLENCODED)
-                .body(form)
-                .retrieve()
-                .body(Map.class);
-    }
-
-    private void requireConfigured() {
-        if (!StringUtils.hasText(props.getKey()) || !StringUtils.hasText(props.getCustomer())) {
-            throw new BizException(50025, "快递100 未配置（需 EXPRESS_KEY / EXPRESS_CUSTOMER 环境变量）");
-        }
-    }
-
-    /** 快递100 签名：MD5(param + key + customer)，32 位大写。 */
-    private MultiValueMap<String, String> signedForm(String paramJson) {
-        MultiValueMap<String, String> form = new LinkedMultiValueMap<>();
-        form.add("param", paramJson);
-        form.add("customer", props.getCustomer());
-        form.add("sign", md5Hex(paramJson + props.getKey() + props.getCustomer()).toUpperCase());
-        return form;
-    }
-
     /** 把快递100 的 returnCode 翻成可读文案；没见过的错误码保留原始 message。 */
-    private static String queryError(Map<?, ?> resp) {
+    private static String queryError(Map<String, Object> resp) {
         String code = text(resp.get("returnCode"));
         String friendly = QUERY_ERRORS.get(code);
         if (friendly != null) {
@@ -234,15 +171,5 @@ public class ExpressServiceImpl implements ExpressService {
             }
         }
         return "";
-    }
-
-    /** MD5 为快递100 签名协议强制要求（非安全算法选型）。 */
-    private static String md5Hex(String data) {
-        try {
-            byte[] digest = MessageDigest.getInstance("MD5").digest(data.getBytes(StandardCharsets.UTF_8)); // mimosa-ignore
-            return HexFormat.of().formatHex(digest);
-        } catch (Exception e) {
-            throw new IllegalStateException(e);
-        }
     }
 }

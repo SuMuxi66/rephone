@@ -35,5 +35,10 @@
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-databind</artifactId>
         </dependency>
+        <!-- Kuaidi100Client 记录调用耗时/错误码分布，需要 SLF4J（版本由 spring-boot-starter-parent 管理） -->
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+        </dependency>
     </dependencies>
 </project>
