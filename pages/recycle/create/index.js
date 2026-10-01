@@ -31,12 +31,18 @@ Page({
   onLoad() {
     const quote = wx.getStorageSync('recycle.quoteResult');
     if (!quote || !quote.priceFen) {
+      // 无估价数据：tab 页只能 switchTab，redirectTo 会静默失败卡白屏
+      this.setData({ noQuote: true });
       wx.showToast({ title: '请先完成估价', icon: 'none' });
-      setTimeout(() => wx.redirectTo({ url: '/pages/recycle/estimate/index' }), 1000);
+      setTimeout(() => wx.switchTab({ url: '/pages/recycle/estimate/index' }), 1200);
       return;
     }
     this.setData({ quote, quoteText: fen2yuan(quote.priceFen) });
     this.loadAddressBook();
+  },
+
+  goEstimateTab() {
+    wx.switchTab({ url: '/pages/recycle/estimate/index' });
   },
 
   onPickupType(e) {

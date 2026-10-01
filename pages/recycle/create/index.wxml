@@ -61,3 +61,8 @@
     </view>
   </t-popup>
 </view>
+
+<view wx:else class="empty-state">
+  <text class="empty-text">还没有估价结果</text>
+  <t-button theme="primary" size="small" bindtap="goEstimateTab">去估价</t-button>
+</view>
