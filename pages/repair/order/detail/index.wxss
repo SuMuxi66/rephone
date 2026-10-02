@@ -90,3 +90,123 @@
 .footer {
   padding: 48rpx 32rpx 0;
 }
+
+/* ===== 寄修运单卡与弹层 ===== */
+.section-head {
+  margin-bottom: 16rpx;
+}
+.section-title-text {
+  font-size: 28rpx;
+  font-weight: 600;
+  color: var(--text-1);
+}
+.express-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16rpx 0;
+}
+.express-info {
+  display: flex;
+  align-items: center;
+  gap: 16rpx;
+  min-width: 0;
+}
+.express-label {
+  font-size: 24rpx;
+  color: var(--text-3);
+  flex-shrink: 0;
+}
+.express-value {
+  font-size: 26rpx;
+  color: var(--text-1);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.express-empty {
+  padding: 8rpx 0 16rpx;
+  font-size: 24rpx;
+  color: var(--text-3);
+}
+.sheet {
+  padding: 32rpx 32rpx calc(env(safe-area-inset-bottom) + 32rpx);
+  background: var(--bg-card);
+  border-radius: 24rpx 24rpx 0 0;
+}
+.sheet-title {
+  font-size: 30rpx;
+  font-weight: 600;
+  color: var(--text-1);
+  margin-bottom: 24rpx;
+}
+.sheet-picker {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 24rpx 0;
+  border-bottom: 1rpx solid var(--border-light);
+}
+.sheet-picker-label {
+  font-size: 26rpx;
+  color: var(--text-2);
+}
+.sheet-picker-value {
+  font-size: 28rpx;
+  color: var(--text-1);
+}
+.sheet-input {
+  margin: 24rpx 0 32rpx;
+  padding: 20rpx 24rpx;
+  background: var(--bg-page);
+  border-radius: var(--radius-sm);
+  font-size: 28rpx;
+  color: var(--text-1);
+}
+.trace-sheet {
+  max-height: 70vh;
+  overflow-y: auto;
+}
+.trace-loading {
+  padding: 40rpx 0;
+  text-align: center;
+  font-size: 26rpx;
+  color: var(--text-3);
+}
+.trace-node {
+  display: flex;
+  gap: 16rpx;
+  padding: 12rpx 0;
+}
+.trace-dot {
+  width: 14rpx;
+  height: 14rpx;
+  margin-top: 12rpx;
+  border-radius: 50%;
+  background: var(--brand);
+  flex-shrink: 0;
+}
+.trace-body {
+  min-width: 0;
+  flex: 1;
+}
+.trace-context {
+  font-size: 26rpx;
+  color: var(--text-1);
+  line-height: 1.5;
+}
+.trace-time {
+  margin-top: 4rpx;
+  font-size: 22rpx;
+  color: var(--text-3);
+}
+.empty-state {
+  min-height: 60vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.empty-text {
+  font-size: 26rpx;
+  color: var(--text-3);
+}

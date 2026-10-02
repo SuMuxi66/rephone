@@ -3,12 +3,12 @@
     <view class="status-row">
       <text class="status-text">{{order.statusDesc}}</text>
       <view class="status-tags">
-        <t-tag theme="primary" variant="light" size="small">上门维修</t-tag>
+        <t-tag theme="primary" variant="light" size="small">{{serviceText}}</t-tag>
         <status-tag biz="repair" status="{{order.status}}" />
       </view>
     </view>
     <view class="price-row">
-      <text class="price-label">维修合计（修好验收后付款）</text>
+      <text class="price-label">{{mailIn ? '维修合计（寄修，修好回寄）' : '维修合计（修好验收后付款）'}}</text>
       <text class="price">¥{{totalText}}</text>
     </view>
     <view class="warranty-line">质保 {{order.warrantyDays}} 天，自维修完成日起算</view>
@@ -21,12 +21,35 @@
     </t-steps>
   </view>
 
+  <!-- 寄修：运单卡 -->
+  <view wx:if="{{mailIn}}" class="timeline-card">
+    <view class="section-head">
+      <text class="section-title-text">寄修运单</text>
+    </view>
+    <view class="express-row" wx:if="{{order.expressNo}}">
+      <view class="express-info">
+        <text class="express-label">寄出</text>
+        <text class="express-value">{{order.expressCompany}} {{order.expressNo}}</text>
+      </view>
+      <t-button size="small" variant="outline" theme="primary" bindtap="onOpenSendTrace">查物流</t-button>
+    </view>
+    <view wx:else class="express-empty">寄出后在此填写运单号，商家收件即开始维修</view>
+    <view class="express-row" wx:if="{{order.returnExpressNo}}">
+      <view class="express-info">
+        <text class="express-label">回寄</text>
+        <text class="express-value">{{order.returnExpressCompany}} {{order.returnExpressNo}}</text>
+      </view>
+      <t-button size="small" variant="outline" theme="primary" bindtap="onOpenReturnTrace">查物流</t-button>
+    </view>
+    <view wx:elif="{{order.status === 40 || order.status === 30}}" class="express-empty">维修完成后商家将回寄并填写运单号</view>
+  </view>
+
   <t-cell-group theme="card">
     <t-cell title="机型" note="{{order.brandName}} {{order.modelName}}" />
     <t-cell title="维修项目" note="{{itemsText}}" />
-    <t-cell title="预约时间" note="{{order.appointTime}}" />
+    <t-cell wx:if="{{!mailIn}}" title="预约时间" note="{{order.appointTime}}" />
     <t-cell title="联系人" note="{{order.contactName}} {{order.contactPhone}}" />
-    <t-cell title="上门地址" note="{{order.address}}" />
+    <t-cell title="{{mailIn ? '回寄收件地址' : '上门地址'}}" note="{{order.address}}" />
     <t-cell wx:if="{{order.remark}}" title="故障描述" note="{{order.remark}}" />
     <t-cell wx:if="{{order.adminRemark}}" title="工程师说明" note="{{order.adminRemark}}" />
   </t-cell-group>
@@ -44,7 +67,57 @@
     />
   </view>
 
-  <view class="footer" wx:if="{{order.status === 10}}">
+  <view class="footer" wx:if="{{order.status === 10 || (mailIn && order.status === 20)}}">
     <t-button theme="default" block bindtap="onCancel">取消预约</t-button>
   </view>
+
+  <!-- 寄修：待寄出 → 填运单号；回寄中 → 确认收货 -->
+  <view class="footer" wx:if="{{mailIn && order.status === 20}}">
+    <t-button theme="primary" block bindtap="openExpressSheet">我已寄出，填写运单号</t-button>
+  </view>
+  <view class="footer" wx:if="{{mailIn && order.status === 45}}">
+    <t-button theme="primary" block bindtap="onConfirmReceipt">确认收货，完成维修</t-button>
+  </view>
+
+  <!-- 寄出填单弹层 -->
+  <t-popup visible="{{expressSheetVisible}}" placement="bottom" bind:visible-change="hideExpressSheet">
+    <view class="sheet">
+      <view class="sheet-title">填写寄出运单号</view>
+      <picker mode="selector" range="{{companies}}" range-key="name" value="{{companyIndex}}" bindchange="onCompanyChange">
+        <view class="sheet-picker">
+          <text class="sheet-picker-label">快递公司</text>
+          <text class="sheet-picker-value">{{companies[companyIndex].name || '请选择'}}</text>
+        </view>
+      </picker>
+      <input
+        class="sheet-input"
+        placeholder="请输入运单号（至少 6 位）"
+        value="{{expressNoInput}}"
+        bindinput="onExpressNoInput"
+      />
+      <t-button theme="primary" block loading="{{submittingExpress}}" disabled="{{submittingExpress}}" bindtap="onSubmitExpress">提交</t-button>
+    </view>
+  </t-popup>
+
+  <!-- 轨迹弹层 -->
+  <t-popup visible="{{traceSheetVisible}}" placement="bottom" bind:visible-change="hideTraceSheet">
+    <view class="sheet trace-sheet">
+      <view class="sheet-title">{{traceTitle}}</view>
+      <view wx:if="{{traceLoading}}" class="trace-loading">查询中...</view>
+      <view wx:elif="{{!traceNodes.length}}" class="trace-loading">暂无物流轨迹</view>
+      <block wx:else>
+        <view wx:for="{{traceNodes}}" wx:key="index" class="trace-node">
+          <view class="trace-dot"></view>
+          <view class="trace-body">
+            <view class="trace-context">{{item.context}}</view>
+            <view class="trace-time">{{item.time}}</view>
+          </view>
+        </view>
+      </block>
+    </view>
+  </t-popup>
+</view>
+
+<view wx:else class="empty-state">
+  <text class="empty-text">订单不存在或无权查看</text>
 </view>

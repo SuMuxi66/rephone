@@ -31,6 +31,38 @@
   font-weight: 600;
 }
 
+.service-options {
+  display: flex;
+  gap: 16rpx;
+  padding: 8rpx 0;
+}
+
+.service-option {
+  flex: 1;
+  box-sizing: border-box;
+  padding: 20rpx 24rpx;
+  border: 2rpx solid var(--border-light);
+  border-radius: var(--radius-sm);
+  background: var(--bg-card);
+}
+
+.service-option--active {
+  border-color: var(--brand);
+  background: var(--brand-light);
+}
+
+.service-option-name {
+  font-size: 28rpx;
+  font-weight: 600;
+  color: var(--text-1);
+}
+
+.service-option-desc {
+  margin-top: 6rpx;
+  font-size: 22rpx;
+  color: var(--text-3);
+}
+
 .form-body {
   padding: 8rpx 0;
 }

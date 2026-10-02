@@ -46,6 +46,12 @@ Page({
     itemsText: '',
     totalText: '0',
     submitting: false,
+    // 服务方式：10 上门维修（默认） 20 寄修
+    serviceType: 10,
+    serviceOptions: [
+      { label: '上门维修', value: 10, desc: '工程师按约定时间上门' },
+      { label: '寄修', value: 20, desc: '自行寄出，修好回寄' },
+    ],
     form: {
       name: '',
       phone: '',
@@ -84,6 +90,11 @@ Page({
 
   goRepairTab() {
     wx.switchTab({ url: '/pages/repair/index' });
+  },
+
+  /** 服务方式切换：寄修无需预约时间 */
+  onServiceChange(e) {
+    this.setData({ serviceType: Number(e.currentTarget.dataset.value) });
   },
 
   onInput(e) {
@@ -239,13 +250,14 @@ Page({
   },
 
   async onSubmit() {
-    const { form, errors, submitting, selection, photos } = this.data;
+    const { form, errors, submitting, selection, photos, serviceType } = this.data;
     if (submitting) return;
     if (!form.name || !form.phone || !form.region || !form.detail) {
       wx.showToast({ title: '请完整填写联系人、地区与详细地址', icon: 'none' });
       return;
     }
-    if (!form.timeText) {
+    const mailIn = Number(serviceType) === 20;
+    if (!mailIn && !form.timeText) {
       wx.showToast({ title: '请选择预约时间', icon: 'none' });
       return;
     }
@@ -265,11 +277,11 @@ Page({
       const { orderNo } = await createRepairOrder({
         modelId: selection.modelId,
         itemIds: selection.items.map((it) => it.itemId),
-        serviceType: 10,
+        serviceType,
         contactName: form.name,
         contactPhone: form.phone,
         address: `${form.region} ${form.detail}`,
-        appointTime: form.timeText,
+        appointTime: mailIn ? '' : form.timeText,
         remark: form.remark,
         images,
       });

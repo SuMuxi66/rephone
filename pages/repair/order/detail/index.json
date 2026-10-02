@@ -7,6 +7,7 @@
     "t-button": "tdesign-miniprogram/button/button",
     "t-steps": "tdesign-miniprogram/steps/steps",
     "t-step-item": "tdesign-miniprogram/step-item/step-item",
+    "t-popup": "tdesign-miniprogram/popup/popup",
     "status-tag": "/components/status-tag/index"
   }
 }

@@ -11,14 +11,29 @@
     <t-icon name="chevron-right" size="36rpx" color="#BBBBBB" />
   </view>
 
-  <section-card title="上门信息">
+  <section-card title="服务方式">
+    <view class="service-options">
+      <view
+        wx:for="{{serviceOptions}}"
+        wx:key="value"
+        class="service-option {{serviceType === item.value ? 'service-option--active' : ''}}"
+        data-value="{{item.value}}"
+        bindtap="onServiceChange"
+      >
+        <view class="service-option-name">{{item.label}}</view>
+        <view class="service-option-desc">{{item.desc}}</view>
+      </view>
+    </view>
+  </section-card>
+
+  <section-card title="{{serviceType === 20 ? '寄修信息' : '上门信息'}}">
     <view class="form-body">
       <t-input label="联系人" placeholder="姓名" value="{{form.name}}" data-field="name" bindchange="onInput" />
       <t-input label="手机号" type="number" placeholder="11 位手机号" value="{{form.phone}}" data-field="phone" bindchange="onInput" bindblur="onPhoneBlur" />
       <view wx:if="{{errors.phone}}" class="field-error">{{errors.phone}}</view>
       <t-cell title="所在地区" arrow hover bindtap="showRegion" note="{{form.region || '请选择省/市/区'}}" />
       <t-input label="详细地址" placeholder="街道、门牌号" value="{{form.detail}}" data-field="detail" bindchange="onInput" />
-      <t-cell title="预约时间" arrow hover bindtap="showTime" note="{{form.timeText || '请选择上门时间段'}}" />
+      <t-cell wx:if="{{serviceType !== 20}}" title="预约时间" arrow hover bindtap="showTime" note="{{form.timeText || '请选择上门时间段'}}" />
       <t-textarea label="故障描述" placeholder="补充故障现象，方便工程师备件（可选）" value="{{form.remark}}" data-field="remark" bindchange="onInput" autosize maxlength="100" />
     </view>
   </section-card>
@@ -38,7 +53,8 @@
 
   <view class="footer">
     <t-button theme="primary" block loading="{{submitting}}" disabled="{{submitting}}" bindtap="onSubmit">提交预约</t-button>
-    <view class="footer-tip">提交后客服将电话确认上门时间，工程师先报价后维修，修好验收付款</view>
+    <view class="footer-tip" wx:if="{{serviceType === 20}}">提交后请将设备寄出并在订单详情填写运单号，修好商家回寄</view>
+    <view class="footer-tip" wx:else>提交后客服将电话确认上门时间，工程师先报价后维修，修好验收付款</view>
   </view>
 
   <t-picker cancelBtn="取消" confirmBtn="确定" visible="{{regionPickerVisible}}" value="{{regionValue}}" title="选择地区" bindpick="onRegionPick" bind:confirm="onRegionConfirm" bind:close="hideRegion">
