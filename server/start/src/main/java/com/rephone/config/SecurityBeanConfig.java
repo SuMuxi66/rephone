@@ -3,6 +3,7 @@ package com.rephone.config;
 import com.rephone.common.security.JwtTokenService;
 import com.rephone.controller.support.AdminTokenFilter;
 import com.rephone.controller.support.JwtAuthFilter;
+import com.rephone.mapper.TenantMapper;
 import com.rephone.mapper.UserMapper;
 import com.rephone.service.AdminRoleService;
 import com.rephone.wechat.WxProperties;
@@ -56,11 +57,12 @@ public class SecurityBeanConfig {
     @Bean
     public FilterRegistrationBean<AdminTokenFilter> adminTokenFilter(Environment env, JwtTokenService tokenService,
                                                                      UserMapper userMapper,
+                                                                     TenantMapper tenantMapper,
                                                                      AdminRoleService adminRoleService) {
         FilterRegistrationBean<AdminTokenFilter> registration =
                 new FilterRegistrationBean<>(
                         new AdminTokenFilter(env.getProperty("rephone.admin.token", ""), tokenService,
-                                userMapper, adminRoleService));
+                                userMapper, tenantMapper, adminRoleService));
         registration.addUrlPatterns("/api/admin/*");
         registration.setOrder(0);
         return registration;

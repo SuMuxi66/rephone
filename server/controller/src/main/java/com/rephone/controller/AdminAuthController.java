@@ -76,6 +76,7 @@ public class AdminAuthController {
         return R.ok(Map.of(
                 "token", token,
                 "userId", user.getId(),
+                "tenantId", user.getTenantId() == null ? 0L : user.getTenantId(),
                 "nickname", user.getNickname() == null ? "" : user.getNickname(),
                 "role", "ADMIN",
                 "roleCode", user.getRole(),
@@ -99,6 +100,7 @@ public class AdminAuthController {
                     "roleCode", user.getRole(),
                     "permissions", adminRoleService.permissionsOf(roleCode),
                     "userId", user.getId(),
+                    "tenantId", user.getTenantId() == null ? 0L : user.getTenantId(),
                     "nickname", user.getNickname() == null ? "" : user.getNickname()));
         }
         return R.ok(Map.of("authType", "token", "role", "ADMIN", "roleCode", "ADMIN",

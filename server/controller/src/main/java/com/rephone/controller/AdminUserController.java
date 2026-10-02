@@ -2,8 +2,10 @@ package com.rephone.controller;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.rephone.common.result.R;
+import com.rephone.controller.support.AdminTokenFilter;
 import com.rephone.pojo.dto.AdminUserItem;
 import com.rephone.service.AdminUserService;
+import jakarta.servlet.http.HttpServletRequest;
 import java.util.Map;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -44,13 +46,31 @@ public class AdminUserController {
         Long id = userService.createAdmin(
                 body == null ? null : body.get("username"),
                 body == null ? null : body.get("password"),
-                body == null ? null : body.get("nickname"));
+                body == null ? null : body.get("nickname"),
+                body == null ? null : body.get("roleCode"),
+                body == null ? null : parseLong(body.get("tenantId")));
         return R.ok(Map.of("userId", id));
+    }
+
+    @PutMapping("/account/{id}/role")
+    public R<Void> changeRole(@PathVariable Long id, @RequestBody Map<String, String> body,
+                              HttpServletRequest request) {
+        Long callerId = (Long) request.getAttribute(AdminTokenFilter.ATTR_USER_ID);
+        userService.changeRole(callerId, id, body == null ? null : body.get("roleCode"));
+        return R.ok();
     }
 
     @PutMapping("/account/{id}/password")
     public R<Void> resetPassword(@PathVariable Long id, @RequestBody Map<String, String> body) {
         userService.resetPassword(id, body == null ? null : body.get("password"));
         return R.ok();
+    }
+
+    private static Long parseLong(String value) {
+        try {
+            return value == null || value.isBlank() ? null : Long.parseLong(value.trim());
+        } catch (NumberFormatException e) {
+            return null;
+        }
     }
 }

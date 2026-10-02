@@ -24,11 +24,23 @@ public class AdminRoleService {
     /** 平台超管角色编码，与 user.role 取值一致。 */
     public static final String SUPER_ROLE = "ADMIN";
 
+    /** 租户管理员角色编码。 */
+    public static final String TENANT_ADMIN_ROLE = "TENANT_ADMIN";
+
     private final RoleMapper roleMapper;
     private final ObjectMapper objectMapper = new ObjectMapper();
 
     public AdminRoleService(RoleMapper roleMapper) {
         this.roleMapper = roleMapper;
+    }
+
+    /** 当前启用中的全部管理角色编码（含固定的平台超管），供账号/租户模块做角色校验与统计。 */
+    public List<String> adminRoleCodes() {
+        List<String> codes = new ArrayList<>();
+        codes.add(SUPER_ROLE);
+        roleMapper.selectList(new LambdaQueryWrapper<Role>().eq(Role::getStatus, 1))
+                .forEach(r -> codes.add(r.getRoleCode()));
+        return List.copyOf(codes);
     }
 
     /** 该角色编码是否允许登录管理端（存在且启用的角色，或平台超管）。 */

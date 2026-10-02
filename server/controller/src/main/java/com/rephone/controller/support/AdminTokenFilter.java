@@ -1,8 +1,11 @@
 package com.rephone.controller.support;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.rephone.common.context.TenantContextHolder;
 import com.rephone.common.security.JwtTokenService;
+import com.rephone.mapper.TenantMapper;
 import com.rephone.mapper.UserMapper;
+import com.rephone.pojo.entity.Tenant;
 import com.rephone.pojo.entity.User;
 import com.rephone.service.AdminRoleService;
 import io.jsonwebtoken.Claims;
@@ -36,14 +39,17 @@ public class AdminTokenFilter extends OncePerRequestFilter {
     private final String adminToken;
     private final JwtTokenService tokenService;
     private final UserMapper userMapper;
+    private final TenantMapper tenantMapper;
     private final AdminRoleService adminRoleService;
     private final ObjectMapper objectMapper = new ObjectMapper();
 
     public AdminTokenFilter(String adminToken, JwtTokenService tokenService,
-                            UserMapper userMapper, AdminRoleService adminRoleService) {
+                            UserMapper userMapper, TenantMapper tenantMapper,
+                            AdminRoleService adminRoleService) {
         this.adminToken = adminToken;
         this.tokenService = tokenService;
         this.userMapper = userMapper;
+        this.tenantMapper = tenantMapper;
         this.adminRoleService = adminRoleService;
     }
 
@@ -75,15 +81,29 @@ public class AdminTokenFilter extends OncePerRequestFilter {
                         writeError(response, 40101, "管理员账号不存在或已停用，请重新登录");
                         return;
                     }
-                    String required = AdminPermissions.required(request.getRequestURI());
-                    if (!adminRoleService.hasPermission(user.getRole(), required)) {
-                        writeError(response, 40300, "无权限访问该功能");
-                        return;
+                    // 租户管理员（tid>0）写租户上下文 → 业务表查询自动限定本租户；停用租户整体阻断
+                    Long tid = user.getTenantId();
+                    if (tid != null && tid > 0) {
+                        Tenant tenant = tenantMapper.selectById(tid);
+                        if (tenant == null || !Integer.valueOf(1).equals(tenant.getStatus())) {
+                            writeError(response, 40101, "所属租户已停用，请联系平台");
+                            return;
+                        }
+                        TenantContextHolder.set(tid);
                     }
-                    request.setAttribute(ATTR_AUTH_TYPE, "account");
-                    request.setAttribute(ATTR_USER_ID, userId);
-                    request.setAttribute(ATTR_ROLE_CODE, user.getRole());
-                    chain.doFilter(request, response);
+                    try {
+                        String required = AdminPermissions.required(request.getRequestURI());
+                        if (!adminRoleService.hasPermission(user.getRole(), required)) {
+                            writeError(response, 40300, "无权限访问该功能");
+                            return;
+                        }
+                        request.setAttribute(ATTR_AUTH_TYPE, "account");
+                        request.setAttribute(ATTR_USER_ID, userId);
+                        request.setAttribute(ATTR_ROLE_CODE, user.getRole());
+                        chain.doFilter(request, response);
+                    } finally {
+                        TenantContextHolder.clear();
+                    }
                     return;
                 }
             } catch (JwtException | IllegalArgumentException ignored) {
