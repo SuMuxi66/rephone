@@ -1,7 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router';
 import { hasPermission } from '../api/permissions';
-
-const TOKEN_KEY = 'rephone.admin.token';
+import { clearSession, getProfile, TOKEN_KEY } from '../api/http';
 
 const router = createRouter({
   history: createWebHistory(),
@@ -13,9 +12,10 @@ const router = createRouter({
       redirect: '/dashboard',
       children: [
         {
+          // 看板是权限兜底页：所有管理角色都可见，守卫对它直接放行避免重定向环
           path: 'dashboard',
           name: 'dashboard',
-          meta: { requiresAdmin: true, permission: 'dashboard:read' },
+          meta: { requiresAdmin: true },
           component: () => import('../views/Dashboard.vue'),
         },
         {
@@ -89,7 +89,8 @@ const router = createRouter({
   ],
 });
 
-// 路由守卫：无 token 回登录页；无对应权限点的页面回落看板
+// 路由守卫：无 token 回登录页；旧格式登录态（升级前保存、无 permissions）强制重新登录；
+// 无对应权限点的页面回落看板（看板自身放行，防止重定向环）
 router.beforeEach((to) => {
   const token = localStorage.getItem(TOKEN_KEY);
   if (to.path !== '/login' && !token) {
@@ -98,7 +99,12 @@ router.beforeEach((to) => {
   if (to.path === '/login' && token) {
     return { path: '/dashboard' };
   }
-  if (to.meta && to.meta.permission && !hasPermission(to.meta.permission)) {
+  const profile = getProfile();
+  if (token && !Array.isArray(profile.permissions)) {
+    clearSession();
+    return { path: '/login' };
+  }
+  if (to.meta && to.meta.permission && to.path !== '/dashboard' && !hasPermission(to.meta.permission)) {
     return { path: '/dashboard' };
   }
   return true;
