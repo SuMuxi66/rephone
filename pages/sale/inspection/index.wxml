@@ -1,6 +1,6 @@
 <view class="page" wx:if="{{report}}">
   <view class="hero">
-    <view class="hero-badge"><t-icon name="verified" size="40rpx" color="#FFFFFF" /></view>
+    <view class="hero-badge"><t-icon name="verified" size="40rpx" /></view>
     <view class="hero-title">RePhone 官方质检报告</view>
     <view class="hero-no">报告编号 {{report.reportNo}}</view>
     <view class="hero-meta">

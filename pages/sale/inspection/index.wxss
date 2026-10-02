@@ -17,6 +17,8 @@
   height: 88rpx;
   border-radius: 50%;
   background: rgba(255, 255, 255, 0.22);
+  /* 图标色走继承，wxml 里不裸写色值 */
+  color: var(--text-anti);
   display: flex;
   align-items: center;
   justify-content: center;
