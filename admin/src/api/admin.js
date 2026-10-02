@@ -22,6 +22,33 @@ export const fetchRepairOrders = (params) => http.get('/admin/repair/orders', { 
 export const fetchRepairOrderDetail = (orderNo) => http.get(`/admin/repair/order/${orderNo}`);
 export const changeRepairStatus = (orderNo, toStatus, remark) =>
   http.put(`/admin/repair/order/${orderNo}/status`, { toStatus, remark });
+export const fillRepairReturnExpress = (orderNo, payload) =>
+  http.put(`/admin/repair/order/${orderNo}/return-express`, payload);
+export const fetchRepairTrace = (orderNo, direction) =>
+  http.get(`/admin/repair/order/${orderNo}/trace`, { params: { direction } });
+export const fetchExpressCompanies = () => http.get('/admin/repair/express-companies');
+
+export const REPAIR_STATUS = {
+  10: { label: '待确认', type: 'info' },
+  20: { label: '已预约/待寄出', type: 'primary' },
+  25: { label: '已寄出', type: 'primary' },
+  30: { label: '维修中', type: 'warning' },
+  40: { label: '待验收/待回寄', type: 'warning' },
+  45: { label: '回寄中', type: 'warning' },
+  50: { label: '已完成', type: 'success' },
+  80: { label: '已取消', type: 'info' },
+};
+
+/** 寄修单的管理端推进映射：当前状态 → 下一状态（20→25 与 40→45 由填单接口触发，不在普通推进内） */
+export const REPAIR_NEXT = {
+  onsite: { 10: 20, 20: 30, 30: 40, 40: 50 },
+  mailIn: { 10: 20, 25: 30, 30: 40, 45: 50 },
+};
+
+export const REPAIR_STATUS_FILTERS = {
+  0: '全部', 10: '待确认', 20: '已预约/待寄出', 25: '已寄出', 30: '维修中',
+  40: '待验收/待回寄', 45: '回寄中', 50: '已完成', 80: '已取消',
+};
 
 // ===== 账号管理 =====
 export const fetchUsers = (params) => http.get('/admin/users', { params });
@@ -128,11 +155,3 @@ export const RECYCLE_STATUS = {
   80: { label: '已取消', type: 'info' },
 };
 
-export const REPAIR_STATUS = {
-  10: { label: '待确认', type: 'info' },
-  20: { label: '已预约', type: 'primary' },
-  30: { label: '维修中', type: 'warning' },
-  40: { label: '待验收', type: 'warning' },
-  50: { label: '已完成', type: 'success' },
-  80: { label: '已取消', type: 'info' },
-};
