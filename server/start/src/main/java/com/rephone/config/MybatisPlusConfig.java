@@ -34,7 +34,8 @@ public class MybatisPlusConfig {
             @Override
             public boolean ignoreTable(String tableName) {
                 String name = tableName == null ? "" : tableName.toLowerCase().replace("`", "");
-                if ("tenant".equals(name)) {
+                // tenant 是租户注册表本身；role 是平台级角色字典（租户管理员的权限解析发生在已写租户上下文的请求里）
+                if ("tenant".equals(name) || "role".equals(name)) {
                     return true;
                 }
                 return TenantContextHolder.get() == null;
