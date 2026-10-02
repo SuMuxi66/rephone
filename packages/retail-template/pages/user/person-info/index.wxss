@@ -57,3 +57,10 @@ page view {
   font-weight: 600;
   color: var(--text-1);
 }
+
+.phone-sheet__hint {
+  margin-bottom: 16rpx;
+  font-size: 22rpx;
+  color: var(--text-3);
+  line-height: 1.5;
+}

@@ -63,7 +63,8 @@ Page({
       case 'phoneNumber':
         this.setData({
           phoneSheetVisible: true,
-          phoneInput: this.data.personInfo.phoneNumber || '',
+          // 预填为空（已绑号码在行上以掩码展示）；输入新号保存=换绑，直接保存空=解绑
+          phoneInput: '',
         });
         break;
       default: {

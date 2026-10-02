@@ -1,6 +1,7 @@
 package com.rephone.service;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.rephone.common.exception.BizException;
 import com.rephone.mapper.UserMapper;
 import com.rephone.pojo.entity.User;
@@ -80,13 +81,16 @@ public class UserService {
         if (phoneNumber != null) {
             String trimmedPhone = phoneNumber.trim();
             if (trimmedPhone.isEmpty()) {
-                user.setPhone(null);
-            } else {
-                if (!trimmedPhone.matches("1\\d{10}")) {
-                    throw new BizException(40043, "手机号格式不正确");
-                }
-                user.setPhone(trimmedPhone);
+                // 解绑：MyBatis-Plus updateById 默认跳过 null 字段，必须用 UpdateWrapper 显式置 NULL
+                userMapper.update(null, new LambdaUpdateWrapper<User>()
+                        .eq(User::getId, userId)
+                        .set(User::getPhone, null));
+                return userMapper.selectById(userId);
             }
+            if (!trimmedPhone.matches("1\\d{10}")) {
+                throw new BizException(40043, "手机号格式不正确");
+            }
+            user.setPhone(trimmedPhone);
         }
         userMapper.updateById(user);
         return user;
