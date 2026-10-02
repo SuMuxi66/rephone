@@ -3,6 +3,7 @@ package com.rephone.config;
 import com.rephone.common.security.JwtTokenService;
 import com.rephone.controller.support.AdminTokenFilter;
 import com.rephone.controller.support.JwtAuthFilter;
+import com.rephone.controller.support.RequestBodySizeFilter;
 import com.rephone.mapper.TenantMapper;
 import com.rephone.mapper.UserMapper;
 import com.rephone.service.AdminRoleService;
@@ -43,6 +44,16 @@ public class SecurityBeanConfig {
             }
         }
         return new JwtTokenService(secret, jwtProperties.getTtlSeconds());
+    }
+
+    @Bean
+    public FilterRegistrationBean<RequestBodySizeFilter> requestBodySizeFilter() {
+        // 请求体硬上限（SEC-5）：排最前，超限请求不消耗鉴权与业务资源
+        FilterRegistrationBean<RequestBodySizeFilter> registration =
+                new FilterRegistrationBean<>(new RequestBodySizeFilter());
+        registration.addUrlPatterns("/api/*");
+        registration.setOrder(-1);
+        return registration;
     }
 
     @Bean

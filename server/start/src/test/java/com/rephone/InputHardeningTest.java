@@ -76,4 +76,18 @@ class InputHardeningTest {
         assertEquals(40002, body.get("code").asInt());
         assertFalse(body.get("message").asText().contains("服务繁忙"));
     }
+
+    @Test
+    void oversizedBodyRejectedBeforeBusinessLogic() throws Exception {
+        // SEC-5：1MB 硬上限，超限请求在过滤器层直接 413，不进入登录逻辑（也不计暴破计数）
+        HttpHeaders h = new HttpHeaders();
+        h.setContentType(MediaType.APPLICATION_JSON);
+        StringBuilder big = new StringBuilder("{\"username\":\"").append("A".repeat(1024 * 1024 + 16))
+                .append("\",\"password\":\"x\"}");
+        ResponseEntity<String> resp = rest.exchange("/api/admin/auth/login", HttpMethod.POST,
+                new HttpEntity<>(big.toString(), h), String.class);
+        assertEquals(413, resp.getStatusCode().value());
+        JsonNode body = objectMapper.readTree(resp.getBody());
+        assertEquals(41300, body.get("code").asInt());
+    }
 }
