@@ -6,7 +6,9 @@ import com.rephone.common.result.R;
 import com.rephone.common.security.JwtTokenService;
 import com.rephone.controller.support.AdminTokenFilter;
 import com.rephone.controller.support.LoginAttemptGuard;
+import com.rephone.mapper.TenantMapper;
 import com.rephone.mapper.UserMapper;
+import com.rephone.pojo.entity.Tenant;
 import com.rephone.pojo.entity.User;
 import com.rephone.service.AdminRoleService;
 import jakarta.servlet.http.HttpServletRequest;
@@ -25,7 +27,8 @@ import org.springframework.web.bind.annotation.RestController;
 /**
  * 管理端账号登录（匿名入口）与身份查询。
  * login 任何失败统一 40101，不区分账号不存在/密码错误；连续失败记录 warn 日志。
- * 登录准入：user.role 必须是启用的管理角色（ADMIN 平台超管代码固定放行）。
+ * 登录准入：user.role 必须是启用的管理角色（ADMIN 平台超管代码固定放行），
+ * 且所属租户（tid>0）必须处于启用状态。
  */
 @RestController
 @RequestMapping("/api/admin/auth")
@@ -34,14 +37,16 @@ public class AdminAuthController {
     private static final Logger log = LoggerFactory.getLogger(AdminAuthController.class);
 
     private final UserMapper userMapper;
+    private final TenantMapper tenantMapper;
     private final JwtTokenService tokenService;
     private final LoginAttemptGuard attemptGuard;
     private final AdminRoleService adminRoleService;
     private final BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 
-    public AdminAuthController(UserMapper userMapper, JwtTokenService tokenService,
+    public AdminAuthController(UserMapper userMapper, TenantMapper tenantMapper, JwtTokenService tokenService,
                                LoginAttemptGuard attemptGuard, AdminRoleService adminRoleService) {
         this.userMapper = userMapper;
+        this.tenantMapper = tenantMapper;
         this.tokenService = tokenService;
         this.attemptGuard = attemptGuard;
         this.adminRoleService = adminRoleService;
@@ -72,6 +77,16 @@ public class AdminAuthController {
             throw new BizException(40101, "用户名或密码错误");
         }
         attemptGuard.reset(attemptKey);
+        // 登录准入层一：所属租户必须启用（层二是 AdminTokenFilter 对每个请求的 40101 阻断；
+        // 此前只挡 API 不挡登录，停用租户的管理员仍能拿到「看着有效」的 token）
+        if (user.getTenantId() != null && user.getTenantId() > 0) {
+            Tenant tenant = tenantMapper.selectById(user.getTenantId());
+            if (tenant == null || !Integer.valueOf(1).equals(tenant.getStatus())) {
+                log.warn("[admin-login] 拒绝停用租户的管理员登录 username={} tenantId={}",
+                        username, user.getTenantId());
+                throw new BizException(40101, "所属租户已停用，请联系平台");
+            }
+        }
         String token = tokenService.createAdminToken(user.getId(), user.getTenantId(), "admin");
         return R.ok(Map.of(
                 "token", token,

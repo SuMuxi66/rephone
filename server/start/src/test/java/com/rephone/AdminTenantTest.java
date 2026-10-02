@@ -54,6 +54,7 @@ class AdminTenantTest {
 
     private long tenantId;
     private String tenantAdminToken;
+    private String tenantAdminUsername;
 
     private ResponseEntity<String> machineExchange(String uri, HttpMethod method, Object body) {
         HttpHeaders h = new HttpHeaders();
@@ -89,9 +90,10 @@ class AdminTenantTest {
     @Order(1)
     void createTenantWithAdminAccount() throws Exception {
         String suffix = UUID.randomUUID().toString().substring(0, 8);
+        tenantAdminUsername = "tadmin_" + suffix;
         ResponseEntity<String> resp = machineExchange("/api/admin/tenant", HttpMethod.POST, Map.of(
                 "name", " partner-shop-" + suffix,
-                "adminUsername", "tadmin_" + suffix,
+                "adminUsername", tenantAdminUsername,
                 "adminPassword", "password123",
                 "adminNickname", "店长" + suffix));
         assertEquals(0, objectMapper.readTree(resp.getBody()).get("code").asInt());
@@ -99,7 +101,7 @@ class AdminTenantTest {
         assertTrue(tenantId > 0);
 
         ResponseEntity<String> login = rest.postForEntity("/api/admin/auth/login", Map.of(
-                "username", "tadmin_" + suffix, "password", "password123"), String.class);
+                "username", tenantAdminUsername, "password", "password123"), String.class);
         JsonNode body = objectMapper.readTree(login.getBody());
         assertEquals(0, body.get("code").asInt());
         tenantAdminToken = body.path("data").path("token").asText();
@@ -141,6 +143,29 @@ class AdminTenantTest {
         assertEquals(0, objectMapper.readTree(resp.getBody()).get("code").asInt());
         ResponseEntity<String> blocked = tenantGet("/api/admin/recycle/orders?pageNum=1&pageSize=10");
         assertEquals(401, blocked.getStatusCode().value());
+
+        // 层一准入：停用租户的管理员「登录」本身也必须被拒（此前缺陷：仍发放可用外观的 token）
+        ResponseEntity<String> loginBlocked = rest.postForEntity("/api/admin/auth/login",
+                Map.of("username", tenantAdminUsername, "password", "password123"), String.class);
+        JsonNode blockedBody = objectMapper.readTree(loginBlocked.getBody());
+        assertEquals(40101, blockedBody.get("code").asInt());
+        assertTrue(blockedBody.get("message").asText().contains("租户已停用"),
+                "应明确提示租户停用，实际：" + blockedBody.get("message").asText());
+        assertTrue(blockedBody.path("data").path("token").asText().isBlank(), "不得发放 token");
+
+        // 租户恢复后登录与访问均恢复
+        ResponseEntity<String> reEnable = machineExchange("/api/admin/tenant/" + tenantId, HttpMethod.PUT,
+                Map.of("status", 1));
+        assertEquals(0, objectMapper.readTree(reEnable.getBody()).get("code").asInt());
+        ResponseEntity<String> loginOk = rest.postForEntity("/api/admin/auth/login",
+                Map.of("username", tenantAdminUsername, "password", "password123"), String.class);
+        JsonNode okBody = objectMapper.readTree(loginOk.getBody());
+        assertEquals(0, okBody.get("code").asInt(), "恢复后应可登录");
+        HttpHeaders h = new HttpHeaders();
+        h.setBearerAuth(okBody.path("data").path("token").asText());
+        ResponseEntity<String> apiOk = rest.exchange("/api/admin/recycle/orders?pageNum=1&pageSize=10",
+                HttpMethod.GET, new HttpEntity<>(h), String.class);
+        assertEquals(0, objectMapper.readTree(apiOk.getBody()).get("code").asInt(), "恢复后 API 应可用");
     }
 
     @Test
