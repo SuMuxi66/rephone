@@ -43,3 +43,17 @@ page view {
 .person-info .t-cell-class {
   height: 112rpx;
 }
+
+/* 手机号绑定半屏弹层 */
+.phone-sheet {
+  background: var(--bg-card);
+  border-radius: 24rpx 24rpx 0 0;
+  padding: 32rpx 32rpx calc(env(safe-area-inset-bottom) + 32rpx);
+}
+
+.phone-sheet__title {
+  margin-bottom: 16rpx;
+  font-size: 32rpx;
+  font-weight: 600;
+  color: var(--text-1);
+}

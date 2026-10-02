@@ -54,9 +54,9 @@ public class UserService {
         return userMapper.selectById(id);
     }
 
-    /** 更新用户资料（仅传入字段生效），返回更新后的用户。 */
+    /** 更新用户资料（仅传入字段生效），返回更新后的用户。phoneNumber 空串=解绑，非空须为 11 位手机号。 */
     @Transactional
-    public User updateProfile(Long userId, String nickname, Integer gender, String avatarUrl) {
+    public User updateProfile(Long userId, String nickname, Integer gender, String avatarUrl, String phoneNumber) {
         User user = userMapper.selectById(userId);
         if (user == null) {
             throw new BizException(40401, "用户不存在");
@@ -76,6 +76,17 @@ public class UserService {
         }
         if (avatarUrl != null) {
             user.setAvatarUrl(avatarUrl);
+        }
+        if (phoneNumber != null) {
+            String trimmedPhone = phoneNumber.trim();
+            if (trimmedPhone.isEmpty()) {
+                user.setPhone(null);
+            } else {
+                if (!trimmedPhone.matches("1\\d{10}")) {
+                    throw new BizException(40043, "手机号格式不正确");
+                }
+                user.setPhone(trimmedPhone);
+            }
         }
         userMapper.updateById(user);
         return user;

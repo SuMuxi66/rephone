@@ -41,7 +41,8 @@ public class WxUserController {
             throw new BizException(40001, "参数不能为空");
         }
         Long userId = UserContextHolder.require().userId();
-        User user = userService.updateProfile(userId, request.nickname(), request.gender(), request.avatarUrl());
+        User user = userService.updateProfile(userId, request.nickname(), request.gender(),
+                request.avatarUrl(), request.phoneNumber());
         return R.ok(new UserProfileResponse(user.getId(), user.getNickname(), user.getAvatarUrl(),
                 user.getGender(), user.getPhone(), user.getTenantId()));
     }

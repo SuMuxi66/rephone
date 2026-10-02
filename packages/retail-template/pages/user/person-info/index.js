@@ -1,6 +1,7 @@
 import { fetchPerson } from '../../../../../services/usercenter/fetchPerson';
 import { updateProfile } from '../../../../../services/usercenter/fetchUsercenter';
 import { phoneEncryption } from '../../../utils/util';
+import { clearToken, ensureLogin } from '../../../../../services/request';
 import Toast from 'tdesign-miniprogram/toast/index';
 
 Page({
@@ -12,6 +13,8 @@ Page({
       phoneNumber: '',
     },
     showUnbindConfirm: false,
+    phoneSheetVisible: false,
+    phoneInput: '',
     pickerOptions: [
       {
         name: '男',
@@ -57,10 +60,69 @@ Page({
       case 'avatarUrl':
         this.toModifyAvatar();
         break;
+      case 'phoneNumber':
+        this.setData({
+          phoneSheetVisible: true,
+          phoneInput: this.data.personInfo.phoneNumber || '',
+        });
+        break;
       default: {
         break;
       }
     }
+  },
+  onPhoneInput(e) {
+    this.setData({ phoneInput: e.detail.value });
+  },
+  hidePhoneSheet() {
+    this.setData({ phoneSheetVisible: false });
+  },
+  onPhoneSave() {
+    const phone = (this.data.phoneInput || '').trim();
+    if (phone && !/^1\d{10}$/.test(phone)) {
+      Toast({ context: this, selector: '#t-toast', message: '手机号格式不正确', theme: 'error' });
+      return;
+    }
+    updateProfile({ phoneNumber: phone })
+      .then(() => {
+        this.setData({ phoneSheetVisible: false });
+        Toast({ context: this, selector: '#t-toast', message: phone ? '绑定成功' : '已解绑', theme: 'success' });
+        this.fetchData();
+      })
+      .catch((err) => {
+        Toast({
+          context: this,
+          selector: '#t-toast',
+          message: err.message || '保存失败',
+          theme: 'error',
+          duration: 1000,
+        });
+      });
+  },
+  /** 切换账号：清本地登录态后重新走登录流程（真实微信登录下仍为当前微信身份） */
+  openUnbindConfirm() {
+    this.setData({ showUnbindConfirm: true });
+  },
+  onUnbindClose() {
+    this.setData({ showUnbindConfirm: false });
+  },
+  onUnbindConfirm() {
+    this.setData({ showUnbindConfirm: false });
+    clearToken();
+    ensureLogin()
+      .then(() => {
+        Toast({ context: this, selector: '#t-toast', message: '已重新登录', theme: 'success' });
+        this.fetchData();
+      })
+      .catch((err) => {
+        Toast({
+          context: this,
+          selector: '#t-toast',
+          message: err.message || '重新登录失败',
+          theme: 'error',
+          duration: 1000,
+        });
+      });
   },
   onClose() {
     this.setData({
