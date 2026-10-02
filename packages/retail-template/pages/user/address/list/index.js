@@ -170,7 +170,7 @@ Page({
 
   editAddressHandle({ detail }) {
     const { id } = detail || {};
-    wx.navigateTo({ url: `/pages/user/address/edit/index?id=${id}` });
+    wx.navigateTo({ url: `/packages/retail-template/pages/user/address/edit/index?id=${id}` });
   },
 
   selectHandle({ detail }) {

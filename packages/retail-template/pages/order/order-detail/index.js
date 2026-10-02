@@ -215,7 +215,7 @@ Page({
       .catch(() => {});
 
     wx.navigateTo({
-      url: `/pages/user/address/list/index?selectMode=1`,
+      url: `/packages/retail-template/pages/user/address/list/index?selectMode=1`,
     });
   },
 

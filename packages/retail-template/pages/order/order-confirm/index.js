@@ -261,7 +261,7 @@ Page({
     }
 
     wx.navigateTo({
-      url: `/pages/user/address/list/index?selectMode=1&isOrderSure=1${id}`,
+      url: `/packages/retail-template/pages/user/address/list/index?selectMode=1&isOrderSure=1${id}`,
     });
   },
   onNotes(e) {

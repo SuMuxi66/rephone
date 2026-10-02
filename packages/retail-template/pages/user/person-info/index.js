@@ -51,7 +51,7 @@ Page({
         break;
       case 'name':
         wx.navigateTo({
-          url: `/pages/user/name-edit/index?name=${nickName}`,
+          url: `/packages/retail-template/pages/user/name-edit/index?name=${nickName}`,
         });
         break;
       case 'avatarUrl':
