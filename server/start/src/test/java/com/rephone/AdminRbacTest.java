@@ -162,4 +162,35 @@ class AdminRbacTest {
         assertEquals(0, objectMapper.readTree(get("/api/admin/users?pageNum=1&pageSize=5", token).getBody())
                 .get("code").asInt());
     }
+
+    @Test
+    @Order(8)
+    void customRoleLifecycle() throws Exception {
+        // 1. 创建自定义角色（仅看板）
+        HttpHeaders machineHeaders = machine();
+        ResponseEntity<String> created = rest.exchange("/api/admin/role", HttpMethod.POST,
+                new HttpEntity<>(Map.of("roleCode", "AUDITOR", "roleName", "审计",
+                        "permissions", java.util.List.of("dashboard:read")), machineHeaders), String.class);
+        assertEquals(0, objectMapper.readTree(created.getBody()).get("code").asInt());
+        long roleId = objectMapper.readTree(created.getBody()).path("data").path("roleId").asLong();
+        assertTrue(roleId > 0);
+
+        // 2. 挂账号：可登录、看板放行、回收单 403
+        insertAdminUser("AUDITOR", "rbac_auditor");
+        String auditorToken = loginAndGetToken("rbac_auditor", "password123");
+        assertEquals(200, get("/api/admin/dashboard/summary", auditorToken).getStatusCode().value());
+        ResponseEntity<String> denied = get("/api/admin/recycle/orders?pageNum=1&pageSize=5", auditorToken);
+        assertEquals(40300, objectMapper.readTree(denied.getBody()).get("code").asInt());
+
+        // 3. 角色被占用时不可删除
+        ResponseEntity<String> deleteDenied = rest.exchange("/api/admin/role/" + roleId,
+                HttpMethod.DELETE, new HttpEntity<>(machineHeaders), String.class);
+        assertEquals(40089, objectMapper.readTree(deleteDenied.getBody()).get("code").asInt());
+
+        // 4. 保留编码不可创建
+        ResponseEntity<String> reserved = rest.exchange("/api/admin/role", HttpMethod.POST,
+                new HttpEntity<>(Map.of("roleCode", "OPERATOR", "roleName", "x",
+                        "permissions", java.util.List.of("dashboard:read")), machineHeaders), String.class);
+        assertEquals(40083, objectMapper.readTree(reserved.getBody()).get("code").asInt());
+    }
 }
