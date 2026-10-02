@@ -43,11 +43,13 @@ public class WxAccessTokenService {
             return cached.get();
         }
         com.rephone.common.web.HttpGuard.requirePublicHttps(TOKEN_URL);
-        var resp = restClient.post().uri(TOKEN_URL)
+        // 微信响应 Content-Type 为 text/plain，取原始串手动解析（WxJson）
+        String raw = restClient.post().uri(TOKEN_URL)
                 .body(java.util.Map.of("grant_type", "client_credential",
                         "appid", properties.getAppid(), "secret", properties.getSecret()))
                 .retrieve()
-                .body(java.util.Map.class);
+                .body(String.class);
+        java.util.Map<?, ?> resp = WxJson.parse(raw, java.util.Map.class);
         Object token = resp == null ? null : resp.get("access_token");
         Object expiresIn = resp == null ? null : resp.get("expires_in");
         if (!(token instanceof String t) || t.isBlank()) {

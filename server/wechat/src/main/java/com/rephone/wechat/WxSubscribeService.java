@@ -28,8 +28,6 @@ public class WxSubscribeService {
 
     private static final Logger log = LoggerFactory.getLogger(WxSubscribeService.class);
 
-    private static final String SEND_URL = "https://api.weixin.qq.com/cgi-bin/message/subscribe/send?access_token={token}";
-
     /** 微信模板字段名的合法形态：小写字母/下划线 + 数字，如 thing1、character_string2、time3。 */
     private static final Pattern FIELD_NAME = Pattern.compile("^[a-z][a-z_]*\\d+$");
 
@@ -58,7 +56,14 @@ public class WxSubscribeService {
             return;
         }
         try {
-            HttpGuard.requirePublicHttps(SEND_URL);
+            // 先展开 access_token 再过 HttpGuard：{} 模板占位符不是合法 URI（HttpGuard 用 URI.create 严格校验）
+            java.net.URI uri = org.springframework.web.util.UriComponentsBuilder
+                    .fromHttpUrl("https://api.weixin.qq.com/cgi-bin/message/subscribe/send")
+                    .queryParam("access_token", accessTokenService.getToken())
+                    .build()
+                    .encode()
+                    .toUri();
+            HttpGuard.requirePublicHttps(uri.toString());
             Map<String, Object> data = buildData(properties.getSubscribeFieldStatus(),
                     properties.getSubscribeFieldOrderNo(), properties.getSubscribeFieldTime(),
                     statusDesc, orderNo, LocalDateTime.now().format(TIME_FMT));
@@ -75,12 +80,13 @@ public class WxSubscribeService {
             }
             body.put("data", data);
 
-            Map<String, Object> resp = restClient.post()
-                    .uri(SEND_URL, accessTokenService.getToken())
+            // 微信响应 Content-Type 为 text/plain，取原始串手动解析（WxJson）
+            Map<String, Object> resp = WxJson.parse(restClient.post()
+                    .uri(uri)
                     .contentType(MediaType.APPLICATION_JSON)
                     .body(body)
                     .retrieve()
-                    .body(Map.class);
+                    .body(String.class), Map.class);
 
             String error = describeError(resp);
             if (error != null) {

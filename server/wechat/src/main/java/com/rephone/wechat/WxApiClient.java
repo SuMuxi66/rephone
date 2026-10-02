@@ -26,8 +26,7 @@ public class WxApiClient {
 
     private static final Logger log = LoggerFactory.getLogger(WxApiClient.class);
 
-    private static final String CODE2SESSION_URL =
-            "https://api.weixin.qq.com/sns/jscode2session?appid={appid}&secret={secret}&js_code={code}&grant_type=authorization_code";
+    private static final String CODE2SESSION_URL = "https://api.weixin.qq.com/sns/jscode2session";
 
     private final WxProperties properties;
     private final RestClient restClient;
@@ -47,11 +46,23 @@ public class WxApiClient {
         if (!StringUtils.hasText(properties.getAppid()) || !StringUtils.hasText(properties.getSecret())) {
             throw new BizException(50001, "微信 AppID/Secret 未配置，请设置环境变量 WX_APPID / WX_SECRET");
         }
-        HttpGuard.requirePublicHttps(CODE2SESSION_URL);
-        WxCode2SessionResponse resp = restClient.get()
-                .uri(CODE2SESSION_URL, properties.getAppid(), properties.getSecret(), code)
+        // 先展开并编码查询参数：HttpGuard 用 URI.create 严格校验，{} 模板占位符不是合法 URI
+        java.net.URI uri = org.springframework.web.util.UriComponentsBuilder
+                .fromHttpUrl(CODE2SESSION_URL)
+                .queryParam("appid", properties.getAppid())
+                .queryParam("secret", properties.getSecret())
+                .queryParam("js_code", code)
+                .queryParam("grant_type", "authorization_code")
+                .build()
+                .encode()
+                .toUri();
+        HttpGuard.requirePublicHttps(uri.toString());
+        // 微信响应 Content-Type 为 text/plain，RestClient 无法直接反序列化，取原始串手动解析
+        String body = restClient.get()
+                .uri(uri)
                 .retrieve()
-                .body(WxCode2SessionResponse.class);
+                .body(String.class);
+        WxCode2SessionResponse resp = WxJson.parse(body, WxCode2SessionResponse.class);
         if (resp == null) {
             throw new BizException(50002, "微信登录响应为空");
         }
