@@ -55,6 +55,11 @@ http.interceptors.response.use(
       clearSession();
       ElMessage.error('登录已过期，请重新登录');
       router.push('/login');
+    } else if (err.response && err.response.status === 403) {
+      // RBAC 无权限：后端统一 40300，优先展示后端文案
+      const message = err.response.data && err.response.data.message
+        ? err.response.data.message : '无权限访问该功能';
+      ElMessage.error(message);
     } else {
       ElMessage.error(err.message || '网络请求失败');
     }

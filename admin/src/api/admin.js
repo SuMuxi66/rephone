@@ -87,6 +87,36 @@ export const AFTER_SALE_STATUS = {
   80: { label: '已撤销', type: 'info' },
 };
 
+// ===== P7：租户 / 角色 / 财务对账 / 数据看板 =====
+export const fetchTenants = (params) => http.get('/admin/tenants', { params });
+export const createTenant = (payload) => http.post('/admin/tenant', payload);
+export const updateTenant = (id, payload) => http.put(`/admin/tenant/${id}`, payload);
+
+export const fetchRoles = () => http.get('/admin/roles');
+export const createRole = (payload) => http.post('/admin/role', payload);
+export const updateRole = (id, payload) => http.put(`/admin/role/${id}`, payload);
+export const deleteRole = (id) => http.delete(`/admin/role/${id}`);
+export const changeAccountRole = (id, roleCode) => http.put(`/admin/account/${id}/role`, { roleCode });
+
+export const fetchFinanceSummary = (params) => http.get('/admin/finance/summary', { params });
+export const fetchFinanceFlows = (params) => http.get('/admin/finance/flows', { params });
+
+export const fetchDashboardSummary = () => http.get('/admin/dashboard/summary');
+export const fetchDashboardTrend = (days) => http.get('/admin/dashboard/trend', { params: { days } });
+export const fetchDashboardTop = (limit) => http.get('/admin/dashboard/top', { params: { limit } });
+
+export const FINANCE_BIZ = {
+  10: { label: '回收打款', type: 'danger' },
+  20: { label: '出售收款', type: 'success' },
+  30: { label: '维修收款', type: 'primary' },
+};
+
+export const FLOW_DIRECTION = {
+  income: { label: '收入', type: 'success' },
+  payout: { label: '支出', type: 'danger' },
+  refund: { label: '退款', type: 'warning' },
+};
+
 // ===== 状态字典 =====
 export const RECYCLE_STATUS = {
   10: { label: '待寄出', type: 'warning' },

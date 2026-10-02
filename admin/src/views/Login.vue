@@ -38,7 +38,14 @@ async function onSubmit() {
   try {
     const data = await login(form.username.trim(), form.password);
     // 先落登录态，再核验角色：管理账号自动切换到管理员工作台
-    saveSession(data.token, { userId: data.userId, nickname: data.nickname, role: data.role });
+    saveSession(data.token, {
+      userId: data.userId,
+      tenantId: data.tenantId || 0,
+      nickname: data.nickname,
+      role: data.role,
+      roleCode: data.roleCode || 'ADMIN',
+      permissions: data.permissions || [],
+    });
     if (data.role !== 'ADMIN') {
       clearSession();
       ElMessage.error('该账号无管理员权限');
@@ -51,8 +58,7 @@ async function onSubmit() {
       return;
     }
     ElMessage.success(`欢迎，${data.nickname || '管理员'}`);
-    // 自动进入管理员权限页面
-    router.push('/recycle');
+    router.push('/dashboard');
   } catch (e) {
     // 错误提示已由拦截器统一处理
   } finally {

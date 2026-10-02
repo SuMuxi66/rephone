@@ -3,10 +3,9 @@
     <el-card shadow="never" class="toolbar">
       <el-space wrap>
         <el-input v-model="keyword" placeholder="昵称/用户名/手机号" clearable style="width: 220px" @keyup.enter="reload" />
-        <el-select v-model="roleFilter" style="width: 140px" @change="reload">
+        <el-select v-model="roleFilter" style="width: 150px" @change="reload">
           <el-option label="全部角色" value="" />
-          <el-option label="普通用户" value="USER" />
-          <el-option label="管理员" value="ADMIN" />
+          <el-option v-for="(label, code) in ROLE_LABELS" :key="code" :label="label" :value="code" />
         </el-select>
         <el-button type="primary" @click="reload">查询</el-button>
         <el-button type="success" @click="createVisible = true">新增管理员</el-button>
@@ -22,11 +21,9 @@
       <el-table-column prop="phone" label="手机号" width="130">
         <template #default="{ row }">{{ row.phone || '--' }}</template>
       </el-table-column>
-      <el-table-column label="角色" width="100">
+      <el-table-column label="角色" width="120">
         <template #default="{ row }">
-          <el-tag :type="row.role === 'ADMIN' ? 'danger' : 'info'">
-            {{ row.role === 'ADMIN' ? '管理员' : '用户' }}
-          </el-tag>
+          <el-tag :type="row.role === 'USER' ? 'info' : 'danger'">{{ roleLabel(row.role) }}</el-tag>
         </template>
       </el-table-column>
       <el-table-column label="状态" width="90">
@@ -36,14 +33,19 @@
       </el-table-column>
       <el-table-column prop="openidMasked" label="openid" width="150" />
       <el-table-column prop="createTime" label="注册时间" width="170" />
-      <el-table-column label="操作" width="150" fixed="right">
+      <el-table-column label="操作" width="220" fixed="right">
         <template #default="{ row }">
           <el-button
-            v-if="row.role !== 'ADMIN'"
+            v-if="row.role === 'USER'"
             link :type="row.status === 1 ? 'danger' : 'success'"
             @click="onToggleStatus(row)"
           >{{ row.status === 1 ? '禁用' : '启用' }}</el-button>
-          <el-button v-if="row.role === 'ADMIN'" link type="warning" @click="openReset(row)">重置密码</el-button>
+          <el-button v-if="row.role !== 'USER'" link type="warning" @click="openReset(row)">重置密码</el-button>
+          <el-button
+            v-if="row.role !== 'USER' && row.id !== (profile.userId || 0)"
+            link type="primary"
+            @click="openChangeRole(row)"
+          >改角色</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -57,7 +59,7 @@
       @current-change="onPage"
     />
 
-    <el-dialog v-model="createVisible" title="新增管理员" width="420px">
+    <el-dialog v-model="createVisible" title="新增管理员" width="440px">
       <el-form label-position="top">
         <el-form-item label="用户名（4-32 位字母/数字/下划线）" required>
           <el-input v-model="createForm.username" />
@@ -68,10 +70,29 @@
         <el-form-item label="昵称" required>
           <el-input v-model="createForm.nickname" />
         </el-form-item>
+        <el-form-item label="角色">
+          <el-select v-model="createForm.roleCode" style="width: 100%">
+            <el-option v-for="r in adminRoleOptions" :key="r.roleCode" :label="r.roleName" :value="r.roleCode" />
+          </el-select>
+        </el-form-item>
+        <el-form-item v-if="createForm.roleCode === 'TENANT_ADMIN'" label="所属租户 ID（见租户管理页）" required>
+          <el-input-number v-model="createForm.tenantId" :min="1" controls-position="right" style="width: 100%" />
+        </el-form-item>
       </el-form>
       <template #footer>
         <el-button @click="createVisible = false">取消</el-button>
         <el-button type="primary" :loading="submitting" @click="onCreate">创建</el-button>
+      </template>
+    </el-dialog>
+
+    <el-dialog v-model="changeRoleVisible" title="修改角色" width="400px">
+      <div class="tip">将为「{{ roleTarget?.nickname }}」设置新角色（{{ roleTarget?.role }} → 新角色）。</div>
+      <el-select v-model="changeRoleCode" style="width: 100%; margin-top: 12px">
+        <el-option v-for="r in adminRoleOptions" :key="r.roleCode" :label="r.roleName" :value="r.roleCode" />
+      </el-select>
+      <template #footer>
+        <el-button @click="changeRoleVisible = false">取消</el-button>
+        <el-button type="primary" :loading="submitting" @click="onChangeRole">确认</el-button>
       </template>
     </el-dialog>
 
@@ -87,14 +108,20 @@
 </template>
 
 <script setup>
-import { onMounted, reactive, ref } from 'vue';
+import { computed, onMounted, reactive, ref } from 'vue';
 import { ElMessage, ElMessageBox } from 'element-plus';
 import {
+  changeAccountRole,
   createAdminAccount,
+  fetchRoles,
   fetchUsers,
   resetAdminPassword,
   setUserStatus,
 } from '../api/admin';
+import { getProfile } from '../api/http';
+import { roleLabel, ROLE_LABELS } from '../api/permissions';
+
+const profile = getProfile();
 
 const keyword = ref('');
 const roleFilter = ref('');
@@ -105,10 +132,16 @@ const pageSize = 20;
 const loading = ref(false);
 const submitting = ref(false);
 const createVisible = ref(false);
-const createForm = reactive({ username: '', password: '', nickname: '' });
+const createForm = reactive({ username: '', password: '', nickname: '', roleCode: 'ADMIN', tenantId: 1 });
 const resetVisible = ref(false);
 const resetTarget = ref(null);
 const resetPassword = ref('');
+const roleOptions = ref([]);
+const changeRoleVisible = ref(false);
+const roleTarget = ref(null);
+const changeRoleCode = ref('');
+
+const adminRoleOptions = computed(() => roleOptions.value.filter((r) => r.status === 1));
 
 async function load() {
   loading.value = true;
@@ -147,9 +180,19 @@ async function onCreate() {
     ElMessage.warning('请完整填写用户名、密码与昵称');
     return;
   }
+  if (createForm.roleCode === 'TENANT_ADMIN' && !(createForm.tenantId >= 1)) {
+    ElMessage.warning('租户管理员必须填写所属租户 ID');
+    return;
+  }
   submitting.value = true;
   try {
-    await createAdminAccount({ ...createForm, username: createForm.username.trim() });
+    await createAdminAccount({
+      username: createForm.username.trim(),
+      password: createForm.password,
+      nickname: createForm.nickname.trim(),
+      roleCode: createForm.roleCode,
+      tenantId: createForm.roleCode === 'TENANT_ADMIN' ? createForm.tenantId : undefined,
+    });
     ElMessage.success('管理员已创建');
     createVisible.value = false;
     createForm.username = '';
@@ -158,6 +201,36 @@ async function onCreate() {
     reload();
   } finally {
     submitting.value = false;
+  }
+}
+
+function openChangeRole(row) {
+  roleTarget.value = row;
+  changeRoleCode.value = row.role;
+  changeRoleVisible.value = true;
+}
+
+async function onChangeRole() {
+  if (!changeRoleCode.value) {
+    ElMessage.warning('请选择新角色');
+    return;
+  }
+  submitting.value = true;
+  try {
+    await changeAccountRole(roleTarget.value.id, changeRoleCode.value);
+    ElMessage.success('角色已更新');
+    changeRoleVisible.value = false;
+    reload();
+  } finally {
+    submitting.value = false;
+  }
+}
+
+async function loadRoles() {
+  try {
+    roleOptions.value = (await fetchRoles()) || [];
+  } catch (e) {
+    roleOptions.value = [];
   }
 }
 
@@ -182,7 +255,10 @@ async function onReset() {
   }
 }
 
-onMounted(load);
+onMounted(() => {
+  load();
+  loadRoles();
+});
 </script>
 
 <style scoped>
