@@ -8,7 +8,7 @@
     bind:submit="handleSubmit"
     focus
   >
-    <t-icon slot="left-icon" prefix="wr" name="search" size="40rpx" color="#bbb" />
+    <t-icon slot="left-icon" prefix="wr" name="search" size="40rpx" color="#9BA0A7" />
   </t-search>
   <view class="search-wrap">
     <view class="history-wrap">

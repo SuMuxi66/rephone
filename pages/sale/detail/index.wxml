@@ -60,7 +60,7 @@
       </view>
       <view class="inspect-arrow">
         <text>完整报告</text>
-        <t-icon name="chevron-right" size="28rpx" color="#1A5CE8" />
+        <t-icon name="chevron-right" size="28rpx" color="#26292E" />
       </view>
     </view>
 

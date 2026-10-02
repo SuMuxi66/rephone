@@ -17,7 +17,7 @@
           bind:change="onRateChange"
           size="26"
           gap="6"
-          color="{{['#ffc51c', '#ddd']}}"
+          color="{{['#96650C', '#E4E3E0']}}"
           data-item="goodRateValue"
         />
       </view>
@@ -43,7 +43,7 @@
     </view>
 
     <view class="anonymous-box">
-      <t-checkbox bind:change="onAnonymousChange" checked="{{isAnonymous}}" color="#1A5CE8" />
+      <t-checkbox bind:change="onAnonymousChange" checked="{{isAnonymous}}" color="#26292E" />
       <view class="name">匿名评价</view>
     </view>
   </view>
@@ -59,7 +59,7 @@
         variant="filled"
         size="26"
         gap="6"
-        color="{{['#ffc51c', '#ddd']}}"
+        color="{{['#96650C', '#E4E3E0']}}"
         data-item="conveyRateValue"
       />
     </view>
@@ -72,7 +72,7 @@
         bind:change="onRateChange"
         size="26"
         gap="6"
-        color="{{['#ffc51c', '#ddd']}}"
+        color="{{['#96650C', '#E4E3E0']}}"
         data-item="serviceRateValue"
       />
     </view>

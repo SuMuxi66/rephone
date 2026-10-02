@@ -40,7 +40,7 @@
         <view class="goods-tag">
           <t-button open-type="share" t-class="shareBtn" variant="text">
             <view class="btn-icon">
-              <t-icon name="share" size="40rpx" color="#000" />
+              <t-icon name="share" size="40rpx" color="#1A1C20" />
               <view class="share-text">分享</view>
             </view>
           </t-button>
@@ -54,7 +54,7 @@
         <view class="{{!selectedAttrStr ? 'tintColor' : ''}}">
           {{selectedAttrStr ? buyNum : ''}}{{selectedAttrStr || '请选择'}}
         </view>
-        <t-icon name="chevron-right" size="40rpx" color="#BBBBBB" />
+        <t-icon name="chevron-right" size="40rpx" color="#9BA0A7" />
       </view>
     </view>
     <view wx:if="{{ commentsStatistics.commentCount > 0 }}" class="comments-wrap">
@@ -65,7 +65,7 @@
         </view>
         <view class="comments-rate-wrap">
           <view class="comments-good-rate">{{commentsStatistics.goodRate}}% 好评</view>
-          <t-icon name="chevron-right" size="40rpx" color="#BBBBBB" />
+          <t-icon name="chevron-right" size="40rpx" color="#9BA0A7" />
         </view>
       </view>
       <view class="comment-item-wrap" wx:for="{{ commentsList }}" wx:for-item="commentItem" wx:key="goodsSpu">
@@ -78,7 +78,7 @@
               count="{{5}}"
               size="12"
               gap="2"
-              color="{{['#ffc51c', '#ddd']}}"
+              color="{{['#96650C', '#E4E3E0']}}"
             />
           </view>
         </view>

@@ -9,7 +9,7 @@
     placeholder="iPhone12pro"
     bind:submit="handleSubmit"
   >
-    <t-icon slot="left-icon" prefix="wr" name="search" size="40rpx" color="#bbb" />
+    <t-icon slot="left-icon" prefix="wr" name="search" size="40rpx" color="#9BA0A7" />
   </t-search>
   <filter
     wr-class="filter-container"

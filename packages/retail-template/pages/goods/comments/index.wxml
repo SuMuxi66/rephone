@@ -43,8 +43,8 @@
 	  t-class="no-more"
 	  status="{{loadMoreStatus}}"
 	  no-more-text="没有更多了"
-	  color="#BBBBBB"
-	  failedColor="#FA550F"
+	  color="#9BA0A7"
+	  failedColor="#B4530F"
 	/>
 </view>
 

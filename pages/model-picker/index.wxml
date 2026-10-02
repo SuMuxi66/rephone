@@ -2,7 +2,7 @@
   <!-- 搜索 -->
   <view class="search">
     <view class="search-box">
-      <t-icon name="search" size="30rpx" color="#99A39D" />
+      <t-icon name="search" size="30rpx" color="#9BA0A7" />
       <input
         class="search-input"
         placeholder="搜索机型"

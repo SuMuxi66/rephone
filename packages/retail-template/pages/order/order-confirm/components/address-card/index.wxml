@@ -12,7 +12,7 @@
 <view class="address-card wr-class">
 	<t-cell wx:if="{{addressData && addressData.detailAddress}}" bindtap="onAddressTap" hover>
 		<view class="order-address" slot="title">
-			<t-icon name="location" color="#10201C" size="40rpx" />
+			<t-icon name="location" color="#1A1C20" size="40rpx" />
 			<view class="address-content">
 				<view class="title">
 					<view class="address-tag" wx:if="{{addressData.addressTag}}">
@@ -28,7 +28,7 @@
 			<t-icon
 			 class="address__right"
 			 name="chevron-right"
-			 color="#BBBBBB"
+			 color="#9BA0A7"
 			 size="40rpx"
 			/>
 		</view>

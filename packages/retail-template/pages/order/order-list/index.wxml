@@ -24,7 +24,7 @@
     normal-bar-height="{{200}}"
     max-bar-height="{{272}}"
     refreshTimeout="{{3000}}"
-    background="#F6F4EF"
+    background="#F5F4F2"
     use-loading-slot
     loading-size="60rpx"
     value="{{pullDownRefreshing}}"

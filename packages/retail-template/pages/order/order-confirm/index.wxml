@@ -12,7 +12,7 @@
     wx:key="storeIndex"
   >
     <view class="store-wrapper">
-      <t-icon prefix="wr" size="40rpx" color="#10201C" name="store" class="store-logo" />
+      <t-icon prefix="wr" size="40rpx" color="#1A1C20" name="store" class="store-logo" />
       {{stores.storeName}}
     </view>
     <view
@@ -75,14 +75,14 @@
           <block wx:else>选择优惠券</block>
         </block>
         <text wx:else>无可用</text>
-        <t-icon name="chevron-right" size="32rpx" color="#BBBBBB" />
+        <t-icon name="chevron-right" size="32rpx" color="#9BA0A7" />
       </view>
     </view>
     <view class="pay-item" wx:if="{{settleDetailData.invoiceSupport}}">
       <text>发票</text>
       <view class="pay-item__right" catchtap="onReceipt">
         <text>{{handleInvoice(invoiceData)}}</text>
-        <t-icon name="chevron-right" size="32rpx" color="#BBBBBB" />
+        <t-icon name="chevron-right" size="32rpx" color="#9BA0A7" />
       </view>
     </view>
     <view class="pay-item">
@@ -91,7 +91,7 @@
         <text class="pay-remark"
           >{{getNotes(storeInfoList, 0) ? getNotes(storeInfoList, 0) :'选填，建议先和商家沟通确认'}}</text
         >
-        <t-icon name="chevron-right" size="32rpx" color="#BBBBBB" />
+        <t-icon name="chevron-right" size="32rpx" color="#9BA0A7" />
       </view>
     </view>
   </view>

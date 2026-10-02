@@ -6,9 +6,9 @@
   </view>
 
   <view wx:if="{{addressBook.length}}" class="addr-bar" bindtap="openAddressSheet">
-    <t-icon prefix="wr" name="location" size="34rpx" color="#1A5CE8" />
+    <t-icon prefix="wr" name="location" size="34rpx" color="#26292E" />
     <text class="addr-bar-text">已存 {{addressBook.length}} 条地址，点击套用</text>
-    <t-icon name="chevron-right" size="36rpx" color="#BBBBBB" />
+    <t-icon name="chevron-right" size="36rpx" color="#9BA0A7" />
   </view>
 
   <section-card title="服务方式">

@@ -107,7 +107,7 @@
               <price fill decimalSmaller price="{{order.couponAmount}}" />
             </block>
             <text wx:else>无可用</text>
-            <!-- <t-icon name="chevron-right" size="32rpx" color="#BBBBBB" /> -->
+            <!-- <t-icon name="chevron-right" size="32rpx" color="#9BA0A7" /> -->
           </view>
         </view>
         <view class="pay-item">

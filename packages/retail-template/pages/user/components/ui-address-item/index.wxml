@@ -6,7 +6,7 @@
   <t-swipe-cell class="swipe-out">
     <view class="address {{isDrawLine ? 'draw-line' : ''}}" bindtap="onSelect" data-item="{{address}}">
       <view class="address-left" wx:if="{{extraSpace}}">
-        <t-icon wx:if="{{address.checked}}" name="check" color="#1A5CE8" class-prefix="{{classPrefix}}" size="46rpx" />
+        <t-icon wx:if="{{address.checked}}" name="check" color="#26292E" class-prefix="{{classPrefix}}" size="46rpx" />
       </view>
       <view class="address-content">
         <view class="title title-class">
@@ -22,7 +22,7 @@
         </view>
       </view>
       <view catch:tap="onEdit" data-item="{{address}}" class="address-edit">
-        <t-icon name="{{customIcon}}" class-prefix="{{classPrefix}}" size="46rpx" color="#BBBBBB" />
+        <t-icon name="{{customIcon}}" class-prefix="{{classPrefix}}" size="46rpx" color="#9BA0A7" />
       </view>
     </view>
     <view slot="right" class="swipe-right-del delete-class" bindtap="onDelete" data-item="{{address}}"> 删除 </view>
