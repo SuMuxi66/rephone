@@ -3,6 +3,8 @@ package com.rephone.controller;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.rephone.common.result.R;
 import com.rephone.pojo.dto.AdminStatusRequest;
+import com.rephone.pojo.dto.ExpressFillRequest;
+import com.rephone.pojo.dto.ExpressTraceResult;
 import com.rephone.pojo.dto.RepairGroupView;
 import com.rephone.pojo.dto.RepairOrderCreateRequest;
 import com.rephone.pojo.dto.RepairOrderDetail;
@@ -20,7 +22,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-/** 维修工单（用户端，需登录）。MVP 仅上门维修，修好验收后付款。 */
+/** 维修工单（用户端，需登录）。上门修好验收付款；寄修含寄出/回寄运单与轨迹。 */
 @RestController
 @RequestMapping("/api/wx/repair")
 public class WxRepairOrderController {
@@ -66,6 +68,33 @@ public class WxRepairOrderController {
     public R<Void> cancel(@PathVariable String orderNo,
                           @RequestBody(required = false) Map<String, String> body) {
         repairService.cancel(orderNo, body == null ? null : body.get("reason"));
+        return R.ok();
+    }
+
+    /** 寄修：填写寄出运单号（仅寄修单、待寄出态），状态 20→25。 */
+    @PutMapping("/order/{orderNo}/express")
+    public R<Void> fillExpress(@PathVariable String orderNo,
+                               @RequestBody(required = false) ExpressFillRequest request) {
+        repairService.fillExpress(orderNo, request);
+        return R.ok();
+    }
+
+    /** 寄修：寄出运单轨迹（30 分钟快照缓存）。 */
+    @GetMapping("/order/{orderNo}/trace")
+    public R<ExpressTraceResult> trace(@PathVariable String orderNo) {
+        return R.ok(repairService.trace(orderNo, false));
+    }
+
+    /** 寄修：回寄运单轨迹。 */
+    @GetMapping("/order/{orderNo}/return-trace")
+    public R<ExpressTraceResult> returnTrace(@PathVariable String orderNo) {
+        return R.ok(repairService.trace(orderNo, true));
+    }
+
+    /** 寄修：用户确认收货（回寄中 45→50）。 */
+    @PutMapping("/order/{orderNo}/confirm")
+    public R<Void> confirm(@PathVariable String orderNo) {
+        repairService.confirmReceipt(orderNo);
         return R.ok();
     }
 }
