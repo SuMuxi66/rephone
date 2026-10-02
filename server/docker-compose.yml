@@ -54,6 +54,8 @@ services:
       REDIS_HOST: redis
       # 开发态默认值：mock 登录 + 本地管理令牌；上线用环境变量覆盖
       WX_MOCK_LOGIN: ${WX_MOCK_LOGIN:-true}
+      # 真实登录（WX_MOCK_LOGIN=false）时必填：JWT 签名密钥，值在 .env
+      JWT_SECRET: ${JWT_SECRET:-}
       # 故意不给默认值：原来默认 "local-admin-token" 是一个开箱可用的管理端凭证，
       # 部署时忘了覆盖就等于把后台（含用户 PII 与打款操作）公开。留空则只禁用机器令牌，
       # 管理员仍可用账号密码登录。本地要用的值写在 .env 里。
