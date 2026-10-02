@@ -7,10 +7,10 @@ ALTER TABLE `repair_order`
     ADD COLUMN `express_com` VARCHAR(32) NULL COMMENT '寄出快递公司编码（快递100 com）' AFTER `appoint_time`,
     ADD COLUMN `express_company` VARCHAR(32) NULL COMMENT '寄出快递公司名' AFTER `express_com`,
     ADD COLUMN `express_no` VARCHAR(32) NULL COMMENT '用户寄出运单号' AFTER `express_company`,
-    ADD COLUMN `express_trace` VARCHAR(8000) NULL COMMENT '寄出轨迹快照JSON' AFTER `express_no`,
+    ADD COLUMN `express_trace` TEXT NULL COMMENT '寄出轨迹快照JSON' AFTER `express_no`,
     ADD COLUMN `trace_at` DATETIME NULL COMMENT '寄出轨迹快照时间' AFTER `express_trace`,
     ADD COLUMN `return_express_com` VARCHAR(32) NULL COMMENT '回寄快递公司编码' AFTER `trace_at`,
     ADD COLUMN `return_express_company` VARCHAR(32) NULL COMMENT '回寄快递公司名' AFTER `return_express_com`,
     ADD COLUMN `return_express_no` VARCHAR(32) NULL COMMENT '商家回寄运单号' AFTER `return_express_company`,
-    ADD COLUMN `return_express_trace` VARCHAR(8000) NULL COMMENT '回寄轨迹快照JSON' AFTER `return_express_no`,
+    ADD COLUMN `return_express_trace` TEXT NULL COMMENT '回寄轨迹快照JSON' AFTER `return_express_no`,
     ADD COLUMN `return_trace_at` DATETIME NULL COMMENT '回寄轨迹快照时间' AFTER `return_express_trace`;
