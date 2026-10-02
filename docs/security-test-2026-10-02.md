@@ -120,3 +120,13 @@
 - 微信支付回调验签——支付链路未实装（P6 支付外置缓做，商户号未到位）
 - 快递100 回调验签——10-01 已测（伪造 sign 返回 fail），本轮未重复
 - 生产域名/HTTPS/合法域名——属部署清单（docs 上线计划 bba0f5e），非代码层
+
+## 10. 修复落实（同日）
+
+| 编号 | 修复 | 提交 | 验证 |
+|---|---|---|---|
+| P1（功能测试发现） | AdminAuthController.login 增加租户状态准入：凭证正确但所属租户停用/缺失即 40101「所属租户已停用」，不再发放 token；与 AdminTokenFilter 层二阻断对齐 | 4c51793 | H2 AdminTenantTest 层一断言（停用拒登录+无 token，恢复后登录与 API 还原）；真实环境建租户→停用→登录 40101 无 token→恢复→登录 code=0 |
+| SEC-4 | GlobalExceptionHandler 新增三个 400 映射：缺参 40000 / 类型不匹配 40001 / 请求体不可读 40002 | a029dee | H2 InputHardeningTest 3 项；真实环境 models 缺 brandId→40000、trend days=abc→40001、畸形 JSON→40002 |
+| SEC-5 | RequestBodySizeFilter：/api/* 请求体 1MB 硬上限；Content-Length 超限直接 413（41300）；chunked 超限读时抛 IO 异常归一 40002；multipart 豁免（由 Spring multipart 上限约束） | 1c9e634 | H2 413 用例；真实环境 2MB JSON body → HTTP 413 / 41300，正常请求不受影响 |
+
+H2 全量 66/66 绿（62 原有 + 4 新增）。
