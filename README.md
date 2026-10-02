@@ -1,119 +1,86 @@
-<p align="center">
-  <a href="https://tdesign.tencent.com/" target="_blank">
-    <img alt="TDesign Logo" width="200" src="https://tdesign.gtimg.com/site/TDesign.png">
-  </a>
-</p>
+# RePhone · 手机维修 / 二手机回收 / 二手出售平台
 
-<p align="center">
-  <a href="https://img.shields.io/github/stars/Tencent/tdesign-miniprogram-starter-retail">
-    <img src="https://img.shields.io/github/stars/Tencent/tdesign-miniprogram-starter-retail" alt="License">
-  </a>
-  <a href="https://github.com/Tencent/tdesign-miniprogram-starter-retail/issues">
-    <img src="https://img.shields.io/github/issues/Tencent/tdesign-miniprogram-starter-retail" alt="License">
-  </a>
-  <a href="https://github.com/Tencent/tdesign-miniprogram-starter-retail/LICENSE">
-    <img src="https://img.shields.io/github/license/Tencent/tdesign-miniprogram-starter-retail" alt="License">
-  </a>
-  <a href="https://www.npmjs.com/package/tdesign-miniprogram">
-    <img src="https://img.shields.io/npm/v/tdesign-miniprogram.svg?sanitize=true" alt="Version">
-  </a>
-  <a href="https://www.npmjs.com/package/tdesign-miniprogram">
-    <img src="https://img.shields.io/npm/dw/tdesign-miniprogram" alt="Downloads">
-  </a>
-</p>
+RePhone 是一个三端同仓的全栈项目：**微信小程序（用户端）+ Spring Boot（后端）+ Vue 3（管理后台）**，
+覆盖手机维修（主业务）、二手机回收、二手机出售三条业务线。
 
-# TDesign 零售行业模版示例小程序
+## 三端架构
 
-TDesign 零售模版示例小程序采用 [TDesign 企业级设计体系小程序解决方案](https://tdesign.tencent.com/miniprogram/overview) 进行搭建，依赖 [TDesign 微信小程序组件库](https://github.com/Tencent/tdesign-miniprogram)，涵盖完整的基本零售场景需求。
+| 端 | 目录 | 技术栈 |
+|---|---|---|
+| 微信小程序 | 仓库根（`app.json` / `pages/` / `components/`） | 原生小程序 + tdesign-miniprogram 1.9.5 + dayjs |
+| 后端 | [`server/`](server/) | Spring Boot 3.5 + Java 21 + MyBatis-Plus + MySQL 8 + Redis（Maven 多模块） |
+| 管理后台 | [`admin/`](admin/) | Vite + Vue 3 + Element Plus + axios |
 
-## :pushpin: 项目介绍
+## 功能概览
 
-### 1. 业务介绍
+- **维修**：故障报价 → 下单（到店 / 寄修，寄修含双向运单流转与物流轨迹）→ 工单列表/详情
+- **回收**：在线估价 → 下单 → 填运单号 / 预约快递 → 质检报告 → 确认打款（微信商家转账）
+- **出售**：商品列表 / 详情 / 下单（复用 TDesign 零售模板改造，接后端）
+- **管理后台**：订单管理（回收/维修/出售）、质检录入、打款、RBAC 权限、租户管理、财务对账、数据看板
+- **通知与物流**：快递100 下单与轨迹回调（本地快照缓存，TTL 30 分钟）、微信订阅消息推送
+- **多租户**：所有业务表带 `tenant_id`，后端租户插件自动隔离
 
-零售行业模版小程序是个经典的单店版电商小程序，涵盖了电商的黄金链路流程，从商品->购物车->结算->订单等。小程序总共包含 28 个完整的页面，涵盖首页，商品详情页，个人中心，售后流程等基础页面。采用 mock 数据进行展示，提供了完整的零售商品展示、交易与售后流程。页面详情：
-
-<img src="https://tdesign.gtimg.com/miniprogram/template/retail/tdesign-starter-readmeV1.png" width = "650" height = "900" alt="模版小程序页面详情" align=center />
-
-主要页面截图如下：
-
-<p align="center">
-    <img alt="example-home" width="200" src="https://tdesign.gtimg.com/miniprogram/template/retail/example/v1/home.png" />
-    <img alt="example-sort" width="200" src="https://tdesign.gtimg.com/miniprogram/template/retail/example/v2/sort.png" />
-    <img alt="example-cart" width="200" src="https://tdesign.gtimg.com/miniprogram/template/retail/example/v1/cart.png" />
-    <img alt="example-user-center" width="200" src="https://tdesign.gtimg.com/miniprogram/template/retail/example/v1/user-center.png" />
-    <img alt="example-goods-detail" width="200" src="https://tdesign.gtimg.com/miniprogram/template/retail/example/v1/goods-detail.png" />
-    <img alt="example-pay" width="200" src="https://tdesign.gtimg.com/miniprogram/template/retail/example/v1/pay.png" />
-    <img alt="example-order" width="200" src="https://tdesign.gtimg.com/miniprogram/template/retail/example/v1/order.png" />
-    <img alt="example-order-detail" width="200" src="https://tdesign.gtimg.com/miniprogram/template/retail/example/v2/order.png" />
-</p>
-
-### 2. 项目构成
-
-零售行业模版小程序采用基础的 JavaScript + WXSS + ESLint 进行构建，降低了使用门槛。
-
-项目目录结构如下：
+## 目录结构
 
 ```
-|-- tdesign-miniprogram-starter
-    |-- README.md
-    |-- app.js
-    |-- app.json
-    |-- app.wxss
-    |-- components	//	公共组件库
-    |-- config	//	基础配置
-    |-- custom-tab-bar	//	自定义 tabbar
-    |-- model	//	mock 数据
-    |-- pages
-    |   |-- cart	//	购物车相关页面
-    |   |-- coupon	//	优惠券相关页面
-    |   |-- goods	//	商品相关页面
-    |   |-- home	//	首页
-    |   |-- order	//	订单售后相关页面
-    |   |-- promotion-detail	//	营销活动页面
-    |   |-- usercenter	//	个人中心及收货地址相关页面
-    |-- services	//	请求接口
-    |-- style	//	公共样式与iconfont
-    |-- utils	//	工具库
+RePhone
+├── app.js / app.json          # 小程序入口与全局配置
+├── pages/                     # 小程序页面（home / sale / repair / recycle / usercenter）
+├── packages/retail-template/  # 零售模板分包（商品/订单/售后等）
+├── components/ custom-tab-bar/ style/   # 公共组件、自定义 tabBar、设计令牌
+├── common/                    # 状态码映射、地址预填 Behavior 等公共逻辑
+├── services/                  # 小程序请求层
+├── model/                     # 模板 mock 契约参考层（保留，勿删）
+├── server/                    # Spring Boot 后端（Maven 多模块，自带 mvnw）
+│   ├── common / pojo / mapper / service / controller / wechat / express
+│   ├── start/src/main/resources/db/   # 建表脚本（幂等）+ patch-*.sql
+│   ├── docker-compose.yml     # MySQL + Redis + server 一键编排
+│   └── .env.example           # 密钥配置模板
+├── admin/                     # Vue 3 管理后台
+└── docs/                      # 审计报告、计划与设计文档
 ```
 
-### 3. 数据模拟
+## 快速开始
 
-零售小程序采用真实的接口数据，模拟后端返回逻辑，在小程序展示完整的购物场景与购物体验逻辑。
+### 1. 后端（Docker 一键起）
 
-### 4. 添加新页面
+```bash
+cd server
+cp .env.example .env        # 填入 MySQL 密码；真实微信/快递100 密钥可选，缺省走 mock
+docker compose up -d --build
+```
 
-1. 在 `pages `目录下创建对应的页面文件夹
-2. 在 `app.json` 文件中的 ` "pages"` 数组中加上页面路径
-3. [可选] 在 `project.config.json` 文件的 `"miniprogram-list"` 下添加页面配置
+- 服务端口 `8080`，MySQL `3306`，Redis `6379`
+- 未配置真实凭据时自动使用 mock 模式（登录 / 快递100 / 支付 / 订阅消息），可完整跑通业务闭环
+- 本地跑测试：`cd server && ./mvnw test`（Windows 用 `mvnw.cmd test`）
 
-## :hammer: 构建运行
+### 2. 微信小程序
 
 1. `npm install`
-2. 小程序开发工具中引入工程
-3. 构建 npm
+2. 微信开发者工具导入仓库根目录，执行「构建 npm」
+3. [config/index.js](config/index.js) 中切换 `env`，开发态 `apiBaseUrl` 默认 `http://localhost:8080`
 
-## :art: 代码风格控制
+### 3. 管理后台
 
-- `eslint`
-- `prettier`
+```bash
+cd admin
+npm install
+npm run dev        # http://localhost:5173，/api 代理到 localhost:8080
+```
 
-## :iphone: 基础库版本
+## 密钥与安全
 
-最低基础库版本`^2.6.5`
+- 所有密钥（appid/secret/mchid/快递100 key/ADMIN_TOKEN 等）**只**放 `server/.env`（已被 gitignore），
+  新增配置同步补到 `server/.env.example` 的空值行
+- 小程序端不含任何密钥，三方服务（支付、快递100、订阅消息、COS）一律由后端代理
+- 金额后端统一以「分」(BIGINT) 存储与传输，前端展示层负责分/元转换
 
-## :dart: 反馈
+## 协作规范
 
-有任何问题，建议通过 [Github issues](https://github.com/Tencent/tdesign-miniprogram/issues) 反馈或扫码加入用户微信群。
+- 详见 [AGENT.md](AGENT.md)（强制阅读）：提交粒度、状态码/设计令牌唯一来源、验证要求等
+- 开发计划：[AI_PLAN.md](AI_PLAN.md)（P0–P7 分阶段）、`docs/superpowers/plans/`
+- 提交信息遵循 Conventional Commits + 中文正文，scope 常用：`sale` `recycle` `repair` `admin` `order` `auth`
 
-<img src="https://raw.githubusercontent.com/Tencent/tdesign/main/packages/site-components/src/images/groups/wx-group.png" width="200" />
+## License
 
-## :link: TDesign 其他技术栈实现
-
-- 移动端 小程序 实现：[mobile-miniprogram](https://github.com/Tencent/tdesign-miniprogram)
-- 桌面端 Vue 2 实现：[web-vue](https://github.com/Tencent/tdesign-vue)
-- 桌面端 Vue 3 实现：[web-vue-next](https://github.com/Tencent/tdesign-vue-next)
-- 桌面端 React 实现：[web-react](https://github.com/Tencent/tdesign-react)
-
-## :page_with_curl: 开源协议
-
-TDesign 遵循 [MIT 协议](https://github.com/Tencent/tdesign-miniprogram/LICENSE)。
+[MIT](LICENSE)
