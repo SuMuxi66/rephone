@@ -5,6 +5,7 @@ import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.time.LocalDate;
+import java.util.Set;
 import java.util.UUID;
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
@@ -24,9 +25,17 @@ public class CosSignService {
     @Autowired
     private com.rephone.service.CosProperties props;
 
+    /** 业务目录白名单：对象 key 首段只允许这几个前缀，默认回收目录（兼容既有调用方）。 */
+    private static final Set<String> DIRS = Set.of("recycle", "repair", "comment");
+
     public CosUploadSign signPutObject(String ext) {
+        return signPutObject(ext, "recycle");
+    }
+
+    public CosUploadSign signPutObject(String ext, String dir) {
         String safeExt = StringUtils.hasText(ext) && ext.matches("[a-zA-Z0-9]{1,8}") ? ext : "jpg";
-        String key = "recycle/" + LocalDate.now() + "/" + UUID.randomUUID().toString().replace("-", "") + "." + safeExt;
+        String safeDir = DIRS.contains(dir) ? dir : "recycle";
+        String key = safeDir + "/" + LocalDate.now() + "/" + UUID.randomUUID().toString().replace("-", "") + "." + safeExt;
 
         if (props.isMock() || !StringUtils.hasText(props.getSecretId()) || !StringUtils.hasText(props.getSecretKey())) {
             return new CosUploadSign(true, "https://mock-bucket.cos.mock-region.myqcloud.com", key, "mock", 0, 0);

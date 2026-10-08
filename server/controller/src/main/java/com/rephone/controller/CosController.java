@@ -20,7 +20,8 @@ public class CosController {
     }
 
     @GetMapping("/upload-sign")
-    public R<CosUploadSign> uploadSign(@RequestParam(defaultValue = "jpg") String ext) {
-        return R.ok(cosSignService.signPutObject(ext));
+    public R<CosUploadSign> uploadSign(@RequestParam(defaultValue = "jpg") String ext,
+                                       @RequestParam(defaultValue = "recycle") String dir) {
+        return R.ok(cosSignService.signPutObject(ext, dir));
     }
 }
