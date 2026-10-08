@@ -58,6 +58,11 @@ rephone:
     mock: ${WXPAY_MOCK:false}
     # 支付结果回调地址（公网 https，微信服务器可达）；mock 模式不需要
     notify-url: ${WXPAY_NOTIFY_URL:}
+  pay:
+    # 待支付支付单有效期（分钟），超时自动关闭；重新发起支付会生成新支付单
+    pending-ttl-minutes: ${PAY_PENDING_TTL_MINUTES:30}
+    # 过期支付单关闭扫描周期
+    close-cron: ${PAY_CLOSE_CRON:0 */5 * * * *}
   cos:
     secret-id: ${COS_SECRET_ID:}
     secret-key: ${COS_SECRET_KEY:}

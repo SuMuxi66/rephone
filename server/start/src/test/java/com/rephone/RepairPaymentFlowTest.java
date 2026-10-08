@@ -64,6 +64,9 @@ class RepairPaymentFlowTest {
     @Autowired
     private JdbcTemplate jdbcTemplate;
 
+    @Autowired
+    private com.rephone.service.PaymentService paymentService;
+
     private String userToken;
     private long userId;
 
@@ -249,5 +252,60 @@ class RepairPaymentFlowTest {
                 "select count(*) from order_status_log where order_no = 'F-RP-1' "
                         + "and from_status = 38 and to_status = 30 and operator_type = 30", Integer.class);
         assertEquals(1, rows, "应有一条 38→30 的系统推进日志");
+    }
+
+    /** M4：过期 PENDING 自动关闭——过期关/未过期保留/已支付不动/重复关闭幂等/迟到回调兑现/重新支付新生成。 */
+    @Test
+    @Order(8)
+    void expired_pending_payments_auto_close() throws Exception {
+        insertOrder("F-RP-EXP", userId, 38);
+        insertQuote("F-RP-EXP");
+        insertOrder("F-RP-EXP2", userId, 38);
+        insertQuote("F-RP-EXP2");
+        // 31 分钟前的过期单 + 29 分钟前的未到期单；已支付单把 create_time 拨旧仍不得关闭
+        jdbcTemplate.update("insert into payment_order (tenant_id, order_no, order_type, pay_no, amount_fen, status, create_time) "
+                + "values (0, 'F-RP-EXP', 30, 'P-RP-EXP1', 25000, 0, dateadd(minute, -31, current_timestamp))");
+        jdbcTemplate.update("insert into payment_order (tenant_id, order_no, order_type, pay_no, amount_fen, status, create_time) "
+                + "values (0, 'F-RP-EXP2', 30, 'P-RP-EXP2', 25000, 0, dateadd(minute, -31, current_timestamp))");
+        jdbcTemplate.update("insert into payment_order (tenant_id, order_no, order_type, pay_no, amount_fen, status, create_time) "
+                + "values (0, 'F-RP-KEEP', 30, 'P-RP-KEEP', 25000, 0, dateadd(minute, -29, current_timestamp))");
+        jdbcTemplate.update("update payment_order set create_time = dateadd(minute, -31, current_timestamp) "
+                + "where pay_no = (select pay_no from repair_order where order_no = 'F-RP-1')");
+
+        int closed = paymentService.closeExpired();
+        assertTrue(closed >= 2, "应至少关闭 2 条过期 PENDING");
+        assertEquals(2, paymentStatus("P-RP-EXP1"), "过期 PENDING 应被关闭");
+        assertEquals(2, paymentStatus("P-RP-EXP2"), "过期 PENDING 应被关闭");
+        assertEquals(0, paymentStatus("P-RP-KEEP"), "未到期 PENDING 不得关闭");
+        Integer paidStatus = jdbcTemplate.queryForObject(
+                "select status from payment_order where pay_no = (select pay_no from repair_order where order_no = 'F-RP-1')",
+                Integer.class);
+        assertEquals(1, paidStatus, "已支付支付单不得被关闭");
+
+        // 重复关闭：第二次扫描不再有针对这些单的变更（幂等）
+        assertEquals(2, paymentStatus("P-RP-EXP1"));
+        assertEquals(2, paymentStatus("P-RP-EXP2"));
+
+        // 关联订单不受关单影响：仍 38 待支付
+        assertEquals(38, statusOf("F-RP-EXP"));
+
+        // 关单后的迟到真实支付必须兑现：回调应答 SUCCESS，支付单入账、订单推进 38→30
+        ResponseEntity<String> late = notify(callbackXml("P-RP-EXP1", 25000, null, "4200EXPLATE"));
+        assertTrue(late.getBody().contains("SUCCESS"), "迟到真实支付应兑现: " + late.getBody());
+        assertEquals(1, paymentStatus("P-RP-EXP1"), "迟到支付应入账");
+        assertEquals(30, statusOf("F-RP-EXP"), "迟到兑现后订单应推进维修中");
+        // 重复通知幂等
+        ResponseEntity<String> lateAgain = notify(callbackXml("P-RP-EXP1", 25000, null, "4200EXPLATE"));
+        assertTrue(lateAgain.getBody().contains("SUCCESS"));
+        assertEquals(30, statusOf("F-RP-EXP"));
+
+        // 重新发起支付：不复用已关闭单，生成新支付单并 mock 闭环 → 30
+        ResponseEntity<String> payResp = rest.exchange("/api/wx/repair/order/F-RP-EXP2/pay", HttpMethod.PUT,
+                new HttpEntity<>(user()), String.class);
+        JsonNode body = objectMapper.readTree(payResp.getBody());
+        assertEquals(0, body.get("code").asInt(), payResp.getBody());
+        String newPayNo = body.path("data").path("payNo").asText();
+        assertTrue(newPayNo.startsWith("P") && !newPayNo.equals("P-RP-EXP2"), "重新支付应生成新支付单");
+        assertEquals(30, statusOf("F-RP-EXP2"), "重新支付成功后订单应进入维修中");
     }
 }

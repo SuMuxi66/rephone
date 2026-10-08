@@ -11,6 +11,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -35,6 +36,10 @@ public class PaymentService {
     private static final long MAX_AMOUNT_FEN = 100_000_000L;
     private static final SecureRandom RANDOM = new SecureRandom();
 
+    /** 待支付单有效期（分钟），超时由定时任务关闭/复用时跳过。 */
+    @Value("${rephone.pay.pending-ttl-minutes:30}")
+    private long pendingTtlMinutes;
+
     private final PaymentOrderMapper paymentOrderMapper;
     private final WxPayClient wxPayClient;
 
@@ -47,10 +52,12 @@ public class PaymentService {
     @Transactional
     public Map<String, Object> start(int orderType, String orderNo, long amountFen, Long tenantId, String openid) {
         validate(orderType, amountFen);
+        // 只复用有效期内的待支付单；过期 PENDING 视同关闭（closeExpired 口径），重新生成新支付单
         PaymentOrder pending = paymentOrderMapper.selectOne(new LambdaQueryWrapper<PaymentOrder>()
                 .eq(PaymentOrder::getOrderType, orderType)
                 .eq(PaymentOrder::getOrderNo, orderNo)
                 .eq(PaymentOrder::getStatus, PaymentOrder.STATUS_PENDING)
+                .gt(PaymentOrder::getCreateTime, LocalDateTime.now().minusMinutes(pendingTtlMinutes))
                 .orderByDesc(PaymentOrder::getId)
                 .last("limit 1"));
         String payNo;
@@ -99,7 +106,10 @@ public class PaymentService {
         return order;
     }
 
-    /** 支付单幂等入账：PENDING→SUCCESS（CAS）；已支付返回 false（重复通知）。 */
+    /**
+     * 支付单幂等入账：PENDING/CLOSED→SUCCESS（CAS）；已支付返回 false（重复通知）。
+     * CLOSED 单收到支付成功视为迟到的真实支付，必须兑现入账（用户资金不容丢弃），订单随之推进。
+     */
     @Transactional
     public boolean markPaySuccess(String payNo, String transactionId) {
         PaymentOrder order = requirePendingByPayNo(payNo);
@@ -112,7 +122,7 @@ public class PaymentService {
         patch.setPayTime(LocalDateTime.now());
         int updated = paymentOrderMapper.update(patch, new LambdaUpdateWrapper<PaymentOrder>()
                 .eq(PaymentOrder::getId, order.getId())
-                .eq(PaymentOrder::getStatus, PaymentOrder.STATUS_PENDING));
+                .in(PaymentOrder::getStatus, PaymentOrder.STATUS_PENDING, PaymentOrder.STATUS_CLOSED));
         return updated > 0;
     }
 
@@ -123,6 +133,19 @@ public class PaymentService {
                 .eq(PaymentOrder::getOrderType, orderType)
                 .eq(PaymentOrder::getOrderNo, orderNo)
                 .eq(PaymentOrder::getStatus, PaymentOrder.STATUS_PENDING)
+                .set(PaymentOrder::getStatus, PaymentOrder.STATUS_CLOSED));
+    }
+
+    /**
+     * 关闭超过有效期（默认 30 分钟，rephone.pay.pending-ttl-minutes）仍未支付的支付单。
+     * 批量 CAS，幂等可重复执行；已被定时任务关闭的迟到回调会因非 PENDING 被拒（fail-safe）。
+     * 真实模式建议关单前调微信 closeorder（见 docs/superpowers/specs 支付订单自动关闭设计）。
+     */
+    @Transactional
+    public int closeExpired() {
+        return paymentOrderMapper.update(null, new LambdaUpdateWrapper<PaymentOrder>()
+                .eq(PaymentOrder::getStatus, PaymentOrder.STATUS_PENDING)
+                .lt(PaymentOrder::getCreateTime, LocalDateTime.now().minusMinutes(pendingTtlMinutes))
                 .set(PaymentOrder::getStatus, PaymentOrder.STATUS_CLOSED));
     }
 
