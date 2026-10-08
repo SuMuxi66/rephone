@@ -1,4 +1,4 @@
-import { fetchRepairOrderDetail, cancelRepairOrder, fillRepairExpress, fetchRepairTrace, fetchRepairReturnTrace, confirmRepairReceipt, payRepairOrder } from '../../../../services/repair/repair';
+import { fetchRepairOrderDetail, cancelRepairOrder, fillRepairExpress, fetchRepairTrace, fetchRepairReturnTrace, confirmRepairReceipt, requestRepairPayment } from '../../../../services/repair/repair';
 import { fetchExpressCompanies } from '../../../../services/recycle/order';
 import { STATUS_DESC, statusDesc, timelineFor, SERVICE_TYPE_DESC, QUOTE_STATUSES } from '../../../../common/repair-status';
 import { fen2yuan } from '../../../../common/recycle-status';
@@ -77,7 +77,8 @@ Page({
     if (paying) return;
     this.setData({ paying: true });
     try {
-      await payRepairOrder(this._orderNo);
+      // mock 模式直接闭环；真实模式调起微信收银台，支付成功后由回调推进订单
+      await requestRepairPayment(this._orderNo);
       wx.showToast({ title: '支付成功，开始维修', icon: 'success' });
       this.fetchDetail();
     } catch (e) {

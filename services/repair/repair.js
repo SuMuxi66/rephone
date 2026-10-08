@@ -50,6 +50,30 @@ export const confirmRepairPrice = (orderNo) =>
 export const rejectRepairPrice = (orderNo) =>
   request({ url: `/api/wx/repair/order/${orderNo}/reject-price`, method: 'PUT' });
 
-/** 按已接受报价支付（38→30 维修中）：PUT /api/wx/repair/order/{orderNo}/pay */
+/** 按已接受报价发起支付（38→30 维修中）：PUT /api/wx/repair/order/{orderNo}/pay */
 export const payRepairOrder = (orderNo) =>
   request({ url: `/api/wx/repair/order/${orderNo}/pay`, method: 'PUT' });
+
+/**
+ * 发起维修支付：mock 模式后端直接闭环（返回 mock=true）；真实模式拿签名参数调起微信收银台。
+ * 返回支付响应；用户取消/失败时抛错（errMsg）。
+ */
+export const requestRepairPayment = async (orderNo) => {
+  const res = await payRepairOrder(orderNo);
+  if (res && res.mock) {
+    return res;
+  }
+  await new Promise((resolve, reject) => {
+    wx.requestPayment({
+      appId: res.appId,
+      timeStamp: res.timeStamp,
+      nonceStr: res.nonceStr,
+      package: res.package,
+      signType: res.signType || 'MD5',
+      paySign: res.paySign,
+      success: resolve,
+      fail: (e) => reject(new Error((e && e.errMsg) || '支付未完成')),
+    });
+  });
+  return res;
+};

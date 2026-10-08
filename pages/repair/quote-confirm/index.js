@@ -2,7 +2,7 @@ import {
   fetchRepairOrderDetail,
   confirmRepairPrice,
   rejectRepairPrice,
-  payRepairOrder,
+  requestRepairPayment,
 } from '../../../services/repair/repair';
 import { fen2yuan } from '../../../common/recycle-status';
 
@@ -100,7 +100,8 @@ Page({
     if (acting) return;
     this.setData({ acting: true });
     try {
-      await payRepairOrder(this._orderNo);
+      // mock 模式直接闭环；真实模式调起微信收银台，用户支付成功后 resolve
+      await requestRepairPayment(this._orderNo);
       wx.showToast({ title: '支付成功', icon: 'success' });
       this.fetchAll();
     } catch (e) {
