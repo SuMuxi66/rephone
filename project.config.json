@@ -89,6 +89,10 @@
       {
         "type": "file",
         "value": "package-lock.json"
+      },
+      {
+        "type": "file",
+        "value": "config/eslintCheck.js"
       }
     ],
     "include": []
