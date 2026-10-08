@@ -27,5 +27,6 @@ export const cancelRecycleOrder = (orderNo, reason) =>
 export const confirmPayout = (orderNo) =>
   request({ url: `/api/wx/recycle/order/${orderNo}/confirm`, method: 'PUT' });
 
-/** COS 直传签名：GET /api/wx/cos/upload-sign */
-export const fetchCosUploadSign = (ext) => get('/api/wx/cos/upload-sign', { ext });
+/** COS 直传签名：GET /api/wx/cos/upload-sign（dir 可选：recycle/repair/comment，默认 recycle） */
+export const fetchCosUploadSign = (ext, dir) =>
+  get('/api/wx/cos/upload-sign', dir ? { ext, dir } : { ext });

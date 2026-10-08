@@ -1,0 +1,53 @@
+<view class="page">
+  <view class="order-card">
+    <view class="order-label">{{typeLabel}}</view>
+    <view class="order-no">单号 {{orderNo}}</view>
+  </view>
+
+  <!-- 已评价：只读展示评价内容（提交成功后也回到此态） -->
+  <view wx:if="{{comment}}" class="card">
+    <view class="done-head">
+      <text class="done-title">我的评价</text>
+      <t-rate count="{{5}}" value="{{comment.score}}" size="32rpx" disabled="{{true}}" />
+    </view>
+    <view wx:if="{{comment.content}}" class="done-content">{{comment.content}}</view>
+    <view wx:if="{{comment.images.length}}" class="photo-grid">
+      <image
+        wx:for="{{comment.images}}"
+        wx:key="index"
+        src="{{item}}"
+        mode="aspectFill"
+        class="photo-thumb"
+        data-index="{{index}}"
+        bindtap="previewPhoto"
+      />
+    </view>
+    <view class="done-hint">评价已提交，感谢您的反馈</view>
+    <t-button theme="primary" block bindtap="goBack">返回</t-button>
+  </view>
+
+  <!-- 未评价：填写表单 -->
+  <view wx:else class="card">
+    <view class="score-row">
+      <text class="score-label">服务评分</text>
+      <t-rate count="{{5}}" value="{{score}}" size="56rpx" gap="16rpx" bind:change="onScoreChange" />
+    </view>
+    <view class="field-label">评价内容（选填，500 字以内）</view>
+    <t-textarea
+      placeholder="聊聊本次服务的体验吧"
+      maxlength="{{500}}"
+      indicator
+      value="{{content}}"
+      bindchange="onContentInput"
+    />
+    <view class="field-label">图片（选填，最多 9 张）</view>
+    <view class="photo-grid">
+      <view wx:for="{{photos}}" wx:key="index" class="photo-item">
+        <image src="{{item}}" mode="aspectFill" class="photo-thumb" data-index="{{index}}" bindtap="previewPhoto" />
+        <view class="photo-remove" data-index="{{index}}" catchtap="removePhoto">×</view>
+      </view>
+      <view wx:if="{{photos.length < 9}}" class="photo-add" bindtap="choosePhoto">+</view>
+    </view>
+    <t-button theme="primary" block loading="{{submitting}}" disabled="{{submitting}}" bindtap="onSubmit">提交评价</t-button>
+  </view>
+</view>

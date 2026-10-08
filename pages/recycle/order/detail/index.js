@@ -6,6 +6,7 @@ import {
   fetchExpressCompanies,
 } from '../../../../services/recycle/order';
 import { STATUS_DESC, fen2yuan } from '../../../../common/recycle-status';
+import { fetchOrderComment } from '../../../../services/comment';
 
 /** 正向流程节点（取消态不展示时间线） */
 const FLOW = [10, 20, 30, 40, 50, 60];
@@ -36,6 +37,8 @@ Page({
     /** 当前所选快递公司查询轨迹时是否必须带收寄件人电话（顺丰速运/顺丰快运/中通快递） */
     expressNeedPhone: true,
     submitting: false,
+    /** 已完成订单的评价（null=未评价，详情页出现「立即评价」按钮） */
+    comment: null,
   },
 
   onLoad(options) {
@@ -64,10 +67,25 @@ Page({
           finalPriceText: fen2yuan(it.finalFen),
         })),
       });
+      this.loadComment();
     } catch (e) {
       this.setData({ loading: false });
       wx.showToast({ title: e.message || '加载失败', icon: 'none' });
     }
+  },
+
+  /** 已完成订单的评价状态：有则展示评价卡，无则出现「立即评价」按钮 */
+  async loadComment() {
+    try {
+      const comment = await fetchOrderComment(this.data.orderNo, 10);
+      this.setData({ comment });
+    } catch (e) {
+      // 评价查询失败不影响详情主流程
+    }
+  },
+
+  goComment() {
+    wx.navigateTo({ url: '/pages/comment/create/index?orderType=10&orderNo=' + this.data.orderNo });
   },
 
   /** 快递公司字典由后端下发，前端不再写死，保证编码与轨迹查询用的是同一份 */

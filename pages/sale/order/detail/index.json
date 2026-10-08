@@ -6,6 +6,7 @@
     "t-button": "tdesign-miniprogram/button/button",
     "t-input": "tdesign-miniprogram/input/input",
     "t-popup": "tdesign-miniprogram/popup/popup",
-    "status-tag": "/components/status-tag/index"
+    "status-tag": "/components/status-tag/index",
+    "order-comment": "/components/order-comment/index"
   }
 }

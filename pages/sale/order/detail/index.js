@@ -7,6 +7,7 @@ import {
 } from '../../../../services/sale/order';
 import { statusDesc } from '../../../../common/sale-status';
 import { fen2yuan } from '../../../../common/recycle-status';
+import { fetchOrderComment } from '../../../../services/comment';
 
 /** 后端 createTime 为 ISO 字符串（2026-09-30T19:09:05） */
 const formatTime = (t) => (t ? String(t).replace('T', ' ').slice(0, 16) : '');
@@ -23,6 +24,8 @@ Page({
     afterSalePopupVisible: false,
     afterSaleForm: { reason: '' },
     submitting: false,
+    /** 已完成订单的评价（null=未评价，详情页出现「立即评价」按钮） */
+    comment: null,
   },
 
   onLoad(options) {
@@ -44,10 +47,25 @@ Page({
         refundText: fen2yuan(order.refundFen),
         createTimeText: formatTime(order.createTime),
       });
+      this.loadComment();
     } catch (e) {
       this.setData({ loading: false });
       wx.showToast({ title: e.message || '加载失败', icon: 'none' });
     }
+  },
+
+  /** 已完成订单的评价状态：有则展示评价卡，无则出现「立即评价」按钮 */
+  async loadComment() {
+    try {
+      const comment = await fetchOrderComment(this.data.orderNo, 20);
+      this.setData({ comment });
+    } catch (e) {
+      // 评价查询失败不影响详情主流程
+    }
+  },
+
+  goComment() {
+    wx.navigateTo({ url: '/pages/comment/create/index?orderType=20&orderNo=' + this.data.orderNo });
   },
 
   copyOrderNo() {

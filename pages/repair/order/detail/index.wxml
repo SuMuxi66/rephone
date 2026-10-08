@@ -67,16 +67,21 @@
     />
   </view>
 
+  <order-comment comment="{{comment}}" />
+
   <view class="footer" wx:if="{{order.status === 10 || (mailIn && order.status === 20)}}">
     <t-button theme="default" block bindtap="onCancel">取消预约</t-button>
   </view>
 
-  <!-- 寄修：待寄出 → 填运单号；回寄中 → 确认收货 -->
+  <!-- 寄修：待寄出 → 填运单号；回寄中 → 确认收货；已完成 → 立即评价 -->
   <view class="footer" wx:if="{{mailIn && order.status === 20}}">
     <t-button theme="primary" block bindtap="openExpressSheet">我已寄出，填写运单号</t-button>
   </view>
   <view class="footer" wx:if="{{mailIn && order.status === 45}}">
     <t-button theme="primary" block bindtap="onConfirmReceipt">确认收货，完成维修</t-button>
+  </view>
+  <view class="footer" wx:if="{{order.status === 50 && !comment}}">
+    <t-button theme="primary" block bindtap="goComment">立即评价</t-button>
   </view>
 
   <!-- 寄出填单弹层 -->

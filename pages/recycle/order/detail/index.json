@@ -11,6 +11,7 @@
     "t-picker-item": "tdesign-miniprogram/picker-item/picker-item",
     "t-steps": "tdesign-miniprogram/steps/steps",
     "t-step-item": "tdesign-miniprogram/step-item/step-item",
-    "status-tag": "/components/status-tag/index"
+    "status-tag": "/components/status-tag/index",
+    "order-comment": "/components/order-comment/index"
   }
 }

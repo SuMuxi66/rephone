@@ -2,6 +2,7 @@ import { fetchRepairOrderDetail, cancelRepairOrder, fillRepairExpress, fetchRepa
 import { fetchExpressCompanies } from '../../../../services/recycle/order';
 import { STATUS_DESC, statusDesc, timelineFor, SERVICE_TYPE_DESC } from '../../../../common/repair-status';
 import { fen2yuan } from '../../../../common/recycle-status';
+import { fetchOrderComment } from '../../../../services/comment';
 
 const TRACE_LIMIT = 8;
 
@@ -24,6 +25,8 @@ Page({
     traceTitle: '',
     traceLoading: false,
     traceNodes: [],
+    /** 已完成订单的评价（null=未评价，详情页出现「立即评价」按钮） */
+    comment: null,
   },
 
   onLoad(query) {
@@ -50,9 +53,24 @@ Page({
         serviceText: SERVICE_TYPE_DESC[order.serviceType] || '上门维修',
         mailIn,
       });
+      this.loadComment();
     } catch (e) {
       wx.showToast({ title: e.message || '加载失败', icon: 'none' });
     }
+  },
+
+  /** 已完成订单的评价状态：有则展示评价卡，无则出现「立即评价」按钮 */
+  async loadComment() {
+    try {
+      const comment = await fetchOrderComment(this._orderNo, 30);
+      this.setData({ comment });
+    } catch (e) {
+      // 评价查询失败不影响详情主流程
+    }
+  },
+
+  goComment() {
+    wx.navigateTo({ url: '/pages/comment/create/index?orderType=30&orderNo=' + this._orderNo });
   },
 
   previewImage(e) {

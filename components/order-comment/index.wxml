@@ -1,0 +1,18 @@
+<view wx:if="{{comment}}" class="comment-card">
+  <view class="comment-head">
+    <text class="comment-title">我的评价</text>
+    <t-rate count="{{5}}" value="{{comment.score}}" size="28rpx" disabled="{{true}}" />
+  </view>
+  <view wx:if="{{comment.content}}" class="comment-content">{{comment.content}}</view>
+  <view wx:if="{{comment.images.length}}" class="comment-photos">
+    <image
+      wx:for="{{comment.images}}"
+      wx:key="index"
+      src="{{item}}"
+      mode="aspectFill"
+      class="comment-photo"
+      data-index="{{index}}"
+      bindtap="onPreview"
+    />
+  </view>
+</view>

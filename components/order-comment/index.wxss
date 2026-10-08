@@ -1,0 +1,40 @@
+/* 令牌来自 page 继承（CSS 自定义属性计算值继承，不受组件样式隔离影响） */
+.comment-card {
+  background: var(--bg-card);
+  border-radius: var(--radius-card);
+  margin: 20rpx var(--space-page) 0;
+  padding: 28rpx 32rpx;
+}
+
+.comment-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.comment-title {
+  font-size: 28rpx;
+  font-weight: 600;
+  color: var(--text-1);
+}
+
+.comment-content {
+  margin-top: 16rpx;
+  font-size: 26rpx;
+  color: var(--text-2);
+  line-height: 1.6;
+}
+
+.comment-photos {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12rpx;
+  margin-top: 16rpx;
+}
+
+.comment-photo {
+  width: 160rpx;
+  height: 160rpx;
+  border-radius: var(--radius-sm);
+  background: var(--bg-sunken);
+}

@@ -8,6 +8,7 @@
     "t-steps": "tdesign-miniprogram/steps/steps",
     "t-step-item": "tdesign-miniprogram/step-item/step-item",
     "t-popup": "tdesign-miniprogram/popup/popup",
-    "status-tag": "/components/status-tag/index"
+    "status-tag": "/components/status-tag/index",
+    "order-comment": "/components/order-comment/index"
   }
 }

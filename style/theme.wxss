@@ -85,6 +85,10 @@ page {
   --td-input-placeholder-text-color: var(--text-3);
   --td-textarea-placeholder-color: var(--text-3);
   --td-cascader-active-color: var(--brand);
+
+  /* ---------- 评分（订单评价） ---------- */
+  --td-rate-selected-color: var(--accent);
+  --td-rate-unselected-color: var(--line-strong);
 }
 
 /* ---------- 弹窗按钮 ---------- */

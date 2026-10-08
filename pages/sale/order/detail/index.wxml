@@ -28,6 +28,8 @@
     <t-cell wx:if="{{order.adminRemark}}" title="商家备注" note="{{order.adminRemark}}" />
   </t-cell-group>
 
+  <order-comment comment="{{comment}}" />
+
   <view class="footer" wx:if="{{order.status === 10 || order.status === 20 || order.status === 30}}">
     <block wx:if="{{order.status === 10}}">
       <view class="footer-btn"><t-button theme="default" block bindtap="onCancel">取消订单</t-button></view>
@@ -40,6 +42,10 @@
     <block wx:if="{{order.status === 20}}">
       <view class="footer-btn"><t-button theme="default" block bindtap="showAfterSalePopup">申请售后</t-button></view>
     </block>
+  </view>
+
+  <view class="footer" wx:if="{{order.status === 40 && !comment}}">
+    <view class="footer-btn"><t-button theme="primary" block bindtap="goComment">立即评价</t-button></view>
   </view>
 
   <t-popup visible="{{afterSalePopupVisible}}" placement="bottom" bind:visible-change="hideAfterSalePopup">
