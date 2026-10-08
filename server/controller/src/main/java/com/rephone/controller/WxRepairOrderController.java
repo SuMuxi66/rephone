@@ -119,9 +119,9 @@ public class WxRepairOrderController {
         return R.ok();
     }
 
-    /** 报价模式：用户按已接受报价支付，成功后进入维修中（38→30）。 */
+    /** 报价模式：用户按已接受报价发起支付；真实模式返回 wx.requestPayment 参数，mock 模式直接闭环（38→30）。 */
     @PutMapping("/order/{orderNo}/pay")
-    public R<Map<String, String>> pay(@PathVariable String orderNo) {
-        return R.ok(Map.of("payNo", repairService.payByQuote(orderNo)));
+    public R<Map<String, Object>> pay(@PathVariable String orderNo) {
+        return R.ok(repairService.startPayment(orderNo));
     }
 }

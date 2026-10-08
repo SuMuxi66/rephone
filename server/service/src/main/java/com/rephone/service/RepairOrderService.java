@@ -383,9 +383,12 @@ public class RepairOrderService {
         casTransition(order, RepairOrder.STATUS_APPOINTED, 10, order.getUserId(), "用户拒绝报价，退回待处理");
     }
 
-    /** 用户支付（报价模式）：38→30 维修中，落支付流水号；金额取已接受报价。 */
+    /**
+     * 用户发起支付（报价模式）：38 态按已接受报价建支付单。
+     * 真实模式返回微信 JSAPI 支付参数（等待回调推进）；mock 模式直接模拟回调完成闭环。
+     */
     @Transactional
-    public String payByQuote(String orderNo) {
+    public Map<String, Object> startPayment(String orderNo) {
         RepairOrder order = requireOwned(orderNo);
         if (order.getStatus() != RepairOrder.STATUS_WAIT_PAYMENT) {
             throw new BizException(40059, "订单状态不允许支付（当前：" + desc(order.getStatus()) + "）");
@@ -395,14 +398,36 @@ public class RepairOrderService {
             throw new BizException(40059, "没有已接受的报价，无法支付");
         }
         long amountFen = toFen(quote.getQuoteAmount());
-        String payNo = paymentService.mockPayNo(PaymentService.BIZ_REPAIR, orderNo, amountFen);
-        casTransition(order, RepairOrder.STATUS_REPAIRING, 10, order.getUserId(),
-                "支付成功 ¥" + fenText(amountFen) + "（按报价），开始维修");
+        Map<String, Object> result = paymentService.start(PaymentService.ORDER_TYPE_REPAIR, orderNo,
+                amountFen, order.getTenantId(), order.getOpenid());
+        if (Boolean.TRUE.equals(result.get("mock"))) {
+            // mock 闭环：走与微信回调完全相同的入账与状态推进路径
+            paymentService.markPaySuccess(String.valueOf(result.get("payNo")), "MOCKTXN-" + result.get("payNo"));
+            markPaid(orderNo, String.valueOf(result.get("payNo")));
+            result = new LinkedHashMap<>(result);
+            result.put("paid", Boolean.TRUE);
+        }
+        return result;
+    }
+
+    /** 支付成功推进（微信回调驱动，幂等）：38→30 维修中，落 pay_no 与状态日志；回调线程无用户上下文。 */
+    @Transactional
+    public void markPaid(String orderNo, String payNo) {
+        RepairOrder order = requireOrder(orderNo);
+        if (order.getStatus() != RepairOrder.STATUS_WAIT_PAYMENT) {
+            return; // 已推进（重复通知/并发），幂等返回
+        }
         RepairOrder patch = new RepairOrder();
-        patch.setId(order.getId());
+        patch.setStatus(RepairOrder.STATUS_REPAIRING);
         patch.setPayNo(payNo);
-        orderMapper.updateById(patch);
-        return payNo;
+        int updated = orderMapper.update(patch, new LambdaUpdateWrapper<RepairOrder>()
+                .eq(RepairOrder::getId, order.getId())
+                .eq(RepairOrder::getStatus, RepairOrder.STATUS_WAIT_PAYMENT));
+        if (updated == 0) {
+            return;
+        }
+        statusLogService.record(ORDER_TYPE_REPAIR, orderNo, RepairOrder.STATUS_WAIT_PAYMENT,
+                RepairOrder.STATUS_REPAIRING, 30, null, "微信支付成功（按报价），开始维修");
     }
 
     /** CAS 推进状态并写状态日志（报价模式专用）。 */

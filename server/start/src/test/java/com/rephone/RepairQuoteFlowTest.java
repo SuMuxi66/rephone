@@ -39,7 +39,7 @@ import org.springframework.test.context.TestPropertySource;
         "spring.datasource.password=",
         "spring.sql.init.mode=always",
         "spring.sql.init.schema-locations=classpath:db/schema-h2.sql,classpath:db/schema-role.sql,"
-                + "classpath:db/schema-repair.sql",
+                + "classpath:db/schema-payment.sql,classpath:db/schema-repair.sql",
         "rephone.wx.mock-login=true",
         "rephone.jwt.ttl-seconds=3600",
         "rephone.admin.token=test-admin-token"
@@ -172,11 +172,12 @@ class RepairQuoteFlowTest {
         ResponseEntity<String> payResp = rest.exchange("/api/wx/repair/order/F-RQ-ONSITE/pay",
                 HttpMethod.PUT, new HttpEntity<>(user()), String.class);
         assertEquals(0, objectMapper.readTree(payResp.getBody()).get("code").asInt(), payResp.getBody());
-        assertTrue(objectMapper.readTree(payResp.getBody()).path("data").path("payNo").asText().startsWith("MOCKPAY-"));
+        assertTrue(objectMapper.readTree(payResp.getBody()).path("data").path("payNo").asText().startsWith("P"),
+                "支付单号应以 P 前缀业务生成");
         assertEquals(30, statusOf("F-RQ-ONSITE"));
         String payNo = jdbcTemplate.queryForObject(
                 "select pay_no from repair_order where order_no = 'F-RQ-ONSITE'", String.class);
-        assertTrue(payNo != null && payNo.startsWith("MOCKPAY-"));
+        assertTrue(payNo != null && payNo.startsWith("P"), "订单 pay_no 应为支付单号");
 
         // 全链状态日志：订单为直插（无创建日志），10→15→35→36→38→30 共 5 条
         Integer logs = jdbcTemplate.queryForObject(

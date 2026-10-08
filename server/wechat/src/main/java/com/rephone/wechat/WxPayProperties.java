@@ -15,6 +15,9 @@ public class WxPayProperties {
     /** apiclient_cert.p12 证书绝对路径。 */
     private String certPath;
 
+    /** 支付结果回调地址（公网 https，微信服务器可达）；mock 模式不需要。 */
+    private String notifyUrl;
+
     /** true 时跳过真实请求，直接返回打款成功（开发联调）。 */
     private boolean mock = false;
 
@@ -40,6 +43,14 @@ public class WxPayProperties {
 
     public void setCertPath(String certPath) {
         this.certPath = certPath;
+    }
+
+    public String getNotifyUrl() {
+        return notifyUrl;
+    }
+
+    public void setNotifyUrl(String notifyUrl) {
+        this.notifyUrl = notifyUrl;
     }
 
     public boolean isMock() {
