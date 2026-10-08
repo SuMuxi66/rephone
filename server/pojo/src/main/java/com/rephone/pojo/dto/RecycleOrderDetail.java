@@ -24,8 +24,14 @@ public record RecycleOrderDetail(
         String expressTaskNo,
         String remark,
         String adminRemark,
+        /** 用户上传机器照片（type: front/back/screen/damage） */
+        List<ImageItem> images,
         String createTime,
         List<InspectionItem> inspections) {
+
+    /** 用户机器照片项。url 实为 COS key（mock 模式为本地临时路径）。 */
+    public record ImageItem(String type, String url) {
+    }
 
     public record InspectionItem(String result, Long finalFen, java.util.List<String> images, String createTime) {
     }

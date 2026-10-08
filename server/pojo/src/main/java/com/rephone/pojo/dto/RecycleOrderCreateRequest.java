@@ -14,5 +14,7 @@ public record RecycleOrderCreateRequest(
         String pickupName,
         String pickupPhone,
         String pickupAddress,
-        String remark) {
+        String remark,
+        /** 用户上传机器照片（选填，≤9 张；type: front/back/screen/damage，url 为 COS key） */
+        List<RecycleOrderDetail.ImageItem> images) {
 }

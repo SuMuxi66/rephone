@@ -45,6 +45,9 @@ public class RecycleOrder {
 
     private String issuesJson;
 
+    /** 用户上传机器照片 [{type,url}] JSON 数组（front/back/screen/damage） */
+    private String imagesJson;
+
     private Long quoteFen;
 
     private Long finalFen;
@@ -176,6 +179,14 @@ public class RecycleOrder {
 
     public void setIssuesJson(String issuesJson) {
         this.issuesJson = issuesJson;
+    }
+
+    public String getImagesJson() {
+        return imagesJson;
+    }
+
+    public void setImagesJson(String imagesJson) {
+        this.imagesJson = imagesJson;
     }
 
     public Long getQuoteFen() {

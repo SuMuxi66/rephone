@@ -14,6 +14,7 @@ CREATE TABLE IF NOT EXISTS `recycle_order` (
     `condition_key`   VARCHAR(32)   NOT NULL COMMENT '成色代码快照',
     `condition_label` VARCHAR(32)   NOT NULL COMMENT '成色名称快照',
     `issues_json`     VARCHAR(512)  NULL COMMENT '故障代码JSON数组快照',
+    `images_json`     VARCHAR(1024) NULL COMMENT '用户上传机器照片 [{type,url}] JSON数组（front/back/screen/damage）',
     `quote_fen`       BIGINT        NOT NULL COMMENT '预估价（分）',
     `final_fen`       BIGINT        NULL COMMENT '质检后最终价（分）',
     `status`          INT           NOT NULL DEFAULT 10 COMMENT '10待寄出 20运输中 30质检中 40待确认 50已打款 60已完成 80已取消',

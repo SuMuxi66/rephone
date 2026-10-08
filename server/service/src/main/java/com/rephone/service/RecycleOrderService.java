@@ -105,6 +105,7 @@ public class RecycleOrderService {
         if (!serverQuote.priceFen().equals(req.quoteFen())) {
             throw new BizException(40020, "报价已更新，请重新估价");
         }
+        validateImages(req.images());
 
         RecycleOrder order = new RecycleOrder();
         order.setOrderNo(nextOrderNo());
@@ -117,6 +118,7 @@ public class RecycleOrderService {
         order.setConditionKey(req.condition());
         order.setConditionLabel(serverQuote.conditionLabel());
         order.setIssuesJson(toJson(req.issues()));
+        order.setImagesJson(req.images() == null || req.images().isEmpty() ? null : toJsonText(req.images()));
         order.setQuoteFen(serverQuote.priceFen());
         order.setStatus(RecycleOrder.STATUS_WAIT_SEND);
         order.setPickupType(req.pickupType());
@@ -203,8 +205,40 @@ public class RecycleOrderService {
                 o.getConditionLabel(), fromJsonList(o.getIssuesJson()), o.getQuoteFen(), o.getFinalFen(),
                 o.getStatus(), desc(o.getStatus()), o.getPickupType(), o.getPickupName(), o.getPickupPhone(),
                 o.getPickupAddress(), o.getExpressCompany(), o.getExpressNo(), o.getExpressTaskNo(),
-                o.getRemark(), o.getAdminRemark(),
+                o.getRemark(), o.getAdminRemark(), images(o.getImagesJson()),
                 o.getCreateTime() == null ? "" : o.getCreateTime().toString(), inspections(o.getOrderNo()));
+    }
+
+    /** 机器照片白名单校验：选填、至多 9 张、类型固定四种、COS key 白名单字符（防目录穿越）。 */
+    private static void validateImages(java.util.List<RecycleOrderDetail.ImageItem> images) {
+        if (images == null || images.isEmpty()) {
+            return;
+        }
+        if (images.size() > 9) {
+            throw new BizException(40032, "机器照片最多 9 张");
+        }
+        for (RecycleOrderDetail.ImageItem image : images) {
+            if (image == null || !List.of("front", "back", "screen", "damage").contains(image.type())) {
+                throw new BizException(40033, "照片类型无效（front/back/screen/damage）");
+            }
+            if (image.url() == null || image.url().contains("..")
+                    || !image.url().matches("[A-Za-z0-9/_.\\-]{1,256}")) {
+                throw new BizException(40034, "照片路径非法");
+            }
+        }
+    }
+
+    /** 用户机器照片 [{type,url}]；解析失败返回空列表。 */
+    private List<RecycleOrderDetail.ImageItem> images(String json) {
+        if (!StringUtils.hasText(json)) {
+            return List.of();
+        }
+        try {
+            return JSON.readValue(json, new TypeReference<List<RecycleOrderDetail.ImageItem>>() {
+            });
+        } catch (Exception e) {
+            return List.of();
+        }
     }
 
     public List<RecycleOrderDetail.InspectionItem> inspections(String orderNo) {
