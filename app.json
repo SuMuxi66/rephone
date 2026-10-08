@@ -19,6 +19,7 @@
     "pages/repair/create/index",
     "pages/repair/order/list/index",
     "pages/repair/order/detail/index",
+    "pages/repair/quote-confirm/index",
     "pages/comment/create/index",
     "pages/usercenter/index"
   ],

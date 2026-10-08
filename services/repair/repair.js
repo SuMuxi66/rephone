@@ -35,3 +35,21 @@ export const fetchRepairReturnTrace = (orderNo) => get(`/api/wx/repair/order/${o
 /** 寄修：确认收货（回寄中 45→50）：PUT /api/wx/repair/order/{orderNo}/confirm */
 export const confirmRepairReceipt = (orderNo) =>
   request({ url: `/api/wx/repair/order/${orderNo}/confirm`, method: 'PUT' });
+
+// ===== 报价模式：检测 → 报价 → 用户确认 → 支付 → 维修 =====
+
+/** 查看最近一次报价（未报价返回 null）：GET /api/wx/repair/order/{orderNo}/quote */
+export const fetchRepairQuote = (orderNo) =>
+  get('/api/wx/repair/order/' + orderNo + '/quote');
+
+/** 接受报价（36→38 待支付）：PUT /api/wx/repair/order/{orderNo}/confirm-price */
+export const confirmRepairPrice = (orderNo) =>
+  request({ url: `/api/wx/repair/order/${orderNo}/confirm-price`, method: 'PUT' });
+
+/** 拒绝报价（36→20 退回待处理，可重新检测报价）：PUT /api/wx/repair/order/{orderNo}/reject-price */
+export const rejectRepairPrice = (orderNo) =>
+  request({ url: `/api/wx/repair/order/${orderNo}/reject-price`, method: 'PUT' });
+
+/** 按已接受报价支付（38→30 维修中）：PUT /api/wx/repair/order/{orderNo}/pay */
+export const payRepairOrder = (orderNo) =>
+  request({ url: `/api/wx/repair/order/${orderNo}/pay`, method: 'PUT' });

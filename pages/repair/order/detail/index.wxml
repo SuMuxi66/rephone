@@ -84,6 +84,14 @@
     <t-button theme="primary" block bindtap="goComment">立即评价</t-button>
   </view>
 
+  <!-- 报价模式：待确认报价 → 查看报价；待支付 → 立即支付 -->
+  <view class="footer" wx:if="{{order.status === 36}}">
+    <t-button theme="primary" block bindtap="goQuote">查看报价 ¥{{quoteAmountText}}</t-button>
+  </view>
+  <view class="footer" wx:if="{{order.status === 38}}">
+    <t-button theme="primary" block loading="{{paying}}" bindtap="onPayQuote">立即支付 ¥{{quoteAmountText}}</t-button>
+  </view>
+
   <!-- 寄出填单弹层 -->
   <t-popup visible="{{expressSheetVisible}}" placement="bottom" bind:visible-change="hideExpressSheet">
     <view class="sheet">

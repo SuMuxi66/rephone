@@ -1,0 +1,117 @@
+.page {
+  min-height: 100vh;
+  background: var(--bg-page);
+  padding: var(--space-page);
+  box-sizing: border-box;
+}
+
+.order-card {
+  background: var(--bg-card);
+  border-radius: var(--radius-card);
+  padding: 28rpx 32rpx;
+  margin-bottom: 20rpx;
+}
+
+.order-line {
+  display: flex;
+  justify-content: space-between;
+  gap: 24rpx;
+  padding: 10rpx 0;
+}
+
+.label {
+  font-size: 26rpx;
+  color: var(--text-3);
+  flex-shrink: 0;
+}
+
+.value {
+  font-size: 26rpx;
+  color: var(--text-1);
+  text-align: right;
+}
+
+.quote-card {
+  background: var(--bg-card);
+  border-radius: var(--radius-card);
+  padding: 32rpx;
+  margin-bottom: 24rpx;
+}
+
+.quote-amount-row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+}
+
+.quote-label {
+  font-size: 30rpx;
+  font-weight: 600;
+  color: var(--text-1);
+}
+
+.quote-amount {
+  font-size: 56rpx;
+  font-weight: 700;
+  color: var(--money);
+}
+
+.quote-desc {
+  margin-top: 20rpx;
+  font-size: 26rpx;
+  color: var(--text-2);
+  line-height: 1.6;
+}
+
+.photo-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12rpx;
+  margin-top: 20rpx;
+}
+
+.photo-thumb {
+  width: 160rpx;
+  height: 160rpx;
+  border-radius: var(--radius-sm);
+  background: var(--bg-sunken);
+}
+
+.quote-time {
+  margin-top: 20rpx;
+  font-size: 22rpx;
+  color: var(--text-3);
+}
+
+.actions {
+  display: flex;
+  gap: 20rpx;
+  flex-direction: column;
+}
+
+.btn-row {
+  display: flex;
+  gap: 20rpx;
+}
+
+.btn-row > t-button {
+  flex: 1;
+}
+
+.state-hint {
+  font-size: 26rpx;
+  color: var(--text-2);
+  text-align: center;
+  padding: 12rpx 0;
+}
+
+.empty-state {
+  padding: 120rpx 0;
+  display: flex;
+  justify-content: center;
+}
+
+.empty-text {
+  font-size: 26rpx;
+  color: var(--text-3);
+}

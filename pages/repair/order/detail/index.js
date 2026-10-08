@@ -1,6 +1,6 @@
-import { fetchRepairOrderDetail, cancelRepairOrder, fillRepairExpress, fetchRepairTrace, fetchRepairReturnTrace, confirmRepairReceipt } from '../../../../services/repair/repair';
+import { fetchRepairOrderDetail, cancelRepairOrder, fillRepairExpress, fetchRepairTrace, fetchRepairReturnTrace, confirmRepairReceipt, payRepairOrder } from '../../../../services/repair/repair';
 import { fetchExpressCompanies } from '../../../../services/recycle/order';
-import { STATUS_DESC, statusDesc, timelineFor, SERVICE_TYPE_DESC } from '../../../../common/repair-status';
+import { STATUS_DESC, statusDesc, timelineFor, SERVICE_TYPE_DESC, QUOTE_STATUSES } from '../../../../common/repair-status';
 import { fen2yuan } from '../../../../common/recycle-status';
 import { fetchOrderComment } from '../../../../services/comment';
 
@@ -27,6 +27,10 @@ Page({
     traceNodes: [],
     /** 已完成订单的评价（null=未评价，详情页出现「立即评价」按钮） */
     comment: null,
+    /** 报价模式：最近一次报价与支付态 */
+    quote: null,
+    quoteAmountText: '',
+    paying: false,
   },
 
   onLoad(query) {
@@ -42,6 +46,9 @@ Page({
     try {
       const order = await fetchRepairOrderDetail(this._orderNo);
       const mailIn = Number(order.serviceType) === 20;
+      const quote = order.quote || null;
+      // 报价模式：有报价记录或处于报价专属状态（15/35/36/38），时间线切报价视图
+      const quoteMode = !!quote || QUOTE_STATUSES.includes(Number(order.status));
       this.setData({
         order: {
           ...order,
@@ -49,13 +56,34 @@ Page({
         },
         totalText: fen2yuan(order.totalFen),
         itemsText: (order.items || []).map((it) => it.name).join('、'),
-        timeline: timelineFor(order.status, order.serviceType),
+        timeline: timelineFor(order.status, order.serviceType, quoteMode),
         serviceText: SERVICE_TYPE_DESC[order.serviceType] || '上门维修',
         mailIn,
+        quote,
+        quoteAmountText: quote ? fen2yuan(quote.amountFen) : '',
       });
       this.loadComment();
     } catch (e) {
       wx.showToast({ title: e.message || '加载失败', icon: 'none' });
+    }
+  },
+
+  goQuote() {
+    wx.navigateTo({ url: '/pages/repair/quote-confirm/index?orderNo=' + this._orderNo });
+  },
+
+  async onPayQuote() {
+    const { paying } = this.data;
+    if (paying) return;
+    this.setData({ paying: true });
+    try {
+      await payRepairOrder(this._orderNo);
+      wx.showToast({ title: '支付成功，开始维修', icon: 'success' });
+      this.fetchDetail();
+    } catch (e) {
+      wx.showToast({ title: e.message || '支付失败', icon: 'none' });
+    } finally {
+      this.setData({ paying: false });
     }
   },
 

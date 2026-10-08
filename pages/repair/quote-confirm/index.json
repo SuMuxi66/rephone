@@ -1,0 +1,7 @@
+{
+  "navigationBarTitleText": "维修报价确认",
+  "usingComponents": {
+    "t-button": "tdesign-miniprogram/button/button",
+    "t-tag": "tdesign-miniprogram/tag/tag"
+  }
+}
