@@ -31,6 +31,8 @@ Page({
     quote: null,
     quoteAmountText: '',
     paying: false,
+    /** 取消状态判断（10/15/20/35/36/38 可取消） */
+    cancellable: false,
   },
 
   onLoad(query) {
@@ -61,6 +63,8 @@ Page({
         mailIn,
         quote,
         quoteAmountText: quote ? fen2yuan(quote.amountFen) : '',
+        // 取消状态判断：10/15/20/35/36/38 可取消；25 已寄出、30 维修中、40/45、50 不可
+        cancellable: [10, 15, 20, 35, 36, 38].includes(Number(order.status)),
       });
       this.loadComment();
     } catch (e) {
@@ -110,12 +114,12 @@ Page({
 
   onCancel() {
     wx.showModal({
-      title: '取消预约',
-      content: '确定取消本次维修预约吗？',
+      title: '取消订单',
+      content: '确定取消该维修订单吗？取消后不可恢复。',
       success: async (res) => {
         if (!res.confirm) return;
         try {
-          await cancelRepairOrder(this._orderNo, '用户取消预约');
+          await cancelRepairOrder(this._orderNo, '用户取消订单');
           wx.showToast({ title: '已取消', icon: 'success' });
           this.fetchDetail();
         } catch (e) {

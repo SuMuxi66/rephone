@@ -69,8 +69,9 @@
 
   <order-comment comment="{{comment}}" />
 
-  <view class="footer" wx:if="{{order.status === 10 || (mailIn && order.status === 20)}}">
-    <t-button theme="default" block bindtap="onCancel">取消预约</t-button>
+  <!-- 取消状态判断：10/15/20/35/36/38 可取消；25 已寄出、30/40/50 不可 -->
+  <view class="footer" wx:if="{{cancellable}}">
+    <t-button theme="default" block bindtap="onCancel">取消订单</t-button>
   </view>
 
   <!-- 寄修：待寄出 → 填运单号；回寄中 → 确认收货；已完成 → 立即评价 -->
