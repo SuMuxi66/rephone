@@ -82,6 +82,21 @@
           </el-space>
         </div>
 
+        <!-- 报价信息（报价模式） -->
+        <div v-if="detail.quote" class="section">
+          <div class="section-title">最近报价</div>
+          <el-descriptions :column="1" border>
+            <el-descriptions-item label="报价金额">{{ fen2yuan(detail.quote.amountFen) }} 元</el-descriptions-item>
+            <el-descriptions-item label="维修说明">{{ detail.quote.description || '--' }}</el-descriptions-item>
+            <el-descriptions-item label="报价状态">
+              <el-tag size="small" :type="QUOTE_STATUS[detail.quote.status]?.type || 'info'">
+                {{ QUOTE_STATUS[detail.quote.status]?.label || detail.quote.status }}
+              </el-tag>
+            </el-descriptions-item>
+            <el-descriptions-item label="报价时间">{{ detail.quote.createTime || '--' }}</el-descriptions-item>
+          </el-descriptions>
+        </div>
+
         <div class="section">
           <div class="section-title">操作</div>
           <el-space wrap>
@@ -91,7 +106,15 @@
             <el-button v-if="mailIn && detail.status === 40" type="success" @click="openReturnSheet">
               填写回寄运单号
             </el-button>
-            <span v-if="!nextStatus && !(mailIn && detail.status === 40)" class="no-action">
+            <el-button v-if="canStartInspect" @click="onStartInspect">接单检测（转报价模式）</el-button>
+            <el-button v-if="detail.status === 15" @click="onFinishInspect">检测完成，待报价</el-button>
+            <el-button v-if="detail.status === 35" type="success" @click="openQuoteSheet">提交报价</el-button>
+            <span v-if="detail.status === 36" class="no-action">等待用户确认报价</span>
+            <span v-else-if="detail.status === 38" class="no-action">等待用户支付（支付后自动开始维修）</span>
+            <span
+              v-else-if="!nextStatus && !canStartInspect && ![15, 35].includes(detail.status) && !(mailIn && detail.status === 40)"
+              class="no-action"
+            >
               当前状态无可执行操作
             </span>
           </el-space>
@@ -122,6 +145,33 @@
       </template>
     </el-dialog>
 
+    <!-- 提交报价 -->
+    <el-dialog v-model="quoteVisible" title="提交维修报价" width="480px">
+      <el-form label-position="top">
+        <el-form-item label="维修费用（元）" required>
+          <el-input-number v-model="quoteForm.amountYuan" :min="0.01" :max="99999" :precision="2" style="width: 100%" />
+        </el-form-item>
+        <el-form-item label="维修说明（故障原因/维修方案）">
+          <el-input v-model="quoteForm.description" type="textarea" :rows="3" maxlength="500" show-word-limit />
+        </el-form-item>
+        <el-form-item label="报价图片（选填，最多 3 张）">
+          <el-upload
+            v-model:file-list="quoteFiles"
+            :http-request="uploadQuoteFile"
+            list-type="picture-card"
+            accept="image/*"
+            :limit="3"
+          >
+            <el-icon><Plus /></el-icon>
+          </el-upload>
+        </el-form-item>
+      </el-form>
+      <template #footer>
+        <el-button @click="quoteVisible = false">取消</el-button>
+        <el-button type="primary" :loading="submitting" @click="onSubmitQuote">提交报价</el-button>
+      </template>
+    </el-dialog>
+
     <!-- 轨迹 -->
     <el-dialog v-model="traceVisible" :title="traceDirection === 'return' ? '回寄物流轨迹' : '寄出物流轨迹'" width="520px">
       <div v-loading="traceLoading" class="trace-body">
@@ -144,6 +194,7 @@
 <script setup>
 import { computed, onMounted, reactive, ref } from 'vue';
 import { ElMessage, ElMessageBox } from 'element-plus';
+import { Plus } from '@element-plus/icons-vue';
 import {
   REPAIR_NEXT,
   REPAIR_STATUS,
@@ -155,7 +206,16 @@ import {
   fetchRepairTrace,
   fillRepairReturnExpress,
   fen2yuan,
+  submitRepairQuote,
+  uploadImage,
+  yuan2fen,
 } from '../api/admin';
+
+const QUOTE_STATUS = {
+  1: { label: '待用户确认', type: 'warning' },
+  2: { label: '已接受', type: 'success' },
+  3: { label: '已拒绝', type: 'danger' },
+};
 
 const statusFilters = REPAIR_STATUS_FILTERS;
 
@@ -183,6 +243,13 @@ const nextStatus = computed(() => {
   if (!d) return null;
   const map = d.serviceType === 20 ? REPAIR_NEXT.mailIn : REPAIR_NEXT.onsite;
   return map[d.status] || null;
+});
+
+/** 报价模式入口：待确认/已预约（上门）或已寄出（寄修）可转检测 */
+const canStartInspect = computed(() => {
+  const d = detail.value;
+  if (!d) return false;
+  return [10, 20].includes(d.status) || (d.serviceType === 20 && d.status === 25);
 });
 
 async function load() {
@@ -222,6 +289,74 @@ async function onAdvance() {
   ElMessage.success('状态已更新');
   detail.value = await fetchRepairOrderDetail(detail.value.orderNo);
   load();
+}
+
+// ===== 报价模式 =====
+
+async function onStartInspect() {
+  await ElMessageBox.confirm('接单并进入检测？检测完成后可提交报价，由用户确认后支付。', '转报价模式');
+  await changeRepairStatus(detail.value.orderNo, 15, '接单检测');
+  ElMessage.success('已进入待检测');
+  detail.value = await fetchRepairOrderDetail(detail.value.orderNo);
+  load();
+}
+
+async function onFinishInspect() {
+  await ElMessageBox.confirm('确认检测完成？完成后可提交报价。', '状态变更');
+  await changeRepairStatus(detail.value.orderNo, 35, '检测完成，待报价');
+  ElMessage.success('已进入待报价');
+  detail.value = await fetchRepairOrderDetail(detail.value.orderNo);
+  load();
+}
+
+const quoteVisible = ref(false);
+const quoteFiles = ref([]);
+const quoteForm = reactive({ amountYuan: null, description: '' });
+
+function openQuoteSheet() {
+  quoteForm.amountYuan = null;
+  quoteForm.description = '';
+  quoteFiles.value = [];
+  quoteVisible.value = true;
+}
+
+/** el-upload 自定义上传：复用管理端上传接口 */
+async function uploadQuoteFile(options) {
+  const form = new FormData();
+  form.append('file', options.file);
+  form.append('category', 'repair');
+  try {
+    options.onSuccess(await uploadImage(form));
+  } catch (e) {
+    options.onError(e);
+    ElMessage.error(e?.message || '图片上传失败');
+  }
+}
+
+/** 提交前收集已上传成功的图片地址（el-upload 把 http-request 的返回值放进 file.response） */
+const quoteImages = computed(() =>
+  quoteFiles.value.map((f) => (f.response && f.response.url) || f.url).filter(Boolean),
+);
+
+async function onSubmitQuote() {
+  if (!quoteForm.amountYuan || quoteForm.amountYuan <= 0) {
+    ElMessage.warning('请填写维修费用');
+    return;
+  }
+  submitting.value = true;
+  try {
+    await submitRepairQuote(detail.value.orderNo, {
+      amountFen: yuan2fen(quoteForm.amountYuan),
+      description: quoteForm.description,
+      images: quoteImages.value,
+    });
+    ElMessage.success('报价已提交，等待用户确认');
+    quoteVisible.value = false;
+    detail.value = await fetchRepairOrderDetail(detail.value.orderNo);
+    load();
+  } finally {
+    submitting.value = false;
+  }
 }
 
 async function openReturnSheet() {

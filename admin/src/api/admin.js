@@ -24,15 +24,22 @@ export const changeRepairStatus = (orderNo, toStatus, remark) =>
   http.put(`/admin/repair/order/${orderNo}/status`, { toStatus, remark });
 export const fillRepairReturnExpress = (orderNo, payload) =>
   http.put(`/admin/repair/order/${orderNo}/return-express`, payload);
+/** 报价模式：提交报价（待报价态 35），amountFen 为分 */
+export const submitRepairQuote = (orderNo, payload) =>
+  http.post(`/admin/repair/order/${orderNo}/quote`, payload);
 export const fetchRepairTrace = (orderNo, direction) =>
   http.get(`/admin/repair/order/${orderNo}/trace`, { params: { direction } });
 export const fetchExpressCompanies = () => http.get('/admin/repair/express-companies');
 
 export const REPAIR_STATUS = {
   10: { label: '待确认', type: 'info' },
+  15: { label: '待检测', type: 'warning' },
   20: { label: '已预约/待寄出', type: 'primary' },
   25: { label: '已寄出', type: 'primary' },
   30: { label: '维修中', type: 'warning' },
+  35: { label: '待报价', type: 'warning' },
+  36: { label: '待确认报价', type: 'warning' },
+  38: { label: '待支付', type: 'danger' },
   40: { label: '待验收/待回寄', type: 'warning' },
   45: { label: '回寄中', type: 'warning' },
   50: { label: '已完成', type: 'success' },
