@@ -82,11 +82,12 @@ public class RecycleOrderService {
     private final WxSubscribeService subscribeService;
     private final WxPayoutService payoutService;
     private final ExpressService expressService;
+    private final CosSignService cosSignService;
 
     public RecycleOrderService(RecycleOrderMapper orderMapper, InspectionMapper inspectionMapper,
                                QuoteService quoteService, StatusLogService statusLogService,
                                WxSubscribeService subscribeService, WxPayoutService payoutService,
-                               ExpressService expressService) {
+                               ExpressService expressService, CosSignService cosSignService) {
         this.orderMapper = orderMapper;
         this.inspectionMapper = inspectionMapper;
         this.quoteService = quoteService;
@@ -94,6 +95,7 @@ public class RecycleOrderService {
         this.subscribeService = subscribeService;
         this.payoutService = payoutService;
         this.expressService = expressService;
+        this.cosSignService = cosSignService;
     }
 
     @Transactional
@@ -209,33 +211,34 @@ public class RecycleOrderService {
                 o.getCreateTime() == null ? "" : o.getCreateTime().toString(), inspections(o.getOrderNo()));
     }
 
-    /** 机器照片白名单校验：选填、至多 9 张、类型固定四种、COS key 白名单字符（防目录穿越）。 */
+    /** 机器照片白名单校验：选填、至多 9 张、类型固定四种、COS key 规则统一走 ImageKeys（防目录穿越）。 */
     private static void validateImages(java.util.List<RecycleOrderDetail.ImageItem> images) {
         if (images == null || images.isEmpty()) {
             return;
         }
-        if (images.size() > 9) {
+        if (images.size() > ImageKeys.MAX_IMAGES) {
             throw new BizException(40032, "机器照片最多 9 张");
         }
         for (RecycleOrderDetail.ImageItem image : images) {
             if (image == null || !List.of("front", "back", "screen", "damage").contains(image.type())) {
                 throw new BizException(40033, "照片类型无效（front/back/screen/damage）");
             }
-            if (image.url() == null || image.url().contains("..")
-                    || !image.url().matches("[A-Za-z0-9/_.\\-]{1,256}")) {
+            if (!ImageKeys.isValidKey(image.url())) {
                 throw new BizException(40034, "照片路径非法");
             }
         }
     }
 
-    /** 用户机器照片 [{type,url}]；解析失败返回空列表。 */
+    /** 用户机器照片 [{type,url}]；url 换 30 分钟预签名 URL（mock/本地路径原样返回），解析失败返回空列表。 */
     private List<RecycleOrderDetail.ImageItem> images(String json) {
         if (!StringUtils.hasText(json)) {
             return List.of();
         }
         try {
             return JSON.readValue(json, new TypeReference<List<RecycleOrderDetail.ImageItem>>() {
-            });
+            }).stream()
+                    .map(im -> new RecycleOrderDetail.ImageItem(im.type(), cosSignService.signGetObject(im.url())))
+                    .toList();
         } catch (Exception e) {
             return List.of();
         }

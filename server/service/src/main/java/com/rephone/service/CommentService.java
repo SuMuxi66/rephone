@@ -45,15 +45,17 @@ public class CommentService {
     private final SaleOrderMapper saleOrderMapper;
     private final RepairOrderMapper repairOrderMapper;
     private final UserMapper userMapper;
+    private final CosSignService cosSignService;
 
     public CommentService(CommentMapper commentMapper, RecycleOrderMapper recycleOrderMapper,
                           SaleOrderMapper saleOrderMapper, RepairOrderMapper repairOrderMapper,
-                          UserMapper userMapper) {
+                          UserMapper userMapper, CosSignService cosSignService) {
         this.commentMapper = commentMapper;
         this.recycleOrderMapper = recycleOrderMapper;
         this.saleOrderMapper = saleOrderMapper;
         this.repairOrderMapper = repairOrderMapper;
         this.userMapper = userMapper;
+        this.cosSignService = cosSignService;
     }
 
     // ===== 用户端 =====
@@ -121,7 +123,7 @@ public class CommentService {
         result.setRecords(page.getRecords().stream()
                 .map(c -> new CommentItem(c.getId(), c.getOrderType(), c.getOrderNo(), c.getUserId(),
                         users.containsKey(c.getUserId()) ? users.get(c.getUserId()).getNickname() : "",
-                        c.getScore(), c.getContent(), parseImages(c.getImagesJson()),
+                        c.getScore(), c.getContent(), signedImages(c.getImagesJson()),
                         c.getCreateTime() == null ? "" : c.getCreateTime().toString()))
                 .toList());
         return result;
@@ -198,7 +200,7 @@ public class CommentService {
                 .filter(StringUtils::hasText)
                 .map(String::trim)
                 .peek(key -> {
-                    if (!key.matches("[A-Za-z0-9/_.\\-]{1,256}")) {
+                    if (!ImageKeys.isValidKey(key)) {
                         throw new BizException(40077, "图片标识不合法");
                     }
                 })
@@ -211,6 +213,13 @@ public class CommentService {
         } catch (Exception e) {
             throw new IllegalStateException("评价图片序列化失败", e);
         }
+    }
+
+    /** COS key 换 30 分钟预签名 URL（mock/本地路径原样返回），解析失败返回空列表。 */
+    private List<String> signedImages(String json) {
+        return parseImages(json).stream()
+                .map(cosSignService::signGetObject)
+                .toList();
     }
 
     private static List<String> parseImages(String json) {
@@ -228,6 +237,6 @@ public class CommentService {
         User user = userMapper.selectById(c.getUserId());
         return new CommentItem(c.getId(), c.getOrderType(), c.getOrderNo(), c.getUserId(),
                 user == null ? "" : user.getNickname(), c.getScore(), c.getContent(),
-                parseImages(c.getImagesJson()), c.getCreateTime() == null ? "" : c.getCreateTime().toString());
+                signedImages(c.getImagesJson()), c.getCreateTime() == null ? "" : c.getCreateTime().toString());
     }
 }

@@ -116,6 +116,16 @@ public class PaymentService {
         return updated > 0;
     }
 
+    /** 订单取消时关闭其待支付支付单（CAS 幂等，防残留 PENDING 被回调入账）。 */
+    @Transactional
+    public void closePending(int orderType, String orderNo) {
+        paymentOrderMapper.update(null, new LambdaUpdateWrapper<PaymentOrder>()
+                .eq(PaymentOrder::getOrderType, orderType)
+                .eq(PaymentOrder::getOrderNo, orderNo)
+                .eq(PaymentOrder::getStatus, PaymentOrder.STATUS_PENDING)
+                .set(PaymentOrder::getStatus, PaymentOrder.STATUS_CLOSED));
+    }
+
     private void validate(int orderType, long amountFen) {
         if (orderType != ORDER_TYPE_SALE && orderType != ORDER_TYPE_REPAIR) {
             throw new BizException(40080, "未知支付业务类型");

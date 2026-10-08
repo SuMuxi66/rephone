@@ -45,6 +45,7 @@ import org.springframework.util.MultiValueMap;
         "rephone.jwt.ttl-seconds=3600",
         "rephone.admin.token=test-admin-token",
         "rephone.express.mock=true",
+        "rephone.express.key=test-express-key",
         "rephone.cos.mock=true"
 })
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
@@ -169,13 +170,33 @@ class P3OrderFlowTest {
         String expressNo = detail.path("expressNo").asText();
         assertTrue(!expressNo.isBlank(), "上门取件单应有运单号");
 
-        // 快递员揽收（模拟快递100 推送回调；mock 模式免验签）
+        // 快递员揽收（模拟快递100 推送回调）：验签任何模式下都强制，按测试 key 正确签名
+        String param = "{\"kuaidinum\":\"" + expressNo + "\",\"last_result\":[{\"message\":\"快件已揽收\"}]}";
         MultiValueMap<String, String> form = new LinkedMultiValueMap<>();
-        form.add("param", "{\"kuaidinum\":\"" + expressNo + "\",\"last_result\":[{\"message\":\"快件已揽收\"}]}");
-        form.add("sign", "ignored-in-mock");
+        form.add("param", param);
+        form.add("sign", kuaidi100Sign(param));
         ResponseEntity<String> cb = rest.postForEntity("/api/callback/kuaidi100", form, String.class);
         assertEquals("success", cb.getBody());
         assertEquals(20, getDetail(orderNo).path("status").asInt(), "揽收回调应推进到运输中");
+
+        // 错误签名必须被拒绝且状态不变
+        MultiValueMap<String, String> forged = new LinkedMultiValueMap<>();
+        forged.add("param", param);
+        forged.add("sign", "deadbeef");
+        ResponseEntity<String> bad = rest.postForEntity("/api/callback/kuaidi100", forged, String.class);
+        assertEquals("fail", bad.getBody(), "错误签名应被拒绝");
+        assertEquals(20, getDetail(orderNo).path("status").asInt(), "验签失败不得推进状态");
+    }
+
+    /** 快递100 推送验签：MD5(param + key) 小写 hex（协议强制）。 */
+    private static String kuaidi100Sign(String param) {
+        try {
+            byte[] digest = java.security.MessageDigest.getInstance("MD5")
+                    .digest((param + "test-express-key").getBytes(java.nio.charset.StandardCharsets.UTF_8));
+            return java.util.HexFormat.of().formatHex(digest);
+        } catch (Exception e) {
+            throw new IllegalStateException(e);
+        }
     }
 
     @Test

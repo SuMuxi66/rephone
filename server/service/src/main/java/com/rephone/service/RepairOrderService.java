@@ -102,12 +102,14 @@ public class RepairOrderService {
     private final StatusLogService statusLogService;
     private final ExpressService expressService;
     private final PaymentService paymentService;
+    private final CosSignService cosSignService;
 
     public RepairOrderService(RepairItemMapper itemMapper, RepairItemPriceMapper priceMapper,
                               RepairOrderMapper orderMapper, RepairQuoteMapper quoteMapper,
                               PhoneModelMapper modelMapper,
                               BrandMapper brandMapper, StatusLogService statusLogService,
-                              ExpressService expressService, PaymentService paymentService) {
+                              ExpressService expressService, PaymentService paymentService,
+                              CosSignService cosSignService) {
         this.itemMapper = itemMapper;
         this.priceMapper = priceMapper;
         this.orderMapper = orderMapper;
@@ -117,6 +119,7 @@ public class RepairOrderService {
         this.statusLogService = statusLogService;
         this.expressService = expressService;
         this.paymentService = paymentService;
+        this.cosSignService = cosSignService;
     }
 
     /** 维修项目分组字典（含该机型价格）。无价格的项目不下发。 */
@@ -171,10 +174,7 @@ public class RepairOrderService {
         requireLen(req.address(), 255, "上门地址");
         requireLen(req.appointTime(), 32, "预约时间");
         requireLen(req.remark(), 255, "故障描述");
-        if (req.images() != null
-                && (req.images().size() > 9 || req.images().stream().anyMatch(i -> i != null && i.length() > 255))) {
-            throw new BizException(40039, "故障照片数量或路径超限");
-        }
+        ImageKeys.check(req.images());
         PhoneModel model = modelMapper.selectById(req.modelId());
         if (model == null) {
             throw new BizException(40402, "机型不存在");
@@ -234,14 +234,22 @@ public class RepairOrderService {
         return order.getOrderNo();
     }
 
+    /**
+     * 用户取消：可取消状态 = 10 待确认 / 15 待检测 / 20 已预约·待寄出 / 35 待报价 / 36 待确认报价 / 38 待支付；
+     * 25 已寄出、30 维修中、40 待验收、45 回寄中、50 已完成不可取消（机器在途/服务已开始/已支付）。
+     * 取消 36 时未确认报价置已拒绝；取消 38 时同步关闭待支付支付单。
+     */
     @Transactional
     public void cancel(String orderNo, String reason) {
         requireLen(reason, 255, "取消原因");
         RepairOrder order = requireOwned(orderNo);
         int fromStatus = order.getStatus();
         boolean cancellable = fromStatus == RepairOrder.STATUS_WAIT_CONFIRM
-                || (Integer.valueOf(SERVICE_MAIL_IN).equals(order.getServiceType())
-                        && fromStatus == RepairOrder.STATUS_APPOINTED);
+                || fromStatus == RepairOrder.STATUS_WAIT_INSPECT
+                || fromStatus == RepairOrder.STATUS_APPOINTED
+                || fromStatus == RepairOrder.STATUS_WAIT_QUOTE
+                || fromStatus == RepairOrder.STATUS_WAIT_CONFIRM_PRICE
+                || fromStatus == RepairOrder.STATUS_WAIT_PAYMENT;
         if (!cancellable) {
             throw new BizException(40036, "订单状态不允许取消（当前：" + desc(fromStatus) + "）");
         }
@@ -253,9 +261,16 @@ public class RepairOrderService {
         if (updated == 0) {
             throw new BizException(40045, "订单状态已变更，请刷新后重试");
         }
+        // 语义收尾：待确认报价置已拒绝；待支付支付单关闭（CAS 幂等）
+        if (fromStatus == RepairOrder.STATUS_WAIT_CONFIRM_PRICE) {
+            markLatestQuote(orderNo, RepairQuote.STATUS_REJECTED);
+        }
+        if (fromStatus == RepairOrder.STATUS_WAIT_PAYMENT) {
+            paymentService.closePending(PaymentService.ORDER_TYPE_REPAIR, orderNo);
+        }
         statusLogService.record(ORDER_TYPE_REPAIR, orderNo, fromStatus,
                 RepairOrder.STATUS_CANCELED, 10, order.getUserId(),
-                StringUtils.hasText(reason) ? reason : "用户取消预约");
+                StringUtils.hasText(reason) ? reason : "用户取消订单");
     }
 
     public Page<RepairOrderItem> list(Integer status, long pageNum, long pageSize) {
@@ -670,11 +685,18 @@ public class RepairOrderService {
         return new RepairOrderDetail(o.getOrderNo(), o.getBrandName(), o.getModelName(),
                 readLines(o.getItemsJson()), o.getTotalFen(), o.getStatus(), o.getServiceType(),
                 o.getContactName(), o.getContactPhone(), o.getAddress(), o.getAppointTime(),
-                o.getRemark(), readStrings(o.getImagesJson()), o.getWarrantyDays(),
+                o.getRemark(), signedImages(o), o.getWarrantyDays(),
                 text(o.getCreateTime()),
                 o.getExpressCom(), o.getExpressCompany(), o.getExpressNo(),
                 o.getReturnExpressCom(), o.getReturnExpressCompany(), o.getReturnExpressNo(),
                 latest == null ? null : toView(latest));
+    }
+
+    /** 故障照片：COS key 换 30 分钟预签名 URL（mock/本地路径原样返回）。 */
+    private List<String> signedImages(RepairOrder o) {
+        return readStrings(o.getImagesJson()).stream()
+                .map(cosSignService::signGetObject)
+                .toList();
     }
 
     private String desc(int status) {

@@ -281,4 +281,39 @@ class RepairQuoteFlowTest {
                 HttpMethod.PUT, new HttpEntity<>(user()), String.class);
         assertNotEquals(0, objectMapper.readTree(confirm.getBody()).path("code").asInt());
     }
+
+    /** 取消流程：报价态可取消并收敛语义（报价置拒绝/待支付支付单关闭）；维修中不可取消。 */
+    @Test
+    @Order(8)
+    void cancel_covers_quote_states_and_closes_pending_payment() throws Exception {
+        // 36 待确认报价：确认 → 38 → 直插待支付支付单 → 取消 → 80 + 报价置拒绝 + 支付单关闭
+        assertEquals(0, objectMapper.readTree(rest.exchange(
+                "/api/wx/repair/order/F-RQ-REJECT/confirm-price", HttpMethod.PUT,
+                new HttpEntity<>(user()), String.class).getBody()).get("code").asInt());
+        assertEquals(38, statusOf("F-RQ-REJECT"));
+        jdbcTemplate.update("insert into payment_order (tenant_id, order_no, order_type, pay_no, amount_fen, status) "
+                + "values (0, 'F-RQ-REJECT', 30, 'P-RQ-CXL', 58000, 0)");
+
+        assertEquals(0, objectMapper.readTree(rest.exchange(
+                "/api/wx/repair/order/F-RQ-REJECT/cancel", HttpMethod.PUT,
+                new HttpEntity<>(Map.of("reason", "不想修了"), user()), String.class).getBody()).get("code").asInt());
+        assertEquals(80, statusOf("F-RQ-REJECT"));
+        Integer rejectedQuote = jdbcTemplate.queryForObject(
+                "select count(*) from repair_quote where repair_order_no = 'F-RQ-REJECT' and status = 3", Integer.class);
+        assertTrue(rejectedQuote >= 1, "取消时应把待确认报价置为已拒绝");
+        Integer closedPayment = jdbcTemplate.queryForObject(
+                "select status from payment_order where pay_no = 'P-RQ-CXL'", Integer.class);
+        assertEquals(2, closedPayment, "待支付支付单应被关闭");
+
+        // 30 维修中不可取消（已开始服务）
+        assertNotEquals(0, objectMapper.readTree(rest.exchange(
+                "/api/wx/repair/order/F-RQ-ONSITE/cancel", HttpMethod.PUT,
+                new HttpEntity<>(Map.of("reason", "x"), user()), String.class).getBody()).get("code").asInt());
+
+        // 寄修 15 待检测可取消（两种服务方式统一）
+        assertEquals(0, objectMapper.readTree(rest.exchange(
+                "/api/wx/repair/order/F-RQ-MAIL/cancel", HttpMethod.PUT,
+                new HttpEntity<>(Map.of("reason", "x"), user()), String.class).getBody()).get("code").asInt());
+        assertEquals(80, statusOf("F-RQ-MAIL"));
+    }
 }

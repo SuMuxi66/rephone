@@ -44,7 +44,11 @@ import org.springframework.test.context.TestPropertySource;
         "rephone.jwt.ttl-seconds=3600",
         "rephone.admin.token=test-admin-token",
         "rephone.express.mock=true",
-        "rephone.cos.mock=true"
+        "rephone.cos.mock=false",
+        "rephone.cos.secret-id=test-cos-id",
+        "rephone.cos.secret-key=test-cos-key",
+        "rephone.cos.bucket=test-bucket-1250000000",
+        "rephone.cos.region=ap-guangzhou"
 })
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
@@ -161,7 +165,10 @@ class RecycleImageFlowTest {
         JsonNode detail = detail(orderNo);
         assertEquals(2, detail.path("images").size(), "详情应返回两张图片");
         assertEquals("front", detail.path("images").get(0).path("type").asText());
-        assertEquals("recycle/2026-10-08/front.jpg", detail.path("images").get(0).path("url").asText());
+        // 图片统一换 COS GET 预签名 URL（CosImageService 口径），mock 不再返回裸 key
+        String url = detail.path("images").get(0).path("url").asText();
+        assertTrue(url.startsWith("https://test-bucket-1250000000.cos.ap-guangzhou.myqcloud.com/recycle/2026-10-08/front.jpg?q-sign-algorithm=sha1"),
+                "详情图片应为 COS 预签名 URL，实际: " + url);
         assertEquals("damage", detail.path("images").get(1).path("type").asText());
     }
 
@@ -207,12 +214,14 @@ class RecycleImageFlowTest {
                 new HttpEntity<>(tenantAdmin()), String.class);
         assertNotEquals(0, objectMapper.readTree(foreign.getBody()).path("code").asInt(), foreign.getBody());
 
-        // 本租户（5）订单正常可见且图片回显
+        // 本租户（5）订单正常可见且图片回显（COS 预签名 URL）
         ResponseEntity<String> own = rest.exchange("/api/admin/recycle/order/R-IMG-T5", HttpMethod.GET,
                 new HttpEntity<>(tenantAdmin()), String.class);
         JsonNode body = objectMapper.readTree(own.getBody());
         assertEquals(0, body.get("code").asInt(), own.getBody());
         assertEquals(1, body.path("data").path("images").size());
         assertEquals("front", body.path("data").path("images").get(0).path("type").asText());
+        assertTrue(body.path("data").path("images").get(0).path("url").asText()
+                .startsWith("https://test-bucket-1250000000.cos.ap-guangzhou.myqcloud.com/"));
     }
 }

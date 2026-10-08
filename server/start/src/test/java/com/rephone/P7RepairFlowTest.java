@@ -149,16 +149,17 @@ class P7RepairFlowTest {
         assertEquals(0, objectMapper.readTree(t1.getBody()).get("code").asInt());
         assertEquals(20, detail(orderNo).path("status").asInt());
 
-        // 已预约（20）后用户不可取消
-        ResponseEntity<String> cancelResp = rest.exchange("/api/wx/repair/order/" + orderNo + "/cancel",
-                HttpMethod.PUT, new HttpEntity<>(Map.of("reason", "x"), auth()), String.class);
-        assertNotEquals(0, objectMapper.readTree(cancelResp.getBody()).get("code").asInt(), "已预约后应禁止取消");
-
         // 非法跳转：20 → 50 应被拒绝
         ResponseEntity<String> bad = rest.exchange("/api/admin/repair/order/" + orderNo + "/status",
                 HttpMethod.PUT, new HttpEntity<>(Map.of("toStatus", 50, "remark", "x"), admin()),
                 String.class);
         assertNotEquals(0, objectMapper.readTree(bad.getBody()).get("code").asInt(), "跳过状态应被拒绝");
+
+        // 已预约（20）后用户可取消（V1.2.1：10/15/20/35/36/38 可取消；30/40/50 禁止由 RepairQuoteFlowTest 覆盖）
+        ResponseEntity<String> cancelResp = rest.exchange("/api/wx/repair/order/" + orderNo + "/cancel",
+                HttpMethod.PUT, new HttpEntity<>(Map.of("reason", "改期了"), auth()), String.class);
+        assertEquals(0, objectMapper.readTree(cancelResp.getBody()).get("code").asInt(), "已预约单应可取消");
+        assertEquals(80, detail(orderNo).path("status").asInt());
     }
 
     @Test

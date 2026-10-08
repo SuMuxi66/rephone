@@ -17,7 +17,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 /**
  * 快递100 物流推送回调（/api/callback/kuaidi100，不在 JWT 过滤范围）。
- * 验签规则：sign = MD5(param + key)；mock 模式跳过验签。
+ * 验签规则：sign = MD5(param + key)，**任何模式下都不可跳过**——mock 只模拟第三方出网响应，
+ * 不豁免推送验签；key 未配置时一律拒绝（fail-safe）。生产必须配置 EXPRESS_KEY。
  * 揽收/运输节点 → 订单进入 20 运输中；签收节点仅记录，质检由后台推进。
  */
 @RestController
@@ -38,12 +39,12 @@ public class ExpressCallbackController {
     public String callback(@RequestParam Map<String, String> form) {
         String param = form.getOrDefault("param", "");
         String sign = form.getOrDefault("sign", "");
-        if (!expressProperties.isMock()) {
-            if (!StringUtils.hasText(param) || !StringUtils.hasText(sign)
-                    || !md5Hex(param + expressProperties.getKey()).equalsIgnoreCase(sign)) {
-                log.warn("[kuaidi100-callback] 验签失败");
-                return "fail";
-            }
+        // 验签不可跳过：mock 模式只影响出网模拟，推送回调必须始终验签；key 未配置（空串）时任何签名都无法通过
+        if (!StringUtils.hasText(expressProperties.getKey())
+                || !StringUtils.hasText(param) || !StringUtils.hasText(sign)
+                || !md5Hex(param + expressProperties.getKey()).equalsIgnoreCase(sign)) {
+            log.warn("[kuaidi100-callback] 验签失败（key 未配置或签名不符）");
+            return "fail";
         }
         try {
             JsonNode node = objectMapper.readTree(param);

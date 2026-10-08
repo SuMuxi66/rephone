@@ -57,6 +57,27 @@ public class CosSignService {
         return new CosUploadSign(false, "https://" + host, key, authorization, start, end);
     }
 
+    /** GET 预签名 URL（图片回显，30 分钟有效）。mock/未配密钥或 key 不合法时原样返回。 */
+    public String signGetObject(String key) {
+        if (!StringUtils.hasText(key) || key.contains("..") || !key.matches("[A-Za-z0-9/_.\\-]{1,256}")) {
+            return key;
+        }
+        if (props.isMock() || !StringUtils.hasText(props.getSecretId()) || !StringUtils.hasText(props.getSecretKey())) {
+            return key;
+        }
+        String host = props.getBucket() + ".cos." + props.getRegion() + ".myqcloud.com";
+        long start = System.currentTimeMillis() / 1000 - 60;
+        long end = start + 1800;
+        String keyTime = start + ";" + end;
+        String signKey = hmacSha1Hex(keyTime, props.getSecretKey());
+        String httpString = "get\n/" + key + "\n\nhost=" + host + "\n";
+        String stringToSign = "sha1\n" + keyTime + "\n" + sha1Hex(httpString) + "\n";
+        String signature = hmacSha1Hex(stringToSign, signKey);
+        return "https://" + host + "/" + key + "?q-sign-algorithm=sha1&q-ak=" + props.getSecretId()
+                + "&q-sign-time=" + keyTime + "&q-key-time=" + keyTime
+                + "&q-header-list=host&q-url-param-list=&q-signature=" + signature;
+    }
+
     private static String hmacSha1Hex(String data, String key) {
         try {
             // 腾讯云 COS XML API 签名规范固定 q-sign-algorithm=sha1，算法由协议强制，不可更换
