@@ -24,7 +24,9 @@ public record RepairOrderDetail(
         String expressNo,
         String returnExpressCom,
         String returnExpressCompany,
-        String returnExpressNo) {
+        String returnExpressNo,
+        /** 最近一次报价（报价模式）；直修单为 null */
+        RepairQuoteView quote) {
 
     /** 维修项目行快照。 */
     public record RepairLine(Long itemId, String name, Long priceFen) {

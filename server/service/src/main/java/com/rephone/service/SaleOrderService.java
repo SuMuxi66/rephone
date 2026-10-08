@@ -40,12 +40,14 @@ public class SaleOrderService {
     private final SaleOrderMapper orderMapper;
     private final GoodsService goodsService;
     private final StatusLogService statusLogService;
+    private final PaymentService paymentService;
 
     public SaleOrderService(SaleOrderMapper orderMapper, GoodsService goodsService,
-                            StatusLogService statusLogService) {
+                            StatusLogService statusLogService, PaymentService paymentService) {
         this.orderMapper = orderMapper;
         this.goodsService = goodsService;
         this.statusLogService = statusLogService;
+        this.paymentService = paymentService;
     }
 
     @Transactional
@@ -95,14 +97,14 @@ public class SaleOrderService {
         return order.getOrderNo();
     }
 
-    /** mock 支付：10 → 20。真实微信支付在 P6 支付联调时替换本方法内部实现。 */
+    /** mock 支付：10 → 20。支付走公共 PaymentService（与维修报价支付同源），真实微信支付联调时替换其内部实现。 */
     @Transactional
     public String pay(String orderNo) {
         SaleOrder order = getOwned(orderNo);
         if (order.getStatus() != SaleOrder.STATUS_WAIT_PAY) {
             throw new BizException(40036, "订单状态不允许支付（当前：" + desc(order.getStatus()) + "）");
         }
-        String payNo = "MOCKPAY-" + order.getOrderNo();
+        String payNo = paymentService.mockPayNo(PaymentService.BIZ_SALE, orderNo, order.getTotalFen());
         casStatus(order, SaleOrder.STATUS_PAID, 10, order.getUserId(),
                 "支付成功" + fen(order.getTotalFen()) + "元");
         order.setPayNo(payNo);

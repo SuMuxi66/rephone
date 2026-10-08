@@ -34,7 +34,8 @@ CREATE TABLE IF NOT EXISTS `repair_order` (
     `model_name`    VARCHAR(128)  NOT NULL COMMENT '机型快照',
     `items_json`    VARCHAR(2048) NOT NULL COMMENT '维修项目快照 [{itemId,name,priceFen}]',
     `total_fen`     BIGINT        NOT NULL COMMENT '合计费用（分），服务端按 repair_item_price 实时计算，客户端不传金额',
-    `status`        INT           NOT NULL DEFAULT 10 COMMENT '10待确认 20已预约/待寄出 25已寄出 30维修中 40待验收/待回寄 45回寄中 50已完成 80已取消',
+    `pay_no`        VARCHAR(64)   NULL COMMENT '维修支付流水号（报价模式 mock/微信支付），出售侧 pay_no 同口径',
+    `status`        INT           NOT NULL DEFAULT 10 COMMENT '10待确认 15待检测 20已预约/待寄出 25已寄出 30维修中 35待报价 36待确认报价 38待支付 40待验收/待回寄 45回寄中 50已完成 80已取消',
     `service_type`  TINYINT       NOT NULL DEFAULT 10 COMMENT '10上门维修 20寄修',
     `contact_name`  VARCHAR(32)   NOT NULL COMMENT '联系人',
     `contact_phone` VARCHAR(20)   NOT NULL COMMENT '联系电话',
@@ -74,6 +75,23 @@ INSERT IGNORE INTO `repair_item` (`id`, `tenant_id`, `group_name`, `name`, `sort
 (8,  0, '声音与拍照', '摄像头维修',       8),
 (9,  0, '声音与拍照', '扬声器/听筒维修',  9),
 (10, 0, '其他',       '面容/指纹维修',    10);
+
+-- ===== P8 维修报价：检测→报价→用户确认→支付→维修（与直修模式并存，status 细分见 repair_order.status 注释）=====
+CREATE TABLE IF NOT EXISTS `repair_quote` (
+    `id`              BIGINT        NOT NULL AUTO_INCREMENT,
+    `tenant_id`       BIGINT        NOT NULL DEFAULT 0 COMMENT '所属租户',
+    `repair_order_no` VARCHAR(32)   NOT NULL COMMENT '维修单号（F前缀）',
+    `quote_amount`    DECIMAL(10,2) NOT NULL COMMENT '报价金额（元），API 传输一律分',
+    `description`     VARCHAR(500)  NULL COMMENT '维修说明（故障原因/维修方案）',
+    `images_json`     VARCHAR(1024) NULL COMMENT '报价图片COS key JSON数组',
+    `operator_id`     BIGINT        NULL COMMENT '报价操作人（管理端账号；机器凭证为 NULL）',
+    `status`          TINYINT       NOT NULL DEFAULT 1 COMMENT '1待确认 2已接受 3已拒绝',
+    `create_time`     DATETIME      NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    `update_time`     DATETIME      NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    PRIMARY KEY (`id`),
+    KEY `idx_repair_quote_order` (`repair_order_no`),
+    KEY `idx_repair_quote_tenant` (`tenant_id`)
+);
 
 -- ===== 全机型基准价（model_id=0，元；机型未配价时回退此价）=====
 INSERT IGNORE INTO `repair_item_price` (`tenant_id`, `model_id`, `item_id`, `price`, `sort`) VALUES

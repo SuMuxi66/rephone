@@ -14,9 +14,17 @@ import java.time.LocalDateTime;
 public class RepairOrder {
 
     public static final int STATUS_WAIT_CONFIRM = 10;
+    /** 报价模式：待检测（WAIT_INSPECTION） */
+    public static final int STATUS_WAIT_INSPECT = 15;
     public static final int STATUS_APPOINTED = 20;
     public static final int STATUS_SHIPPED = 25;
     public static final int STATUS_REPAIRING = 30;
+    /** 报价模式：待报价（检测完成，等待提交报价，WAIT_QUOTE） */
+    public static final int STATUS_WAIT_QUOTE = 35;
+    /** 报价模式：待用户确认报价（WAIT_CONFIRM_PRICE） */
+    public static final int STATUS_WAIT_CONFIRM_PRICE = 36;
+    /** 报价模式：待支付（用户已接受报价，WAIT_PAYMENT） */
+    public static final int STATUS_WAIT_PAYMENT = 38;
     public static final int STATUS_WAIT_ACCEPT = 40;
     public static final int STATUS_RETURNING = 45;
     public static final int STATUS_DONE = 50;
@@ -42,6 +50,9 @@ public class RepairOrder {
     private String itemsJson;
 
     private Long totalFen;
+
+    /** 维修支付流水号（报价模式 mock/微信支付），与出售侧 pay_no 同口径 */
+    private String payNo;
 
     private Integer status;
 
@@ -165,6 +176,14 @@ public class RepairOrder {
 
     public void setTotalFen(Long totalFen) {
         this.totalFen = totalFen;
+    }
+
+    public String getPayNo() {
+        return payNo;
+    }
+
+    public void setPayNo(String payNo) {
+        this.payNo = payNo;
     }
 
     public Integer getStatus() {

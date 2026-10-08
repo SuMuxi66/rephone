@@ -9,10 +9,15 @@ import com.rephone.pojo.dto.ExpressFillRequest;
 import com.rephone.pojo.dto.ExpressTraceResult;
 import com.rephone.pojo.dto.RepairOrderDetail;
 import com.rephone.pojo.dto.RepairOrderItem;
+import com.rephone.pojo.dto.RepairQuoteRequest;
+import com.rephone.controller.support.AdminTokenFilter;
 import com.rephone.service.RepairOrderService;
+import jakarta.servlet.http.HttpServletRequest;
 import java.util.List;
+import java.util.Map;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -42,11 +47,26 @@ public class AdminRepairController {
         return R.ok(repairService.adminDetail(orderNo));
     }
 
-    /** 状态推进（按服务方式分支校验：上门 10→20→30→40→50；寄修 10→20、25→30、30→40、45→50）。 */
+    /** 状态推进（按服务方式分支校验：直修 10→20→30→40→50；寄修 10→20、25→30、30→40、45→50；
+     *  报价模式接单 10/20/25→15、检测完成 15→35；报价提交/用户确认/支付走专用接口）。 */
     @PutMapping("/order/{orderNo}/status")
     public R<Void> transition(@PathVariable String orderNo, @RequestBody AdminStatusRequest request) {
         repairService.adminTransition(orderNo, request.toStatus(), request.remark());
         return R.ok();
+    }
+
+    /** 报价模式：提交报价（仅待报价态 35），推进到待用户确认（36）。 */
+    @PostMapping("/order/{orderNo}/quote")
+    public R<Map<String, Long>> quote(@PathVariable String orderNo,
+                                      @RequestBody(required = false) RepairQuoteRequest request,
+                                      HttpServletRequest httpRequest) {
+        Long operatorId = (Long) httpRequest.getAttribute(AdminTokenFilter.ATTR_USER_ID);
+        Long quoteId = repairService.submitQuote(orderNo,
+                request == null ? null : request.amountFen(),
+                request == null ? null : request.description(),
+                request == null ? null : request.images(),
+                operatorId);
+        return R.ok(Map.of("quoteId", quoteId));
     }
 
     /** 寄修：商家填写回寄运单号（待回寄态），状态 40→45。 */

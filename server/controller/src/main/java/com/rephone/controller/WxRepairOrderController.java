@@ -9,6 +9,7 @@ import com.rephone.pojo.dto.RepairGroupView;
 import com.rephone.pojo.dto.RepairOrderCreateRequest;
 import com.rephone.pojo.dto.RepairOrderDetail;
 import com.rephone.pojo.dto.RepairOrderItem;
+import com.rephone.pojo.dto.RepairQuoteView;
 import com.rephone.service.QuoteService;
 import com.rephone.service.RepairOrderService;
 import java.util.List;
@@ -96,5 +97,31 @@ public class WxRepairOrderController {
     public R<Void> confirm(@PathVariable String orderNo) {
         repairService.confirmReceipt(orderNo);
         return R.ok();
+    }
+
+    /** 报价模式：查看最近一次报价（未报价返回 null）。 */
+    @GetMapping("/order/{orderNo}/quote")
+    public R<RepairQuoteView> quote(@PathVariable String orderNo) {
+        return R.ok(repairService.getQuote(orderNo));
+    }
+
+    /** 报价模式：用户接受报价，进入待支付（38）。 */
+    @PutMapping("/order/{orderNo}/confirm-price")
+    public R<Void> confirmPrice(@PathVariable String orderNo) {
+        repairService.confirmPrice(orderNo);
+        return R.ok();
+    }
+
+    /** 报价模式：用户拒绝报价，退回待处理（36→20，可重新检测报价）。 */
+    @PutMapping("/order/{orderNo}/reject-price")
+    public R<Void> rejectPrice(@PathVariable String orderNo) {
+        repairService.rejectPrice(orderNo);
+        return R.ok();
+    }
+
+    /** 报价模式：用户按已接受报价支付，成功后进入维修中（38→30）。 */
+    @PutMapping("/order/{orderNo}/pay")
+    public R<Map<String, String>> pay(@PathVariable String orderNo) {
+        return R.ok(Map.of("payNo", repairService.payByQuote(orderNo)));
     }
 }

@@ -17,6 +17,7 @@ import com.rephone.mapper.PhoneModelMapper;
 import com.rephone.mapper.RepairItemMapper;
 import com.rephone.mapper.RepairItemPriceMapper;
 import com.rephone.mapper.RepairOrderMapper;
+import com.rephone.mapper.RepairQuoteMapper;
 import com.rephone.pojo.dto.ExpressFillRequest;
 import com.rephone.pojo.dto.ExpressTraceResult;
 import com.rephone.pojo.dto.RepairGroupView;
@@ -24,11 +25,13 @@ import com.rephone.pojo.dto.RepairItemCell;
 import com.rephone.pojo.dto.RepairOrderCreateRequest;
 import com.rephone.pojo.dto.RepairOrderDetail;
 import com.rephone.pojo.dto.RepairOrderItem;
+import com.rephone.pojo.dto.RepairQuoteView;
 import com.rephone.pojo.entity.Brand;
 import com.rephone.pojo.entity.PhoneModel;
 import com.rephone.pojo.entity.RepairItem;
 import com.rephone.pojo.entity.RepairItemPrice;
 import com.rephone.pojo.entity.RepairOrder;
+import com.rephone.pojo.entity.RepairQuote;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.security.SecureRandom;
@@ -53,6 +56,8 @@ import org.springframework.util.StringUtils;
  * 客户端只传项目 ID，金额不可篡改）、用户取消、寄修运单流转与管理端状态机。
  * 上门(10)：10 待确认 → 20 已预约 → 30 维修中 → 40 待验收 → 50 已完成；
  * 寄修(20)：10 待确认 → 20 待寄出 → 25 已寄出 → 30 维修中 → 40 待回寄 → 45 回寄中 → 50 已完成。
+ * 报价模式（与直修并存）：接单后 15 待检测 → 35 待报价 → 提交报价 36 待确认 →
+ * 用户接受 38 待支付 → 支付成功并入 30 维修中；用户拒绝退回 20 可重新检测报价。
  */
 @Service
 public class RepairOrderService {
@@ -65,16 +70,19 @@ public class RepairOrderService {
     /** 服务方式：20 寄修 */
     public static final int SERVICE_MAIL_IN = 20;
 
+    /** 直修推进；报价模式经 15（待检测）进 35（待报价），报价提交/接受/支付走专用接口。 */
     private static final Map<Integer, Set<Integer>> ADMIN_TRANSITIONS_ONSITE = Map.of(
-            RepairOrder.STATUS_WAIT_CONFIRM, Set.of(RepairOrder.STATUS_APPOINTED),
-            RepairOrder.STATUS_APPOINTED, Set.of(RepairOrder.STATUS_REPAIRING),
+            RepairOrder.STATUS_WAIT_CONFIRM, Set.of(RepairOrder.STATUS_APPOINTED, RepairOrder.STATUS_WAIT_INSPECT),
+            RepairOrder.STATUS_APPOINTED, Set.of(RepairOrder.STATUS_REPAIRING, RepairOrder.STATUS_WAIT_INSPECT),
+            RepairOrder.STATUS_WAIT_INSPECT, Set.of(RepairOrder.STATUS_WAIT_QUOTE),
             RepairOrder.STATUS_REPAIRING, Set.of(RepairOrder.STATUS_WAIT_ACCEPT),
             RepairOrder.STATUS_WAIT_ACCEPT, Set.of(RepairOrder.STATUS_DONE));
 
-    /** 寄修：20→25 由用户填单触发、40→45 由商家填回寄单触发，均不走普通推进。 */
+    /** 寄修：20→25 由用户填单触发、40→45 由商家填回寄单触发，均不走普通推进；收件后 25→15 进入检测。 */
     private static final Map<Integer, Set<Integer>> ADMIN_TRANSITIONS_MAIL_IN = Map.of(
-            RepairOrder.STATUS_WAIT_CONFIRM, Set.of(RepairOrder.STATUS_APPOINTED),
-            RepairOrder.STATUS_SHIPPED, Set.of(RepairOrder.STATUS_REPAIRING),
+            RepairOrder.STATUS_WAIT_CONFIRM, Set.of(RepairOrder.STATUS_APPOINTED, RepairOrder.STATUS_WAIT_INSPECT),
+            RepairOrder.STATUS_SHIPPED, Set.of(RepairOrder.STATUS_REPAIRING, RepairOrder.STATUS_WAIT_INSPECT),
+            RepairOrder.STATUS_WAIT_INSPECT, Set.of(RepairOrder.STATUS_WAIT_QUOTE),
             RepairOrder.STATUS_REPAIRING, Set.of(RepairOrder.STATUS_WAIT_ACCEPT),
             RepairOrder.STATUS_RETURNING, Set.of(RepairOrder.STATUS_DONE));
 
@@ -88,22 +96,27 @@ public class RepairOrderService {
     private final RepairItemMapper itemMapper;
     private final RepairItemPriceMapper priceMapper;
     private final RepairOrderMapper orderMapper;
+    private final RepairQuoteMapper quoteMapper;
     private final PhoneModelMapper modelMapper;
     private final BrandMapper brandMapper;
     private final StatusLogService statusLogService;
     private final ExpressService expressService;
+    private final PaymentService paymentService;
 
     public RepairOrderService(RepairItemMapper itemMapper, RepairItemPriceMapper priceMapper,
-                              RepairOrderMapper orderMapper, PhoneModelMapper modelMapper,
+                              RepairOrderMapper orderMapper, RepairQuoteMapper quoteMapper,
+                              PhoneModelMapper modelMapper,
                               BrandMapper brandMapper, StatusLogService statusLogService,
-                              ExpressService expressService) {
+                              ExpressService expressService, PaymentService paymentService) {
         this.itemMapper = itemMapper;
         this.priceMapper = priceMapper;
         this.orderMapper = orderMapper;
+        this.quoteMapper = quoteMapper;
         this.modelMapper = modelMapper;
         this.brandMapper = brandMapper;
         this.statusLogService = statusLogService;
         this.expressService = expressService;
+        this.paymentService = paymentService;
     }
 
     /** 维修项目分组字典（含该机型价格）。无价格的项目不下发。 */
@@ -298,6 +311,136 @@ public class RepairOrderService {
         }
         statusLogService.record(ORDER_TYPE_REPAIR, orderNo, fromStatus, toStatus, 20, 0L,
                 StringUtils.hasText(remark) ? remark : "后台更新状态");
+    }
+
+    // ===== 报价模式：检测 → 报价 → 用户确认 → 支付 → 维修 =====
+
+    /** 管理端提交报价：仅待报价（35）；CAS 35→36，报价单置待确认。金额传输分，存储转 DECIMAL(10,2) 元。 */
+    @Transactional
+    public Long submitQuote(String orderNo, Long amountFen, String description, List<String> images,
+                            Long operatorId) {
+        if (amountFen == null || amountFen <= 0 || amountFen > 10_000_000L) {
+            throw new BizException(40052, "报价金额无效（0.01 元 - 10 万元）");
+        }
+        requireLen(description, 500, "维修说明");
+        if (images != null && images.size() > 9) {
+            throw new BizException(40054, "报价图片最多 9 张");
+        }
+        RepairOrder order = requireOrder(orderNo);
+        if (order.getStatus() != RepairOrder.STATUS_WAIT_QUOTE) {
+            throw new BizException(40055, "当前状态不可报价（当前：" + desc(order.getStatus()) + "，须先完成检测）");
+        }
+        Long pending = quoteMapper.selectCount(new LambdaQueryWrapper<RepairQuote>()
+                .eq(RepairQuote::getRepairOrderNo, orderNo)
+                .eq(RepairQuote::getStatus, RepairQuote.STATUS_PENDING));
+        if (pending != null && pending > 0) {
+            throw new BizException(40056, "已有待用户确认的报价，请勿重复提交");
+        }
+        RepairQuote quote = new RepairQuote();
+        quote.setTenantId(order.getTenantId());
+        quote.setRepairOrderNo(orderNo);
+        quote.setQuoteAmount(BigDecimal.valueOf(amountFen, 2));
+        String desc = description == null ? "" : description.trim();
+        quote.setDescription(desc.isEmpty() ? null : desc);
+        List<String> imgs = images == null ? List.of()
+                : images.stream().filter(StringUtils::hasText).map(String::trim).toList();
+        if (!imgs.isEmpty()) {
+            quote.setImagesJson(toJson(imgs));
+        }
+        quote.setOperatorId(operatorId);
+        quote.setStatus(RepairQuote.STATUS_PENDING);
+        quoteMapper.insert(quote);
+        casTransition(order, RepairOrder.STATUS_WAIT_CONFIRM_PRICE, 20, 0L,
+                "提交报价 ¥" + fenText(amountFen) + "，等待用户确认");
+        return quote.getId();
+    }
+
+    /** 用户查看最近一次报价（含已接受/已拒绝）；未报价返回 null。 */
+    public RepairQuoteView getQuote(String orderNo) {
+        RepairQuote quote = latestQuote(requireOwned(orderNo).getOrderNo());
+        return quote == null ? null : toView(quote);
+    }
+
+    /** 用户接受报价：36→38 待支付，报价置已接受。 */
+    @Transactional
+    public void confirmPrice(String orderNo) {
+        RepairOrder order = requireOwned(orderNo);
+        if (order.getStatus() != RepairOrder.STATUS_WAIT_CONFIRM_PRICE) {
+            throw new BizException(40057, "当前没有待确认的报价（当前：" + desc(order.getStatus()) + "）");
+        }
+        markLatestQuote(orderNo, RepairQuote.STATUS_ACCEPTED);
+        casTransition(order, RepairOrder.STATUS_WAIT_PAYMENT, 10, order.getUserId(), "用户接受报价，待支付");
+    }
+
+    /** 用户拒绝报价：36→20 退回已预约/待寄出（保留预约，可重新检测报价），报价置已拒绝。 */
+    @Transactional
+    public void rejectPrice(String orderNo) {
+        RepairOrder order = requireOwned(orderNo);
+        if (order.getStatus() != RepairOrder.STATUS_WAIT_CONFIRM_PRICE) {
+            throw new BizException(40058, "当前没有可拒绝的报价（当前：" + desc(order.getStatus()) + "）");
+        }
+        markLatestQuote(orderNo, RepairQuote.STATUS_REJECTED);
+        casTransition(order, RepairOrder.STATUS_APPOINTED, 10, order.getUserId(), "用户拒绝报价，退回待处理");
+    }
+
+    /** 用户支付（报价模式）：38→30 维修中，落支付流水号；金额取已接受报价。 */
+    @Transactional
+    public String payByQuote(String orderNo) {
+        RepairOrder order = requireOwned(orderNo);
+        if (order.getStatus() != RepairOrder.STATUS_WAIT_PAYMENT) {
+            throw new BizException(40059, "订单状态不允许支付（当前：" + desc(order.getStatus()) + "）");
+        }
+        RepairQuote quote = latestQuote(orderNo);
+        if (quote == null || quote.getStatus() != RepairQuote.STATUS_ACCEPTED) {
+            throw new BizException(40059, "没有已接受的报价，无法支付");
+        }
+        long amountFen = toFen(quote.getQuoteAmount());
+        String payNo = paymentService.mockPayNo(PaymentService.BIZ_REPAIR, orderNo, amountFen);
+        casTransition(order, RepairOrder.STATUS_REPAIRING, 10, order.getUserId(),
+                "支付成功 ¥" + fenText(amountFen) + "（按报价），开始维修");
+        RepairOrder patch = new RepairOrder();
+        patch.setId(order.getId());
+        patch.setPayNo(payNo);
+        orderMapper.updateById(patch);
+        return payNo;
+    }
+
+    /** CAS 推进状态并写状态日志（报价模式专用）。 */
+    private void casTransition(RepairOrder order, int toStatus, int operatorType, Long operatorId, String remark) {
+        int fromStatus = order.getStatus();
+        RepairOrder patch = new RepairOrder();
+        patch.setStatus(toStatus);
+        int updated = orderMapper.update(patch, new LambdaUpdateWrapper<RepairOrder>()
+                .eq(RepairOrder::getId, order.getId())
+                .eq(RepairOrder::getStatus, fromStatus));
+        if (updated == 0) {
+            throw new BizException(40045, "订单状态已变更，请刷新后重试");
+        }
+        statusLogService.record(ORDER_TYPE_REPAIR, order.getOrderNo(), fromStatus, toStatus,
+                operatorType, operatorId, remark);
+    }
+
+    private RepairQuote latestQuote(String orderNo) {
+        return quoteMapper.selectOne(new LambdaQueryWrapper<RepairQuote>()
+                .eq(RepairQuote::getRepairOrderNo, orderNo)
+                .orderByDesc(RepairQuote::getId)
+                .last("limit 1"));
+    }
+
+    private void markLatestQuote(String orderNo, int status) {
+        RepairQuote quote = latestQuote(orderNo);
+        if (quote != null && quote.getStatus() == RepairQuote.STATUS_PENDING) {
+            RepairQuote patch = new RepairQuote();
+            patch.setId(quote.getId());
+            patch.setStatus(status);
+            quoteMapper.updateById(patch);
+        }
+    }
+
+    private RepairQuoteView toView(RepairQuote quote) {
+        return new RepairQuoteView(quote.getId(), toFen(quote.getQuoteAmount()),
+                quote.getDescription(), readStrings(quote.getImagesJson()), quote.getStatus(),
+                text(quote.getCreateTime()));
     }
 
     // ===== 寄修运单流转 =====
@@ -498,21 +641,27 @@ public class RepairOrderService {
     }
 
     private RepairOrderDetail toDetail(RepairOrder o) {
+        RepairQuote latest = latestQuote(o.getOrderNo());
         return new RepairOrderDetail(o.getOrderNo(), o.getBrandName(), o.getModelName(),
                 readLines(o.getItemsJson()), o.getTotalFen(), o.getStatus(), o.getServiceType(),
                 o.getContactName(), o.getContactPhone(), o.getAddress(), o.getAppointTime(),
                 o.getRemark(), readStrings(o.getImagesJson()), o.getWarrantyDays(),
                 text(o.getCreateTime()),
                 o.getExpressCom(), o.getExpressCompany(), o.getExpressNo(),
-                o.getReturnExpressCom(), o.getReturnExpressCompany(), o.getReturnExpressNo());
+                o.getReturnExpressCom(), o.getReturnExpressCompany(), o.getReturnExpressNo(),
+                latest == null ? null : toView(latest));
     }
 
     private String desc(int status) {
         return switch (status) {
             case RepairOrder.STATUS_WAIT_CONFIRM -> "待确认";
+            case RepairOrder.STATUS_WAIT_INSPECT -> "待检测";
             case RepairOrder.STATUS_APPOINTED -> "已预约/待寄出";
             case RepairOrder.STATUS_SHIPPED -> "已寄出";
             case RepairOrder.STATUS_REPAIRING -> "维修中";
+            case RepairOrder.STATUS_WAIT_QUOTE -> "待报价";
+            case RepairOrder.STATUS_WAIT_CONFIRM_PRICE -> "待确认报价";
+            case RepairOrder.STATUS_WAIT_PAYMENT -> "待支付";
             case RepairOrder.STATUS_WAIT_ACCEPT -> "待验收/待回寄";
             case RepairOrder.STATUS_RETURNING -> "回寄中";
             case RepairOrder.STATUS_DONE -> "已完成";
@@ -536,6 +685,11 @@ public class RepairOrderService {
         return yuan.multiply(BigDecimal.valueOf(100))
                 .setScale(0, RoundingMode.HALF_UP)
                 .longValueExact();
+    }
+
+    /** 分 → 元字符串（日志/备注展示用）。 */
+    private static String fenText(long fen) {
+        return BigDecimal.valueOf(fen, 2).toPlainString();
     }
 
     private String nextOrderNo() {
