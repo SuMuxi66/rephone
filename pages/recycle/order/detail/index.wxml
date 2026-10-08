@@ -44,6 +44,20 @@
 
   <order-comment comment="{{comment}}" />
 
+  <view wx:if="{{order.images.length}}" class="section-title">机器照片</view>
+  <view wx:if="{{order.images.length}}" class="photo-strip">
+    <view wx:for="{{order.images}}" wx:key="index" class="photo-cell">
+      <image
+        src="{{item.url}}"
+        mode="aspectFill"
+        class="photo-thumb"
+        data-index="{{index}}"
+        bindtap="onPreviewPhoto"
+      />
+      <view class="photo-type">{{photoTypes[item.type] || item.type}}</view>
+    </view>
+  </view>
+
   <view wx:if="{{order.inspections.length}}" class="section-title">质检记录</view>
   <view wx:for="{{order.inspections}}" wx:key="createTime" class="inspection-card">
     <view class="insp-row">

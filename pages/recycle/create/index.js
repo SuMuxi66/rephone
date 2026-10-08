@@ -1,4 +1,4 @@
-import { createRecycleOrder } from '../../../services/recycle/order';
+import { createRecycleOrder, fetchCosUploadSign } from '../../../services/recycle/order';
 import { fetchSubscribeTemplates, requestOrderStatusSubscribe } from '../../../services/subscribe';
 import { fen2yuan } from '../../../common/recycle-status';
 import { areaData } from '../../../config/index';
@@ -26,6 +26,16 @@ Page({
     errors: {
       phone: '',
     },
+    /** 机器照片：四类分组，合计至多 9 张（front/back/screen/damage） */
+    photoTypes: [
+      { key: 'front', label: '正面' },
+      { key: 'back', label: '背面' },
+      { key: 'screen', label: '屏幕' },
+      { key: 'damage', label: '损坏位置' },
+    ],
+    photos: { front: [], back: [], screen: [], damage: [] },
+    photoTotal: 0,
+    uploadText: '',
     regionPickerVisible: false,
     regionValue: [],
     regionColumns: { province: provinces, city: [], district: [] },
@@ -88,6 +98,87 @@ Page({
     } else {
       this.setData({ 'errors.phone': '' });
     }
+  },
+
+  // ===== 机器照片 =====
+
+  photoTotalOf(photos) {
+    return photos.front.length + photos.back.length + photos.screen.length + photos.damage.length;
+  },
+
+  onChoosePhoto(e) {
+    const type = e.currentTarget.dataset.type;
+    const left = 9 - this.data.photoTotal;
+    if (left <= 0) {
+      wx.showToast({ title: '最多 9 张照片', icon: 'none' });
+      return;
+    }
+    wx.chooseMedia({
+      count: left,
+      mediaType: ['image'],
+      sizeType: ['compressed'],
+      success: (res) => {
+        const files = (res.tempFiles || []).map((f) => f.tempFilePath);
+        const photos = this.data.photos;
+        photos[type] = photos[type].concat(files);
+        this.setData({ photos, photoTotal: this.photoTotalOf(photos) });
+      },
+    });
+  },
+
+  onPreviewPhoto(e) {
+    const { type, index } = e.currentTarget.dataset;
+    wx.previewImage({ current: this.data.photos[type][index], urls: this.data.photos[type] });
+  },
+
+  onRemovePhoto(e) {
+    const { type, index } = e.currentTarget.dataset;
+    const photos = this.data.photos;
+    photos[type] = photos[type].slice();
+    photos[type].splice(index, 1);
+    this.setData({ photos, photoTotal: this.photoTotalOf(photos) });
+  },
+
+  /** 提交前逐张上传（进度文案），返回 [{type,url}]；mock 签名保留本地路径占位 */
+  async uploadPhotos() {
+    const groups = this.data.photos;
+    const flat = [];
+    ['front', 'back', 'screen', 'damage'].forEach((type) => {
+      (groups[type] || []).forEach((path) => flat.push({ type, path }));
+    });
+    const images = [];
+    for (let i = 0; i < flat.length; i++) {
+      this.setData({ uploadText: '正在上传图片 ' + (i + 1) + '/' + flat.length });
+      const ext = (flat[i].path.match(/\.(\w+)$/) || [])[1] || 'jpg';
+      images.push({ type: flat[i].type, url: await this.uploadToCos(flat[i].path, ext) });
+    }
+    this.setData({ uploadText: '' });
+    return images;
+  },
+
+  /** COS 直传（与维修/评价同款），目录固定 recycle */
+  uploadToCos(tempFilePath, ext) {
+    return fetchCosUploadSign(ext, 'recycle').then((sign) => {
+      if (sign.mock) {
+        return tempFilePath;
+      }
+      return new Promise((resolve, reject) => {
+        wx.getFileSystemManager().readFile({
+          filePath: tempFilePath,
+          success: (res) => {
+            wx.request({
+              url: sign.host + '/' + sign.key,
+              method: 'PUT',
+              header: { Authorization: sign.authorization, 'content-type': 'image/jpeg' },
+              data: res.data,
+              success: () => resolve(sign.key),
+              fail: (err) => reject(new Error(err.errMsg || '图片上传失败')),
+            });
+          },
+          fail: () => reject(new Error('读取图片失败')),
+        });
+      });
+    });
   },
 
   showRegion() {
@@ -199,6 +290,7 @@ Page({
 
     this.setData({ submitting: true });
     try {
+      const images = await this.uploadPhotos();
       const { orderNo, pickupFailReason } = await createRecycleOrder({
         modelId: this.data.quote.modelId,
         storage: this.data.quote.storage,
@@ -211,10 +303,11 @@ Page({
         pickupPhone: form.phone,
         pickupAddress: `${form.region} ${form.detail}`,
         remark: form.remark,
+        images,
       });
       await this.saveAddressIfNew();
       wx.removeStorageSync('recycle.quoteResult');
-      this.setData({ submitting: false });
+      this.setData({ submitting: false, uploadText: '' });
       if (pickupFailReason) {
         this.showPickupFallback(orderNo, pickupFailReason);
         return;

@@ -36,6 +36,71 @@
   padding: 8rpx 24rpx 16rpx;
 }
 
+.photo-groups {
+  display: flex;
+  flex-direction: column;
+  gap: 20rpx;
+  padding: 8rpx 24rpx 16rpx;
+}
+
+.photo-group-label {
+  font-size: 26rpx;
+  color: var(--text-2);
+  margin-bottom: 10rpx;
+}
+
+.photo-group-body {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14rpx;
+}
+
+.photo-cell {
+  position: relative;
+  width: 150rpx;
+  height: 150rpx;
+}
+
+.photo-thumb {
+  width: 150rpx;
+  height: 150rpx;
+  border-radius: var(--radius-sm);
+  background: var(--bg-sunken);
+}
+
+.photo-remove {
+  position: absolute;
+  top: -10rpx;
+  right: -10rpx;
+  width: 36rpx;
+  height: 36rpx;
+  border-radius: var(--radius-pill);
+  background: var(--danger);
+  color: var(--text-anti);
+  font-size: 26rpx;
+  line-height: 36rpx;
+  text-align: center;
+}
+
+.photo-add {
+  width: 150rpx;
+  height: 150rpx;
+  border: 2rpx dashed var(--line-strong);
+  border-radius: var(--radius-sm);
+  color: var(--text-3);
+  font-size: 52rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+}
+
+.upload-text {
+  margin-top: 8rpx;
+  font-size: 24rpx;
+  color: var(--text-3);
+}
+
 .pickup-card {
   flex: 1;
   border: 2rpx solid var(--border-light);

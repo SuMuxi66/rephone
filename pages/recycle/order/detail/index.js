@@ -39,6 +39,8 @@ Page({
     submitting: false,
     /** 已完成订单的评价（null=未评价，详情页出现「立即评价」按钮） */
     comment: null,
+    /** 机器照片类型文案（front/back/screen/damage） */
+    photoTypes: { front: '正面', back: '背面', screen: '屏幕', damage: '损坏' },
   },
 
   onLoad(options) {
@@ -86,6 +88,13 @@ Page({
 
   goComment() {
     wx.navigateTo({ url: '/pages/comment/create/index?orderType=10&orderNo=' + this.data.orderNo });
+  },
+
+  /** 机器照片预览（全量 url 列表，从当前张打开） */
+  onPreviewPhoto(e) {
+    const index = e.currentTarget.dataset.index;
+    const urls = (this.data.order.images || []).map((it) => it.url);
+    wx.previewImage({ current: urls[index], urls });
   },
 
   /** 快递公司字典由后端下发，前端不再写死，保证编码与轨迹查询用的是同一份 */

@@ -37,6 +37,29 @@
     </view>
   </section-card>
 
+  <section-card title="机器照片（选填，最多 9 张）">
+    <view class="photo-groups">
+      <view wx:for="{{photoTypes}}" wx:key="key" class="photo-group">
+        <view class="photo-group-label">{{item.label}}</view>
+        <view class="photo-group-body">
+          <view wx:for="{{photos[item.key]}}" wx:for-item="p" wx:for-index="pi" wx:key="pi" class="photo-cell">
+            <image
+              src="{{p}}"
+              mode="aspectFill"
+              class="photo-thumb"
+              data-type="{{item.key}}"
+              data-index="{{pi}}"
+              bindtap="onPreviewPhoto"
+            />
+            <view class="photo-remove" data-type="{{item.key}}" data-index="{{pi}}" catchtap="onRemovePhoto">×</view>
+          </view>
+          <view wx:if="{{photoTotal < 9}}" class="photo-add" data-type="{{item.key}}" bindtap="onChoosePhoto">+</view>
+        </view>
+      </view>
+    </view>
+    <view wx:if="{{uploadText}}" class="upload-text">{{uploadText}}</view>
+  </section-card>
+
   <view class="footer">
     <t-button theme="primary" block loading="{{submitting}}" disabled="{{submitting}}" bindtap="onSubmit">提交回收订单</t-button>
     <view class="footer-tip">提交后请按取件方式寄出机器，质检完成后打款</view>
