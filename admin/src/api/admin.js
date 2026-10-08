@@ -144,6 +144,15 @@ export const FLOW_DIRECTION = {
   refund: { label: '退款', type: 'warning' },
 };
 
+// ===== 评价管理 =====
+export const fetchComments = (params) => http.get('/admin/comment/list', { params });
+
+export const COMMENT_ORDER_TYPE = {
+  10: { label: '回收单', type: 'warning' },
+  20: { label: '出售单', type: 'success' },
+  30: { label: '维修单', type: 'primary' },
+};
+
 // ===== 状态字典 =====
 export const RECYCLE_STATUS = {
   10: { label: '待寄出', type: 'warning' },

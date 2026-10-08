@@ -84,6 +84,12 @@ const router = createRouter({
           meta: { requiresAdmin: true, permission: 'address:manage' },
           component: () => import('../views/Addresses.vue'),
         },
+        {
+          path: 'comments',
+          name: 'comments',
+          meta: { requiresAdmin: true, permission: 'comment:manage' },
+          component: () => import('../views/Comment.vue'),
+        },
       ],
     },
   ],
