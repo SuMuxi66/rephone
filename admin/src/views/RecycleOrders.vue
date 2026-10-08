@@ -68,6 +68,25 @@
           <el-descriptions-item v-if="detail.adminRemark" label="质检说明">{{ detail.adminRemark }}</el-descriptions-item>
         </el-descriptions>
 
+        <!-- 用户上传图片 -->
+        <div v-if="(detail.images || []).length" class="section">
+          <div class="section-title">用户上传图片</div>
+          <el-space wrap>
+            <div v-for="(img, i) in detail.images" :key="i" class="user-photo">
+              <el-tag size="small" type="info">{{ IMAGE_TYPE_LABELS[img.type] || img.type }}</el-tag>
+              <el-image
+                v-if="img.url && img.url.startsWith('http')"
+                :src="img.url"
+                :preview-src-list="[img.url]"
+                fit="cover"
+                class="user-photo-img"
+              />
+              <span class="user-photo-key">{{ img.url }}</span>
+            </div>
+          </el-space>
+          <div class="photo-note">url 为 COS 对象 key（mock 环境为本地临时路径），可在 COS 控制台按前缀检索查看</div>
+        </div>
+
         <div v-if="detail.inspections?.length" class="section">
           <div class="section-title">质检记录</div>
           <el-card v-for="(item, i) in detail.inspections" :key="i" shadow="never" class="insp-card">
@@ -160,6 +179,8 @@ import {
 } from '../api/admin';
 
 const statusFilters = { 0: '全部', 10: '待寄出', 20: '运输中', 30: '质检中', 40: '待确认', 50: '已打款', 60: '已完成', 80: '已取消' };
+
+const IMAGE_TYPE_LABELS = { front: '正面', back: '背面', screen: '屏幕', damage: '损坏' };
 
 const activeStatus = ref(0);
 const orders = ref([]);
@@ -337,6 +358,27 @@ onMounted(load);
   font-size: 13px;
 }
 .tip {
+  color: #909399;
+  font-size: 12px;
+}
+.user-photo {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  max-width: 100%;
+}
+.user-photo-img {
+  width: 64px;
+  height: 64px;
+  border-radius: 4px;
+}
+.user-photo-key {
+  color: #909399;
+  font-size: 12px;
+  word-break: break-all;
+}
+.photo-note {
+  margin-top: 8px;
   color: #909399;
   font-size: 12px;
 }
