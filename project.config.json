@@ -20,6 +20,14 @@
       },
       {
         "type": "folder",
+        "value": "tools"
+      },
+      {
+        "type": "folder",
+        "value": ".playwright-mcp"
+      },
+      {
+        "type": "folder",
         "value": ".zcode"
       },
       {
@@ -48,6 +56,14 @@
       },
       {
         "type": "file",
+        "value": "README-production.md"
+      },
+      {
+        "type": "file",
+        "value": "需求文档.md"
+      },
+      {
+        "type": "file",
         "value": "LICENSE"
       },
       {
@@ -65,6 +81,14 @@
       {
         "type": "file",
         "value": "jsconfig.json"
+      },
+      {
+        "type": "file",
+        "value": "package.json"
+      },
+      {
+        "type": "file",
+        "value": "package-lock.json"
       }
     ],
     "include": []
