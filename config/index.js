@@ -4,7 +4,7 @@ const envVersion =
 
 const ENV_MAP = {
   develop: {
-    apiBaseUrl: 'http://localhost:8080',
+    apiBaseUrl: 'http://127.0.0.1:8080',
     /** 出售端模板页是否使用 mock 数据（回收端 services/recycle/* 始终走真实后端） */
     useMock: true,
   },
