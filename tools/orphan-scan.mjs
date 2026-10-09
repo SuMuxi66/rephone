@@ -65,10 +65,12 @@ function resolveFileSpec(fromFile, spec) {
     const base = path.resolve(path.dirname(fromFile), spec);
     out.push(base, base + '.js', base + '.json', base + '.wxml', base + '.wxss', path.join(base, 'index.js'));
   } else {
-    // 裸包名：包内嵌套 npm 与根 npm 都算（宁多勿缺）
-    for (const b of [path.join(NPM, 'tdesign-miniprogram', 'miniprogram_npm', spec), path.join(NPM, spec)]) {
-      out.push(b, b + '.js', path.join(b, 'index.js'));
-    }
+    // 裸包名：嵌套 npm 优先（编译器实测如此），无嵌套才回退根 npm
+    const nested = path.join(NPM, 'tdesign-miniprogram', 'miniprogram_npm', spec);
+    const nestedHits = [nested, nested + '.js', path.join(nested, 'index.js')].filter(isFile);
+    if (nestedHits.length) return nestedHits;
+    const root = path.join(NPM, spec);
+    return [root, root + '.js', path.join(root, 'index.js')].filter(isFile);
   }
   return out.filter(isFile);
 }

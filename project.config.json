@@ -93,6 +93,10 @@
       {
         "type": "file",
         "value": "config/eslintCheck.js"
+      },
+      {
+        "type": "file",
+        "value": "project.private.config.json"
       }
     ],
     "include": []

@@ -82,10 +82,13 @@ function resolveSpec(fromFile, spec) {
     const base = path.resolve(path.dirname(fromFile), spec);
     out.push(base, base + '.js', base + '.json', base + '.wxml', base + '.wxss', path.join(base, 'index.js'));
   } else {
-    // 裸包名：包内嵌套 npm 优先，其次根 npm（两处都标可达，宁多勿缺）
-    for (const b of [path.join(TD, 'miniprogram_npm', spec), path.join(NPM, spec)]) {
-      out.push(b, b + '.js', path.join(b, 'index.js'));
-    }
+    // 裸包名：编译器实际解析到包内嵌套 npm（实测根副本 moduleId=null 不入模块图）；
+    // 嵌套不存在时才回退根 npm
+    const nested = path.join(TD, 'miniprogram_npm', spec);
+    const nestedHits = [nested, nested + '.js', path.join(nested, 'index.js')].filter(isFile);
+    if (nestedHits.length) return nestedHits;
+    const root = path.join(NPM, spec);
+    return [root, root + '.js', path.join(root, 'index.js')].filter(isFile);
   }
   return out.filter(isFile);
 }
