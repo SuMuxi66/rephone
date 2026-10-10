@@ -4,6 +4,8 @@ node_modules/
 miniprogram_npm/
 server/**/target/
 server/.mvn/wrapper/*.zip
+# 管理后台构建产物（部署用 GitHub Release zip 或自行构建，勿把旧构建提交入库）
+admin/dist/
 
 # 系统与工具文件
 .DS_Store
