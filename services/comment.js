@@ -1,4 +1,4 @@
-import { get, post } from '../request';
+import { get, post } from './request';
 
 /** 创建评价：POST /api/wx/comment（订单完成后可评一次） */
 export const createComment = (payload) => post('/api/wx/comment', payload);

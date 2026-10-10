@@ -1,5 +1,4 @@
-import { fetchPerson } from '../../../../../services/usercenter/fetchPerson';
-import { updateProfile } from '../../../../../services/usercenter/fetchUsercenter';
+import { fetchUserProfile, updateProfile } from '../../../../../services/usercenter/fetchUsercenter';
 import { phoneEncryption } from '../../../utils/util';
 import { clearToken, ensureLogin } from '../../../../../services/request';
 import Toast from 'tdesign-miniprogram/toast/index';
@@ -35,7 +34,7 @@ Page({
     this.fetchData();
   },
   fetchData() {
-    fetchPerson().then((personInfo) => {
+    fetchUserProfile().then((personInfo) => {
       this.setData({
         personInfo,
         'personInfo.phoneNumber': phoneEncryption(personInfo.phoneNumber),
