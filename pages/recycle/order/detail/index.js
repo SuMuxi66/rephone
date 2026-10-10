@@ -3,6 +3,7 @@ import {
   fillExpressNo,
   cancelRecycleOrder,
   confirmPayout,
+  rejectFinalPrice,
   fetchExpressCompanies,
 } from '../../../../services/recycle/order';
 import { STATUS_DESC, fen2yuan } from '../../../../common/recycle-status';
@@ -225,6 +226,24 @@ Page({
           this.fetchDetail();
         } catch (e) {
           wx.showToast({ title: e.message || '操作失败', icon: 'none' });
+        }
+      },
+    });
+  },
+
+  /** 拒绝最终价：退回重新质检，机器暂留平台侧（不产生退回物流）；次数超限后端提示转人工 */
+  onRejectPrice() {
+    wx.showModal({
+      title: '拒绝最终价',
+      content: '拒绝后将退回重新质检，期间机器暂存平台。确定拒绝当前报价吗？',
+      success: async (res) => {
+        if (!res.confirm) return;
+        try {
+          await rejectFinalPrice(this.data.orderNo);
+          wx.showToast({ title: '已退回重新质检', icon: 'success' });
+          this.fetchDetail();
+        } catch (e) {
+          wx.showModal({ title: '无法拒绝', content: e.message || '操作失败，请联系客服', showCancel: false });
         }
       },
     });

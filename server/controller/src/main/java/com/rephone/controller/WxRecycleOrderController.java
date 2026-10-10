@@ -72,4 +72,11 @@ public class WxRecycleOrderController {
         orderService.confirmPayout(orderNo);
         return R.ok();
     }
+
+    /** 拒绝最终价：质检待确认（40）→ 退回质检中（30），管理端重新质检；机器留在平台侧，不涉退回物流。 */
+    @PutMapping("/order/{orderNo}/reject-price")
+    public R<Void> rejectPrice(@PathVariable String orderNo) {
+        orderService.rejectFinalPrice(orderNo);
+        return R.ok();
+    }
 }

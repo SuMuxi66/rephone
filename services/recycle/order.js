@@ -27,6 +27,10 @@ export const cancelRecycleOrder = (orderNo, reason) =>
 export const confirmPayout = (orderNo) =>
   request({ url: `/api/wx/recycle/order/${orderNo}/confirm`, method: 'PUT' });
 
+/** 拒绝最终价：PUT /api/wx/recycle/order/{orderNo}/reject-price（40→30 退回重新质检，机器留平台侧） */
+export const rejectFinalPrice = (orderNo) =>
+  request({ url: `/api/wx/recycle/order/${orderNo}/reject-price`, method: 'PUT' });
+
 /** COS 直传签名：GET /api/wx/cos/upload-sign（dir 可选：recycle/repair/comment，默认 recycle） */
 export const fetchCosUploadSign = (ext, dir) =>
   get('/api/wx/cos/upload-sign', dir ? { ext, dir } : { ext });

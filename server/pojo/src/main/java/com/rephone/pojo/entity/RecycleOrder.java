@@ -7,7 +7,8 @@ import java.time.LocalDateTime;
 
 /**
  * 回收订单。状态机：10 待寄出 → 20 运输中 → 30 质检中 → 40 待确认 → 50 已打款 → 60 已完成；
- * 10 可被用户取消为 80。所有状态流转必须写 order_status_log。
+ * 40 可被用户拒绝最终价退回 30 重新质检（累计上限转人工）；10 可被用户取消为 80，40 待确认亦可取消。
+ * 所有状态流转必须写 order_status_log。
  */
 @TableName("recycle_order")
 public class RecycleOrder {

@@ -65,7 +65,8 @@ public class RecycleOrderService {
             RecycleOrder.STATUS_WAIT_SEND, List.of(RecycleOrder.STATUS_SHIPPING, RecycleOrder.STATUS_CANCELED),
             RecycleOrder.STATUS_SHIPPING, List.of(RecycleOrder.STATUS_INSPECTING),
             RecycleOrder.STATUS_INSPECTING, List.of(RecycleOrder.STATUS_WAIT_CONFIRM),
-            RecycleOrder.STATUS_WAIT_CONFIRM, List.of(RecycleOrder.STATUS_PAID, RecycleOrder.STATUS_CANCELED),
+            RecycleOrder.STATUS_WAIT_CONFIRM,
+            List.of(RecycleOrder.STATUS_PAID, RecycleOrder.STATUS_INSPECTING, RecycleOrder.STATUS_CANCELED),
             RecycleOrder.STATUS_PAID, List.of(RecycleOrder.STATUS_DONE));
 
     /** 轨迹快照有效期：快递100 要求同一单号查询间隔 >= 30 分钟，超频会锁单，因此必须走本地快照。 */
@@ -353,6 +354,26 @@ public class RecycleOrderService {
     public void confirmPayout(String orderNo) {
         RecycleOrder order = getOwned(orderNo);
         doPayout(order, 10, order.getUserId());
+    }
+
+    /** 最终价拒绝上限：累计达 2 次后再拒绝转人工（客服处理），防无限拉扯。 */
+    private static final int MAX_FINAL_PRICE_REJECTS = 2;
+
+    /**
+     * 用户拒绝最终价：40 → 30 退回重新质检。机器此时在平台侧，「退回」指质检流程而非物流，
+     * 不产生任何寄回运单；拒绝不修改 final_fen，新最终价以管理端再次质检提交为准。
+     * 拒绝次数以 order_status_log 中「40→30 且用户操作」计数（不加列），达上限后转人工。
+     */
+    @Transactional
+    public void rejectFinalPrice(String orderNo) {
+        RecycleOrder order = getOwned(orderNo);
+        long rejected = statusLogService.countTransitions(orderNo,
+                RecycleOrder.STATUS_WAIT_CONFIRM, RecycleOrder.STATUS_INSPECTING, 10);
+        if (rejected >= MAX_FINAL_PRICE_REJECTS) {
+            throw new BizException(40044, "最终价拒绝次数已达上限，请联系客服处理");
+        }
+        transition(order, RecycleOrder.STATUS_INSPECTING, 10, order.getUserId(),
+                "用户拒绝最终价，退回重新质检");
     }
 
     /**

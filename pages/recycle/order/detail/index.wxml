@@ -73,7 +73,8 @@
       <t-button theme="primary" bindtap="showExpressPopup">填写运单号</t-button>
     </block>
     <block wx:if="{{order.status === 40}}">
-      <t-button theme="primary" block bindtap="onConfirmPayout">确认打款 ¥{{finalText}}</t-button>
+      <t-button theme="default" bindtap="onRejectPrice">拒绝并退回</t-button>
+      <t-button theme="primary" bindtap="onConfirmPayout">确认打款 ¥{{finalText}}</t-button>
     </block>
     <block wx:if="{{order.status === 60 && !comment}}">
       <t-button theme="primary" block bindtap="goComment">立即评价</t-button>
