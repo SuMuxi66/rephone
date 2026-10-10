@@ -7,7 +7,7 @@
     <parent>
         <groupId>com.rephone</groupId>
         <artifactId>rephone-server</artifactId>
-        <version>1.0.1</version>
+        <version>1.0.2</version>
     </parent>
 
     <artifactId>rephone-wechat</artifactId>
