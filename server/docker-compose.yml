@@ -54,8 +54,13 @@ services:
       MYSQL_USERNAME: root
       MYSQL_PASSWORD: ${MYSQL_ROOT_PASSWORD}
       REDIS_HOST: redis
-      # 开发态默认值：mock 登录 + 本地管理令牌；上线用环境变量覆盖
-      WX_MOCK_LOGIN: ${WX_MOCK_LOGIN:-true}
+      # 运行 profile：默认 prod —— 让 MockGuardConfig 进入「有 mock 就拒绝启动」的严格模式。
+      # 本地开发要跑 mock 时显式覆盖：SPRING_PROFILES_ACTIVE=dev WX_MOCK_LOGIN=true ...
+      SPRING_PROFILES_ACTIVE: ${SPRING_PROFILES_ACTIVE:-prod}
+      # 安全默认值：一律 false。mock 登录会绕过整个 /api/wx/* 认证，
+      # mock 支付会伪造支付成功，绝不能作为默认值。
+      # 本地开发要闭环时显式开启：WX_MOCK_LOGIN=true（并同时把 profile 设为非 prod）
+      WX_MOCK_LOGIN: ${WX_MOCK_LOGIN:-false}
       # 真实登录（WX_MOCK_LOGIN=false）时必填：JWT 签名密钥，值在 .env
       JWT_SECRET: ${JWT_SECRET:-}
       # 故意不给默认值：原来默认 "local-admin-token" 是一个开箱可用的管理端凭证，
@@ -63,8 +68,9 @@ services:
       # 管理员仍可用账号密码登录。本地要用的值写在 .env 里。
       ADMIN_TOKEN: ${ADMIN_TOKEN:-}
       ADMIN_BOOTSTRAP_PASSWORD: ${ADMIN_BOOTSTRAP_PASSWORD:-}
-      # 快递100 真实出网配置：值来自同目录 .env（compose 自动读它做插值），缺省保持 mock
-      EXPRESS_MOCK: ${EXPRESS_MOCK:-true}
+      # 快递100：安全默认 false（真实出网）。本地无 key 时显式开 EXPRESS_MOCK=true。
+      # 值来自同目录 .env（compose 自动读它做插值）
+      EXPRESS_MOCK: ${EXPRESS_MOCK:-false}
       EXPRESS_KEY: ${EXPRESS_KEY:-}
       EXPRESS_CUSTOMER: ${EXPRESS_CUSTOMER:-}
       EXPRESS_CALLBACK_URL: ${EXPRESS_CALLBACK_URL:-}
@@ -80,7 +86,7 @@ services:
       WXPAY_MCH_ID: ${WXPAY_MCH_ID:-}
       WXPAY_MCH_KEY: ${WXPAY_MCH_KEY:-}
       WXPAY_CERT_PATH: ${WXPAY_CERT_PATH:-}
-      WXPAY_MOCK: ${WXPAY_MOCK:-true}
+      WXPAY_MOCK: ${WXPAY_MOCK:-false}
       WXPAY_NOTIFY_URL: ${WXPAY_NOTIFY_URL:-}
       # 支付单自动关闭：30 分钟未支付关闭，每 5 分钟扫描
       PAY_PENDING_TTL_MINUTES: ${PAY_PENDING_TTL_MINUTES:-30}
@@ -90,7 +96,7 @@ services:
       COS_SECRET_KEY: ${COS_SECRET_KEY:-}
       COS_BUCKET: ${COS_BUCKET:-}
       COS_REGION: ${COS_REGION:-ap-guangzhou}
-      COS_MOCK: ${COS_MOCK:-true}
+      COS_MOCK: ${COS_MOCK:-false}
     depends_on:
       mysql:
         condition: service_healthy

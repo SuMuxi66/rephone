@@ -74,6 +74,12 @@ cd admin && npm ci && npm run build   # 产物 admin/dist（不入库），托�
 **docker compose 注意**：以上变量已全部在 `server/docker-compose.yml` 透传进容器；
 compose 会自动读取同目录 `.env` 做插值，改完 `.env` 后 `docker compose up -d` 生效。
 
+**安全默认值（v1.0.1 起）**：compose 里
+`SPRING_PROFILES_ACTIVE` 默认 `prod`，四个 mock 开关默认**全部为 false**。
+因此**未做任何配置就 `docker compose up` 的部署是安全的**：一旦有人打开了任一 mock 开关，
+`MockGuardConfig` 会在启动阶段抛出 `IllegalStateException` 并拒绝启动，
+而不是打一行日志照常运行。本地要跑 mock 必须显式设 `SPRING_PROFILES_ACTIVE=dev` 加对应开关。
+
 ## 5. 微信配置
 
 1. **小程序**：`WX_APPID/WX_SECRET`；后台「开发管理-服务器域名」加入后端 https 域名（request 合法域名）。
