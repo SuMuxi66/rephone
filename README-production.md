@@ -1,6 +1,6 @@
 # RePhone 生产部署手册（README-production）
 
-> 适用版本：V1.3+（含维修报价/支付、评价系统、回收图片）。上线前请逐项过完文末 Checklist。
+> 适用版本：v1.0.0 及以上（v1.0.1 起，含维修报价/支付、评价系统、回收图片与拒绝最终价）。上线前请逐项过完文末 Checklist。
 
 ## 1. 环境要求
 
@@ -25,7 +25,8 @@ docker compose logs -f server # 等待启动完成（/api/health 返回 pong）
 管理后台：
 
 ```bash
-cd admin && npm ci && npm run build   # 产物 admin/dist，托管到 Nginx（/ 指向 dist，/api 反代到后端 8080）
+cd admin && npm ci && npm run build   # 产物 admin/dist（不入库），托管到 Nginx（/ 指向 dist，/api 反代到后端 8080）
+                                      # 或直接使用 GitHub Release 提供的 rephone-admin-dist-<版本>.zip
 ```
 
 小程序：开发者工具导入仓库根目录，`config/index.js` 的 API 地址切到生产域名，上传提审。
@@ -34,14 +35,16 @@ cd admin && npm ci && npm run build   # 产物 admin/dist，托管到 Nginx（/ 
 
 - **新库**：无需手工执行 SQL。应用启动时 `spring.sql.init` 幂等创建全部表
   （`db/schema*.sql`：基础表 → 估价 → 回收 → 维修 → 出售 → 支付 → 角色，再落数据种子）。
-- **存量库升级**：`CREATE TABLE IF NOT EXISTS` 不会给已存在的表加列，按顺序手工执行补丁：
-  1. `db/patch-express-trace.sql`（recycle_order 轨迹列）
+- **存量库升级**：`CREATE TABLE IF NOT EXISTS` 不会给已存在的表加列，必须按顺序手工执行全部补丁。
+  **执行任何补丁前先备份**（`mysqldump` 全量，并确认可恢复）；已执行过的补丁重复执行会报重复列，忽略即可：
+  1. `db/patch-express-trace.sql`（recycle_order 轨迹快照列）
   2. `db/patch-repair-express.sql`（repair_order 双向运单列）
   3. `db/patch-repair-quote.sql`（repair_order.pay_no + repair_quote 表）
   4. `db/patch-recycle-images.sql`（recycle_order.images_json）
-  已执行过的补丁重复执行会报重复列，忽略即可。
-- `server/sql/001_init.sql`（compose 首次初始化挂载）只含 tenant/user/order_status_log 三张基础表，
-  其余表由应用启动补齐，二者幂等兼容。
+  5. `db/patch-goods-attrs.sql`（goods 品牌/容量/成色/标签列 + 检索索引；缺列会导致商品列表/筛选与出售下单报错）
+- **初始化与补丁的区别**：`server/sql/001_init.sql`（compose 首次初始化挂载）只含 tenant/user/order_status_log
+  三张基础表，其余表由应用启动补齐，二者幂等兼容；`db/patch-*.sql` 仅服务于「表已存在」的存量库，
+  新库一律不要手工执行（重复执行会报重复列/重复索引）。
 - **回滚方案**：表结构变更全部为「加表/加列」，回滚 = `ALTER TABLE ... DROP COLUMN` / `DROP TABLE`
   （补丁文件头部有精确的加列清单，逆向执行即可）；数据回滚依赖 MySQL 定时备份
   （上线前必须配置 `mysqldump` 每日全量 + binlog）。应用回滚 = `docker compose` 切回上一镜像 tag。
@@ -63,6 +66,7 @@ cd admin && npm ci && npm run build   # 产物 admin/dist，托管到 Nginx（/ 
 | `WXPAY_NOTIFY_URL` | ✅（支付） | `https://<域名>/api/callback/wxpay` |
 | `WXPAY_CERT_PATH` | 打款时 | 企业付款到零钱证书路径 |
 | `PAY_PENDING_TTL_MINUTES` | 可选 | 待支付单关闭时长（默认 30 分钟） |
+| `PAY_CLOSE_CRON` | 可选 | 关单扫描周期（默认每 5 分钟） |
 | `COS_MOCK` | ✅ | 生产 `false` |
 | `COS_SECRET_ID` / `COS_SECRET_KEY` / `COS_BUCKET` / `COS_REGION` | ✅（图片） | 腾讯云 COS；图片直传与预签名回显依赖它 |
 | `WX_SUBSCRIBE_*` / `EXPRESS_MOCK` 以外的订阅项 | 可选 | 订阅消息模板字段；未配置则跳过订阅 |
