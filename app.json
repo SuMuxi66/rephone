@@ -31,24 +31,7 @@
         "pages/user/person-info/index",
         "pages/user/address/list/index",
         "pages/user/address/edit/index",
-        "pages/user/name-edit/index",
-        "pages/goods/list/index",
-        "pages/goods/details/index",
-        "pages/goods/search/index",
-        "pages/goods/result/index",
-        "pages/goods/comments/index",
-        "pages/goods/comments/create/index",
-        "pages/order/order-confirm/index",
-        "pages/order/receipt/index",
-        "pages/order/pay-result/index",
-        "pages/order/order-list/index",
-        "pages/order/order-detail/index",
-        "pages/order/apply-service/index",
-        "pages/order/after-service-list/index",
-        "pages/order/after-service-detail/index",
-        "pages/order/fill-tracking-no/index",
-        "pages/order/delivery-detail/index",
-        "pages/order/invoice/index"
+        "pages/user/name-edit/index"
       ]
     }
   ],
