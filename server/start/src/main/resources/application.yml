@@ -73,7 +73,8 @@ rephone:
     key: ${EXPRESS_KEY:}
     customer: ${EXPRESS_CUSTOMER:}
     callback-url: ${EXPRESS_CALLBACK_URL:}
-    mock: ${EXPRESS_MOCK:true}
+    # 安全默认 false：快递查询与上门取件会真实出网；本地无凭据时显式开 EXPRESS_MOCK=true
+    mock: ${EXPRESS_MOCK:false}
   admin:
     token: ${ADMIN_TOKEN:}
     bootstrap-password: ${ADMIN_BOOTSTRAP_PASSWORD:}

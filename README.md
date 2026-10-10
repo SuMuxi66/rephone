@@ -46,12 +46,25 @@ RePhone
 
 ```bash
 cd server
-cp .env.example .env        # 填入 MySQL 密码；真实微信/快递100 密钥可选，缺省走 mock
+cp .env.example .env        # 至少填 MySQL 密码；真实微信/快递100 密钥生产必填
 docker compose up -d --build
 ```
 
 - 服务端口 `8080`，MySQL `3306`，Redis `6379`
-- 未配置真实凭据时自动使用 mock 模式（登录 / 快递100 / 支付 / 订阅消息），可完整跑通业务闭环
+- **安全默认值**：compose 默认 `SPRING_PROFILES_ACTIVE=prod`，四个 mock 开关
+  （`WX_MOCK_LOGIN` / `WXPAY_MOCK` / `EXPRESS_MOCK` / `COS_MOCK`）默认**全部为 false**。
+  这个组合下 `MockGuardConfig` 会在启动时校验，一旦发现 mock 开关或弱管理令牌就**直接拒绝启动**
+  （mock 登录等于绕过整条 `/api/wx/*` 认证，mock 支付会伪造支付成功）。
+- **本地开发要跑 mock 闭环必须显式开启**（不再有「缺省走 mock」）：
+
+  ```bash
+  # server/.env
+  SPRING_PROFILES_ACTIVE=dev
+  WX_MOCK_LOGIN=true
+  EXPRESS_MOCK=true
+  ```
+
+  非 prod 下守卫不拦截，但会打印醒目 WARN 横幅列出所有生效的不安全开关。
 - 本地跑测试：`cd server && mvnw.cmd test`（PowerShell/Bash 用 `./mvnw test`）
 
 ### 2. 微信小程序
