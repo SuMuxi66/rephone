@@ -138,7 +138,9 @@ public class PaymentService {
 
     /**
      * 关闭超过有效期（默认 30 分钟，rephone.pay.pending-ttl-minutes）仍未支付的支付单。
-     * 批量 CAS，幂等可重复执行；已被定时任务关闭的迟到回调会因非 PENDING 被拒（fail-safe）。
+     * 批量 CAS，幂等可重复执行。已关闭单收到支付成功回调不丢弃资金：markPaySuccess 会把
+     * CLOSED 兑现入账（CAS 含 CLOSED→SUCCESS），订单随之推进；start() 复用同样只认有效期内
+     * 的 PENDING，过期视同已关闭、重新生成新支付单。
      * 真实模式建议关单前调微信 closeorder（见 docs/superpowers/specs 支付订单自动关闭设计）。
      */
     @Transactional

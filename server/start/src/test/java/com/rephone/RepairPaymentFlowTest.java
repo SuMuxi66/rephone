@@ -308,4 +308,24 @@ class RepairPaymentFlowTest {
         assertTrue(newPayNo.startsWith("P") && !newPayNo.equals("P-RP-EXP2"), "重新支付应生成新支付单");
         assertEquals(30, statusOf("F-RP-EXP2"), "重新支付成功后订单应进入维修中");
     }
+
+    /** M5：有效期内重复发起支付必须复用同一待支付单（同 payNo、不产生第二行）。 */
+    @Test
+    @Order(9)
+    void pending_payment_reused_within_ttl() throws Exception {
+        insertOrder("F-RP-REUSE", userId, 38);
+        insertQuote("F-RP-REUSE");
+        insertPendingPayment("F-RP-REUSE", "P-RP-REUSE1", 25000);
+
+        ResponseEntity<String> resp = rest.exchange("/api/wx/repair/order/F-RP-REUSE/pay", HttpMethod.PUT,
+                new HttpEntity<>(user()), String.class);
+        JsonNode body = objectMapper.readTree(resp.getBody());
+        assertEquals(0, body.get("code").asInt(), resp.getBody());
+        assertEquals("P-RP-REUSE1", body.path("data").path("payNo").asText(), "有效期内重试应复用同一支付单");
+        Integer rows = jdbcTemplate.queryForObject(
+                "select count(*) from payment_order where order_no = 'F-RP-REUSE'", Integer.class);
+        assertEquals(1, rows, "复用不得产生第二行支付单");
+        assertEquals(1, paymentStatus("P-RP-REUSE1"), "mock 闭环后该支付单入账");
+        assertEquals(30, statusOf("F-RP-REUSE"), "支付成功后订单应进入维修中");
+    }
 }
