@@ -1,6 +1,6 @@
-import dayjs from 'dayjs';
-
-const formatTime = (date, template) => dayjs(date).format(template);
+/* 注意：本文件曾被分包内多个页面引用，不要在这里 import 任何 npm 包 ——
+   小程序对分包的 npm 解析是「相对分包根」的，裸包名在分包内解析不到会整页白屏。
+   （原有一处 dayjs 依赖仅服务于未被任何页面调用的 formatTime，已一并移除。） */
 
 /**
  * 格式化价格数额为字符串
@@ -123,7 +123,6 @@ const phoneRegCheck = (phone) => {
 };
 
 module.exports = {
-  formatTime,
   priceFormat,
   cosThumb,
   get,
