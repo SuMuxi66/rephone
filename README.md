@@ -7,7 +7,7 @@ RePhone 是一个三端同仓的全栈项目：**微信小程序（用户端）+
 
 | 端 | 目录 | 技术栈 |
 |---|---|---|
-| 微信小程序 | 仓库根（`app.json` / `pages/` / `components/`） | 原生小程序 + tdesign-miniprogram 1.9.5 + dayjs |
+| 微信小程序 | 仓库根（`app.json` / `pages/` / `components/`） | 原生小程序 + tdesign-miniprogram 1.9.5（按需裁剪） |
 | 后端 | [`server/`](server/) | Spring Boot 3.5 + Java 21 + MyBatis-Plus + MySQL 8 + Redis（Maven 多模块） |
 | 管理后台 | [`admin/`](admin/) | Vite + Vue 3 + Element Plus + axios |
 
@@ -30,8 +30,8 @@ RePhone
 ├── components/ custom-tab-bar/ style/   # 公共组件、自定义 tabBar、设计令牌
 ├── common/                    # 状态码映射、地址预填 Behavior 等公共逻辑
 ├── services/                  # 小程序请求层
-├── model/                     # 模板 mock 契约参考层（保留，勿删）
-├── server/                    # Spring Boot 后端（Maven 多模块，自带 mvnw）
+├── model/ → packages/retail-template/model/   # 模板数据层已随迁移进入分包
+├── server/                    # Spring Boot 后端（Maven 多模块，目录内自带 mvnw）
 │   ├── common / pojo / mapper / service / controller / wechat / express
 │   ├── start/src/main/resources/db/   # 建表脚本（幂等）+ patch-*.sql
 │   ├── docker-compose.yml     # MySQL + Redis + server 一键编排
@@ -52,13 +52,14 @@ docker compose up -d --build
 
 - 服务端口 `8080`，MySQL `3306`，Redis `6379`
 - 未配置真实凭据时自动使用 mock 模式（登录 / 快递100 / 支付 / 订阅消息），可完整跑通业务闭环
-- 本地跑测试：`cd server && ./mvnw test`（Windows 用 `mvnw.cmd test`）
+- 本地跑测试：`cd server && mvnw.cmd test`（PowerShell/Bash 用 `./mvnw test`）
 
 ### 2. 微信小程序
 
 1. `npm install`
-2. 微信开发者工具导入仓库根目录，执行「构建 npm」
-3. [config/index.js](config/index.js) 中切换 `env`，开发态 `apiBaseUrl` 默认 `http://localhost:8080`
+2. 微信开发者工具导入仓库根目录，执行「构建 npm」，随后运行 `npm run prune-npm` 按需裁剪
+   （每次「构建 npm」都会整体还原 `miniprogram_npm/`，主包会回弹，必须重跑裁剪）
+3. [config/index.js](config/index.js) 中切换 `env`，开发态 `apiBaseUrl` 默认 `http://127.0.0.1:8080`
 
 ### 3. 管理后台
 
