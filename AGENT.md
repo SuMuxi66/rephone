@@ -106,6 +106,11 @@ RePhone 是「手机维修（主）+ 二手机回收 + 二手出售」平台，*
   渲染在 page 节点树之外的组件自己带 `:host` 令牌。
 - **WXSS 不支持 `*` 选择器**：写了会让 `app.wxss` 编译失败，进而**整个项目构建挂掉**
   （表现为所有页面白屏、`compile_wxss` 对任意文件都报 10041、自动化取不到页面）。禁止使用 `*`。
+- **分包内不要 import 裸 npm 包名**：小程序对分包的 npm 解析是「相对分包根」的。
+  把 `import Toast from 'tdesign-miniprogram/toast/index'` 写在 `packages/retail-template/**` 里，
+  会被解析到分包路径下并报 `module ... is not defined`；主包页面同样报这个错但能幸存，
+  **分包页面会整页白屏**（实测：收货地址页的空态文案与底部按钮全部不渲染）。
+  分包页面需要 npm 能力时，优先把逻辑留在主包，或先确认「构建 npm」已把对应入口构建出来（见 §8）。
 - **`custom-tab-bar` 特殊**：它渲染在 page 节点树之外，继承不到 `page` 级令牌，
   TDesign 的 `.t-tab-bar-item__content--checked` 会回退到默认蓝。故该组件自带 `:host` 令牌块，
   并用自身 `.is-active` 类上色，不依赖 TDesign 的选中态继承色。
@@ -158,6 +163,14 @@ RePhone 是「手机维修（主）+ 二手机回收 + 二手出售」平台，*
   **跑之前先想清楚**；一旦失败，立刻执行 `git checkout HEAD -- admin/dist` 恢复，且不要提交 `admin/dist` 的删除。
   仅校验 Vue 代码时，优先用第 7 节的 `@vue/compiler-sfc` 静态校验，不要动构建。
 - `.gitignore` 已忽略 `node_modules/`、`miniprogram_npm/`、`server/**/target/`、`.mimosa/`、`.zcode/`、`*.log`、`.env`。**不要**把构建产物或日志提交进仓库。
+- **`miniprogram_npm/` 是「构建 npm」的产物且未入库**：克隆后必须先执行构建 npm（`build_npm`），
+  否则所有 `t-xxx` 组件与 `tdesign-miniprogram/*` 的 JS 导入都解析不到，页面整页白屏。
+  该命令**会先删除再重建**目录，过程中目录可能短暂为空 —— 别在此时下「文件丢了」的结论。
+  `node_modules/` 必须在位（根 `package.json` 依赖 `tdesign-miniprogram` + `tslib`）。
+  判据：`miniprogram_npm` 下 `index.js` 应有 25+ 个，只剩 2 个即为残缺构建
+  （典型症状 = 分包页面白屏 + 控制台 `module ... is not defined`）。
+  另：组件 js 里引用的**非 tdesign 裸包**（如 `dayjs`）必须写进 `package.json` 依赖，
+  否则构建 npm 不会产出它，分包内引用即报错。
 - **密钥注入方式**：`application.yml` 里已用 `spring.config.import: optional:file:./.env[.properties]` 等
   三个候选路径，Spring Boot **直接读** `server/.env`（无需额外依赖，也无需手动设环境变量）。
   新增密钥时：真实值只写 `server/.env`，同时往 `server/.env.example` 补一行空值与注释；
