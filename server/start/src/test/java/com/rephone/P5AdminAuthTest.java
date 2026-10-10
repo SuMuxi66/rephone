@@ -21,15 +21,18 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.test.context.TestPropertySource;
 
 /**
- * P5 验收：账号制管理员登录（bootstrap 种子 admin/test-admin-123）、双凭证管理端鉴权
+ * P5 验收：账号制管理员登录（自种 admin/test-admin-123）、双凭证管理端鉴权
  * （ADMIN_TOKEN 与管理员 JWT）、/me 身份查询、管理端回收单详情与管理端 COS 签名。
+ * 使用独立 H2 库并自种管理员，不依赖共享库残留、AdminBootstrapRunner 顺序或本机 .env。
  */
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @TestPropertySource(properties = {
-        "spring.datasource.url=jdbc:h2:mem:rephone;MODE=MySQL;DATABASE_TO_LOWER=TRUE;CASE_INSENSITIVE_IDENTIFIERS=TRUE;DB_CLOSE_DELAY=-1",
+        "spring.datasource.url=jdbc:h2:mem:p5auth;MODE=MySQL;DATABASE_TO_LOWER=TRUE;CASE_INSENSITIVE_IDENTIFIERS=TRUE;DB_CLOSE_DELAY=-1",
         "spring.datasource.driver-class-name=org.h2.Driver",
         "spring.datasource.username=sa",
         "spring.datasource.password=",
@@ -38,7 +41,8 @@ import org.springframework.test.context.TestPropertySource;
         "rephone.wx.mock-login=true",
         "rephone.jwt.ttl-seconds=3600",
         "rephone.admin.token=test-admin-token",
-        "rephone.admin.bootstrap-password=test-admin-123"
+        "rephone.admin.bootstrap-password=test-admin-123",
+        "rephone.cos.mock=true"
 })
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
@@ -50,11 +54,21 @@ class P5AdminAuthTest {
     @Autowired
     private ObjectMapper objectMapper;
 
+    @Autowired
+    private JdbcTemplate jdbcTemplate;
+
+    private final BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+
     private String userToken;
     private String adminToken;
 
     @BeforeAll
     void loginUsers() throws Exception {
+        // 自种平台管理员：不依赖 AdminBootstrapRunner 执行顺序与共享 H2 库/本机 .env 残留
+        jdbcTemplate.update("delete from `user` where username = 'admin'");
+        jdbcTemplate.update("insert into `user` (tenant_id, openid, nickname, role, status, username, password_hash) "
+                        + "values (0, 'p5auth-admin', '平台管理员', 'ADMIN', 1, 'admin', ?)",
+                encoder.encode("test-admin-123"));
         // 普通用户（wx mock 登录）
         ResponseEntity<String> resp = rest.postForEntity("/api/wx/login",
                 Map.of("code", "p5-user"), String.class);
