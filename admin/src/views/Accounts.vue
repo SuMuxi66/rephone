@@ -75,7 +75,7 @@
             <el-option v-for="r in adminRoleOptions" :key="r.roleCode" :label="r.roleName" :value="r.roleCode" />
           </el-select>
         </el-form-item>
-        <el-form-item v-if="createForm.roleCode === 'TENANT_ADMIN'" label="所属租户 ID（见租户管理页）" required>
+        <el-form-item v-if="needsTenant" label="所属租户 ID（见租户管理页）" required>
           <el-input-number v-model="createForm.tenantId" :min="1" controls-position="right" style="width: 100%" />
         </el-form-item>
       </el-form>
@@ -143,6 +143,10 @@ const changeRoleCode = ref('');
 
 const adminRoleOptions = computed(() => roleOptions.value.filter((r) => r.status === 1));
 
+/** 租户侧角色（数据限本租户）：创建时必须绑定租户 */
+const TENANT_SCOPED_ROLES = ['TENANT_ADMIN', 'MERCHANT'];
+const needsTenant = computed(() => TENANT_SCOPED_ROLES.includes(createForm.roleCode));
+
 async function load() {
   loading.value = true;
   try {
@@ -180,8 +184,8 @@ async function onCreate() {
     ElMessage.warning('请完整填写用户名、密码与昵称');
     return;
   }
-  if (createForm.roleCode === 'TENANT_ADMIN' && !(createForm.tenantId >= 1)) {
-    ElMessage.warning('租户管理员必须填写所属租户 ID');
+  if (needsTenant.value && !(createForm.tenantId >= 1)) {
+    ElMessage.warning('租户侧角色（租户管理员/维修商家）必须填写所属租户 ID');
     return;
   }
   submitting.value = true;
@@ -191,7 +195,7 @@ async function onCreate() {
       password: createForm.password,
       nickname: createForm.nickname.trim(),
       roleCode: createForm.roleCode,
-      tenantId: createForm.roleCode === 'TENANT_ADMIN' ? createForm.tenantId : undefined,
+      tenantId: needsTenant.value ? createForm.tenantId : undefined,
     });
     ElMessage.success('管理员已创建');
     createVisible.value = false;

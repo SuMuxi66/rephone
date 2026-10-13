@@ -19,6 +19,7 @@ export const PERMISSIONS = [
 export const ROLE_LABELS = {
   ADMIN: '平台超管',
   TENANT_ADMIN: '租户管理员',
+  MERCHANT: '维修商家',
   OPERATOR: '运营',
   FINANCE: '财务',
   VIEWER: '只读',
