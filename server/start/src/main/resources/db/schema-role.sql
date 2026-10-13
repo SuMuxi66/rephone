@@ -22,4 +22,5 @@ INSERT IGNORE INTO `role` (`role_code`, `role_name`, `permissions_json`, `status
 ('TENANT_ADMIN', '租户管理员', '["recycle:manage","repair:manage","sale:manage","goods:manage","address:manage","dashboard:read"]', 1, 1, '数据自动限定本租户'),
 ('OPERATOR',     '运营',       '["recycle:manage","repair:manage","sale:manage","goods:manage","address:manage","dashboard:read"]', 1, 1, '平台自营运营'),
 ('FINANCE',      '财务',       '["finance:read","dashboard:read"]', 1, 1, '只读资金口径'),
-('VIEWER',       '只读',       '["dashboard:read"]', 1, 1, '仅看板');
+('VIEWER',       '只读',       '["dashboard:read"]', 1, 1, '仅看板'),
+('MERCHANT',     '维修商家',   '["repair:manage"]', 1, 1, '商家端：仅维修工单（接单/报价/状态/回寄），数据限本租户');

@@ -71,7 +71,7 @@ public class AdminUserService {
 
     /**
      * 创建管理员账号并指定角色与所属租户。
-     * 平台超管只能属于租户 0；租户管理员必须指定已启用的租户。
+     * 平台超管只能属于租户 0；租户管理员/维修商家必须指定已启用的租户（数据限本租户）。
      */
     public Long createAdmin(String username, String password, String nickname, String roleCode, Long tenantId) {
         validateUsername(username);
@@ -88,7 +88,8 @@ public class AdminUserService {
             if (tid != 0) {
                 throw new BizException(40075, "平台超管只能属于平台租户 0");
             }
-        } else if (AdminRoleService.TENANT_ADMIN_ROLE.equals(role)) {
+        } else if (AdminRoleService.TENANT_ADMIN_ROLE.equals(role)
+                || AdminRoleService.MERCHANT_ROLE.equals(role)) {
             requireEnabledTenant(tid);
         }
         Long exists = userMapper.selectCount(new LambdaQueryWrapper<User>()
@@ -127,8 +128,10 @@ public class AdminUserService {
             throw new BizException(40078, "租户账号不能提升为平台超管");
         }
         if (AdminRoleService.TENANT_ADMIN_ROLE.equals(role)
-                && (target.getTenantId() == null || target.getTenantId() == 0)) {
-            throw new BizException(40079, "平台账号不能设置为租户管理员，请先指定租户");
+                || AdminRoleService.MERCHANT_ROLE.equals(role)) {
+            if (target.getTenantId() == null || target.getTenantId() == 0) {
+                throw new BizException(40079, "平台账号不能设置为租户侧角色，请先指定租户");
+            }
         }
         target.setRole(role);
         userMapper.updateById(target);
@@ -136,7 +139,7 @@ public class AdminUserService {
 
     private void requireEnabledTenant(Long tenantId) {
         if (tenantId == null || tenantId <= 0) {
-            throw new BizException(40080, "租户管理员必须指定租户");
+            throw new BizException(40080, "租户侧角色（租户管理员/维修商家）必须指定租户");
         }
         Tenant tenant = tenantMapper.selectById(tenantId);
         if (tenant == null || !Integer.valueOf(1).equals(tenant.getStatus())) {

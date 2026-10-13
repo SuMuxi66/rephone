@@ -33,9 +33,12 @@ public class AdminRoleService {
     /** 租户管理员角色编码。 */
     public static final String TENANT_ADMIN_ROLE = "TENANT_ADMIN";
 
+    /** 维修商家角色编码（租户侧角色，数据限本租户，仅维修工单权限）。 */
+    public static final String MERCHANT_ROLE = "MERCHANT";
+
     /** 自建角色不可占用的内置编码。 */
     private static final Set<String> RESERVED_CODES =
-            Set.of("ADMIN", "TENANT_ADMIN", "OPERATOR", "FINANCE", "VIEWER");
+            Set.of("ADMIN", "TENANT_ADMIN", "MERCHANT", "OPERATOR", "FINANCE", "VIEWER");
 
     private final RoleMapper roleMapper;
     private final UserMapper userMapper;
