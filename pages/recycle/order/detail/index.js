@@ -12,6 +12,9 @@ import { fetchOrderComment } from '../../../../services/comment';
 /** 正向流程节点（取消态不展示时间线） */
 const FLOW = [10, 20, 30, 40, 50, 60];
 
+/** 后端 createTime 为 ISO 字符串（2026-09-30T19:09:05） */
+const formatTime = (t) => (t ? String(t).replace('T', ' ').slice(0, 19) : '');
+
 const NODE_DESC = {
   10: '等待您寄出机器',
   20: '机器运输中',
@@ -68,6 +71,7 @@ Page({
         'order.inspections': (order.inspections || []).map((it) => ({
           ...it,
           finalPriceText: fen2yuan(it.finalFen),
+          createTimeText: formatTime(it.createTime),
         })),
       });
       this.loadComment();

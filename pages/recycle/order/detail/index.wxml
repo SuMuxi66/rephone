@@ -64,7 +64,7 @@
       <text class="insp-result">{{item.result}}</text>
       <text class="insp-price">¥{{item.finalPriceText}}</text>
     </view>
-    <view class="insp-time">{{item.createTime}}</view>
+    <view class="insp-time">{{item.createTimeText}}</view>
   </view>
 
   <view class="footer">

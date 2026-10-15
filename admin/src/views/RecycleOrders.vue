@@ -29,7 +29,7 @@
           </el-tag>
         </template>
       </el-table-column>
-      <el-table-column prop="createTime" label="创建时间" width="170" />
+      <el-table-column prop="createTime" label="创建时间" width="170" :formatter="fmtTime" />
       <el-table-column label="操作" width="90" fixed="right">
         <template #default="{ row }">
           <el-button link type="primary" @click="openDetail(row)">详情</el-button>
@@ -105,7 +105,7 @@
                 class="insp-thumb"
               />
             </div>
-            <div class="insp-time">{{ item.createTime }}</div>
+            <div class="insp-time">{{ fmtTime(item.createTime) }}</div>
           </el-card>
         </div>
 
@@ -181,6 +181,9 @@ import {
 const statusFilters = { 0: '全部', 10: '待寄出', 20: '运输中', 30: '质检中', 40: '待确认', 50: '已打款', 60: '已完成', 80: '已取消' };
 
 const IMAGE_TYPE_LABELS = { front: '正面', back: '背面', screen: '屏幕', damage: '损坏' };
+
+/** 后端时间为 ISO 字符串（2026-09-30T19:09:05），列表展示到分钟 */
+const fmtTime = (t) => (t ? String(t).replace('T', ' ').slice(0, 16) : '');
 
 const activeStatus = ref(0);
 const orders = ref([]);

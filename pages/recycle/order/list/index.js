@@ -1,6 +1,9 @@
 import { fetchRecycleOrders } from '../../../../services/recycle/order';
 import { STATUS_DESC, fen2yuan } from '../../../../common/recycle-status';
 
+/** 后端 createTime 为 ISO 字符串（2026-09-30T19:09:05） */
+const formatTime = (t) => (t ? String(t).replace('T', ' ').slice(0, 16) : '');
+
 const FILTERS = [
   { label: '全部', status: 0 },
   { label: '待寄出', status: 10 },
@@ -69,6 +72,7 @@ Page({
         ...o,
         priceText: fen2yuan(o.finalFen != null ? o.finalFen : o.quoteFen),
         statusDesc: STATUS_DESC[o.status] || '未知',
+        createTimeText: formatTime(o.createTime),
       }));
       const orders = this.data.orders.concat(items);
       this.setData({

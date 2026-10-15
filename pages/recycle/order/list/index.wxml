@@ -28,7 +28,7 @@
     <view class="sub">{{item.storage}} · {{item.conditionLabel}} · {{item.orderNo}}</view>
     <view class="row bottom">
       <text class="price">¥{{item.priceText}}</text>
-      <text class="time">{{item.createTime}}</text>
+      <text class="time">{{item.createTimeText}}</text>
     </view>
   </view>
 
