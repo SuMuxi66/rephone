@@ -85,7 +85,7 @@
           </template>
         </el-table-column>
         <el-table-column prop="status" label="状态值" width="90" align="center" />
-        <el-table-column prop="createTime" label="创建时间" width="180" />
+        <el-table-column prop="createTime" label="创建时间" width="180" :formatter="fmtTime" />
       </el-table>
       <el-pagination
         class="pager"
@@ -102,6 +102,9 @@
 <script setup>
 import { onMounted, ref } from 'vue';
 import { fen2yuan, fetchFinanceFlows, fetchFinanceSummary, FINANCE_BIZ, FLOW_DIRECTION } from '../api/admin';
+
+/** 后端时间为 ISO 字符串，流水对账保留到秒 */
+const fmtTime = (t) => (t ? String(t).replace('T', ' ').slice(0, 19) : '');
 
 const range = ref(defaultRange());
 const summary = ref({});

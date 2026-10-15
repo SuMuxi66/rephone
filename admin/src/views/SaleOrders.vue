@@ -31,7 +31,7 @@
       <el-table-column label="收件人" width="120">
         <template #default="{ row }">{{ row.receiverName }} {{ row.receiverPhone }}</template>
       </el-table-column>
-      <el-table-column prop="createTime" label="下单时间" width="170" />
+      <el-table-column prop="createTime" label="下单时间" width="170" :formatter="fmtTime" />
       <el-table-column label="操作" width="90" fixed="right">
         <template #default="{ row }">
           <el-button link type="primary" @click="openDetail(row)">详情</el-button>
@@ -104,6 +104,9 @@ import {
   refundSaleOrder,
   shipSaleOrder,
 } from '../api/admin';
+
+/** 后端时间为 ISO 字符串（2026-09-30T19:09:05），列表展示到分钟 */
+const fmtTime = (t) => (t ? String(t).replace('T', ' ').slice(0, 16) : '');
 
 const statusFilter = ref(0);
 const keyword = ref('');
