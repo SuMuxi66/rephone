@@ -3,6 +3,7 @@ package com.rephone.controller;
 import com.rephone.pojo.entity.PaymentOrder;
 import com.rephone.service.PaymentService;
 import com.rephone.service.RepairOrderService;
+import com.rephone.service.SaleOrderService;
 import com.rephone.wechat.WxPayClient;
 import com.rephone.wechat.WxPayProperties;
 import com.rephone.wechat.WxProperties;
@@ -19,7 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 /**
  * 微信支付 V2 回调（匿名入口）：验签 → 商户号/appid/金额比对 → 支付单幂等入账 → 按订单类型分派推进。
  * 协议要求无论处理结果都返回 XML（FAIL 时微信会重试通知）；订单推进 CAS 幂等，重复通知安全。
- * 分派：REPAIR → 维修单 38→30；SALE 预留（出售当前为 mock 内联支付）。
+ * 分派：REPAIR → 维修单 38→30；SALE → 出售单 10→20。
  */
 @RestController
 public class WxPayCallbackController {
@@ -30,13 +31,16 @@ public class WxPayCallbackController {
     private final WxProperties wxProps;
     private final PaymentService paymentService;
     private final RepairOrderService repairOrderService;
+    private final SaleOrderService saleOrderService;
 
     public WxPayCallbackController(WxPayProperties payProps, WxProperties wxProps,
-                                   PaymentService paymentService, RepairOrderService repairOrderService) {
+                                   PaymentService paymentService, RepairOrderService repairOrderService,
+                                   SaleOrderService saleOrderService) {
         this.payProps = payProps;
         this.wxProps = wxProps;
         this.paymentService = paymentService;
         this.repairOrderService = repairOrderService;
+        this.saleOrderService = saleOrderService;
     }
 
     @PostMapping(value = "/api/callback/wxpay", produces = MediaType.TEXT_XML_VALUE)
@@ -87,6 +91,9 @@ public class WxPayCallbackController {
         if (changed && payment.getOrderType() == PaymentService.ORDER_TYPE_REPAIR) {
             // 入账成功才推进订单；重复通知 changed=false 自然跳过
             repairOrderService.markPaid(payment.getOrderNo(), payment.getPayNo());
+        }
+        if (changed && payment.getOrderType() == PaymentService.ORDER_TYPE_SALE) {
+            saleOrderService.markPaid(payment.getOrderNo(), payment.getPayNo());
         }
         return xml(WxPayClient.successXml());
     }

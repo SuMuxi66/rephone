@@ -2,7 +2,7 @@ import {
   fetchSaleOrderDetail,
   cancelSaleOrder,
   confirmSaleOrder,
-  paySaleOrder,
+  requestSalePayment,
   applySaleAfterSale,
 } from '../../../../services/sale/order';
 import { statusDesc } from '../../../../common/sale-status';
@@ -75,7 +75,7 @@ Page({
   onPay() {
     if (this.data.submitting) return;
     this.setData({ submitting: true });
-    paySaleOrder(this.data.orderNo)
+    requestSalePayment(this.data.orderNo)
       .then(() => {
         wx.showToast({ title: '支付成功', icon: 'success' });
         this.fetchDetail();

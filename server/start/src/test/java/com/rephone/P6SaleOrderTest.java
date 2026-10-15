@@ -26,7 +26,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.TestPropertySource;
 
 /**
- * P6 验收：商品上架 → 用户下单（服务端计价+扣库存）→ mock 支付 → 发货 → 收货；
+ * P6 验收：商品上架 → 用户下单（服务端计价+扣库存）→ 统一支付入口（mock 闭环）→ 发货 → 收货；
  * 取消回补库存；售后申请 → 审核退款联动订单置 90；越权守卫。金额断言单位为分。
  */
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -36,7 +36,7 @@ import org.springframework.test.context.TestPropertySource;
         "spring.datasource.username=sa",
         "spring.datasource.password=",
         "spring.sql.init.mode=always",
-        "spring.sql.init.schema-locations=classpath:db/schema-h2.sql,classpath:db/schema-quote.sql,classpath:db/schema-recycle.sql,classpath:db/schema-repair.sql,classpath:db/schema-sale.sql",
+        "spring.sql.init.schema-locations=classpath:db/schema-h2.sql,classpath:db/schema-quote.sql,classpath:db/schema-recycle.sql,classpath:db/schema-repair.sql,classpath:db/schema-sale.sql,classpath:db/schema-payment.sql",
         "rephone.wx.mock-login=true",
         "rephone.jwt.ttl-seconds=3600",
         "rephone.admin.token=test-admin-token",
@@ -132,7 +132,10 @@ class P6SaleOrderTest {
         ResponseEntity<String> pay = rest.exchange("/api/wx/sale/order/" + no2 + "/pay", HttpMethod.POST,
                 new HttpEntity<>(user()), String.class);
         assertEquals(0, objectMapper.readTree(pay.getBody()).get("code").asInt());
-        assertTrue(objectMapper.readTree(pay.getBody()).path("data").path("payNo").asText().startsWith("MOCKPAY-"));
+        JsonNode payBody = objectMapper.readTree(pay.getBody()).path("data");
+        assertTrue(payBody.path("payNo").asText().startsWith("P"), "统一支付入口的支付单号应 P 前缀");
+        assertTrue(payBody.path("mock").asBoolean(), "测试环境（mock 登录）应走 mock 闭环");
+        assertTrue(payBody.path("paid").asBoolean(), "mock 闭环应同步入账推进");
         assertEquals(20, orderDetail(no2, user()).path("status").asInt());
 
         ResponseEntity<String> ship = rest.exchange("/api/admin/sale/order/" + no2 + "/ship",

@@ -15,8 +15,29 @@ export const fetchGoodsInspection = (id) => get(`/api/wx/goods/${id}/inspection`
 /** 创建出售订单（我买到的）：POST /api/wx/sale/order */
 export const createSaleOrder = (payload) => post('/api/wx/sale/order', payload);
 
-/** 支付：POST /api/wx/sale/order/{orderNo}/pay（后端当前为 mock 支付，接真实微信支付后替换） */
+/** 发起支付：POST /api/wx/sale/order/{orderNo}/pay（mock 模式后端直接闭环，真实模式返回 JSAPI 参数） */
 export const paySaleOrder = (orderNo) => post(`/api/wx/sale/order/${orderNo}/pay`);
+
+/** 支付双模式：mock 直接闭环；真实模式调起微信收银台，用户支付成功后 resolve */
+export const requestSalePayment = async (orderNo) => {
+  const res = await paySaleOrder(orderNo);
+  if (res && res.mock) {
+    return res;
+  }
+  await new Promise((resolve, reject) => {
+    wx.requestPayment({
+      appId: res.appId,
+      timeStamp: res.timeStamp,
+      nonceStr: res.nonceStr,
+      package: res.package,
+      signType: res.signType || 'MD5',
+      paySign: res.paySign,
+      success: resolve,
+      fail: (e) => reject(new Error((e && e.errMsg) || '支付未完成')),
+    });
+  });
+  return res;
+};
 
 /** 我的购买订单分页：GET /api/wx/sale/orders */
 export const fetchSaleOrders = (params) => get('/api/wx/sale/orders', params);

@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-/** 出售订单（用户端，需登录）。支付为 mock，真实微信支付 P6 联调替换。 */
+/** 出售订单（用户端，需登录）。支付走统一支付入口：真实模式返回 JSAPI 参数，受控 mock 模式直接闭环。 */
 @RestController
 @RequestMapping("/api/wx/sale")
 public class WxSaleOrderController {
@@ -41,8 +41,8 @@ public class WxSaleOrderController {
     }
 
     @PostMapping("/order/{orderNo}/pay")
-    public R<Map<String, String>> pay(@PathVariable String orderNo) {
-        return R.ok(Map.of("payNo", orderService.pay(orderNo)));
+    public R<Map<String, Object>> pay(@PathVariable String orderNo) {
+        return R.ok(orderService.startPayment(orderNo));
     }
 
     @GetMapping("/orders")

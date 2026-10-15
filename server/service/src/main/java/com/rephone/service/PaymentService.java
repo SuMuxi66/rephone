@@ -81,20 +81,6 @@ public class PaymentService {
         return params;
     }
 
-    /**
-     * 出售订单 mock 支付流水号（既有路径，格式 MOCKPAY-订单号，P6 测试依赖此格式）。
-     * 出售迁移到 payment_order + 回调前继续使用；校验逻辑与 start 同源。
-     */
-    public String mockPayNo(String bizType, String orderNo, long amountFen) {
-        if (!BIZ_SALE.equals(bizType) && !BIZ_REPAIR.equals(bizType)) {
-            throw new BizException(40080, "未知支付业务类型");
-        }
-        if (amountFen <= 0 || amountFen > MAX_AMOUNT_FEN) {
-            throw new BizException(40081, "支付金额无效");
-        }
-        return "MOCKPAY-" + orderNo;
-    }
-
     /** 待支付单校验：订单存在、待支付状态、金额一致（mock 自动闭环与微信回调共用）。 */
     public PaymentOrder requirePendingByPayNo(String payNo) {
         PaymentOrder order = paymentOrderMapper.selectOne(new LambdaQueryWrapper<PaymentOrder>()

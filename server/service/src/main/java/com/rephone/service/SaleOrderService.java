@@ -12,6 +12,7 @@ import com.rephone.pojo.entity.SaleOrder;
 import java.security.SecureRandom;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Set;
 import org.springframework.stereotype.Service;
@@ -19,8 +20,9 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
 /**
- * 出售订单闭环：下单（价格服务端算+CAS 扣库存）→ mock 支付 → 发货 → 确认收货；
- * 取消回补库存；退款（管理端直退或售后审核驱动）置 90。
+ * 出售订单闭环：下单（价格服务端算+CAS 扣库存）→ 统一支付入口支付（真实微信支付等待回调；
+ * 受控 mock 模式服务端模拟回调闭环）→ 发货 → 确认收货；
+ * 取消回补库存并关闭待支付支付单；退款（管理端直退或售后审核驱动）置 90。
  * 状态流转全部 CAS + 写 order_status_log（order_type=20 出售单）。
  */
 @Service
@@ -97,19 +99,47 @@ public class SaleOrderService {
         return order.getOrderNo();
     }
 
-    /** mock 支付：10 → 20。支付走公共 PaymentService（与维修报价支付同源），真实微信支付联调时替换其内部实现。 */
+    /**
+     * 用户发起支付：10 → 20。统一走公共 PaymentService（与维修支付同源）：
+     * 真实模式返回微信 JSAPI 参数（等待回调推进）；受控 mock 模式服务端模拟回调完成闭环。
+     * 未配置微信支付商户凭据时由 WxPayClient 抛出明确错误（fail-closed），不再无凭据放单。
+     */
     @Transactional
-    public String pay(String orderNo) {
+    public Map<String, Object> startPayment(String orderNo) {
         SaleOrder order = getOwned(orderNo);
         if (order.getStatus() != SaleOrder.STATUS_WAIT_PAY) {
             throw new BizException(40036, "订单状态不允许支付（当前：" + desc(order.getStatus()) + "）");
         }
-        String payNo = paymentService.mockPayNo(PaymentService.BIZ_SALE, orderNo, order.getTotalFen());
-        casStatus(order, SaleOrder.STATUS_PAID, 10, order.getUserId(),
-                "支付成功" + fen(order.getTotalFen()) + "元");
-        order.setPayNo(payNo);
-        orderMapper.updateById(order);
-        return payNo;
+        Map<String, Object> result = paymentService.start(PaymentService.ORDER_TYPE_SALE, orderNo,
+                order.getTotalFen(), order.getTenantId(), order.getOpenid());
+        if (Boolean.TRUE.equals(result.get("mock"))) {
+            // mock 闭环：走与微信回调完全相同的入账与状态推进路径
+            paymentService.markPaySuccess(String.valueOf(result.get("payNo")), "MOCKTXN-" + result.get("payNo"));
+            markPaid(orderNo, String.valueOf(result.get("payNo")));
+            result = new LinkedHashMap<>(result);
+            result.put("paid", Boolean.TRUE);
+        }
+        return result;
+    }
+
+    /** 支付成功推进（微信回调驱动，幂等）：10→20 已付款，落 pay_no 与状态日志；回调线程无用户上下文。 */
+    @Transactional
+    public void markPaid(String orderNo, String payNo) {
+        SaleOrder order = requireOrder(orderNo);
+        if (order.getStatus() != SaleOrder.STATUS_WAIT_PAY) {
+            return; // 已推进（重复通知/并发），幂等返回
+        }
+        SaleOrder patch = new SaleOrder();
+        patch.setStatus(SaleOrder.STATUS_PAID);
+        patch.setPayNo(payNo);
+        int updated = orderMapper.update(patch, new LambdaUpdateWrapper<SaleOrder>()
+                .eq(SaleOrder::getId, order.getId())
+                .eq(SaleOrder::getStatus, SaleOrder.STATUS_WAIT_PAY));
+        if (updated == 0) {
+            return;
+        }
+        statusLogService.record(ORDER_TYPE_SALE, orderNo, SaleOrder.STATUS_WAIT_PAY,
+                SaleOrder.STATUS_PAID, 30, null, "微信支付成功" + fen(order.getTotalFen()) + "元");
     }
 
     @Transactional
@@ -122,6 +152,8 @@ public class SaleOrderService {
         casStatus(order, SaleOrder.STATUS_CANCELED, 10, order.getUserId(),
                 StringUtils.hasText(reason) ? reason : "用户取消订单");
         goodsService.restoreStock(order.getGoodsId(), order.getQuantity());
+        // 关闭待支付支付单，防残留 PENDING 被迟到回调入账
+        paymentService.closePending(PaymentService.ORDER_TYPE_SALE, orderNo);
     }
 
     @Transactional
