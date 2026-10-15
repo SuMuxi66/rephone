@@ -1,4 +1,5 @@
-const systemInfo = wx.getSystemInfoSync();
+/** 基础库 2.20+ 拆分接口优先（getSystemInfoSync 官方已弃用），旧基础库回退同步接口 */
+const systemInfo = (wx.getWindowInfo && wx.getWindowInfo()) || wx.getSystemInfoSync();
 Component({
   externalClasses: ['t-class', 't-class-load'],
   properties: {
