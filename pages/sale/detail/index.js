@@ -1,4 +1,5 @@
 import { fetchSaleGoodsDetail, fetchGoodsInspection } from '../../../services/sale/order';
+import { reportEvents, TRACK } from '../../../services/track';
 import { fen2yuan } from '../../../common/recycle-status';
 
 /** 卡片上最多展示的「需说明」检查项条数 */
@@ -22,6 +23,11 @@ Page({
 
   onLoad(options) {
     this.setData({ id: options.id || '' });
+    // 商品浏览埋点（=点击）：id 无效时不上报，避免整包事件被服务端拒绝
+    const goodsId = Number(options.id);
+    if (goodsId > 0) {
+      reportEvents([{ eventType: TRACK.GOODS_VIEW, targetType: 1, targetId: goodsId, page: 'sale-detail' }]);
+    }
   },
 
   onShow() {

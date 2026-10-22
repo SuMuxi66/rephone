@@ -2,6 +2,7 @@ import { fetchBrands } from '../../services/recycle/quote';
 import { fetchModels as fetchRepairModels } from '../../services/repair/repair';
 import { fetchModels as fetchQuoteModels } from '../../services/recycle/quote';
 import { brandColorOf, shortModelName, softTint } from '../../common/brand-visual';
+import { reportEvents, TRACK } from '../../services/track';
 
 /** 机型库按业务取不同接口：维修=全量机型库，回收=受估价基准价过滤的机型 */
 const MODEL_FETCHERS = {
@@ -105,6 +106,13 @@ Page({
     const model = (this.data.models || []).find((m) => m.id === id);
     if (!model) return;
     const brand = (this.data.brands || []).find((b) => b.id === this.data.activeBrandId) || {};
+    // 机型点击埋点：page 带 biz 区分回收/维修漏斗
+    reportEvents([{
+      eventType: TRACK.MODEL_CLICK,
+      targetType: 2,
+      targetId: model.id,
+      page: `model-picker:${this.biz || ''}`,
+    }]);
     wx.setStorageSync(RESULT_KEY, {
       brandId: brand.id,
       brandName: brand.name,

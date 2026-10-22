@@ -1,4 +1,5 @@
 import { fetchSaleGoods, fetchSaleGoodsFilters } from '../../services/sale/order';
+import { reportEvents, TRACK } from '../../services/track';
 import { fen2yuan } from '../../common/recycle-status';
 import { resolveImageUrl } from '../../common/image-url';
 
@@ -148,6 +149,13 @@ Page({
         filterActive: !!((keyword || '').trim() || activeBrand || activeCondition || activeSort !== 'default'),
       });
       this.renderPage(1);
+      // 曝光埋点：本次列表返回的商品集合（接口返回即曝光，近似口径）
+      reportEvents([{
+        eventType: TRACK.GOODS_EXPOSE,
+        targetType: 1,
+        targetIds: goods.map((g) => g.id).slice(0, 50),
+        page: 'sale-list',
+      }]);
     } catch (e) {
       this.setData({ goods: [], visible: [], total: 0, finished: true, loadStatus: 3 });
       wx.showToast({ title: e.message || '加载失败', icon: 'none' });

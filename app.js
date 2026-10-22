@@ -1,5 +1,6 @@
 import updateManager from './common/updateManager';
 import { ensureLogin } from './services/request';
+import { reportEvents, TRACK } from './services/track';
 
 App({
   globalData: {
@@ -8,6 +9,8 @@ App({
 
   onLaunch() {
     this.silentLogin();
+    // 启动埋点（谁在几点打开了小程序）：未登录时请求层会自动登录后重放
+    reportEvents([{ eventType: TRACK.APP_OPEN, page: 'app-launch' }]);
   },
 
   onShow() {
