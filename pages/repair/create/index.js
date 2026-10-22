@@ -287,11 +287,24 @@ Page({
       });
       await this.saveAddressIfNew();
       wx.removeStorageSync('repair.selection');
-      wx.redirectTo({ url: `/pages/repair/order/detail/index?orderNo=${orderNo}` });
+      this.goAfterCreated(`/pages/repair/order/detail/index?orderNo=${orderNo}`);
     } catch (e) {
       wx.showToast({ title: e.message || '提交失败，请稍后重试', icon: 'none' });
     } finally {
       this.setData({ submitting: false });
     }
+  },
+
+  /**
+   * 提交流程已结束，先回维修主页（tab）再进详情，压掉栈里已走完的选机型/报价页，
+   * 保证左上角返回键落在维修主页而不是报价流程。
+   */
+  goAfterCreated(url) {
+    wx.switchTab({
+      url: '/pages/repair/index',
+      complete() {
+        wx.navigateTo({ url });
+      },
+    });
   },
 });

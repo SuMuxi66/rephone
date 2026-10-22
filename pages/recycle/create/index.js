@@ -312,12 +312,25 @@ Page({
         this.showPickupFallback(orderNo, pickupFailReason);
         return;
       }
-      wx.redirectTo({ url: `/pages/recycle/order/detail/index?orderNo=${orderNo}` });
+      this.goAfterCreated(`/pages/recycle/order/detail/index?orderNo=${orderNo}`);
     } catch (e) {
       wx.showToast({ title: e.message || '下单失败，请稍后重试', icon: 'none' });
     } finally {
       this.setData({ submitting: false });
     }
+  },
+
+  /**
+   * 下单流程已结束，先回回收主页（tab）再进目标页，压掉栈里已走完的估价结果页，
+   * 保证左上角返回键落在回收主页而不是估价流程。
+   */
+  goAfterCreated(url) {
+    wx.switchTab({
+      url: '/pages/recycle/estimate/index',
+      complete() {
+        wx.navigateTo({ url });
+      },
+    });
   },
 
   /** 上门取件没约上：必须明确告知并给出去处，不能让用户干等一个不会来的快递员 */
@@ -331,7 +344,7 @@ Page({
         const url = res.confirm
           ? `/pages/recycle/order/detail/index?orderNo=${orderNo}`
           : '/pages/recycle/order/list/index';
-        wx.redirectTo({ url });
+        this.goAfterCreated(url);
       },
     });
   },

@@ -188,11 +188,24 @@ Page({
         remark: form.remark,
       });
       await this.saveAddressIfNew();
-      wx.redirectTo({ url: `/pages/sale/order/detail/index?orderNo=${orderNo}` });
+      this.goAfterCreated(`/pages/sale/order/detail/index?orderNo=${orderNo}`);
     } catch (e) {
       wx.showToast({ title: e.message || '提交失败，请稍后重试', icon: 'none' });
     } finally {
       this.setData({ submitting: false });
     }
+  },
+
+  /**
+   * 下单流程已结束，先回购买主页（tab）再进详情，压掉栈里已走完的商品详情/确认页，
+   * 保证左上角返回键落在购买主页而不是下单流程。
+   */
+  goAfterCreated(url) {
+    wx.switchTab({
+      url: '/pages/sale/index',
+      complete() {
+        wx.navigateTo({ url });
+      },
+    });
   },
 });
