@@ -143,6 +143,10 @@ export const fetchClickSummary = () => http.get('/admin/stats/click/summary');
 export const fetchClickTrend = (days) => http.get('/admin/stats/click/trend', { params: { days } });
 export const fetchClickTop = (params) => http.get('/admin/stats/click/top', { params });
 
+export const fetchUserProfilePage = (params) => http.get('/admin/user-profile/page', { params });
+export const fetchUserProfileDetail = (userId) => http.get(`/admin/user-profile/${userId}/detail`);
+export const generateUserProfileAi = (userId) => http.post(`/admin/user-profile/${userId}/ai-analysis`);
+
 export const FINANCE_BIZ = {
   10: { label: '回收打款', type: 'danger' },
   20: { label: '出售收款', type: 'success' },

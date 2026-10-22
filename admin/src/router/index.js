@@ -96,6 +96,12 @@ const router = createRouter({
           meta: { requiresAdmin: true, permission: 'stats:click' },
           component: () => import('../views/ClickStats.vue'),
         },
+        {
+          path: 'user-profiles',
+          name: 'user-profiles',
+          meta: { requiresAdmin: true, permission: 'profile:read' },
+          component: () => import('../views/UserProfiles.vue'),
+        },
       ],
     },
   ],
