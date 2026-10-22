@@ -2,11 +2,14 @@ package com.rephone.controller;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.rephone.common.result.R;
+import com.rephone.pojo.dto.AiProfileInfo;
 import com.rephone.pojo.dto.UserProfileCard;
 import com.rephone.pojo.dto.UserProfileDetail;
 import com.rephone.service.AdminUserProfileService;
+import com.rephone.service.AiAnalysisService;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -17,9 +20,12 @@ import org.springframework.web.bind.annotation.RestController;
 public class AdminUserProfileController {
 
     private final AdminUserProfileService userProfileService;
+    private final AiAnalysisService aiAnalysisService;
 
-    public AdminUserProfileController(AdminUserProfileService userProfileService) {
+    public AdminUserProfileController(AdminUserProfileService userProfileService,
+                                      AiAnalysisService aiAnalysisService) {
         this.userProfileService = userProfileService;
+        this.aiAnalysisService = aiAnalysisService;
     }
 
     @GetMapping("/page")
@@ -32,5 +38,10 @@ public class AdminUserProfileController {
     @GetMapping("/{userId}/detail")
     public R<UserProfileDetail> detail(@PathVariable Long userId) {
         return R.ok(userProfileService.detail(userId));
+    }
+
+    @PostMapping("/{userId}/ai-analysis")
+    public R<AiProfileInfo> generateAiAnalysis(@PathVariable Long userId) {
+        return R.ok(aiAnalysisService.generate(userId));
     }
 }

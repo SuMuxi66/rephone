@@ -78,6 +78,14 @@ rephone:
   admin:
     token: ${ADMIN_TOKEN:}
     bootstrap-password: ${ADMIN_BOOTSTRAP_PASSWORD:}
+  ai:
+    # AI 用户画像分析：OpenAI 兼容 /chat/completions（GLM/DeepSeek/Kimi 等兼容端点均可）
+    # base-url 填到版本号一级（如 https://open.bigmodel.cn/api/paas/v4），代码自动拼 /chat/completions
+    base-url: ${AI_BASE_URL:}
+    api-key: ${AI_API_KEY:}
+    model: ${AI_MODEL:}
+    # true = 内置规则模板（不调外网，本地/测试用）
+    mock: ${AI_MOCK:false}
 
 logging:
   level:
