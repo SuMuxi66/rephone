@@ -4,29 +4,29 @@
       <el-col :span="6">
         <el-card shadow="never">
           <div class="card-label">今日商品点击</div>
-          <div class="card-value">{{ summary.today.clicks || 0 }}</div>
-          <div class="card-sub">曝光 {{ summary.today.exposes || 0 }} · 启动 {{ summary.today.appOpens || 0 }}</div>
+          <div class="card-value">{{ summary.today?.clicks || 0 }}</div>
+          <div class="card-sub">曝光 {{ summary.today?.exposes || 0 }} · 启动 {{ summary.today?.appOpens || 0 }}</div>
         </el-card>
       </el-col>
       <el-col :span="6">
         <el-card shadow="never">
           <div class="card-label">今日点击率</div>
-          <div class="card-value">{{ pct(summary.today.ctr) }}</div>
+          <div class="card-value">{{ pct(summary.today?.ctr) }}</div>
           <div class="card-sub">点击 / 曝光</div>
         </el-card>
       </el-col>
       <el-col :span="6">
         <el-card shadow="never">
           <div class="card-label">近 7 天点击率</div>
-          <div class="card-value">{{ pct(summary.last7.ctr) }}</div>
-          <div class="card-sub">点击 {{ summary.last7.clicks || 0 }} / 曝光 {{ summary.last7.exposes || 0 }}</div>
+          <div class="card-value">{{ pct(summary.last7?.ctr) }}</div>
+          <div class="card-sub">点击 {{ summary.last7?.clicks || 0 }} / 曝光 {{ summary.last7?.exposes || 0 }}</div>
         </el-card>
       </el-col>
       <el-col :span="6">
         <el-card shadow="never">
           <div class="card-label">近 30 天启动</div>
-          <div class="card-value">{{ summary.last30.appOpens || 0 }}</div>
-          <div class="card-sub">曝光 {{ summary.last30.exposes || 0 }} · 点击 {{ summary.last30.clicks || 0 }}</div>
+          <div class="card-value">{{ summary.last30?.appOpens || 0 }}</div>
+          <div class="card-sub">曝光 {{ summary.last30?.exposes || 0 }} · 点击 {{ summary.last30?.clicks || 0 }}</div>
         </el-card>
       </el-col>
     </el-row>
