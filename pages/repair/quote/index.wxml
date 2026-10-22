@@ -20,15 +20,15 @@
         <view class="service-name">上门维修</view>
         <view class="service-desc">工程师按预约时间上门，现场维修</view>
       </view>
-      <t-tag theme="primary" variant="light" size="small">已选</t-tag>
+      <t-tag theme="primary" variant="light" size="small">默认</t-tag>
     </view>
-    <view class="service-row disabled">
+    <view class="service-row">
       <t-icon name="swap" size="40rpx" />
       <view class="service-info">
         <view class="service-name">寄修服务</view>
-        <view class="service-desc">双向包邮，维修全程直播</view>
+        <view class="service-desc">自行寄出，修好回寄，双向物流可追踪</view>
       </view>
-      <t-tag theme="default" variant="light" size="small">即将上线</t-tag>
+      <t-tag theme="default" variant="light" size="small">下单时可选</t-tag>
     </view>
   </section-card>
 
