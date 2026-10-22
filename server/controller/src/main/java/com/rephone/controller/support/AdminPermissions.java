@@ -23,6 +23,8 @@ public final class AdminPermissions {
     public static final String FINANCE_READ = "finance:read";
     public static final String DASHBOARD_READ = "dashboard:read";
     public static final String COMMENT_MANAGE = "comment:manage";
+    public static final String STATS_CLICK = "stats:click";
+    public static final String PROFILE_READ = "profile:read";
 
     private record Rule(boolean exact, String prefix, String permission) {
     }
@@ -49,7 +51,9 @@ public final class AdminPermissions {
             new Rule(true, "/api/admin/role", ROLE_MANAGE),
             new Rule(true, "/api/admin/finance", FINANCE_READ),
             new Rule(true, "/api/admin/dashboard", DASHBOARD_READ),
-            new Rule(true, "/api/admin/comment", COMMENT_MANAGE));
+            new Rule(true, "/api/admin/comment", COMMENT_MANAGE),
+            new Rule(true, "/api/admin/stats", STATS_CLICK),
+            new Rule(true, "/api/admin/user-profile", PROFILE_READ));
 
     private AdminPermissions() {
     }
@@ -78,6 +82,7 @@ public final class AdminPermissions {
     /** 全部权限点（角色管理页矩阵展示顺序）。 */
     public static List<String> all() {
         return List.of(RECYCLE_MANAGE, REPAIR_MANAGE, SALE_MANAGE, GOODS_MANAGE, ADDRESS_MANAGE,
-                ACCOUNT_MANAGE, TENANT_MANAGE, ROLE_MANAGE, FINANCE_READ, DASHBOARD_READ, COMMENT_MANAGE);
+                ACCOUNT_MANAGE, TENANT_MANAGE, ROLE_MANAGE, FINANCE_READ, DASHBOARD_READ, COMMENT_MANAGE,
+                STATS_CLICK, PROFILE_READ);
     }
 }
