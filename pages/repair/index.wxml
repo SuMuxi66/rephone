@@ -9,10 +9,9 @@
     <text>上门快修</text>
   </view>
 
-  <!-- 品牌与机型都从机型库页面选择（品牌 + 机型一次选完） -->
+  <!-- 品牌 + 机型在机型库二级页一次选完，这里只留一个入口 -->
   <t-cell-group theme="card">
-    <t-cell title="品牌" arrow hover note="{{form.brandName || '请选择品牌'}}" bindtap="openModelPicker" />
-    <t-cell title="机型" arrow hover note="{{form.modelName || '从机型库选择'}}" bindtap="openModelPicker" />
+    <t-cell title="机型" arrow hover note="{{form.modelName ? form.brandName + ' ' + form.modelName : '请选择机型'}}" bindtap="openModelPicker" />
   </t-cell-group>
 
   <view wx:if="{{itemsLoading}}" class="state">
@@ -73,6 +72,6 @@
         <text>180天质保</text>
       </view>
     </view>
-    <view class="empty-guide">从机型库选择品牌和机型，查看专属维修价</view>
+    <view class="empty-guide">选择机型，查看专属维修价</view>
   </view>
 </view>
