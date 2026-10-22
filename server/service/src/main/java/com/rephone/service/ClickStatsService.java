@@ -136,10 +136,13 @@ public class ClickStatsService {
         for (Map<String, Object> row : saleOrderMapper.selectMaps(orderWrapper)) {
             orders.put(Long.parseLong(String.valueOf(row.get("tid"))), num(row.get("cnt")));
         }
-        Map<Long, Goods> goodsMap = goodsMapper.selectBatchIds(mergeKeys(exposes, clicks)).stream()
-                .collect(java.util.stream.Collectors.toMap(Goods::getId, g -> g, (a, b) -> a));
+        // 空数据时不得调 selectBatchIds（空集合生成非法 IN () SQL）
+        List<Long> goodsIds = mergeKeys(exposes, clicks);
+        Map<Long, Goods> goodsMap = goodsIds.isEmpty() ? Map.of()
+                : goodsMapper.selectBatchIds(goodsIds).stream()
+                        .collect(java.util.stream.Collectors.toMap(Goods::getId, g -> g, (a, b) -> a));
         List<ClickTopItem> items = new ArrayList<>();
-        for (Long id : mergeKeys(exposes, clicks)) {
+        for (Long id : goodsIds) {
             long click = clicks.getOrDefault(id, 0L);
             long expose = exposes.getOrDefault(id, 0L);
             Goods goods = goodsMap.get(id);
@@ -161,8 +164,10 @@ public class ClickStatsService {
                 ids.add(key);
             }
         }
-        Map<Long, PhoneModel> modelMap = phoneModelMapper.selectBatchIds(ids).stream()
-                .collect(java.util.stream.Collectors.toMap(PhoneModel::getId, m -> m, (a, b) -> a));
+        // 空数据时不得调 selectBatchIds（空集合生成非法 IN () SQL）
+        Map<Long, PhoneModel> modelMap = ids.isEmpty() ? Map.of()
+                : phoneModelMapper.selectBatchIds(ids).stream()
+                        .collect(java.util.stream.Collectors.toMap(PhoneModel::getId, m -> m, (a, b) -> a));
         List<ClickModelTopItem> items = new ArrayList<>();
         for (Long id : ids) {
             PhoneModel model = modelMap.get(id);
