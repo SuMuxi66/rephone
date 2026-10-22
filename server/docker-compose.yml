@@ -97,6 +97,11 @@ services:
       COS_BUCKET: ${COS_BUCKET:-}
       COS_REGION: ${COS_REGION:-ap-guangzhou}
       COS_MOCK: ${COS_MOCK:-false}
+      # AI 用户画像分析：OpenAI 兼容端点，留空时画像页生成按钮返回未配置提示
+      AI_BASE_URL: ${AI_BASE_URL:-}
+      AI_API_KEY: ${AI_API_KEY:-}
+      AI_MODEL: ${AI_MODEL:-}
+      AI_MOCK: ${AI_MOCK:-false}
     depends_on:
       mysql:
         condition: service_healthy
