@@ -90,6 +90,12 @@ const router = createRouter({
           meta: { requiresAdmin: true, permission: 'comment:manage' },
           component: () => import('../views/Comment.vue'),
         },
+        {
+          path: 'click-stats',
+          name: 'click-stats',
+          meta: { requiresAdmin: true, permission: 'stats:click' },
+          component: () => import('../views/ClickStats.vue'),
+        },
       ],
     },
   ],

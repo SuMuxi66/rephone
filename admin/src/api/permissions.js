@@ -13,6 +13,7 @@ export const PERMISSIONS = [
   { code: 'finance:read', label: '财务对账' },
   { code: 'dashboard:read', label: '数据看板' },
   { code: 'comment:manage', label: '评价管理' },
+  { code: 'stats:click', label: '点击统计' },
 ];
 
 /** 角色编码 → 展示名（含内置与可能的普通用户角色）。 */

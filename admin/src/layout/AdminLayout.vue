@@ -39,7 +39,7 @@ import { computed } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import {
   Box, Tools, UserFilled, Iphone, Location, Sell, ChatDotRound, ChatLineSquare, GoodsFilled,
-  DataBoard, OfficeBuilding, Key, Money,
+  DataBoard, OfficeBuilding, Key, Money, Pointer,
 } from '@element-plus/icons-vue';
 import { getProfile, clearSession } from '../api/http';
 import { hasPermission, roleLabel } from '../api/permissions';
@@ -62,6 +62,7 @@ const MENU = [
   { index: '/accounts', label: '账号管理', icon: UserFilled, permission: 'account:manage' },
   { index: '/addresses', label: '地址管理', icon: Location, permission: 'address:manage' },
   { index: '/comments', label: '评价管理', icon: ChatLineSquare, permission: 'comment:manage' },
+  { index: '/click-stats', label: '点击统计', icon: Pointer, permission: 'stats:click' },
 ];
 
 const visibleMenu = computed(() => MENU.filter((item) => hasPermission(item.permission)));
