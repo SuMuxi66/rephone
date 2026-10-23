@@ -338,7 +338,7 @@ Page({
     wx.showModal({
       title: '上门取件未能预约',
       content: reason,
-      confirmText: '去自助寄出',
+      confirmText: '自助寄出',
       cancelText: '稍后处理',
       success: (res) => {
         const url = res.confirm
