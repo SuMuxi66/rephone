@@ -33,7 +33,7 @@
   <t-cell-group theme="card">
     <t-cell title="机型" note="{{order.brandName}} {{order.modelName}}" />
     <t-cell title="配置" note="{{order.storage}} · {{order.conditionLabel}}" />
-    <t-cell title="功能问题" note="{{order.issues.length ? order.issues : '无'}}" />
+    <t-cell title="功能问题" note="{{issuesText || '无'}}" />
     <t-cell title="取件人" note="{{order.pickupName}} {{order.pickupPhone}}" />
     <t-cell title="取件地址" note="{{order.pickupAddress}}" />
     <t-cell wx:if="{{order.expressNo}}" title="运单号" arrow hover

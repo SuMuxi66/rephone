@@ -1,3 +1,5 @@
+import { fen2yuan } from '../../../common/recycle-status';
+
 Page({
   data: {
     quote: null,
@@ -13,7 +15,9 @@ Page({
     }
     this.setData({
       quote,
-      priceText: (quote.priceFen / 100).toFixed(2),
+      priceText: fen2yuan(quote.priceFen),
+      // t-cell note 只收字符串：功能问题标签数组在此拼接，避免组件类型告警
+      issueLabelsText: (quote.issueLabels || []).join('、'),
     });
   },
 

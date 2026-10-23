@@ -67,6 +67,8 @@ Page({
         loading: false,
         quoteText: fen2yuan(order.quoteFen),
         finalText: fen2yuan(order.finalFen),
+        // t-cell note 只收字符串：功能问题数组在此拼接，避免组件类型告警刷屏
+        issuesText: (order.issues || []).join('、'),
         timeline: this.buildTimeline(order.status),
         'order.inspections': (order.inspections || []).map((it) => ({
           ...it,
