@@ -1,78 +1,24 @@
 <view class="page recycle-page">
-  <view wx:if="{{loading}}" class="state">
-    <t-loading theme="circular" size="40rpx" text="加载中..." inherit-color />
+  <view class="steps-wrap">
+    <t-steps current="{{stepCurrent}}" theme="default">
+      <t-step-item title="选机型" />
+      <t-step-item title="描述成色" />
+      <t-step-item title="获取报价" />
+    </t-steps>
   </view>
 
-  <view wx:elif="{{loadError}}" class="state">
-    <text class="state-text">{{loadError}}</text>
-    <t-button theme="primary" size="small" bindtap="onRetry">重试</t-button>
-  </view>
+  <!-- ① 机型：机型库二级页一次选完品牌与机型（与维修页同款入口） -->
+  <t-cell-group theme="card">
+    <t-cell title="机型" arrow hover note="{{form.modelName ? form.brandName + ' ' + form.modelName : '请选择机型'}}" bindtap="openModelPicker" />
+  </t-cell-group>
 
-  <block wx:else>
-    <view class="steps-wrap">
-      <t-steps current="{{stepCurrent}}" theme="default">
-        <t-step-item title="选机型" />
-        <t-step-item title="描述成色" />
-        <t-step-item title="获取报价" />
-      </t-steps>
+  <!-- ② 内存：选完机型才出现 -->
+  <view wx:if="{{form.modelId}}" id="sec-storage" class="q-card">
+    <view class="q-head">
+      <text class="q-no">1</text>
+      <text class="q-title">选择内存</text>
+      <text wx:if="{{form.storage}}" class="q-picked">{{form.storage}}</text>
     </view>
-
-    <!-- ① 品牌：答完才出现机型 -->
-    <view class="q-card">
-      <view class="q-head">
-        <text class="q-no">1</text>
-        <text class="q-title">选择品牌</text>
-        <text wx:if="{{form.brandName}}" class="q-picked">{{form.brandName}}</text>
-      </view>
-      <view class="brand-grid">
-        <view
-          wx:for="{{brands}}"
-          wx:key="id"
-          class="opt-card {{form.brandId === item.id ? 'active' : ''}}"
-          data-id="{{item.id}}"
-          bindtap="onBrandTap"
-        >
-          <image wx:if="{{item.logo}}" class="opt-logo" src="{{item.logo}}" mode="aspectFit" lazy-load />
-          <view wx:else class="opt-logo opt-logo--ph">{{item.initial}}</view>
-          <view class="opt-name">{{item.name}}</view>
-        </view>
-      </view>
-    </view>
-
-    <!-- ② 机型：选完品牌才出现 -->
-    <view wx:if="{{form.brandId}}" id="sec-model" class="q-card">
-      <view class="q-head">
-        <text class="q-no">2</text>
-        <text class="q-title">选择机型</text>
-        <text wx:if="{{form.modelName}}" class="q-picked">{{form.modelName}}</text>
-      </view>
-      <view class="model-grid">
-        <view
-          wx:for="{{models}}"
-          wx:key="id"
-          class="model-item {{form.modelId === item.id ? 'active' : ''}}"
-          data-id="{{item.id}}"
-          bindtap="onModelTap"
-        >
-          <image wx:if="{{item.image}}" src="{{item.image}}" mode="aspectFit" class="model-img" lazy-load />
-          <view wx:else class="model-ph">
-            <view class="model-ph-body">
-              <view class="model-ph-camera"></view>
-            </view>
-          </view>
-          <view class="model-item-name">{{item.name}}</view>
-        </view>
-      </view>
-      <view wx:if="{{!models.length}}" class="model-empty">该品牌暂无可估价机型，请更换品牌</view>
-    </view>
-
-    <!-- ③ 内存：选完机型才出现 -->
-    <view wx:if="{{form.modelId}}" id="sec-storage" class="q-card">
-      <view class="q-head">
-        <text class="q-no">3</text>
-        <text class="q-title">选择内存</text>
-        <text wx:if="{{form.storage}}" class="q-picked">{{form.storage}}</text>
-      </view>
       <view class="chip-row">
         <view
           wx:for="{{storages}}"
@@ -84,10 +30,10 @@
       </view>
     </view>
 
-    <!-- ④ 成色：选完内存才出现 -->
+    <!-- ③ 成色：选完内存才出现 -->
     <view wx:if="{{form.storage}}" id="sec-condition" class="q-card">
       <view class="q-head">
-        <text class="q-no">4</text>
+        <text class="q-no">2</text>
         <text class="q-title">成色</text>
         <text wx:if="{{form.condition}}" class="q-picked">{{form.conditionLabel}}</text>
       </view>
@@ -105,10 +51,10 @@
       </view>
     </view>
 
-    <!-- ⑤ 屏幕状态：选完成色才出现 -->
+    <!-- ④ 屏幕状态：选完成色才出现 -->
     <view wx:if="{{form.condition}}" id="sec-screen" class="q-card">
       <view class="q-head">
-        <text class="q-no">5</text>
+        <text class="q-no">3</text>
         <text class="q-title">屏幕状态</text>
         <text wx:if="{{form.screen}}" class="q-picked">{{form.screenLabel}}</text>
       </view>
@@ -126,10 +72,10 @@
       </view>
     </view>
 
-    <!-- ⑥ 功能问题：选完屏幕才出现，可多选 -->
+    <!-- ⑤ 功能问题：选完屏幕才出现，可多选 -->
     <view wx:if="{{form.screen}}" id="sec-issues" class="q-card">
       <view class="q-head">
-        <text class="q-no">6</text>
+        <text class="q-no">4</text>
         <text class="q-title">功能问题</text>
         <text class="q-tip">可多选，选得越准报价越准</text>
       </view>
@@ -154,5 +100,4 @@
       </t-button>
       <view class="footer-tip">预估价仅供参考，最终回收价以质检结果为准</view>
     </view>
-  </block>
 </view>

@@ -118,6 +118,8 @@ Page({
       brandName: brand.name,
       modelId: model.id,
       modelName: model.name,
+      // 回收估价需要该机型的可选项（无内存基准价的机型不在回收机型库内）
+      storages: model.storages || [],
     });
     wx.navigateBack();
   },

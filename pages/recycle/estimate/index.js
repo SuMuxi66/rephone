@@ -1,4 +1,8 @@
-import { fetchBrands, fetchModels, calculateQuote } from '../../../services/recycle/quote';
+import { calculateQuote } from '../../../services/recycle/quote';
+
+/** 机型库选择结果 / 当前选中（与维修页共用同一机型库二级页） */
+const RESULT_KEY = 'modelPicker.result';
+const CURRENT_KEY = 'modelPicker.current';
 
 // 成色/故障选项前端固定展示，后端按 quote_rule 校验（P5 后台可改为接口下发）
 const CONDITION_OPTIONS = [
@@ -80,11 +84,7 @@ const EMPTY_FORM = {
 
 Page({
   data: {
-    loading: true,
     submitting: false,
-    loadError: '',
-    brands: [],
-    models: [],
     storages: [],
     form: EMPTY_FORM,
     conditions: CONDITION_OPTIONS,
@@ -96,85 +96,37 @@ Page({
     stepCurrent: 0,
   },
 
-  onLoad() {
-    this.init();
-  },
-
   onShow() {
     if (typeof this.getTabBar === 'function' && this.getTabBar()) {
       this.getTabBar().init();
     }
-    const prefill = wx.getStorageSync('recycle.prefillBrandId');
-    if (prefill) {
-      wx.removeStorageSync('recycle.prefillBrandId');
-      this._prefillBrandId = prefill;
-      this.applyPrefill();
-    }
+    this.applyPickerResult();
   },
 
-  async init() {
-    try {
-      const brands = await fetchBrands();
-      // 卡片无 logo 时用品牌首字占位（WXML 不便做字符串截取，进页算好）
-      const decorated = (brands || []).map((b) => Object.assign({}, b, { initial: (b.name || '')[0] }));
-      this.setData({ brands: decorated, loading: false });
-      this.applyPrefill();
-    } catch (e) {
-      this.setData({ loading: false, loadError: e.message || '加载失败' });
-    }
-  },
-
-  /** 首页热门机型入口带来的品牌预选 */
-  applyPrefill() {
-    const brandId = this._prefillBrandId;
-    if (!brandId || !this.data.brands.length || this.data.form.brandId) {
-      return;
-    }
-    const brand = this.data.brands.find((b) => b.id === brandId);
-    if (brand) {
-      this.selectBrand(brand);
-    }
-  },
-
-  onRetry() {
-    this.setData({ loading: true, loadError: '' });
-    this.init();
-  },
-
-  async selectBrand(brand) {
-    this.setData({
-      'form.brandId': brand.id,
-      'form.brandName': brand.name,
-      'form.modelId': null,
-      'form.modelName': '',
-      'form.storage': '',
-      models: [],
-      storages: [],
-      stepCurrent: 0,
+  /** 打开机型库页面（品牌 + 机型一次选完）；首页热门品牌预选经 prefillBrandId 透传为当前品牌 */
+  openModelPicker() {
+    wx.setStorageSync(CURRENT_KEY, {
+      brandId: this.data.form.brandId || wx.getStorageSync('recycle.prefillBrandId') || null,
+      modelId: this.data.form.modelId || null,
     });
-    try {
-      const models = await fetchModels(brand.id);
-      this.setData({ models });
-      this.scrollToSection('#sec-model');
-    } catch (err) {
-      wx.showToast({ title: err.message || '机型加载失败', icon: 'none' });
-    }
+    wx.removeStorageSync('recycle.prefillBrandId');
+    wx.navigateTo({ url: '/pages/model-picker/index?biz=recycle' });
   },
 
-  onBrandTap(e) {
-    const brand = this.data.brands.find((b) => b.id === e.currentTarget.dataset.id);
-    if (!brand || brand.id === this.data.form.brandId) return;
-    this.selectBrand(brand);
-  },
-
-  onModelTap(e) {
-    const model = this.data.models.find((m) => m.id === e.currentTarget.dataset.id);
-    if (!model || model.id === this.data.form.modelId) return;
+  /** 机型库返回：品牌与机型一起带回（storages 随机型带回）；机型有变才清内存并滚动到下一步 */
+  applyPickerResult() {
+    const result = wx.getStorageSync(RESULT_KEY);
+    if (!result || !result.modelId) return;
+    wx.removeStorageSync(RESULT_KEY);
+    const changed = result.modelId !== this.data.form.modelId;
+    if (!changed) return;
     this.setData({
-      'form.modelId': model.id,
-      'form.modelName': model.name,
+      'form.brandId': result.brandId,
+      'form.brandName': result.brandName,
+      'form.modelId': result.modelId,
+      'form.modelName': result.modelName,
+      storages: result.storages || [],
       'form.storage': '',
-      storages: model.storages || [],
     });
     this.updateStep();
     this.scrollToSection('#sec-storage');
