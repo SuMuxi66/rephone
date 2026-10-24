@@ -4,6 +4,11 @@ server:
 spring:
   application:
     name: rephone-server
+  servlet:
+    multipart:
+      # 默认 1MB 会让上传端点的 2MB 业务校验永远够不着（超限先被这里拒掉），显式放宽到 5MB
+      max-file-size: 5MB
+      max-request-size: 6MB
   config:
     # 本地密钥：.env 已被 gitignore，Spring Boot 直接把它当属性源读，无需额外依赖。
     # 三个候选路径分别覆盖 cwd = server/、server/start（mvnw test 的 cwd）、仓库根。

@@ -28,6 +28,11 @@ public class CosSignService {
     /** 业务目录白名单：对象 key 首段只允许这几个前缀，默认回收目录（兼容既有调用方）。 */
     private static final Set<String> DIRS = Set.of("recycle", "repair", "comment", "avatar");
 
+    /** 目录白名单判断（本地上传兜底端点与签名端点共用同一口径）。 */
+    public static boolean allowedDir(String dir) {
+        return DIRS.contains(dir);
+    }
+
     public CosUploadSign signPutObject(String ext) {
         return signPutObject(ext, "recycle");
     }
@@ -59,7 +64,9 @@ public class CosSignService {
 
     /** GET 预签名 URL（图片回显，30 分钟有效）。mock/未配密钥或 key 不合法时原样返回。 */
     public String signGetObject(String key) {
-        if (!StringUtils.hasText(key) || key.contains("..") || !key.matches("[A-Za-z0-9/_.\\-]{1,256}")) {
+        // 本地存储兜底的路径（/img/** 静态资源，见 WebResourceConfig）不是 COS key，直接原样返回
+        if (!StringUtils.hasText(key) || key.startsWith("/img/") || key.startsWith("img/")
+                || key.contains("..") || !key.matches("[A-Za-z0-9/_.\\-]{1,256}")) {
             return key;
         }
         if (props.isMock() || !StringUtils.hasText(props.getSecretId()) || !StringUtils.hasText(props.getSecretKey())) {

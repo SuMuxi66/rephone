@@ -6,17 +6,24 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Map;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
+import org.springframework.core.io.ByteArrayResource;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.context.TestPropertySource;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
 
 /**
  * P1 验收标准自动化（AI_PLAN §4 P1）：
@@ -126,5 +133,49 @@ class P1AuthFlowTest {
         ResponseEntity<String> cleared = rest.exchange("/api/wx/user/profile", HttpMethod.GET,
                 new HttpEntity<>(headers), String.class);
         assertEquals("", objectMapper.readTree(cleared.getBody()).path("data").path("avatarUrl").asText());
+    }
+
+    @Test
+    void localUploadFallbackStoresFileAndEchoesAsAvatar() throws Exception {
+        String token = objectMapper.readTree(rest.postForEntity("/api/wx/login",
+                Map.of("code", "it-code-local-avatar"), String.class).getBody())
+                .path("data").path("token").asText();
+        HttpHeaders uploadHeaders = new HttpHeaders();
+        uploadHeaders.setBearerAuth(token);
+        uploadHeaders.setContentType(MediaType.MULTIPART_FORM_DATA);
+
+        byte[] png = new byte[]{(byte) 0x89, 'P', 'N', 'G', '\r', '\n', 0x1a, '\n', 0, 0, 0, 0};
+        MultiValueMap<String, Object> parts = new LinkedMultiValueMap<>();
+        parts.add("file", new ByteArrayResource(png) {
+            @Override
+            public String getFilename() {
+                return "a.png";
+            }
+        });
+        ResponseEntity<String> upload = rest.exchange("/api/wx/upload/image?dir=avatar", HttpMethod.POST,
+                new HttpEntity<>(parts, uploadHeaders), String.class);
+        assertEquals(0, objectMapper.readTree(upload.getBody()).get("code").asInt());
+        String url = objectMapper.readTree(upload.getBody()).path("data").path("url").asText();
+        assertTrue(url.matches("/img/avatar/\\d+_\\d+\\.png"), "本地兜底应返回 /img/** 访问路径: " + url);
+
+        // 存为头像后 profile 原样回显（/img/** 静态路径不是 COS key，不得被签名改写）
+        HttpHeaders authHeaders = new HttpHeaders();
+        authHeaders.setBearerAuth(token);
+        rest.exchange("/api/wx/user/profile", HttpMethod.PUT,
+                new HttpEntity<>(Map.of("avatarUrl", url), authHeaders), String.class);
+        ResponseEntity<String> profile = rest.exchange("/api/wx/user/profile", HttpMethod.GET,
+                new HttpEntity<>(authHeaders), String.class);
+        assertEquals(url, objectMapper.readTree(profile.getBody()).path("data").path("avatarUrl").asText());
+
+        // 非白名单目录回落 avatar
+        ResponseEntity<String> evilDir = rest.exchange("/api/wx/upload/image?dir=../evil", HttpMethod.POST,
+                new HttpEntity<>(parts, uploadHeaders), String.class);
+        assertEquals(0, objectMapper.readTree(evilDir.getBody()).get("code").asInt());
+        String evilUrl = objectMapper.readTree(evilDir.getBody()).path("data").path("url").asText();
+        assertTrue(evilUrl.startsWith("/img/avatar/"), "非法目录应回落 avatar: " + evilUrl);
+
+        // 清理写入的测试文件（测试 CWD=server/start，勿留未跟踪产物）
+        Files.deleteIfExists(Paths.get("data", "img", "avatar", url.substring(url.lastIndexOf('/') + 1)));
+        Files.deleteIfExists(Paths.get("data", "img", "avatar", evilUrl.substring(evilUrl.lastIndexOf('/') + 1)));
     }
 }

@@ -27,3 +27,6 @@ server/data/
 .playwright-mcp/
 .zcode-tmp/
 plugins/
+
+# 测试运行时本地兜底上传产物（CWD=server/start）
+server/start/data/
