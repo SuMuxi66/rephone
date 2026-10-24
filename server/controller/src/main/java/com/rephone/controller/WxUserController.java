@@ -6,6 +6,7 @@ import com.rephone.common.result.R;
 import com.rephone.pojo.dto.UserProfileResponse;
 import com.rephone.pojo.dto.UserProfileUpdateRequest;
 import com.rephone.pojo.entity.User;
+import com.rephone.service.CosSignService;
 import com.rephone.service.UserService;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -19,9 +20,11 @@ import org.springframework.web.bind.annotation.RestController;
 public class WxUserController {
 
     private final UserService userService;
+    private final CosSignService cosSignService;
 
-    public WxUserController(UserService userService) {
+    public WxUserController(UserService userService, CosSignService cosSignService) {
         this.userService = userService;
+        this.cosSignService = cosSignService;
     }
 
     @GetMapping("/profile")
@@ -31,8 +34,7 @@ public class WxUserController {
         if (user == null) {
             throw new BizException(40401, "用户不存在");
         }
-        return R.ok(new UserProfileResponse(user.getId(), user.getNickname(), user.getAvatarUrl(),
-                user.getGender(), user.getPhone(), user.getTenantId()));
+        return ok(user);
     }
 
     @PutMapping("/profile")
@@ -43,7 +45,13 @@ public class WxUserController {
         Long userId = UserContextHolder.require().userId();
         User user = userService.updateProfile(userId, request.nickname(), request.gender(),
                 request.avatarUrl(), request.phoneNumber());
-        return R.ok(new UserProfileResponse(user.getId(), user.getNickname(), user.getAvatarUrl(),
+        return ok(user);
+    }
+
+    /** avatarUrl 以 COS key 存储，返回前签 GET 预签名 URL 供前端直接回显（mock/空值原样返回）。 */
+    private R<UserProfileResponse> ok(User user) {
+        return R.ok(new UserProfileResponse(user.getId(), user.getNickname(),
+                cosSignService.signGetObject(user.getAvatarUrl()),
                 user.getGender(), user.getPhone(), user.getTenantId()));
     }
 }

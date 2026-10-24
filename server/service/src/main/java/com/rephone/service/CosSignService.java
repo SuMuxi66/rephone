@@ -26,7 +26,7 @@ public class CosSignService {
     private com.rephone.service.CosProperties props;
 
     /** 业务目录白名单：对象 key 首段只允许这几个前缀，默认回收目录（兼容既有调用方）。 */
-    private static final Set<String> DIRS = Set.of("recycle", "repair", "comment");
+    private static final Set<String> DIRS = Set.of("recycle", "repair", "comment", "avatar");
 
     public CosUploadSign signPutObject(String ext) {
         return signPutObject(ext, "recycle");

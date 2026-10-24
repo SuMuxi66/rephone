@@ -93,4 +93,38 @@ class P1AuthFlowTest {
         Integer countAfter = jdbcTemplate.queryForObject("select count(*) from `user`", Integer.class);
         assertEquals(countBefore, countAfter, "同一 code 重复登录不应新增用户");
     }
+
+    @Test
+    void avatarUpdateValidatesKeyAndEchoesInProfile() throws Exception {
+        String token = objectMapper.readTree(rest.postForEntity("/api/wx/login",
+                Map.of("code", "it-code-avatar"), String.class).getBody())
+                .path("data").path("token").asText();
+        HttpHeaders headers = new HttpHeaders();
+        headers.setBearerAuth(token);
+
+        // 1. 非法 key（目录穿越/非 COS key 形态）→ 40039
+        ResponseEntity<String> evil = rest.exchange("/api/wx/user/profile", HttpMethod.PUT,
+                new HttpEntity<>(Map.of("avatarUrl", "avatar/../../evil.jpg"), headers), String.class);
+        assertEquals(40039, objectMapper.readTree(evil.getBody()).get("code").asInt());
+
+        // 2. 合法 key 保存后，profile 返回原样回显（测试环境无 COS 密钥，signGetObject 原样返回）
+        ResponseEntity<String> saved = rest.exchange("/api/wx/user/profile", HttpMethod.PUT,
+                new HttpEntity<>(Map.of("avatarUrl", "avatar/2026-10-24/abc123.jpg"), headers), String.class);
+        assertEquals(0, objectMapper.readTree(saved.getBody()).get("code").asInt());
+        ResponseEntity<String> profile = rest.exchange("/api/wx/user/profile", HttpMethod.GET,
+                new HttpEntity<>(headers), String.class);
+        JsonNode data = objectMapper.readTree(profile.getBody()).path("data");
+        assertEquals("avatar/2026-10-24/abc123.jpg", data.path("avatarUrl").asText());
+        // phone 字段语义不应被头像更新污染（null/空或 11 位手机号，绝不能混入签名 URL）
+        String phone = data.path("phone").asText("");
+        assertTrue(phone.isEmpty() || phone.matches("1\\d{10}"),
+                "phone 字段语义不应被头像更新污染");
+
+        // 3. 空串=清空头像
+        rest.exchange("/api/wx/user/profile", HttpMethod.PUT,
+                new HttpEntity<>(Map.of("avatarUrl", ""), headers), String.class);
+        ResponseEntity<String> cleared = rest.exchange("/api/wx/user/profile", HttpMethod.GET,
+                new HttpEntity<>(headers), String.class);
+        assertEquals("", objectMapper.readTree(cleared.getBody()).path("data").path("avatarUrl").asText());
+    }
 }

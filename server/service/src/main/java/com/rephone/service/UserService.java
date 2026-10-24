@@ -76,7 +76,19 @@ public class UserService {
             user.setGender(gender);
         }
         if (avatarUrl != null) {
-            user.setAvatarUrl(avatarUrl);
+            // 空串=清空头像；非空必须是 COS 对象 key（ImageKeys 统一口径），防止任意串入库
+            String trimmedAvatar = avatarUrl.trim();
+            if (trimmedAvatar.isEmpty()) {
+                user.setAvatarUrl("");
+                userMapper.update(null, new LambdaUpdateWrapper<User>()
+                        .eq(User::getId, userId)
+                        .set(User::getAvatarUrl, ""));
+            } else {
+                if (!ImageKeys.isValidKey(trimmedAvatar)) {
+                    throw new BizException(40039, "头像地址非法");
+                }
+                user.setAvatarUrl(trimmedAvatar);
+            }
         }
         if (phoneNumber != null) {
             String trimmedPhone = phoneNumber.trim();
