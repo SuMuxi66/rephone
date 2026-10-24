@@ -34,10 +34,15 @@ Page({
     this.fetchData();
   },
   fetchData() {
-    fetchUserProfile().then((personInfo) => {
+    fetchUserProfile().then((profile) => {
+      // 后端返回 nickname/phone，本页（沿模板）用 nickName/phoneNumber，需在此映射，勿直接透传
       this.setData({
-        personInfo,
-        'personInfo.phoneNumber': phoneEncryption(personInfo.phoneNumber),
+        personInfo: {
+          avatarUrl: profile.avatarUrl || '',
+          nickName: profile.nickname || '',
+          gender: profile.gender || 0,
+          phoneNumber: phoneEncryption(profile.phone),
+        },
       });
     });
   },

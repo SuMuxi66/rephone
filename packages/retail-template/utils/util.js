@@ -105,6 +105,8 @@ const rpx2px = (rpx, round = false) => {
  * @returns
  */
 const phoneEncryption = (phone) => {
+  // 未绑定/解绑后 phone 为 null/undefined，直接原样返回空串，避免 replace 抛错
+  if (!phone) return '';
   return phone.replace(/(\d{3})\d{4}(\d{4})/, '$1****$2');
 };
 
