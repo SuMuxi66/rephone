@@ -1,6 +1,7 @@
 import { fetchUserProfile, updateProfile } from '../../../../../services/usercenter/fetchUsercenter';
 import { phoneEncryption } from '../../../utils/util';
 import { uploadToCos } from '../../../../../services/cos';
+import { resolveImageUrl } from '../../../../../common/image-url';
 import { clearToken, ensureLogin } from '../../../../../services/request';
 import Toast from 'tdesign-miniprogram/toast/index';
 
@@ -36,10 +37,11 @@ Page({
   },
   fetchData() {
     fetchUserProfile().then((profile) => {
-      // 后端返回 nickname/phone，本页（沿模板）用 nickName/phoneNumber，需在此映射，勿直接透传
+      // 后端返回 nickname/phone，本页（沿模板）用 nickName/phoneNumber，需在此映射，勿直接透传；
+      // avatarUrl 可能是 COS 签名 URL（https 开头原样）或本地兜底 /img/** 相对路径（拼 apiBaseUrl）
       this.setData({
         personInfo: {
-          avatarUrl: profile.avatarUrl || '',
+          avatarUrl: resolveImageUrl(profile.avatarUrl || ''),
           nickName: profile.nickname || '',
           gender: profile.gender || 0,
           phoneNumber: phoneEncryption(profile.phone),

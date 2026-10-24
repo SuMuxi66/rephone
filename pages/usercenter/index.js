@@ -6,6 +6,7 @@ import {
 } from '../../services/usercenter/fetchUsercenter';
 import Toast from 'tdesign-miniprogram/toast/index';
 import { config } from '../../config/index';
+import { resolveImageUrl } from '../../common/image-url';
 
 const menuData = [
   [
@@ -109,7 +110,7 @@ Page({
         });
         this.setData({
           userInfo: {
-            avatarUrl: profile.avatarUrl || '',
+            avatarUrl: resolveImageUrl(profile.avatarUrl || ''),
             nickName: profile.nickname || 'RePhone 用户',
             phoneNumber: profile.phone || '',
           },
