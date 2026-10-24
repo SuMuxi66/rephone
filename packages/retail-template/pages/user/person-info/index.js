@@ -1,5 +1,6 @@
 import { fetchUserProfile, updateProfile } from '../../../../../services/usercenter/fetchUsercenter';
 import { phoneEncryption } from '../../../utils/util';
+import { uploadToCos } from '../../../../../services/cos';
 import { clearToken, ensureLogin } from '../../../../../services/request';
 import Toast from 'tdesign-miniprogram/toast/index';
 
@@ -161,6 +162,7 @@ Page({
         });
       });
   },
+  /** 真实换头像：选图 → COS 直传（avatar 目录）→ 保存 key → 重拉资料回显（后端签 GET URL） */
   async toModifyAvatar() {
     try {
       const tempFilePath = await new Promise((resolve, reject) => {
@@ -179,20 +181,18 @@ Page({
           fail: (err) => reject(err),
         });
       });
-      const tempUrlArr = tempFilePath.split('/');
-      const tempFileName = tempUrlArr[tempUrlArr.length - 1];
-      Toast({
-        context: this,
-        selector: '#t-toast',
-        message: `已选择图片-${tempFileName}`,
-        theme: 'success',
-      });
+      const ext = (tempFilePath.match(/\.(\w+)$/) || [])[1] || 'jpg';
+      Toast({ context: this, selector: '#t-toast', message: '正在上传头像…', duration: 600000 });
+      const key = await uploadToCos(tempFilePath, ext, 'avatar');
+      await updateProfile({ avatarUrl: key });
+      Toast({ context: this, selector: '#t-toast', message: '头像已更新', theme: 'success' });
+      this.fetchData();
     } catch (error) {
-      if (error.errMsg === 'chooseImage:fail cancel') return;
+      if (error && error.errMsg === 'chooseImage:fail cancel') return;
       Toast({
         context: this,
         selector: '#t-toast',
-        message: error.errMsg || error.msg || '修改头像出错了',
+        message: (error && (error.message || error.errMsg)) || '修改头像出错了',
         theme: 'error',
       });
     }
