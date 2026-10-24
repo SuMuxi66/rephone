@@ -8,7 +8,17 @@
       arrow
       t-class-left="order-group__left"
     >
-      <t-image slot="note" src="{{personInfo.avatarUrl}}" t-class="avatarUrl" mode="aspectFill" />
+      <!-- 原生 image：增强编译（enhance:true）下 t-image 内部 image 节点的 src 会被改写为
+           https + imageMogr2 压缩参数，本地 /img/** 直接 404（原生节点不改写），故头像不用 t-image -->
+      <image
+        wx:if="{{personInfo.avatarUrl && !avatarFailed}}"
+        slot="note"
+        class="avatarUrl"
+        src="{{personInfo.avatarUrl}}"
+        mode="aspectFill"
+        bind:error="onAvatarError"
+      />
+      <view wx:else slot="note" class="avatarUrl avatarUrl--ph" />
     </t-cell>
     <t-cell
       title="昵称"

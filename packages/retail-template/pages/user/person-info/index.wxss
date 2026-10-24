@@ -29,8 +29,11 @@ page view {
 .avatarUrl {
   width: 80rpx;
   height: 80rpx;
-  border-radius: 50% !important;
+  border-radius: 50%;
   overflow: hidden;
+}
+.avatarUrl--ph {
+  background: #f2f3f5;
 }
 
 .t-class-confirm {

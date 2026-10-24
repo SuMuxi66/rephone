@@ -16,6 +16,7 @@ Page({
     showUnbindConfirm: false,
     phoneSheetVisible: false,
     phoneInput: '',
+    avatarFailed: false,
     pickerOptions: [
       {
         name: '男',
@@ -46,8 +47,13 @@ Page({
           gender: profile.gender || 0,
           phoneNumber: phoneEncryption(profile.phone),
         },
+        avatarFailed: false,
       });
     });
+  },
+  /** 头像加载失败兜底（换源/清空后 fetchData 会重置） */
+  onAvatarError() {
+    this.setData({ avatarFailed: true });
   },
   onClickCell({ currentTarget }) {
     const { dataset } = currentTarget;
