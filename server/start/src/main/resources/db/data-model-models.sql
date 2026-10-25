@@ -1,6 +1,7 @@
 -- 机型库全量数据:来源 MobileModels(KHwang9883/MobileModels,CC BY-NC-SA 4.0,仅限开发测试使用,商用需自行维护数据)。
 -- 生成脚本 tools/parse-mobilemodels.ps1;幂等(INSERT IGNORE + INSERT...SELECT 关联 brand),可重复执行。
--- 品牌:现有 华为/小米/OPPO/vivo/Apple 保留;新建 荣耀/三星/iQOO/Redmi/realme/努比亚/红魔。
+-- 品牌:现有 华为/小米/OPPO/vivo/Apple 保留;新建 荣耀/三星/iQOO/Redmi/realme/努比亚/红魔/一加。
+-- 2026-10-25 补充:对照《2020-2026 主力机型参数表》补 31 款缺口(一加品牌 16 款 + 其余品牌 15 款),见文末「补充」节。
 
 INSERT IGNORE INTO `brand` (`tenant_id`, `name`, `sort`) VALUES (0, 'realme', 10);
 INSERT IGNORE INTO `brand` (`tenant_id`, `name`, `sort`) VALUES (0, 'Redmi', 9);
@@ -1559,4 +1560,42 @@ INSERT IGNORE INTO `phone_model` (`tenant_id`, `brand_id`, `name`, `image`, `rel
 INSERT IGNORE INTO `phone_model` (`tenant_id`, `brand_id`, `name`, `image`, `release_year`, `sort`) SELECT 0, b.id, '荣耀笔记本 X16 Plus 2026', NULL, NULL, 270 FROM `brand` b WHERE b.`name`='荣耀';
 INSERT IGNORE INTO `phone_model` (`tenant_id`, `brand_id`, `name`, `image`, `release_year`, `sort`) SELECT 0, b.id, '荣耀 MagicBook Z3 14 2023', NULL, NULL, 271 FROM `brand` b WHERE b.`name`='荣耀';
 INSERT IGNORE INTO `phone_model` (`tenant_id`, `brand_id`, `name`, `image`, `release_year`, `sort`) SELECT 0, b.id, '荣耀 MagicBook Z3 16', NULL, NULL, 272 FROM `brand` b WHERE b.`name`='荣耀';
+
+-- ===== 2026-10-25 补充:《2020-2026 主力机型参数表》对比后缺失的机型(命名沿用各品牌现有写法) =====
+INSERT IGNORE INTO `brand` (`tenant_id`, `name`, `sort`) VALUES (0, '一加', 13);
+
+-- ===== 一加 (16 款) =====
+INSERT IGNORE INTO `phone_model` (`tenant_id`, `brand_id`, `name`, `image`, `release_year`, `sort`) SELECT 0, b.id, '一加 8', NULL, 2020, 1 FROM `brand` b WHERE b.`name`='一加';
+INSERT IGNORE INTO `phone_model` (`tenant_id`, `brand_id`, `name`, `image`, `release_year`, `sort`) SELECT 0, b.id, '一加 8 Pro', NULL, 2020, 2 FROM `brand` b WHERE b.`name`='一加';
+INSERT IGNORE INTO `phone_model` (`tenant_id`, `brand_id`, `name`, `image`, `release_year`, `sort`) SELECT 0, b.id, '一加 9 Pro', NULL, 2021, 3 FROM `brand` b WHERE b.`name`='一加';
+INSERT IGNORE INTO `phone_model` (`tenant_id`, `brand_id`, `name`, `image`, `release_year`, `sort`) SELECT 0, b.id, '一加 10 Pro', NULL, 2022, 4 FROM `brand` b WHERE b.`name`='一加';
+INSERT IGNORE INTO `phone_model` (`tenant_id`, `brand_id`, `name`, `image`, `release_year`, `sort`) SELECT 0, b.id, '一加 Ace', NULL, 2022, 5 FROM `brand` b WHERE b.`name`='一加';
+INSERT IGNORE INTO `phone_model` (`tenant_id`, `brand_id`, `name`, `image`, `release_year`, `sort`) SELECT 0, b.id, '一加 Ace 竞速版', NULL, 2022, 6 FROM `brand` b WHERE b.`name`='一加';
+INSERT IGNORE INTO `phone_model` (`tenant_id`, `brand_id`, `name`, `image`, `release_year`, `sort`) SELECT 0, b.id, '一加 11', NULL, 2023, 7 FROM `brand` b WHERE b.`name`='一加';
+INSERT IGNORE INTO `phone_model` (`tenant_id`, `brand_id`, `name`, `image`, `release_year`, `sort`) SELECT 0, b.id, '一加 12', NULL, 2023, 8 FROM `brand` b WHERE b.`name`='一加';
+INSERT IGNORE INTO `phone_model` (`tenant_id`, `brand_id`, `name`, `image`, `release_year`, `sort`) SELECT 0, b.id, '一加 Ace 2', NULL, 2023, 9 FROM `brand` b WHERE b.`name`='一加';
+INSERT IGNORE INTO `phone_model` (`tenant_id`, `brand_id`, `name`, `image`, `release_year`, `sort`) SELECT 0, b.id, '一加 Ace 3', NULL, 2023, 10 FROM `brand` b WHERE b.`name`='一加';
+INSERT IGNORE INTO `phone_model` (`tenant_id`, `brand_id`, `name`, `image`, `release_year`, `sort`) SELECT 0, b.id, '一加 Open', NULL, 2023, 11 FROM `brand` b WHERE b.`name`='一加';
+INSERT IGNORE INTO `phone_model` (`tenant_id`, `brand_id`, `name`, `image`, `release_year`, `sort`) SELECT 0, b.id, '一加 Ace 5', NULL, 2024, 12 FROM `brand` b WHERE b.`name`='一加';
+INSERT IGNORE INTO `phone_model` (`tenant_id`, `brand_id`, `name`, `image`, `release_year`, `sort`) SELECT 0, b.id, '一加 13', NULL, 2024, 13 FROM `brand` b WHERE b.`name`='一加';
+INSERT IGNORE INTO `phone_model` (`tenant_id`, `brand_id`, `name`, `image`, `release_year`, `sort`) SELECT 0, b.id, '一加 Ace 6', NULL, 2025, 14 FROM `brand` b WHERE b.`name`='一加';
+INSERT IGNORE INTO `phone_model` (`tenant_id`, `brand_id`, `name`, `image`, `release_year`, `sort`) SELECT 0, b.id, '一加 Ace 6 至尊版', NULL, 2025, 15 FROM `brand` b WHERE b.`name`='一加';
+INSERT IGNORE INTO `phone_model` (`tenant_id`, `brand_id`, `name`, `image`, `release_year`, `sort`) SELECT 0, b.id, '一加 14', NULL, 2025, 16 FROM `brand` b WHERE b.`name`='一加';
+
+-- ===== 其余品牌缺口 (15 款) =====
+INSERT IGNORE INTO `phone_model` (`tenant_id`, `brand_id`, `name`, `image`, `release_year`, `sort`) SELECT 0, b.id, 'HUAWEI Mate 90', NULL, 2026, 198 FROM `brand` b WHERE b.`name`='华为';
+INSERT IGNORE INTO `phone_model` (`tenant_id`, `brand_id`, `name`, `image`, `release_year`, `sort`) SELECT 0, b.id, 'HUAWEI Mate 90 Pro', NULL, 2026, 199 FROM `brand` b WHERE b.`name`='华为';
+INSERT IGNORE INTO `phone_model` (`tenant_id`, `brand_id`, `name`, `image`, `release_year`, `sort`) SELECT 0, b.id, 'HUAWEI Mate 90 Pro Max', NULL, 2026, 200 FROM `brand` b WHERE b.`name`='华为';
+INSERT IGNORE INTO `phone_model` (`tenant_id`, `brand_id`, `name`, `image`, `release_year`, `sort`) SELECT 0, b.id, '华为畅享 100', NULL, 2026, 201 FROM `brand` b WHERE b.`name`='华为';
+INSERT IGNORE INTO `phone_model` (`tenant_id`, `brand_id`, `name`, `image`, `release_year`, `sort`) SELECT 0, b.id, 'Xiaomi 16', NULL, 2024, 90 FROM `brand` b WHERE b.`name`='小米';
+INSERT IGNORE INTO `phone_model` (`tenant_id`, `brand_id`, `name`, `image`, `release_year`, `sort`) SELECT 0, b.id, 'Xiaomi 16 Pro', NULL, 2024, 91 FROM `brand` b WHERE b.`name`='小米';
+INSERT IGNORE INTO `phone_model` (`tenant_id`, `brand_id`, `name`, `image`, `release_year`, `sort`) SELECT 0, b.id, 'REDMI Note 16', NULL, 2025, 49 FROM `brand` b WHERE b.`name`='Redmi';
+INSERT IGNORE INTO `phone_model` (`tenant_id`, `brand_id`, `name`, `image`, `release_year`, `sort`) SELECT 0, b.id, 'REDMI 15', NULL, 2025, 84 FROM `brand` b WHERE b.`name`='红米';
+INSERT IGNORE INTO `phone_model` (`tenant_id`, `brand_id`, `name`, `image`, `release_year`, `sort`) SELECT 0, b.id, 'Redmi K70 电竞版', NULL, 2024, 85 FROM `brand` b WHERE b.`name`='红米';
+INSERT IGNORE INTO `phone_model` (`tenant_id`, `brand_id`, `name`, `image`, `release_year`, `sort`) SELECT 0, b.id, '真我 GT5', NULL, 2023, 97 FROM `brand` b WHERE b.`name`='realme';
+INSERT IGNORE INTO `phone_model` (`tenant_id`, `brand_id`, `name`, `image`, `release_year`, `sort`) SELECT 0, b.id, '真我 GT Neo7 SE', NULL, 2025, 98 FROM `brand` b WHERE b.`name`='realme';
+INSERT IGNORE INTO `phone_model` (`tenant_id`, `brand_id`, `name`, `image`, `release_year`, `sort`) SELECT 0, b.id, '真我 16', NULL, 2025, 99 FROM `brand` b WHERE b.`name`='realme';
+INSERT IGNORE INTO `phone_model` (`tenant_id`, `brand_id`, `name`, `image`, `release_year`, `sort`) SELECT 0, b.id, 'iQOO 14', NULL, 2024, 82 FROM `brand` b WHERE b.`name`='iQOO';
+INSERT IGNORE INTO `phone_model` (`tenant_id`, `brand_id`, `name`, `image`, `release_year`, `sort`) SELECT 0, b.id, '荣耀 700', NULL, 2026, 273 FROM `brand` b WHERE b.`name`='荣耀';
+INSERT IGNORE INTO `phone_model` (`tenant_id`, `brand_id`, `name`, `image`, `release_year`, `sort`) SELECT 0, b.id, '荣耀 600e', NULL, 2026, 274 FROM `brand` b WHERE b.`name`='荣耀';
 

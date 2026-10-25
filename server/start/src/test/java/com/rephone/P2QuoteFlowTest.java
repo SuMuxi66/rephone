@@ -71,7 +71,7 @@ class P2QuoteFlowTest {
                 new HttpEntity<>(auth()), String.class);
         JsonNode body = objectMapper.readTree(resp.getBody());
         assertEquals(0, body.get("code").asInt());
-        assertEquals(12, body.path("data").size(), "应返回 12 个品牌（5 种子 + 7 MobileModels 新增）");
+        assertEquals(13, body.path("data").size(), "应返回 13 个品牌（5 种子 + 7 MobileModels 新增 + 1 参数表补充一加）");
         assertEquals("Apple", body.path("data").get(0).path("name").asText());
     }
 
