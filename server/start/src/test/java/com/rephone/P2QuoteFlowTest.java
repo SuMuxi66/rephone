@@ -33,7 +33,7 @@ import org.springframework.test.context.TestPropertySource;
         "spring.datasource.username=sa",
         "spring.datasource.password=",
         "spring.sql.init.mode=always",
-        "spring.sql.init.schema-locations=classpath:db/schema-h2.sql,classpath:db/schema-quote.sql,classpath:db/data-model-models.sql",
+        "spring.sql.init.schema-locations=classpath:db/schema-h2.sql,classpath:db/schema-quote.sql,classpath:db/data-model-models.sql,classpath:db/data-model-specs.sql",
         "rephone.wx.mock-login=true",
         "rephone.jwt.ttl-seconds=3600"
 })
