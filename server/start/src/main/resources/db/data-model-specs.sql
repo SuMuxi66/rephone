@@ -2105,3 +2105,836 @@ WHERE `chip` IS NULL AND `tenant_id`=0 AND `name`='荣耀 V8'
 UPDATE `phone_model` SET `release_year`='2020', `release_month`='7', `chip`='MediaTek MT6873 Dimensity 800 5G', `ram`='8GB/6GB', `storage`='128GB/64GB', `battery_mah`='5000', `charge_w`=NULL, `wireless_w`='0', `screen_size`='7.09英寸', `resolution`='2280×1080', `refresh_rate`=NULL, `rear_camera`='800万主摄'
 WHERE `chip` IS NULL AND `tenant_id`=0 AND `name`='荣耀 X10 Max'
   AND `brand_id`=(SELECT `id` FROM `brand` WHERE `name`='荣耀' AND `tenant_id`=0);
+
+-- ===== 子代理收集·OPPO（56 款，来源: ZOL参数页(中关村在线),2026-10-25）=====
+UPDATE `phone_model` SET `release_year`='2021', `release_month`='3', `battery_mah`='4500', `charge_w`='65', `wireless_w`='30', `series`=NULL, `chip`='高通 骁龙870', `ram`='8GB', `storage`='128GB', `screen_size`='6.7英寸', `resolution`='3216×1440', `refresh_rate`='5-120', `rear_camera`='5000万主摄'
+WHERE `chip` IS NULL AND `tenant_id`=0 AND `name`='OPPO Find X3'
+  AND `brand_id`=(SELECT `id` FROM `brand` WHERE `name`='OPPO' AND `tenant_id`=0);
+UPDATE `phone_model` SET `release_year`='2022', `release_month`='2', `battery_mah`='4800', `charge_w`='80', `wireless_w`='30', `series`=NULL, `chip`='高通 骁龙888', `ram`='8GB', `storage`='256GB', `screen_size`='6.55英寸', `resolution`=NULL, `refresh_rate`='120', `rear_camera`='5000万主摄'
+WHERE `chip` IS NULL AND `tenant_id`=0 AND `name`='OPPO Find X5'
+  AND `brand_id`=(SELECT `id` FROM `brand` WHERE `name`='OPPO' AND `tenant_id`=0);
+UPDATE `phone_model` SET `release_year`='2023', `release_month`='3', `battery_mah`='4800', `charge_w`='80', `wireless_w`='0', `series`=NULL, `chip`='联发科 天玑9200', `ram`='12GB', `storage`='256GB', `screen_size`='6.74英寸', `resolution`='2772×1240', `refresh_rate`='40-120', `rear_camera`='5000万主摄'
+WHERE `chip` IS NULL AND `tenant_id`=0 AND `name`='OPPO Find X6'
+  AND `brand_id`=(SELECT `id` FROM `brand` WHERE `name`='OPPO' AND `tenant_id`=0);
+UPDATE `phone_model` SET `release_year`='2024', `release_month`='1', `battery_mah`='5000', `charge_w`='100', `wireless_w`='0', `series`=NULL, `chip`='联发科 天玑9300', `ram`='12GB', `storage`='256GB', `screen_size`='6.78英寸', `resolution`='2780×1264', `refresh_rate`='1-120', `rear_camera`='5000万主摄'
+WHERE `chip` IS NULL AND `tenant_id`=0 AND `name`='OPPO Find X7'
+  AND `brand_id`=(SELECT `id` FROM `brand` WHERE `name`='OPPO' AND `tenant_id`=0);
+UPDATE `phone_model` SET `release_year`='2024', `release_month`='10', `battery_mah`='5630', `charge_w`='80', `wireless_w`='50', `series`=NULL, `chip`='联发科 天玑 9400', `ram`='16GB', `storage`='1TB', `screen_size`='6.59英寸', `resolution`='2760×1256', `refresh_rate`='120', `rear_camera`='5000万主摄'
+WHERE `chip` IS NULL AND `tenant_id`=0 AND `name`='OPPO Find X8'
+  AND `brand_id`=(SELECT `id` FROM `brand` WHERE `name`='OPPO' AND `tenant_id`=0);
+UPDATE `phone_model` SET `release_year`='2025', `release_month`='4', `battery_mah`='6100', `charge_w`='100', `wireless_w`='50', `series`=NULL, `chip`='高通 骁龙 8 Elite', `ram`='12GB', `storage`='256GB', `screen_size`='6.82英寸', `resolution`='3168×1440', `refresh_rate`='120', `rear_camera`='5000万主摄'
+WHERE `chip` IS NULL AND `tenant_id`=0 AND `name`='OPPO Find X8 Ultra'
+  AND `brand_id`=(SELECT `id` FROM `brand` WHERE `name`='OPPO' AND `tenant_id`=0);
+UPDATE `phone_model` SET `release_year`='2025', `release_month`='10', `battery_mah`='7025', `charge_w`='80', `wireless_w`='50', `series`=NULL, `chip`='联发科 天玑 9500', `ram`='12GB', `storage`='256GB', `screen_size`='6.59英寸', `resolution`='2760×1256', `refresh_rate`='120', `rear_camera`='5000万主摄'
+WHERE `chip` IS NULL AND `tenant_id`=0 AND `name`='OPPO Find X9'
+  AND `brand_id`=(SELECT `id` FROM `brand` WHERE `name`='OPPO' AND `tenant_id`=0);
+UPDATE `phone_model` SET `release_year`='2026', `release_month`='4', `battery_mah`='7025', `charge_w`='80', `wireless_w`='50', `series`=NULL, `chip`='联发科 天玑 9500', `ram`='12GB', `storage`='256GB', `screen_size`='6.32英寸', `resolution`='2640×1216', `refresh_rate`='144', `rear_camera`=NULL
+WHERE `chip` IS NULL AND `tenant_id`=0 AND `name`='OPPO Find X9s Pro'
+  AND `brand_id`=(SELECT `id` FROM `brand` WHERE `name`='OPPO' AND `tenant_id`=0);
+UPDATE `phone_model` SET `release_year`='2026', `release_month`='4', `battery_mah`='7050', `charge_w`='100', `wireless_w`='50', `series`=NULL, `chip`='骁龙 8 Elite Gen5', `ram`='12GB', `storage`='256GB', `screen_size`='6.82英寸', `resolution`='3168×1440', `refresh_rate`='144', `rear_camera`=NULL
+WHERE `chip` IS NULL AND `tenant_id`=0 AND `name`='OPPO Find X9 Ultra'
+  AND `brand_id`=(SELECT `id` FROM `brand` WHERE `name`='OPPO' AND `tenant_id`=0);
+UPDATE `phone_model` SET `release_year`='2026', `release_month`='9', `battery_mah`='8000', `charge_w`='80', `wireless_w`='50', `series`=NULL, `chip`='联发科 天玑 9600M', `ram`='16GB', `storage`='1TB', `screen_size`='6.59英寸', `resolution`='2768×1272', `refresh_rate`='120', `rear_camera`=NULL
+WHERE `chip` IS NULL AND `tenant_id`=0 AND `name`='OPPO Find X10'
+  AND `brand_id`=(SELECT `id` FROM `brand` WHERE `name`='OPPO' AND `tenant_id`=0);
+UPDATE `phone_model` SET `release_year`='2026', `release_month`='9', `battery_mah`='7025', `charge_w`='80', `wireless_w`='50', `series`=NULL, `chip`='联发科 天玑 9500S', `ram`='16GB', `storage`='512GB', `screen_size`='6.59英寸', `resolution`='2760×1256', `refresh_rate`='120', `rear_camera`='5000万主摄'
+WHERE `chip` IS NULL AND `tenant_id`=0 AND `name`='OPPO Find X10 E'
+  AND `brand_id`=(SELECT `id` FROM `brand` WHERE `name`='OPPO' AND `tenant_id`=0);
+UPDATE `phone_model` SET `release_year`='2026', `release_month`='9', `battery_mah`='8000', `charge_w`='80', `wireless_w`='50', `series`=NULL, `chip`='联发科 天玑 9600 Pro', `ram`='16GB', `storage`='256GB', `screen_size`='6.78英寸', `resolution`='2772×1272', `refresh_rate`='144', `rear_camera`=NULL
+WHERE `chip` IS NULL AND `tenant_id`=0 AND `name`='OPPO Find X10 Pro Max'
+  AND `brand_id`=(SELECT `id` FROM `brand` WHERE `name`='OPPO' AND `tenant_id`=0);
+UPDATE `phone_model` SET `release_year`='2022', `release_month`='12', `battery_mah`='4300', `charge_w`='44', `wireless_w`='0', `series`=NULL, `chip`='联发科 天玑9000+', `ram`='8GB', `storage`='256GB', `screen_size`='6.8英寸', `resolution`='2520×1080', `refresh_rate`='120', `rear_camera`='5000万主摄'
+WHERE `chip` IS NULL AND `tenant_id`=0 AND `name`='OPPO Find N2 Flip'
+  AND `brand_id`=(SELECT `id` FROM `brand` WHERE `name`='OPPO' AND `tenant_id`=0);
+UPDATE `phone_model` SET `release_year`='2023', `release_month`='8', `battery_mah`='4300', `charge_w`='44', `wireless_w`='0', `series`=NULL, `chip`='联发科 天玑9200', `ram`='12GB', `storage`='256GB', `screen_size`='6.8英寸', `resolution`='2520×1080', `refresh_rate`='120', `rear_camera`='5000万主摄'
+WHERE `chip` IS NULL AND `tenant_id`=0 AND `name`='OPPO Find N3 Flip'
+  AND `brand_id`=(SELECT `id` FROM `brand` WHERE `name`='OPPO' AND `tenant_id`=0);
+UPDATE `phone_model` SET `release_year`='2026', `release_month`='3', `battery_mah`='6000', `charge_w`='80', `wireless_w`='50', `series`=NULL, `chip`='骁龙 8 Elite Gen5', `ram`='12GB', `storage`='256GB', `screen_size`='8.12英寸', `resolution`='2480×2248', `refresh_rate`='1-120', `rear_camera`=NULL
+WHERE `chip` IS NULL AND `tenant_id`=0 AND `name`='OPPO Find N6'
+  AND `brand_id`=(SELECT `id` FROM `brand` WHERE `name`='OPPO' AND `tenant_id`=0);
+UPDATE `phone_model` SET `release_year`='2021', `release_month`='3', `battery_mah`='4300', `charge_w`='65', `wireless_w`='0', `series`=NULL, `chip`='高通 骁龙750G', `ram`='8GB', `storage`='128GB', `screen_size`='6.43英寸', `resolution`='2400×1080', `refresh_rate`='90', `rear_camera`='6400万主摄'
+WHERE `chip` IS NULL AND `tenant_id`=0 AND `name`='OPPO Reno5 K'
+  AND `brand_id`=(SELECT `id` FROM `brand` WHERE `name`='OPPO' AND `tenant_id`=0);
+UPDATE `phone_model` SET `release_year`='2021', `release_month`='5', `battery_mah`='4500', `charge_w`='65', `wireless_w`='0', `series`=NULL, `chip`='联发科 天玑1200', `ram`='12GB', `storage`='256GB', `screen_size`='6.55英寸', `resolution`='2400×1080', `refresh_rate`='90', `rear_camera`='6400万主摄'
+WHERE `chip` IS NULL AND `tenant_id`=0 AND `name`='OPPO Reno6 Pro'
+  AND `brand_id`=(SELECT `id` FROM `brand` WHERE `name`='OPPO' AND `tenant_id`=0);
+UPDATE `phone_model` SET `release_year`='2021', `release_month`='5', `battery_mah`='4500', `charge_w`='65', `wireless_w`='0', `series`=NULL, `chip`='高通 骁龙870', `ram`='12GB', `storage`='256GB', `screen_size`='6.55英寸', `resolution`='2400×1080', `refresh_rate`='90', `rear_camera`='5000万主摄'
+WHERE `chip` IS NULL AND `tenant_id`=0 AND `name`='OPPO Reno6 Pro+'
+  AND `brand_id`=(SELECT `id` FROM `brand` WHERE `name`='OPPO' AND `tenant_id`=0);
+UPDATE `phone_model` SET `release_year`='2021', `release_month`='11', `battery_mah`='4500', `charge_w`='65', `wireless_w`='0', `series`=NULL, `chip`='联发科 天玑1200 MAX', `ram`='8GB', `storage`='256GB', `screen_size`='6.55英寸', `resolution`='2400×1080', `refresh_rate`='90', `rear_camera`='5000万主摄'
+WHERE `chip` IS NULL AND `tenant_id`=0 AND `name`='OPPO Reno7 Pro'
+  AND `brand_id`=(SELECT `id` FROM `brand` WHERE `name`='OPPO' AND `tenant_id`=0);
+UPDATE `phone_model` SET `release_year`='2021', `release_month`='11', `battery_mah`='4500', `charge_w`='33', `wireless_w`='0', `series`=NULL, `chip`='联发科 天玑900', `ram`='8GB', `storage`='128GB', `screen_size`='6.43英寸', `resolution`='2400×1080', `refresh_rate`='90', `rear_camera`='4800万主摄'
+WHERE `chip` IS NULL AND `tenant_id`=0 AND `name`='OPPO Reno7 SE'
+  AND `brand_id`=(SELECT `id` FROM `brand` WHERE `name`='OPPO' AND `tenant_id`=0);
+UPDATE `phone_model` SET `release_year`='2022', `release_month`='5', `battery_mah`='4500', `charge_w`='80', `wireless_w`='0', `series`=NULL, `chip`='高通 骁龙7 Gen1', `ram`='8GB', `storage`='256GB', `screen_size`='6.62英寸', `resolution`='2400×1080', `refresh_rate`='120', `rear_camera`='5000万主摄'
+WHERE `chip` IS NULL AND `tenant_id`=0 AND `name`='OPPO Reno8 Pro'
+  AND `brand_id`=(SELECT `id` FROM `brand` WHERE `name`='OPPO' AND `tenant_id`=0);
+UPDATE `phone_model` SET `release_year`='2022', `release_month`='5', `battery_mah`='4500', `charge_w`='80', `wireless_w`='0', `series`=NULL, `chip`='联发科 天玑8100-Max', `ram`='8GB', `storage`='256GB', `screen_size`='6.7英寸', `resolution`='2412×1080', `refresh_rate`='120', `rear_camera`='5000万主摄'
+WHERE `chip` IS NULL AND `tenant_id`=0 AND `name`='OPPO Reno8 Pro+'
+  AND `brand_id`=(SELECT `id` FROM `brand` WHERE `name`='OPPO' AND `tenant_id`=0);
+UPDATE `phone_model` SET `release_year`='2022', `release_month`='11', `battery_mah`='4500', `charge_w`='67', `wireless_w`='0', `series`=NULL, `chip`='联发科 天玑8100-Max', `ram`='16GB', `storage`='256GB', `screen_size`='6.7英寸', `resolution`='2412×1080', `refresh_rate`='120', `rear_camera`='5000万主摄'
+WHERE `chip` IS NULL AND `tenant_id`=0 AND `name`='OPPO Reno9 Pro'
+  AND `brand_id`=(SELECT `id` FROM `brand` WHERE `name`='OPPO' AND `tenant_id`=0);
+UPDATE `phone_model` SET `release_year`='2022', `release_month`='11', `battery_mah`='4700', `charge_w`='80', `wireless_w`='0', `series`=NULL, `chip`='高通 骁龙8+ Gen1（降频版）', `ram`='16GB', `storage`='256GB', `screen_size`='6.7英寸', `resolution`='2412×1080', `refresh_rate`='120', `rear_camera`='5000万主摄'
+WHERE `chip` IS NULL AND `tenant_id`=0 AND `name`='OPPO Reno9 Pro+'
+  AND `brand_id`=(SELECT `id` FROM `brand` WHERE `name`='OPPO' AND `tenant_id`=0);
+UPDATE `phone_model` SET `release_year`='2023', `release_month`='5', `battery_mah`='4600', `charge_w`='100', `wireless_w`='0', `series`=NULL, `chip`='联发科 天玑8200', `ram`='16GB', `storage`='256GB', `screen_size`='6.74英寸', `resolution`='2772×1240', `refresh_rate`='120', `rear_camera`='5000万主摄'
+WHERE `chip` IS NULL AND `tenant_id`=0 AND `name`='OPPO Reno10 Pro'
+  AND `brand_id`=(SELECT `id` FROM `brand` WHERE `name`='OPPO' AND `tenant_id`=0);
+UPDATE `phone_model` SET `release_year`='2023', `release_month`='5', `battery_mah`='4700', `charge_w`='100', `wireless_w`='0', `series`=NULL, `chip`='高通 骁龙8+ Gen1', `ram`='16GB', `storage`='256GB', `screen_size`='6.74英寸', `resolution`='2772×1240', `refresh_rate`='120', `rear_camera`='5000万主摄'
+WHERE `chip` IS NULL AND `tenant_id`=0 AND `name`='OPPO Reno10 Pro+'
+  AND `brand_id`=(SELECT `id` FROM `brand` WHERE `name`='OPPO' AND `tenant_id`=0);
+UPDATE `phone_model` SET `release_year`='2023', `release_month`='11', `battery_mah`='4700', `charge_w`='80', `wireless_w`='0', `series`=NULL, `chip`='高通 骁龙8+ Gen1', `ram`='12GB', `storage`='256GB', `screen_size`='6.74英寸', `resolution`='2772×1240', `refresh_rate`='120', `rear_camera`='5000万主摄'
+WHERE `chip` IS NULL AND `tenant_id`=0 AND `name`='OPPO Reno11 Pro'
+  AND `brand_id`=(SELECT `id` FROM `brand` WHERE `name`='OPPO' AND `tenant_id`=0);
+UPDATE `phone_model` SET `release_year`='2024', `release_month`='5', `battery_mah`='5000', `charge_w`='80', `wireless_w`='0', `series`=NULL, `chip`='联发科 天玑9200+ 星速版', `ram`='12GB', `storage`='256GB', `screen_size`='6.7英寸', `resolution`=NULL, `refresh_rate`='120', `rear_camera`='5000万主摄'
+WHERE `chip` IS NULL AND `tenant_id`=0 AND `name`='OPPO Reno12 Pro (`omega`)'
+  AND `brand_id`=(SELECT `id` FROM `brand` WHERE `name`='OPPO' AND `tenant_id`=0);
+UPDATE `phone_model` SET `release_year`='2024', `release_month`='11', `battery_mah`='5800', `charge_w`='80', `wireless_w`='50', `series`=NULL, `chip`='联发科 天玑8350', `ram`='12GB', `storage`='256GB', `screen_size`='6.83英寸', `resolution`='2800×1272', `refresh_rate`='120', `rear_camera`='5000万主摄'
+WHERE `chip` IS NULL AND `tenant_id`=0 AND `name`='OPPO Reno13 Pro (`milkyway`)'
+  AND `brand_id`=(SELECT `id` FROM `brand` WHERE `name`='OPPO' AND `tenant_id`=0);
+UPDATE `phone_model` SET `release_year`='2018', `release_month`='11', `battery_mah`='3700', `charge_w`=NULL, `wireless_w`='0', `series`=NULL, `chip`='高通 骁龙710', `ram`='6GB', `storage`='128GB', `screen_size`='6.4英寸', `resolution`='2340×1080', `refresh_rate`=NULL, `rear_camera`='2000万主摄'
+WHERE `chip` IS NULL AND `tenant_id`=0 AND `name`='OPPO R17 Pro'
+  AND `brand_id`=(SELECT `id` FROM `brand` WHERE `name`='OPPO' AND `tenant_id`=0);
+UPDATE `phone_model` SET `release_year`='2018', `release_month`='7', `battery_mah`='4230', `charge_w`=NULL, `wireless_w`='0', `series`=NULL, `chip`='高通 骁龙450B', `ram`='4GB', `storage`='64GB', `screen_size`='6.2英寸', `resolution`='1520×720', `refresh_rate`=NULL, `rear_camera`='1300万主摄'
+WHERE `chip` IS NULL AND `tenant_id`=0 AND `name`='OPPO A5'
+  AND `brand_id`=(SELECT `id` FROM `brand` WHERE `name`='OPPO' AND `tenant_id`=0);
+UPDATE `phone_model` SET `release_year`='2019', `release_month`=NULL, `battery_mah`='5000', `charge_w`=NULL, `wireless_w`='0', `series`=NULL, `chip`='高通 骁龙665', `ram`='8GB', `storage`='128GB', `screen_size`='6.5英寸', `resolution`='1600×720', `refresh_rate`=NULL, `rear_camera`='4800万主摄'
+WHERE `chip` IS NULL AND `tenant_id`=0 AND `name`='OPPO A11x'
+  AND `brand_id`=(SELECT `id` FROM `brand` WHERE `name`='OPPO' AND `tenant_id`=0);
+UPDATE `phone_model` SET `release_year`='2021', `release_month`='4', `battery_mah`='4230', `charge_w`='10', `wireless_w`='0', `series`=NULL, `chip`='联发科 Helio P35（MT6765）', `ram`='4GB', `storage`='128GB', `screen_size`='6.52英寸', `resolution`='1600×720', `refresh_rate`='60', `rear_camera`='1300万主摄'
+WHERE `chip` IS NULL AND `tenant_id`=0 AND `name`='OPPO A35'
+  AND `brand_id`=(SELECT `id` FROM `brand` WHERE `name`='OPPO' AND `tenant_id`=0);
+UPDATE `phone_model` SET `release_year`='2022', `release_month`='1', `battery_mah`='5000', `charge_w`='10', `wireless_w`='0', `series`=NULL, `chip`='高通 骁龙680', `ram`='8GB', `storage`='256GB', `screen_size`='6.56英寸', `resolution`='1612×720', `refresh_rate`='90', `rear_camera`='1300万主摄'
+WHERE `chip` IS NULL AND `tenant_id`=0 AND `name`='OPPO A36'
+  AND `brand_id`=(SELECT `id` FROM `brand` WHERE `name`='OPPO' AND `tenant_id`=0);
+UPDATE `phone_model` SET `release_year`='2021', `release_month`='10', `battery_mah`='5000', `charge_w`='10', `wireless_w`='0', `series`=NULL, `chip`='联发科 天玑700（MT6833）', `ram`='6GB', `storage`='128GB', `screen_size`='6.52英寸', `resolution`='1600×720', `refresh_rate`='60', `rear_camera`='1300万主摄'
+WHERE `chip` IS NULL AND `tenant_id`=0 AND `name`='OPPO A56'
+  AND `brand_id`=(SELECT `id` FROM `brand` WHERE `name`='OPPO' AND `tenant_id`=0);
+UPDATE `phone_model` SET `release_year`='2022', `release_month`='11', `battery_mah`='5000', `charge_w`='33', `wireless_w`='0', `series`=NULL, `chip`='联发科 天玑700', `ram`='8GB', `storage`='256GB', `screen_size`='6.56英寸', `resolution`='1612×720', `refresh_rate`='90', `rear_camera`='5000万主摄'
+WHERE `chip` IS NULL AND `tenant_id`=0 AND `name`='OPPO A58'
+  AND `brand_id`=(SELECT `id` FROM `brand` WHERE `name`='OPPO' AND `tenant_id`=0);
+UPDATE `phone_model` SET `release_year`='2022', `release_month`='12', `battery_mah`='5000', `charge_w`='10', `wireless_w`='0', `series`=NULL, `chip`='联发科 天玑700', `ram`='6GB', `storage`='128GB', `screen_size`='6.56英寸', `resolution`='1612×720', `refresh_rate`='90', `rear_camera`='1300万主摄'
+WHERE `chip` IS NULL AND `tenant_id`=0 AND `name`='OPPO A58x'
+  AND `brand_id`=(SELECT `id` FROM `brand` WHERE `name`='OPPO' AND `tenant_id`=0);
+UPDATE `phone_model` SET `release_year`='2021', `release_month`='4', `battery_mah`='4310', `charge_w`='30', `wireless_w`='0', `series`=NULL, `chip`='联发科 天玑800U', `ram`='8GB', `storage`='128GB', `screen_size`='6.43英寸', `resolution`='2400×1080', `refresh_rate`='60', `rear_camera`='4800万主摄'
+WHERE `chip` IS NULL AND `tenant_id`=0 AND `name`='OPPO A95'
+  AND `brand_id`=(SELECT `id` FROM `brand` WHERE `name`='OPPO' AND `tenant_id`=0);
+UPDATE `phone_model` SET `release_year`='2022', `release_month`='1', `battery_mah`='4500', `charge_w`='33', `wireless_w`='0', `series`=NULL, `chip`='高通 骁龙695', `ram`='8GB', `storage`='256GB', `screen_size`='6.43英寸', `resolution`='2400×1080', `refresh_rate`='60', `rear_camera`='4800万主摄'
+WHERE `chip` IS NULL AND `tenant_id`=0 AND `name`='OPPO A96'
+  AND `brand_id`=(SELECT `id` FROM `brand` WHERE `name`='OPPO' AND `tenant_id`=0);
+UPDATE `phone_model` SET `release_year`='2023', `release_month`='3', `battery_mah`='5000', `charge_w`=NULL, `wireless_w`='0', `series`=NULL, `chip`='联发科 天玑700', `ram`='6GB', `storage`='128GB', `screen_size`='6.56英寸', `resolution`='1612×720', `refresh_rate`='90', `rear_camera`='1300万主摄'
+WHERE `chip` IS NULL AND `tenant_id`=0 AND `name`='OPPO A1x / OPPO A1 活力版'
+  AND `brand_id`=(SELECT `id` FROM `brand` WHERE `name`='OPPO' AND `tenant_id`=0);
+UPDATE `phone_model` SET `release_year`='2018', `release_month`='7', `battery_mah`='4230', `charge_w`=NULL, `wireless_w`='0', `series`=NULL, `chip`='高通 骁龙450B', `ram`='4GB', `storage`='64GB', `screen_size`='6.2英寸', `resolution`='1520×720', `refresh_rate`=NULL, `rear_camera`='1300万主摄'
+WHERE `chip` IS NULL AND `tenant_id`=0 AND `name`='OPPO A5 / OPPO A6 Plus'
+  AND `brand_id`=(SELECT `id` FROM `brand` WHERE `name`='OPPO' AND `tenant_id`=0);
+UPDATE `phone_model` SET `release_year`='2026', `release_month`='9', `battery_mah`='8000', `charge_w`='45', `wireless_w`='0', `series`=NULL, `chip`='联发科 天玑6360 MAX', `ram`='8GB', `storage`='256GB', `screen_size`='6.57英寸', `resolution`='2372×1080', `refresh_rate`='120', `rear_camera`='5000万主摄'
+WHERE `chip` IS NULL AND `tenant_id`=0 AND `name`='OPPO A7 Pro'
+  AND `brand_id`=(SELECT `id` FROM `brand` WHERE `name`='OPPO' AND `tenant_id`=0);
+UPDATE `phone_model` SET `release_year`='2026', `release_month`='8', `battery_mah`='10000', `charge_w`='80', `wireless_w`='0', `series`=NULL, `chip`='高通 骁龙4 Gen5', `ram`='8GB', `storage`='128GB', `screen_size`='6.78英寸', `resolution`='2772×1272', `refresh_rate`='120', `rear_camera`='5000万主摄'
+WHERE `chip` IS NULL AND `tenant_id`=0 AND `name`='OPPO A7 Pro Max'
+  AND `brand_id`=(SELECT `id` FROM `brand` WHERE `name`='OPPO' AND `tenant_id`=0);
+UPDATE `phone_model` SET `release_year`='2021', `release_month`='5', `battery_mah`='4300', `charge_w`='65', `wireless_w`='0', `series`=NULL, `chip`='高通 骁龙768G', `ram`='8GB', `storage`='128GB', `screen_size`='6.43英寸', `resolution`='2400×1080', `refresh_rate`='90', `rear_camera`='6400万主摄'
+WHERE `chip` IS NULL AND `tenant_id`=0 AND `name`='OPPO K9'
+  AND `brand_id`=(SELECT `id` FROM `brand` WHERE `name`='OPPO' AND `tenant_id`=0);
+UPDATE `phone_model` SET `release_year`='2021', `release_month`='10', `battery_mah`='5000', `charge_w`='30', `wireless_w`='0', `series`=NULL, `chip`='高通 骁龙778G', `ram`='8GB', `storage`='128GB', `screen_size`='6.59英寸', `resolution`='2412×1080', `refresh_rate`='120', `rear_camera`='6400万主摄'
+WHERE `chip` IS NULL AND `tenant_id`=0 AND `name`='OPPO K9s (`walle`) / OPPO K10 活力版'
+  AND `brand_id`=(SELECT `id` FROM `brand` WHERE `name`='OPPO' AND `tenant_id`=0);
+UPDATE `phone_model` SET `release_year`='2021', `release_month`='9', `battery_mah`='4500', `charge_w`='60', `wireless_w`='0', `series`=NULL, `chip`='联发科 天玑1200', `ram`='8GB', `storage`='128GB', `screen_size`='6.43英寸', `resolution`='2400×1080', `refresh_rate`='120', `rear_camera`='6400万主摄'
+WHERE `chip` IS NULL AND `tenant_id`=0 AND `name`='OPPO K9 Pro'
+  AND `brand_id`=(SELECT `id` FROM `brand` WHERE `name`='OPPO' AND `tenant_id`=0);
+UPDATE `phone_model` SET `release_year`='2022', `release_month`='4', `battery_mah`='5000', `charge_w`='67', `wireless_w`='0', `series`=NULL, `chip`='联发科 天玑8000-Max', `ram`='8GB', `storage`='256GB', `screen_size`='6.59英寸', `resolution`='2412×1080', `refresh_rate`='120', `rear_camera`='6400万主摄'
+WHERE `chip` IS NULL AND `tenant_id`=0 AND `name`='OPPO K10'
+  AND `brand_id`=(SELECT `id` FROM `brand` WHERE `name`='OPPO' AND `tenant_id`=0);
+UPDATE `phone_model` SET `release_year`='2022', `release_month`='4', `battery_mah`='5000', `charge_w`='80', `wireless_w`='0', `series`=NULL, `chip`='高通 骁龙888', `ram`='8GB', `storage`='256GB', `screen_size`='6.62英寸', `resolution`='2400×1080', `refresh_rate`='120', `rear_camera`='5000万主摄'
+WHERE `chip` IS NULL AND `tenant_id`=0 AND `name`='OPPO K10 Pro'
+  AND `brand_id`=(SELECT `id` FROM `brand` WHERE `name`='OPPO' AND `tenant_id`=0);
+UPDATE `phone_model` SET `release_year`='2022', `release_month`='9', `battery_mah`='5000', `charge_w`='67', `wireless_w`='0', `series`=NULL, `chip`='高通 骁龙695', `ram`='8GB', `storage`='128GB', `screen_size`='6.59英寸', `resolution`='2412×1080', `refresh_rate`='120', `rear_camera`='6400万主摄'
+WHERE `chip` IS NULL AND `tenant_id`=0 AND `name`='OPPO K10x'
+  AND `brand_id`=(SELECT `id` FROM `brand` WHERE `name`='OPPO' AND `tenant_id`=0);
+UPDATE `phone_model` SET `release_year`='2023', `release_month`='7', `battery_mah`='5000', `charge_w`='100', `wireless_w`='0', `series`=NULL, `chip`='高通 骁龙782G', `ram`='12GB', `storage`='512GB', `screen_size`='6.7英寸', `resolution`='2412×1080', `refresh_rate`='120', `rear_camera`='5000万主摄'
+WHERE `chip` IS NULL AND `tenant_id`=0 AND `name`='OPPO K11'
+  AND `brand_id`=(SELECT `id` FROM `brand` WHERE `name`='OPPO' AND `tenant_id`=0);
+UPDATE `phone_model` SET `release_year`='2023', `release_month`='5', `battery_mah`='5000', `charge_w`='67', `wireless_w`='0', `series`=NULL, `chip`='高通 骁龙695', `ram`='8GB', `storage`='128GB', `screen_size`='6.72英寸', `resolution`='2400×1080', `refresh_rate`='120', `rear_camera`=NULL
+WHERE `chip` IS NULL AND `tenant_id`=0 AND `name`='OPPO K11x'
+  AND `brand_id`=(SELECT `id` FROM `brand` WHERE `name`='OPPO' AND `tenant_id`=0);
+UPDATE `phone_model` SET `release_year`='2024', `release_month`='4', `battery_mah`='5500', `charge_w`='100', `wireless_w`='0', `series`=NULL, `chip`='高通 骁龙7 Gen3', `ram`='8GB', `storage`='256GB', `screen_size`='6.7英寸', `resolution`='2412×1080', `refresh_rate`='120', `rear_camera`='5000万主摄'
+WHERE `chip` IS NULL AND `tenant_id`=0 AND `name`='OPPO K12'
+  AND `brand_id`=(SELECT `id` FROM `brand` WHERE `name`='OPPO' AND `tenant_id`=0);
+UPDATE `phone_model` SET `release_year`='2024', `release_month`='1', `battery_mah`='5000', `charge_w`='100', `wireless_w`='0', `series`=NULL, `chip`='联发科 天玑9300', `ram`='12GB', `storage`='256GB', `screen_size`='6.78英寸', `resolution`='2780×1264', `refresh_rate`='1-120', `rear_camera`='5000万主摄'
+WHERE `chip` IS NULL AND `tenant_id`=0 AND `name`='Find X7'
+  AND `brand_id`=(SELECT `id` FROM `brand` WHERE `name`='OPPO' AND `tenant_id`=0);
+UPDATE `phone_model` SET `release_year`='2022', `release_month`='11', `battery_mah`='5000', `charge_w`='33', `wireless_w`='0', `series`=NULL, `chip`='联发科 天玑700', `ram`='8GB', `storage`='256GB', `screen_size`='6.56英寸', `resolution`='1612×720', `refresh_rate`='90', `rear_camera`='5000万主摄'
+WHERE `chip` IS NULL AND `tenant_id`=0 AND `name`='A58'
+  AND `brand_id`=(SELECT `id` FROM `brand` WHERE `name`='OPPO' AND `tenant_id`=0);
+UPDATE `phone_model` SET `release_year`='2023', `release_month`='11', `battery_mah`='5000', `charge_w`='33', `wireless_w`='0', `series`=NULL, `chip`='联发科 天玑6020', `ram`='12GB', `storage`='256GB', `screen_size`='6.72英寸', `resolution`='2400×1080', `refresh_rate`='90', `rear_camera`='5000万主摄'
+WHERE `chip` IS NULL AND `tenant_id`=0 AND `name`='OPPO A1s / OPPO A2'
+  AND `brand_id`=(SELECT `id` FROM `brand` WHERE `name`='OPPO' AND `tenant_id`=0);
+UPDATE `phone_model` SET `release_year`='2022', `release_month`='2', `battery_mah`='5000', `charge_w`='80', `wireless_w`='50', `series`=NULL, `chip`='联发科 天玑9000', `ram`='12GB', `storage`='256GB', `screen_size`='6.7英寸', `resolution`='3216×1440', `refresh_rate`='0-120', `rear_camera`='5000万主摄'
+WHERE `chip` IS NULL AND `tenant_id`=0 AND `name`='OPPO Find X5 Pro 天玑版'
+  AND `brand_id`=(SELECT `id` FROM `brand` WHERE `name`='OPPO' AND `tenant_id`=0);
+
+-- ===== 子代理收集·Redmi（20 款，来源: ZOL参数页(中关村在线),2026-10-25）=====
+UPDATE `phone_model` SET `release_year`='2019', `release_month`='8', `battery_mah`='4000', `charge_w`='18', `wireless_w`='0', `series`=NULL, `chip`='高通 骁龙665', `ram`='4GB', `storage`='64GB', `screen_size`='6.3英寸', `resolution`='2340×1080', `refresh_rate`=NULL, `rear_camera`='4800万主摄'
+WHERE `chip` IS NULL AND `tenant_id`=0 AND `name`='Redmi Note 8'
+  AND `brand_id`=(SELECT `id` FROM `brand` WHERE `name`='Redmi' AND `tenant_id`=0);
+UPDATE `phone_model` SET `release_year`='2019', `release_month`='8', `battery_mah`='4500', `charge_w`='18', `wireless_w`='0', `series`=NULL, `chip`='联发科 Helio G90T', `ram`='8GB', `storage`='128GB', `screen_size`='6.53英寸', `resolution`='2340×1080', `refresh_rate`=NULL, `rear_camera`='6400万主摄'
+WHERE `chip` IS NULL AND `tenant_id`=0 AND `name`='Redmi Note 8 Pro'
+  AND `brand_id`=(SELECT `id` FROM `brand` WHERE `name`='Redmi' AND `tenant_id`=0);
+UPDATE `phone_model` SET `release_year`='2020', `release_month`='11', `battery_mah`='4820', `charge_w`='33', `wireless_w`='0', `series`=NULL, `chip`='高通 骁龙750G', `ram`='6GB', `storage`='128GB', `screen_size`='6.67英寸', `resolution`='2400×1080', `refresh_rate`='120', `rear_camera`=NULL
+WHERE `chip` IS NULL AND `tenant_id`=0 AND `name`='Redmi Note 9 Pro (`gauguin`)'
+  AND `brand_id`=(SELECT `id` FROM `brand` WHERE `name`='Redmi' AND `tenant_id`=0);
+UPDATE `phone_model` SET `release_year`='2021', `release_month`='5', `battery_mah`='5000', `charge_w`='67', `wireless_w`='0', `series`=NULL, `chip`='联发科 天玑1100', `ram`='8GB', `storage`='128GB', `screen_size`='6.6英寸', `resolution`='2400×1080', `refresh_rate`='120', `rear_camera`='6400万主摄'
+WHERE `chip` IS NULL AND `tenant_id`=0 AND `name`='Redmi Note 10 Pro'
+  AND `brand_id`=(SELECT `id` FROM `brand` WHERE `name`='Redmi' AND `tenant_id`=0);
+UPDATE `phone_model` SET `release_year`='2021', `release_month`='11', `battery_mah`='5000', `charge_w`='18', `wireless_w`='0', `series`=NULL, `chip`='联发科 Helio G88', `ram`='4GB', `storage`='128GB', `screen_size`='6.5英寸', `resolution`='2400×1080', `refresh_rate`='90', `rear_camera`='5000万主摄'
+WHERE `chip` IS NULL AND `tenant_id`=0 AND `name`='Redmi Note 11 4G (`selene`)'
+  AND `brand_id`=(SELECT `id` FROM `brand` WHERE `name`='Redmi' AND `tenant_id`=0);
+UPDATE `phone_model` SET `release_year`='2021', `release_month`='10', `battery_mah`='5160', `charge_w`='67', `wireless_w`='0', `series`=NULL, `chip`='联发科 天玑920', `ram`='8GB', `storage`='128GB', `screen_size`='6.67英寸', `resolution`='2400×1080', `refresh_rate`='120', `rear_camera`=NULL
+WHERE `chip` IS NULL AND `tenant_id`=0 AND `name`='Redmi Note 11 Pro'
+  AND `brand_id`=(SELECT `id` FROM `brand` WHERE `name`='Redmi' AND `tenant_id`=0);
+UPDATE `phone_model` SET `release_year`='2022', `release_month`='3', `battery_mah`='5000', `charge_w`='67', `wireless_w`='0', `series`=NULL, `chip`='高通 骁龙695', `ram`='8GB', `storage`='128GB', `screen_size`='6.67英寸', `resolution`='2400×1080', `refresh_rate`='120', `rear_camera`=NULL
+WHERE `chip` IS NULL AND `tenant_id`=0 AND `name`='Redmi Note 11E Pro'
+  AND `brand_id`=(SELECT `id` FROM `brand` WHERE `name`='Redmi' AND `tenant_id`=0);
+UPDATE `phone_model` SET `release_year`='2021', `release_month`='10', `battery_mah`='4500', `charge_w`='120', `wireless_w`='0', `series`=NULL, `chip`='联发科 天玑920', `ram`='8GB', `storage`='128GB', `screen_size`='6.67英寸', `resolution`='2400×1080', `refresh_rate`='120', `rear_camera`=NULL
+WHERE `chip` IS NULL AND `tenant_id`=0 AND `name`='Redmi Note 11 Pro+ (`pissarro`)'
+  AND `brand_id`=(SELECT `id` FROM `brand` WHERE `name`='Redmi' AND `tenant_id`=0);
+UPDATE `phone_model` SET `release_year`='2022', `release_month`='5', `battery_mah`='5080', `charge_w`='67', `wireless_w`='0', `series`=NULL, `chip`='联发科 天玑8100', `ram`='6GB', `storage`='128GB', `screen_size`='6.6英寸', `resolution`='2460×1080', `refresh_rate`='144', `rear_camera`='6400万主摄'
+WHERE `chip` IS NULL AND `tenant_id`=0 AND `name`='Redmi Note 11T Pro'
+  AND `brand_id`=(SELECT `id` FROM `brand` WHERE `name`='Redmi' AND `tenant_id`=0);
+UPDATE `phone_model` SET `release_year`='2022', `release_month`='5', `battery_mah`='4400', `charge_w`='120', `wireless_w`='0', `series`=NULL, `chip`='联发科 天玑8100', `ram`='8GB', `storage`='128GB', `screen_size`='6.6英寸', `resolution`='2460×1080', `refresh_rate`='144', `rear_camera`='6400万主摄'
+WHERE `chip` IS NULL AND `tenant_id`=0 AND `name`='Redmi Note 11T Pro+ (`xaga`)'
+  AND `brand_id`=(SELECT `id` FROM `brand` WHERE `name`='Redmi' AND `tenant_id`=0);
+UPDATE `phone_model` SET `release_year`='2022', `release_month`='9', `battery_mah`='5000', `charge_w`='10', `wireless_w`='0', `series`=NULL, `chip`='联发科 天玑700', `ram`='6GB', `storage`='128GB', `screen_size`='6.58英寸', `resolution`='2400×1080', `refresh_rate`='90', `rear_camera`='1300万主摄'
+WHERE `chip` IS NULL AND `tenant_id`=0 AND `name`='Redmi Note 11R (`lightcm`)'
+  AND `brand_id`=(SELECT `id` FROM `brand` WHERE `name`='Redmi' AND `tenant_id`=0);
+UPDATE `phone_model` SET `release_year`='2023', `release_month`='5', `battery_mah`='5080', `charge_w`='67', `wireless_w`='0', `series`=NULL, `chip`='联发科 天玑8200-Ultra', `ram`='8GB', `storage`='256GB', `screen_size`='6.6英寸', `resolution`='2460×1080', `refresh_rate`='144', `rear_camera`='6400万主摄'
+WHERE `chip` IS NULL AND `tenant_id`=0 AND `name`='Redmi Note 12T Pro'
+  AND `brand_id`=(SELECT `id` FROM `brand` WHERE `name`='Redmi' AND `tenant_id`=0);
+UPDATE `phone_model` SET `release_year`='2023', `release_month`='3', `battery_mah`='5000', `charge_w`='67', `wireless_w`='0', `series`=NULL, `chip`='高通 骁龙7+ Gen2', `ram`='12GB', `storage`='256GB', `screen_size`='6.67英寸', `resolution`='2400×1080', `refresh_rate`='120', `rear_camera`='6400万主摄'
+WHERE `chip` IS NULL AND `tenant_id`=0 AND `name`='Redmi Note 12 Turbo'
+  AND `brand_id`=(SELECT `id` FROM `brand` WHERE `name`='Redmi' AND `tenant_id`=0);
+UPDATE `phone_model` SET `release_year`='2023', `release_month`='9', `battery_mah`='5100', `charge_w`='67', `wireless_w`='0', `series`=NULL, `chip`='高通 第二代骁龙7s', `ram`='8GB', `storage`='128GB', `screen_size`='6.67英寸', `resolution`='2712×1220', `refresh_rate`='120', `rear_camera`=NULL
+WHERE `chip` IS NULL AND `tenant_id`=0 AND `name`='Redmi Note 13 Pro'
+  AND `brand_id`=(SELECT `id` FROM `brand` WHERE `name`='Redmi' AND `tenant_id`=0);
+UPDATE `phone_model` SET `release_year`='2023', `release_month`='9', `battery_mah`='5000', `charge_w`='120', `wireless_w`='0', `series`=NULL, `chip`='联发科 天玑 7200-Ultra', `ram`='12GB', `storage`='256GB', `screen_size`='6.67英寸', `resolution`='2712×1220', `refresh_rate`='120', `rear_camera`=NULL
+WHERE `chip` IS NULL AND `tenant_id`=0 AND `name`='Redmi Note 13 Pro+'
+  AND `brand_id`=(SELECT `id` FROM `brand` WHERE `name`='Redmi' AND `tenant_id`=0);
+UPDATE `phone_model` SET `release_year`='2024', `release_month`='5', `battery_mah`='5030', `charge_w`='33', `wireless_w`='0', `series`=NULL, `chip`='高通 骁龙4 Gen2 领先版', `ram`='6GB', `storage`='128GB', `screen_size`='6.79英寸', `resolution`='2460×1080', `refresh_rate`='120', `rear_camera`='5000万主摄'
+WHERE `chip` IS NULL AND `tenant_id`=0 AND `name`='Redmi Note 13R'
+  AND `brand_id`=(SELECT `id` FROM `brand` WHERE `name`='Redmi' AND `tenant_id`=0);
+UPDATE `phone_model` SET `release_year`='2024', `release_month`='5', `battery_mah`='5000', `charge_w`='33', `wireless_w`='0', `series`=NULL, `chip`='联发科 天玑6080', `ram`='12GB', `storage`='256GB', `screen_size`='6.67英寸', `resolution`='2400×1080', `refresh_rate`='120', `rear_camera`=NULL
+WHERE `chip` IS NULL AND `tenant_id`=0 AND `name`='Redmi Note 13R Pro'
+  AND `brand_id`=(SELECT `id` FROM `brand` WHERE `name`='Redmi' AND `tenant_id`=0);
+UPDATE `phone_model` SET `release_year`='2024', `release_month`='9', `battery_mah`='5500', `charge_w`='45', `wireless_w`='0', `series`=NULL, `chip`='联发科 天玑 7300-Ultra', `ram`='8GB', `storage`='128GB', `screen_size`='6.67英寸', `resolution`='2712×1220', `refresh_rate`='120', `rear_camera`='5000万主摄'
+WHERE `chip` IS NULL AND `tenant_id`=0 AND `name`='Redmi Note 14 Pro'
+  AND `brand_id`=(SELECT `id` FROM `brand` WHERE `name`='Redmi' AND `tenant_id`=0);
+UPDATE `phone_model` SET `release_year`='2024', `release_month`='9', `battery_mah`='6200', `charge_w`='90', `wireless_w`='0', `series`=NULL, `chip`='高通 骁龙7S Gen3', `ram`='12GB', `storage`='256GB', `screen_size`='6.67英寸', `resolution`='2712×1220', `refresh_rate`='120', `rear_camera`='5000万主摄'
+WHERE `chip` IS NULL AND `tenant_id`=0 AND `name`='Redmi Note 14 Pro+'
+  AND `brand_id`=(SELECT `id` FROM `brand` WHERE `name`='Redmi' AND `tenant_id`=0);
+UPDATE `phone_model` SET `release_year`='2022', `release_month`='10', `battery_mah`='5000', `charge_w`='120', `wireless_w`='0', `series`=NULL, `chip`='联发科 天玑1080', `ram`='8GB', `storage`='256GB', `screen_size`='6.67英寸', `resolution`='2400×1080', `refresh_rate`='120', `rear_camera`=NULL
+WHERE `chip` IS NULL AND `tenant_id`=0 AND `name`='Redmi Note 12 Pro+ (`ruby`)'
+  AND `brand_id`=(SELECT `id` FROM `brand` WHERE `name`='Redmi' AND `tenant_id`=0);
+
+-- ===== 子代理收集·iQOO（31 款，来源: ZOL参数页(中关村在线),2026-10-25）=====
+UPDATE `phone_model` SET `release_year`='2021', `release_month`='8', `battery_mah`='4500', `charge_w`='120', `wireless_w`='50', `series`=NULL, `chip`='高通 骁龙888 Plus', `ram`='12GB', `storage`='256GB', `screen_size`='6.78英寸', `resolution`='3200×1440', `refresh_rate`='1-120', `rear_camera`='5000万主摄'
+WHERE `chip` IS NULL AND `tenant_id`=0 AND `name`='iQOO 8 Pro'
+  AND `brand_id`=(SELECT `id` FROM `brand` WHERE `name`='iQOO' AND `tenant_id`=0);
+UPDATE `phone_model` SET `release_year`='2022', `release_month`='1', `battery_mah`='4700', `charge_w`='120', `wireless_w`='50', `series`=NULL, `chip`='高通 骁龙8 Gen1', `ram`='12GB', `storage`='256GB', `screen_size`='6.78英寸', `resolution`='3200×1440', `refresh_rate`='1-120', `rear_camera`='5000万主摄'
+WHERE `chip` IS NULL AND `tenant_id`=0 AND `name`='iQOO 9 Pro'
+  AND `brand_id`=(SELECT `id` FROM `brand` WHERE `name`='iQOO' AND `tenant_id`=0);
+UPDATE `phone_model` SET `release_year`='2022', `release_month`='7', `battery_mah`='4700', `charge_w`='200', `wireless_w`='50', `series`=NULL, `chip`='高通 骁龙8+ Gen1', `ram`='12GB', `storage`='256GB', `screen_size`='6.78英寸', `resolution`='3200×1440', `refresh_rate`='1-120', `rear_camera`='5000万主摄'
+WHERE `chip` IS NULL AND `tenant_id`=0 AND `name`='iQOO 10 Pro'
+  AND `brand_id`=(SELECT `id` FROM `brand` WHERE `name`='iQOO' AND `tenant_id`=0);
+UPDATE `phone_model` SET `release_year`='2022', `release_month`='12', `battery_mah`='4700', `charge_w`='200', `wireless_w`='50', `series`=NULL, `chip`='高通 骁龙8 Gen2', `ram`='8GB', `storage`='256GB', `screen_size`='6.78英寸', `resolution`='3200×1440', `refresh_rate`='144', `rear_camera`='5000万主摄'
+WHERE `chip` IS NULL AND `tenant_id`=0 AND `name`='iQOO 11 Pro'
+  AND `brand_id`=(SELECT `id` FROM `brand` WHERE `name`='iQOO' AND `tenant_id`=0);
+UPDATE `phone_model` SET `release_year`='2023', `release_month`='7', `battery_mah`='4700', `charge_w`='200', `wireless_w`='0', `series`=NULL, `chip`='高通 骁龙8 Gen2', `ram`='12GB', `storage`='256GB', `screen_size`='6.78英寸', `resolution`='3200×1440', `refresh_rate`='144', `rear_camera`='5000万主摄'
+WHERE `chip` IS NULL AND `tenant_id`=0 AND `name`='iQOO 11S'
+  AND `brand_id`=(SELECT `id` FROM `brand` WHERE `name`='iQOO' AND `tenant_id`=0);
+UPDATE `phone_model` SET `release_year`='2023', `release_month`='11', `battery_mah`='5100', `charge_w`=NULL, `wireless_w`='50', `series`=NULL, `chip`='高通 骁龙8 Gen3', `ram`='16GB', `storage`='256GB', `screen_size`='6.78英寸', `resolution`='3200×1440', `refresh_rate`='144', `rear_camera`='5000万主摄'
+WHERE `chip` IS NULL AND `tenant_id`=0 AND `name`='iQOO 12 Pro'
+  AND `brand_id`=(SELECT `id` FROM `brand` WHERE `name`='iQOO' AND `tenant_id`=0);
+UPDATE `phone_model` SET `release_year`='2026', `release_month`='2', `battery_mah`='7400', `charge_w`='100', `wireless_w`='40', `series`=NULL, `chip`='骁龙 8 Elite Gen5', `ram`='16GB', `storage`='256GB', `screen_size`='6.85英寸', `resolution`='3168×1440', `refresh_rate`='144', `rear_camera`='5000万主摄'
+WHERE `chip` IS NULL AND `tenant_id`=0 AND `name`='iQOO 15 Ultra'
+  AND `brand_id`=(SELECT `id` FROM `brand` WHERE `name`='iQOO' AND `tenant_id`=0);
+UPDATE `phone_model` SET `release_year`='2026', `release_month`='3', `battery_mah`='7500', `charge_w`='100', `wireless_w`='50', `series`=NULL, `chip`='骁龙 8 Elite Gen5', `ram`='12GB', `storage`='256GB', `screen_size`='6.32英寸', `resolution`='2640×1216', `refresh_rate`='165', `rear_camera`='5000万主摄'
+WHERE `chip` IS NULL AND `tenant_id`=0 AND `name`='iQOO 15T'
+  AND `brand_id`=(SELECT `id` FROM `brand` WHERE `name`='iQOO' AND `tenant_id`=0);
+UPDATE `phone_model` SET `release_year`='2021', `release_month`='12', `battery_mah`='4500', `charge_w`='66', `wireless_w`='0', `series`=NULL, `chip`='高通 骁龙888', `ram`='8GB', `storage`='256GB', `screen_size`='6.62英寸', `resolution`='2400×1080', `refresh_rate`='120', `rear_camera`='4800万主摄'
+WHERE `chip` IS NULL AND `tenant_id`=0 AND `name`='iQOO Neo5S'
+  AND `brand_id`=(SELECT `id` FROM `brand` WHERE `name`='iQOO' AND `tenant_id`=0);
+UPDATE `phone_model` SET `release_year`='2021', `release_month`='12', `battery_mah`='4500', `charge_w`='55', `wireless_w`='0', `series`=NULL, `chip`='高通 骁龙870', `ram`='8GB', `storage`='256GB', `screen_size`='6.67英寸', `resolution`='2400×1080', `refresh_rate`='144', `rear_camera`='5000万主摄'
+WHERE `chip` IS NULL AND `tenant_id`=0 AND `name`='iQOO Neo5 SE'
+  AND `brand_id`=(SELECT `id` FROM `brand` WHERE `name`='iQOO' AND `tenant_id`=0);
+UPDATE `phone_model` SET `release_year`='2022', `release_month`='5', `battery_mah`='4700', `charge_w`='80', `wireless_w`='0', `series`=NULL, `chip`='高通 骁龙870', `ram`='8GB', `storage`='128GB', `screen_size`='6.62英寸', `resolution`='2400×1080', `refresh_rate`='120', `rear_camera`='6400万主摄'
+WHERE `chip` IS NULL AND `tenant_id`=0 AND `name`='iQOO Neo6 SE'
+  AND `brand_id`=(SELECT `id` FROM `brand` WHERE `name`='iQOO' AND `tenant_id`=0);
+UPDATE `phone_model` SET `release_year`='2022', `release_month`='12', `battery_mah`='5000', `charge_w`='120', `wireless_w`='0', `series`=NULL, `chip`='联发科 天玑8200', `ram`='8GB', `storage`='128GB', `screen_size`='6.78英寸', `resolution`='2400×1080', `refresh_rate`='120', `rear_camera`='6400万主摄'
+WHERE `chip` IS NULL AND `tenant_id`=0 AND `name`='iQOO Neo7 SE'
+  AND `brand_id`=(SELECT `id` FROM `brand` WHERE `name`='iQOO' AND `tenant_id`=0);
+UPDATE `phone_model` SET `release_year`='2023', `release_month`='5', `battery_mah`='5000', `charge_w`='120', `wireless_w`='0', `series`=NULL, `chip`='联发科 天玑9200+', `ram`='16GB', `storage`='256GB', `screen_size`='6.78英寸', `resolution`='2800×1260', `refresh_rate`='144', `rear_camera`='5000万主摄'
+WHERE `chip` IS NULL AND `tenant_id`=0 AND `name`='iQOO Neo8 Pro'
+  AND `brand_id`=(SELECT `id` FROM `brand` WHERE `name`='iQOO' AND `tenant_id`=0);
+UPDATE `phone_model` SET `release_year`='2023', `release_month`='12', `battery_mah`='5160', `charge_w`='120', `wireless_w`='0', `series`=NULL, `chip`='联发科 天玑9300', `ram`='12GB', `storage`='256GB', `screen_size`='6.78英寸', `resolution`='2800×1260', `refresh_rate`='144', `rear_camera`='5000万主摄'
+WHERE `chip` IS NULL AND `tenant_id`=0 AND `name`='iQOO Neo9 Pro'
+  AND `brand_id`=(SELECT `id` FROM `brand` WHERE `name`='iQOO' AND `tenant_id`=0);
+UPDATE `phone_model` SET `release_year`='2024', `release_month`='5', `battery_mah`='5160', `charge_w`='120', `wireless_w`='0', `series`=NULL, `chip`='联发科 天玑9300+', `ram`='12GB', `storage`='256GB', `screen_size`='6.78英寸', `resolution`='2800×1260', `refresh_rate`='144', `rear_camera`='5000万主摄'
+WHERE `chip` IS NULL AND `tenant_id`=0 AND `name`='iQOO Neo9S Pro'
+  AND `brand_id`=(SELECT `id` FROM `brand` WHERE `name`='iQOO' AND `tenant_id`=0);
+UPDATE `phone_model` SET `release_year`='2024', `release_month`='7', `battery_mah`='5500', `charge_w`='120', `wireless_w`='0', `series`=NULL, `chip`='高通 骁龙8 Gen3', `ram`='12GB', `storage`='256GB', `screen_size`='6.78英寸', `resolution`='2800×1260', `refresh_rate`='144', `rear_camera`='5000万主摄'
+WHERE `chip` IS NULL AND `tenant_id`=0 AND `name`='iQOO Neo9S Pro+'
+  AND `brand_id`=(SELECT `id` FROM `brand` WHERE `name`='iQOO' AND `tenant_id`=0);
+UPDATE `phone_model` SET `release_year`='2024', `release_month`='11', `battery_mah`='6100', `charge_w`='120', `wireless_w`='0', `series`=NULL, `chip`='联发科 天玑9400', `ram`='12GB', `storage`='256GB', `screen_size`='6.78英寸', `resolution`='2800×1260', `refresh_rate`='144', `rear_camera`='5000万主摄'
+WHERE `chip` IS NULL AND `tenant_id`=0 AND `name`='iQOO Neo10 Pro'
+  AND `brand_id`=(SELECT `id` FROM `brand` WHERE `name`='iQOO' AND `tenant_id`=0);
+UPDATE `phone_model` SET `release_year`='2025', `release_month`='10', `battery_mah`='7500', `charge_w`='100', `wireless_w`='0', `series`=NULL, `chip`='高通 骁龙 8 Elite', `ram`='12GB', `storage`='256GB', `screen_size`='6.82英寸', `resolution`='3168×1440', `refresh_rate`='144', `rear_camera`='5000万主摄'
+WHERE `chip` IS NULL AND `tenant_id`=0 AND `name`='iQOO Neo11'
+  AND `brand_id`=(SELECT `id` FROM `brand` WHERE `name`='iQOO' AND `tenant_id`=0);
+UPDATE `phone_model` SET `release_year`='2021', `release_month`='10', `battery_mah`='5000', `charge_w`='44', `wireless_w`='0', `series`=NULL, `chip`='联发科 天玑900', `ram`='8GB', `storage`='128GB', `screen_size`='6.58英寸', `resolution`='2408×1080', `refresh_rate`='120', `rear_camera`='5000万主摄'
+WHERE `chip` IS NULL AND `tenant_id`=0 AND `name`='iQOO Z5x'
+  AND `brand_id`=(SELECT `id` FROM `brand` WHERE `name`='iQOO' AND `tenant_id`=0);
+UPDATE `phone_model` SET `release_year`='2022', `release_month`='8', `battery_mah`='6000', `charge_w`='44', `wireless_w`='0', `series`=NULL, `chip`='联发科 天玑810', `ram`='6GB', `storage`='128GB', `screen_size`='6.58英寸', `resolution`='2408×1080', `refresh_rate`=NULL, `rear_camera`='5000万主摄'
+WHERE `chip` IS NULL AND `tenant_id`=0 AND `name`='iQOO Z6x'
+  AND `brand_id`=(SELECT `id` FROM `brand` WHERE `name`='iQOO' AND `tenant_id`=0);
+UPDATE `phone_model` SET `release_year`='2023', `release_month`='3', `battery_mah`='6000', `charge_w`='80', `wireless_w`='0', `series`=NULL, `chip`='高通 骁龙 695', `ram`='6GB', `storage`='128GB', `screen_size`='6.64英寸', `resolution`=NULL, `refresh_rate`='120', `rear_camera`='5000万主摄'
+WHERE `chip` IS NULL AND `tenant_id`=0 AND `name`='iQOO Z7x'
+  AND `brand_id`=(SELECT `id` FROM `brand` WHERE `name`='iQOO' AND `tenant_id`=0);
+UPDATE `phone_model` SET `release_year`='2023', `release_month`='3', `battery_mah`='5000', `charge_w`='15', `wireless_w`='0', `series`=NULL, `chip`='联发科 天玑6020', `ram`='4GB', `storage`='128GB', `screen_size`='6.51英寸', `resolution`='1600×720', `refresh_rate`='60', `rear_camera`='1300万主摄'
+WHERE `chip` IS NULL AND `tenant_id`=0 AND `name`='iQOO Z7i'
+  AND `brand_id`=(SELECT `id` FROM `brand` WHERE `name`='iQOO' AND `tenant_id`=0);
+UPDATE `phone_model` SET `release_year`='2023', `release_month`='8', `battery_mah`='6000', `charge_w`='44', `wireless_w`='0', `series`=NULL, `chip`='高通 骁龙6 Gen1', `ram`='8GB', `storage`='128GB', `screen_size`='6.64英寸', `resolution`=NULL, `refresh_rate`='120', `rear_camera`='5000万主摄'
+WHERE `chip` IS NULL AND `tenant_id`=0 AND `name`='iQOO Z8x'
+  AND `brand_id`=(SELECT `id` FROM `brand` WHERE `name`='iQOO' AND `tenant_id`=0);
+UPDATE `phone_model` SET `release_year`='2024', `release_month`='4', `battery_mah`='6000', `charge_w`='80', `wireless_w`='0', `series`=NULL, `chip`='高通 骁龙7 Gen3', `ram`='8GB', `storage`='128GB', `screen_size`='6.78英寸', `resolution`='2800×1260', `refresh_rate`='144', `rear_camera`='5000万主摄'
+WHERE `chip` IS NULL AND `tenant_id`=0 AND `name`='iQOO Z9'
+  AND `brand_id`=(SELECT `id` FROM `brand` WHERE `name`='iQOO' AND `tenant_id`=0);
+UPDATE `phone_model` SET `release_year`='2024', `release_month`='9', `battery_mah`='6400', `charge_w`='80', `wireless_w`='0', `series`=NULL, `chip`='联发科 天玑9300+', `ram`='12GB', `storage`='256GB', `screen_size`='6.78英寸', `resolution`='2800×1260', `refresh_rate`='144', `rear_camera`='5000万主摄'
+WHERE `chip` IS NULL AND `tenant_id`=0 AND `name`='iQOO Z9 Turbo+'
+  AND `brand_id`=(SELECT `id` FROM `brand` WHERE `name`='iQOO' AND `tenant_id`=0);
+UPDATE `phone_model` SET `release_year`='2024', `release_month`='4', `battery_mah`='6000', `charge_w`='44', `wireless_w`='0', `series`=NULL, `chip`='高通 骁龙6 Gen1', `ram`='8GB', `storage`='128GB', `screen_size`='6.72英寸', `resolution`='2408×1080', `refresh_rate`='120', `rear_camera`='5000万主摄'
+WHERE `chip` IS NULL AND `tenant_id`=0 AND `name`='iQOO Z9x'
+  AND `brand_id`=(SELECT `id` FROM `brand` WHERE `name`='iQOO' AND `tenant_id`=0);
+UPDATE `phone_model` SET `release_year`='2025', `release_month`='4', `battery_mah`='7620', `charge_w`='90', `wireless_w`='0', `series`=NULL, `chip`='联发科 天玑 8400 满血版', `ram`='12GB', `storage`='256GB', `screen_size`='6.78英寸', `resolution`='2800×1260', `refresh_rate`='144', `rear_camera`='5000万主摄'
+WHERE `chip` IS NULL AND `tenant_id`=0 AND `name`='iQOO Z10 Turbo'
+  AND `brand_id`=(SELECT `id` FROM `brand` WHERE `name`='iQOO' AND `tenant_id`=0);
+UPDATE `phone_model` SET `release_year`='2026', `release_month`='8', `battery_mah`='10000', `charge_w`='44', `wireless_w`='0', `series`=NULL, `chip`='联发科 天玑 7500满血版', `ram`='12GB', `storage`='512GB', `screen_size`='6.83英寸', `resolution`='2800×1260', `refresh_rate`='165', `rear_camera`='5000万主摄'
+WHERE `chip` IS NULL AND `tenant_id`=0 AND `name`='iQOO Z11S'
+  AND `brand_id`=(SELECT `id` FROM `brand` WHERE `name`='iQOO' AND `tenant_id`=0);
+UPDATE `phone_model` SET `release_year`='2021', `release_month`='12', `battery_mah`='5000', `charge_w`='18', `wireless_w`='0', `series`=NULL, `chip`='高通 骁龙695', `ram`='6GB', `storage`='128GB', `screen_size`='6.58英寸', `resolution`='2408×1080', `refresh_rate`='120', `rear_camera`='5000万主摄'
+WHERE `chip` IS NULL AND `tenant_id`=0 AND `name`='iQOO U5'
+  AND `brand_id`=(SELECT `id` FROM `brand` WHERE `name`='iQOO' AND `tenant_id`=0);
+UPDATE `phone_model` SET `release_year`='2022', `release_month`='3', `battery_mah`='5000', `charge_w`='10', `wireless_w`='0', `series`=NULL, `chip`='高通 骁龙680', `ram`='4GB', `storage`='128GB', `screen_size`='6.51英寸', `resolution`='1600×720', `refresh_rate`='60', `rear_camera`='1300万主摄'
+WHERE `chip` IS NULL AND `tenant_id`=0 AND `name`='iQOO U5x'
+  AND `brand_id`=(SELECT `id` FROM `brand` WHERE `name`='iQOO' AND `tenant_id`=0);
+UPDATE `phone_model` SET `release_year`='2019', `release_month`='10', `battery_mah`='4500', `charge_w`='33', `wireless_w`='0', `series`=NULL, `chip`='高通 骁龙855', `ram`='6GB', `storage`='64GB', `screen_size`='6.38英寸', `resolution`='2340×1080', `refresh_rate`=NULL, `rear_camera`='1200万主摄'
+WHERE `chip` IS NULL AND `tenant_id`=0 AND `name`='iQOO Neo 855 版'
+  AND `brand_id`=(SELECT `id` FROM `brand` WHERE `name`='iQOO' AND `tenant_id`=0);
+
+-- ===== 子代理收集·realme（34 款，来源: ZOL参数页(中关村在线),2026-10-25）=====
+UPDATE `phone_model` SET `release_year`='2020', `release_month`='4', `battery_mah`='4200', `charge_w`=NULL, `wireless_w`='0', `series`=NULL, `chip`='高通 骁龙765G', `ram`='8GB', `storage`='256GB', `screen_size`='6.57英寸', `resolution`='2400×1080', `refresh_rate`='120', `rear_camera`='4800万主摄'
+WHERE `chip` IS NULL AND `tenant_id`=0 AND `name`='真我 X50t'
+  AND `brand_id`=(SELECT `id` FROM `brand` WHERE `name`='realme' AND `tenant_id`=0);
+UPDATE `phone_model` SET `release_year`='2024', `release_month`='12', `battery_mah`='5300', `charge_w`='100', `wireless_w`='0', `series`=NULL, `chip`='高通 骁龙8 Gen3', `ram`='12GB', `storage`='256GB', `screen_size`='6.7英寸', `resolution`='2664×1200', `refresh_rate`='120', `rear_camera`='5000万主摄'
+WHERE `chip` IS NULL AND `tenant_id`=0 AND `name`='真我 GT'
+  AND `brand_id`=(SELECT `id` FROM `brand` WHERE `name`='realme' AND `tenant_id`=0);
+UPDATE `phone_model` SET `release_year`='2022', `release_month`='1', `battery_mah`='5000', `charge_w`='65', `wireless_w`='0', `series`=NULL, `chip`='高通 骁龙888', `ram`='8GB', `storage`='128GB', `screen_size`='6.62英寸', `resolution`='2400×1080', `refresh_rate`='120', `rear_camera`='5000万主摄'
+WHERE `chip` IS NULL AND `tenant_id`=0 AND `name`='真我 GT2'
+  AND `brand_id`=(SELECT `id` FROM `brand` WHERE `name`='realme' AND `tenant_id`=0);
+UPDATE `phone_model` SET `release_year`='2022', `release_month`='1', `battery_mah`='5000', `charge_w`='65', `wireless_w`='0', `series`=NULL, `chip`='高通 骁龙8 Gen1', `ram`='12GB', `storage`='256GB', `screen_size`='6.7英寸', `resolution`='3216×1440', `refresh_rate`='1-120', `rear_camera`='5000万主摄'
+WHERE `chip` IS NULL AND `tenant_id`=0 AND `name`='真我 GT2 Pro'
+  AND `brand_id`=(SELECT `id` FROM `brand` WHERE `name`='realme' AND `tenant_id`=0);
+UPDATE `phone_model` SET `release_year`='2023', `release_month`='12', `battery_mah`='5400', `charge_w`='100', `wireless_w`='50', `series`=NULL, `chip`='高通 骁龙8 Gen3', `ram`='12GB', `storage`='256GB', `screen_size`='6.78英寸', `resolution`='2780×1264', `refresh_rate`='144', `rear_camera`='5000万主摄'
+WHERE `chip` IS NULL AND `tenant_id`=0 AND `name`='真我 GT5 Pro'
+  AND `brand_id`=(SELECT `id` FROM `brand` WHERE `name`='realme' AND `tenant_id`=0);
+UPDATE `phone_model` SET `release_year`='2025', `release_month`='4', `battery_mah`='7200', `charge_w`='100', `wireless_w`='0', `series`=NULL, `chip`='联发科 天玑 9400+', `ram`='12GB', `storage`='256GB', `screen_size`='6.8英寸', `resolution`='2800×1280', `refresh_rate`='144', `rear_camera`='5000万主摄'
+WHERE `chip` IS NULL AND `tenant_id`=0 AND `name`='真我 GT7'
+  AND `brand_id`=(SELECT `id` FROM `brand` WHERE `name`='realme' AND `tenant_id`=0);
+UPDATE `phone_model` SET `release_year`='2025', `release_month`='10', `battery_mah`='7000', `charge_w`='100', `wireless_w`='0', `series`=NULL, `chip`='高通 骁龙 8 Elite', `ram`='12GB', `storage`='256GB', `screen_size`='6.79英寸', `resolution`='3136×1440', `refresh_rate`='144', `rear_camera`='5000万主摄'
+WHERE `chip` IS NULL AND `tenant_id`=0 AND `name`='真我 GT8'
+  AND `brand_id`=(SELECT `id` FROM `brand` WHERE `name`='realme' AND `tenant_id`=0);
+UPDATE `phone_model` SET `release_year`='2025', `release_month`='10', `battery_mah`='7000', `charge_w`='120', `wireless_w`='50', `series`=NULL, `chip`='骁龙 8 Elite Gen5', `ram`='12GB', `storage`='256GB', `screen_size`='6.79英寸', `resolution`='3136×1440', `refresh_rate`='144', `rear_camera`='5000万主摄'
+WHERE `chip` IS NULL AND `tenant_id`=0 AND `name`='真我 GT8 Pro'
+  AND `brand_id`=(SELECT `id` FROM `brand` WHERE `name`='realme' AND `tenant_id`=0);
+UPDATE `phone_model` SET `release_year`='2021', `release_month`='3', `battery_mah`='4500', `charge_w`='50', `wireless_w`='0', `series`=NULL, `chip`='联发科 天玑1200', `ram`='8GB', `storage`='128GB', `screen_size`='6.43英寸', `resolution`='2400×1080', `refresh_rate`='120', `rear_camera`='6400万主摄'
+WHERE `chip` IS NULL AND `tenant_id`=0 AND `name`='真我 GT Neo'
+  AND `brand_id`=(SELECT `id` FROM `brand` WHERE `name`='realme' AND `tenant_id`=0);
+UPDATE `phone_model` SET `release_year`='2021', `release_month`='10', `battery_mah`='4500', `charge_w`='65', `wireless_w`='0', `series`=NULL, `chip`='联发科 天玑1200-AI版', `ram`='8GB', `storage`='256GB', `screen_size`='6.43英寸', `resolution`='2400×1080', `refresh_rate`='120', `rear_camera`='6400万主摄'
+WHERE `chip` IS NULL AND `tenant_id`=0 AND `name`='真我 GT Neo2T'
+  AND `brand_id`=(SELECT `id` FROM `brand` WHERE `name`='realme' AND `tenant_id`=0);
+UPDATE `phone_model` SET `release_year`='2024', `release_month`='5', `battery_mah`='5500', `charge_w`='120', `wireless_w`='0', `series`=NULL, `chip`='高通 骁龙8S Gen3', `ram`='12GB', `storage`='256GB', `screen_size`='6.78英寸', `resolution`='2780×1264', `refresh_rate`='120', `rear_camera`='5000万主摄'
+WHERE `chip` IS NULL AND `tenant_id`=0 AND `name`='真我 GT Neo6'
+  AND `brand_id`=(SELECT `id` FROM `brand` WHERE `name`='realme' AND `tenant_id`=0);
+UPDATE `phone_model` SET `release_year`='2024', `release_month`='12', `battery_mah`='7000', `charge_w`='80', `wireless_w`='0', `series`=NULL, `chip`='联发科 天玑 9300+', `ram`='12GB', `storage`='256GB', `screen_size`='6.78英寸', `resolution`='2780×1264', `refresh_rate`='1-120', `rear_camera`='5000万主摄'
+WHERE `chip` IS NULL AND `tenant_id`=0 AND `name`='真我 Neo7'
+  AND `brand_id`=(SELECT `id` FROM `brand` WHERE `name`='realme' AND `tenant_id`=0);
+UPDATE `phone_model` SET `release_year`='2025', `release_month`='5', `battery_mah`='7200', `charge_w`='100', `wireless_w`='0', `series`=NULL, `chip`='联发科 天玑 9400e', `ram`='12GB', `storage`='256GB', `screen_size`='6.8英寸', `resolution`='2800×1280', `refresh_rate`='144', `rear_camera`='5000万主摄'
+WHERE `chip` IS NULL AND `tenant_id`=0 AND `name`='真我 Neo7 Turbo'
+  AND `brand_id`=(SELECT `id` FROM `brand` WHERE `name`='realme' AND `tenant_id`=0);
+UPDATE `phone_model` SET `release_year`='2025', `release_month`='2', `battery_mah`='7000', `charge_w`='80', `wireless_w`='0', `series`=NULL, `chip`='联发科 天玑 8400-MAX', `ram`='8GB', `storage`='256GB', `screen_size`='6.78英寸', `resolution`=NULL, `refresh_rate`=NULL, `rear_camera`='5000万主摄'
+WHERE `chip` IS NULL AND `tenant_id`=0 AND `name`='真我 Neo7 SE'
+  AND `brand_id`=(SELECT `id` FROM `brand` WHERE `name`='realme' AND `tenant_id`=0);
+UPDATE `phone_model` SET `release_year`='2021', `release_month`='4', `battery_mah`='4500', `charge_w`='30', `wireless_w`='0', `series`=NULL, `chip`='联发科 天玑1100', `ram`='8GB', `storage`='128GB', `screen_size`='6.43英寸', `resolution`='2400×1080', `refresh_rate`='120', `rear_camera`='6400万主摄'
+WHERE `chip` IS NULL AND `tenant_id`=0 AND `name`='真我 Q3 Pro'
+  AND `brand_id`=(SELECT `id` FROM `brand` WHERE `name`='realme' AND `tenant_id`=0);
+UPDATE `phone_model` SET `release_year`='2021', `release_month`='4', `battery_mah`='5000', `charge_w`='18', `wireless_w`='0', `series`=NULL, `chip`='联发科 天玑700', `ram`='6GB', `storage`='128GB', `screen_size`='6.5英寸', `resolution`='2400×1080', `refresh_rate`='90', `rear_camera`='4800万主摄'
+WHERE `chip` IS NULL AND `tenant_id`=0 AND `name`='真我 Q3i'
+  AND `brand_id`=(SELECT `id` FROM `brand` WHERE `name`='realme' AND `tenant_id`=0);
+UPDATE `phone_model` SET `release_year`='2021', `release_month`='10', `battery_mah`='5000', `charge_w`='30', `wireless_w`='0', `series`=NULL, `chip`='高通 骁龙778G', `ram`='8GB', `storage`='128GB', `screen_size`='6.6英寸', `resolution`='2412×1080', `refresh_rate`='144', `rear_camera`='4800万主摄'
+WHERE `chip` IS NULL AND `tenant_id`=0 AND `name`='真我 Q3s'
+  AND `brand_id`=(SELECT `id` FROM `brand` WHERE `name`='realme' AND `tenant_id`=0);
+UPDATE `phone_model` SET `release_year`='2021', `release_month`='11', `battery_mah`='5000', `charge_w`='30', `wireless_w`='0', `series`=NULL, `chip`='高通 骁龙778G', `ram`='6GB', `storage`='128GB', `screen_size`='6.6英寸', `resolution`='2412×1080', `refresh_rate`='144', `rear_camera`='4800万主摄'
+WHERE `chip` IS NULL AND `tenant_id`=0 AND `name`='真我 Q3t'
+  AND `brand_id`=(SELECT `id` FROM `brand` WHERE `name`='realme' AND `tenant_id`=0);
+UPDATE `phone_model` SET `release_year`='2022', `release_month`='4', `battery_mah`='5000', `charge_w`='80', `wireless_w`='0', `series`=NULL, `chip`='高通 骁龙870', `ram`='8GB', `storage`='128GB', `screen_size`='6.62英寸', `resolution`='2400×1080', `refresh_rate`='120', `rear_camera`='6400万主摄'
+WHERE `chip` IS NULL AND `tenant_id`=0 AND `name`='真我 Q5 Pro'
+  AND `brand_id`=(SELECT `id` FROM `brand` WHERE `name`='realme' AND `tenant_id`=0);
+UPDATE `phone_model` SET `release_year`='2022', `release_month`='4', `battery_mah`='5000', `charge_w`='33', `wireless_w`='0', `series`=NULL, `chip`='联发科 天玑810', `ram`='6GB', `storage`='128GB', `screen_size`='6.58英寸', `resolution`='2408×1080', `refresh_rate`='90', `rear_camera`='1300万主摄'
+WHERE `chip` IS NULL AND `tenant_id`=0 AND `name`='真我 Q5i'
+  AND `brand_id`=(SELECT `id` FROM `brand` WHERE `name`='realme' AND `tenant_id`=0);
+UPDATE `phone_model` SET `release_year`='2022', `release_month`='12', `battery_mah`='5000', `charge_w`='33', `wireless_w`='0', `series`=NULL, `chip`='天玑810', `ram`='8GB', `storage`='128GB', `screen_size`='6.6英寸', `resolution`='2408×1080', `refresh_rate`='90', `rear_camera`='5000万主摄'
+WHERE `chip` IS NULL AND `tenant_id`=0 AND `name`='真我 10s'
+  AND `brand_id`=(SELECT `id` FROM `brand` WHERE `name`='realme' AND `tenant_id`=0);
+UPDATE `phone_model` SET `release_year`='2022', `release_month`='11', `battery_mah`='5000', `charge_w`='33', `wireless_w`='0', `series`=NULL, `chip`='高通 骁龙695', `ram`='8GB', `storage`='256GB', `screen_size`='6.72英寸', `resolution`='2400×1080', `refresh_rate`='120', `rear_camera`=NULL
+WHERE `chip` IS NULL AND `tenant_id`=0 AND `name`='真我 10 Pro'
+  AND `brand_id`=(SELECT `id` FROM `brand` WHERE `name`='realme' AND `tenant_id`=0);
+UPDATE `phone_model` SET `release_year`='2022', `release_month`='11', `battery_mah`='5000', `charge_w`='67', `wireless_w`='0', `series`=NULL, `chip`='联发科 天玑1080', `ram`='8GB', `storage`='128GB', `screen_size`='6.7英寸', `resolution`='2412×1080', `refresh_rate`=NULL, `rear_camera`=NULL
+WHERE `chip` IS NULL AND `tenant_id`=0 AND `name`='真我 10 Pro+'
+  AND `brand_id`=(SELECT `id` FROM `brand` WHERE `name`='realme' AND `tenant_id`=0);
+UPDATE `phone_model` SET `release_year`='2023', `release_month`='5', `battery_mah`='5000', `charge_w`='67', `wireless_w`='0', `series`=NULL, `chip`='联发科 天玑7050', `ram`='8GB', `storage`='256GB', `screen_size`='6.7英寸', `resolution`='2412×1080', `refresh_rate`='120', `rear_camera`=NULL
+WHERE `chip` IS NULL AND `tenant_id`=0 AND `name`='真我 11 Pro'
+  AND `brand_id`=(SELECT `id` FROM `brand` WHERE `name`='realme' AND `tenant_id`=0);
+UPDATE `phone_model` SET `release_year`='2023', `release_month`='5', `battery_mah`='5000', `charge_w`='100', `wireless_w`='0', `series`=NULL, `chip`='联发科 天玑7050', `ram`='12GB', `storage`='256GB', `screen_size`='6.7英寸', `resolution`='2412×1080', `refresh_rate`='120', `rear_camera`=NULL
+WHERE `chip` IS NULL AND `tenant_id`=0 AND `name`='真我 11 Pro+'
+  AND `brand_id`=(SELECT `id` FROM `brand` WHERE `name`='realme' AND `tenant_id`=0);
+UPDATE `phone_model` SET `release_year`='2025', `release_month`='1', `battery_mah`='6000', `charge_w`='80', `wireless_w`='0', `series`=NULL, `chip`='高通 骁龙7S Gen3', `ram`='12GB', `storage`='256GB', `screen_size`='6.83英寸', `resolution`='2800×1272', `refresh_rate`='120', `rear_camera`='5000万主摄'
+WHERE `chip` IS NULL AND `tenant_id`=0 AND `name`='真我 14 Pro+'
+  AND `brand_id`=(SELECT `id` FROM `brand` WHERE `name`='realme' AND `tenant_id`=0);
+UPDATE `phone_model` SET `release_year`='2025', `release_month`='9', `battery_mah`='7000', `charge_w`='80', `wireless_w`='0', `series`=NULL, `chip`='联发科 天玑7300+', `ram`='8GB', `storage`='256GB', `screen_size`='6.77英寸', `resolution`='2392×1080', `refresh_rate`='144', `rear_camera`='5000万主摄'
+WHERE `chip` IS NULL AND `tenant_id`=0 AND `name`='真我 15'
+  AND `brand_id`=(SELECT `id` FROM `brand` WHERE `name`='realme' AND `tenant_id`=0);
+UPDATE `phone_model` SET `release_year`='2024', `release_month`='10', `battery_mah`='6100', `charge_w`='90', `wireless_w`='50', `series`=NULL, `chip`='高通 骁龙 8 Elite', `ram`='12GB', `storage`='256GB', `screen_size`='6.73英寸', `resolution`='3200×1440', `refresh_rate`='120', `rear_camera`='5000万主摄'
+WHERE `chip` IS NULL AND `tenant_id`=0 AND `name`='真我 15 Pro'
+  AND `brand_id`=(SELECT `id` FROM `brand` WHERE `name`='realme' AND `tenant_id`=0);
+UPDATE `phone_model` SET `release_year`='2026', `release_month`='3', `battery_mah`='7500', `charge_w`='100', `wireless_w`='50', `series`=NULL, `chip`='骁龙 8 Elite Gen5', `ram`='12GB', `storage`='256GB', `screen_size`='6.32英寸', `resolution`='2640×1216', `refresh_rate`='165', `rear_camera`='5000万主摄'
+WHERE `chip` IS NULL AND `tenant_id`=0 AND `name`='真我 15T'
+  AND `brand_id`=(SELECT `id` FROM `brand` WHERE `name`='realme' AND `tenant_id`=0);
+UPDATE `phone_model` SET `release_year`='2021', `release_month`='2', `battery_mah`='5000', `charge_w`='18', `wireless_w`='0', `series`=NULL, `chip`='联发科 天玑700', `ram`='4GB', `storage`='128GB', `screen_size`='6.52英寸', `resolution`=NULL, `refresh_rate`='60', `rear_camera`='1300万主摄'
+WHERE `chip` IS NULL AND `tenant_id`=0 AND `name`='真我 V11'
+  AND `brand_id`=(SELECT `id` FROM `brand` WHERE `name`='realme' AND `tenant_id`=0);
+UPDATE `phone_model` SET `release_year`='2021', `release_month`='3', `battery_mah`='5000', `charge_w`='18', `wireless_w`='0', `series`=NULL, `chip`='联发科 天玑700', `ram`='8GB', `storage`='128GB', `screen_size`='6.5英寸', `resolution`='2400×1080', `refresh_rate`='90', `rear_camera`='4800万主摄'
+WHERE `chip` IS NULL AND `tenant_id`=0 AND `name`='真我 V13'
+  AND `brand_id`=(SELECT `id` FROM `brand` WHERE `name`='realme' AND `tenant_id`=0);
+UPDATE `phone_model` SET `release_year`='2022', `release_month`='4', `battery_mah`='5000', `charge_w`='33', `wireless_w`='0', `series`=NULL, `chip`='联发科 天玑810', `ram`='12GB', `storage`='256GB', `screen_size`='6.58英寸', `resolution`='2408×1080', `refresh_rate`=NULL, `rear_camera`='4800万主摄'
+WHERE `chip` IS NULL AND `tenant_id`=0 AND `name`='真我 V23'
+  AND `brand_id`=(SELECT `id` FROM `brand` WHERE `name`='realme' AND `tenant_id`=0);
+UPDATE `phone_model` SET `release_year`='2022', `release_month`=NULL, `battery_mah`='5000', `charge_w`='33', `wireless_w`='0', `series`=NULL, `chip`='联发科 天玑700', `ram`='8GB', `storage`='256GB', `screen_size`='6.56英寸', `resolution`='1612×720', `refresh_rate`=NULL, `rear_camera`='1300万主摄'
+WHERE `chip` IS NULL AND `tenant_id`=0 AND `name`='真我 V23i'
+  AND `brand_id`=(SELECT `id` FROM `brand` WHERE `name`='realme' AND `tenant_id`=0);
+UPDATE `phone_model` SET `release_year`='2023', `release_month`='2', `battery_mah`='5000', `charge_w`='10', `wireless_w`='0', `series`=NULL, `chip`='联发科 天玑700', `ram`='6GB', `storage`='128GB', `screen_size`='6.5英寸', `resolution`='1600×720', `refresh_rate`=NULL, `rear_camera`='1300万主摄'
+WHERE `chip` IS NULL AND `tenant_id`=0 AND `name`='真我 V30t'
+  AND `brand_id`=(SELECT `id` FROM `brand` WHERE `name`='realme' AND `tenant_id`=0);
+
+-- ===== 子代理收集·vivo（57 款，来源: ZOL参数页(中关村在线),2026-10-25）=====
+UPDATE `phone_model` SET `release_year`='2021', `release_month`='3', `battery_mah`='4300', `charge_w`='33', `wireless_w`='0', `series`=NULL, `chip`='联发科 天玑1100', `ram`='8GB', `storage`='128GB', `screen_size`='6.56英寸', `resolution`='2376×1080', `refresh_rate`='120', `rear_camera`='4800万主摄'
+WHERE `chip` IS NULL AND `tenant_id`=0 AND `name`='vivo X60t'
+  AND `brand_id`=(SELECT `id` FROM `brand` WHERE `name`='vivo' AND `tenant_id`=0);
+UPDATE `phone_model` SET `release_year`='2021', `release_month`='6', `battery_mah`='4200', `charge_w`='55', `wireless_w`='0', `series`=NULL, `chip`='高通 骁龙888', `ram`='8GB', `storage`='128GB', `screen_size`='6.56英寸', `resolution`='2376×1080', `refresh_rate`='120', `rear_camera`='5000万主摄'
+WHERE `chip` IS NULL AND `tenant_id`=0 AND `name`='vivo X60t Pro+'
+  AND `brand_id`=(SELECT `id` FROM `brand` WHERE `name`='vivo' AND `tenant_id`=0);
+UPDATE `phone_model` SET `release_year`='2021', `release_month`='9', `battery_mah`='4400', `charge_w`='44', `wireless_w`='0', `series`=NULL, `chip`='联发科 天玑1200-vivo', `ram`='8GB', `storage`='256GB', `screen_size`='6.56英寸', `resolution`='2376×1080', `refresh_rate`='120', `rear_camera`='4000万主摄'
+WHERE `chip` IS NULL AND `tenant_id`=0 AND `name`='vivo X70'
+  AND `brand_id`=(SELECT `id` FROM `brand` WHERE `name`='vivo' AND `tenant_id`=0);
+UPDATE `phone_model` SET `release_year`='2021', `release_month`='9', `battery_mah`='4450', `charge_w`='44', `wireless_w`='0', `series`=NULL, `chip`='三星 Exynos 1080', `ram`='12GB', `storage`='256GB', `screen_size`='6.56英寸', `resolution`='2376×1080', `refresh_rate`='120', `rear_camera`='5000万主摄'
+WHERE `chip` IS NULL AND `tenant_id`=0 AND `name`='vivo X70 Pro'
+  AND `brand_id`=(SELECT `id` FROM `brand` WHERE `name`='vivo' AND `tenant_id`=0);
+UPDATE `phone_model` SET `release_year`='2022', `release_month`='4', `battery_mah`='5000', `charge_w`='80', `wireless_w`='50', `series`=NULL, `chip`='高通 骁龙8 Gen1', `ram`='12GB', `storage`='256GB', `screen_size`='7英寸', `resolution`='3080×1440', `refresh_rate`='120', `rear_camera`='5000万主摄'
+WHERE `chip` IS NULL AND `tenant_id`=0 AND `name`='vivo X Note'
+  AND `brand_id`=(SELECT `id` FROM `brand` WHERE `name`='vivo' AND `tenant_id`=0);
+UPDATE `phone_model` SET `release_year`='2022', `release_month`='4', `battery_mah`='4500', `charge_w`='80', `wireless_w`='0', `series`=NULL, `chip`='联发科 天玑9000', `ram`='12GB', `storage`='256GB', `screen_size`='6.78英寸', `resolution`='2400×1080', `refresh_rate`='120', `rear_camera`='5000万主摄'
+WHERE `chip` IS NULL AND `tenant_id`=0 AND `name`='vivo X80'
+  AND `brand_id`=(SELECT `id` FROM `brand` WHERE `name`='vivo' AND `tenant_id`=0);
+UPDATE `phone_model` SET `release_year`='2022', `release_month`='9', `battery_mah`='4730', `charge_w`='80', `wireless_w`='50', `series`=NULL, `chip`='高通 骁龙8+ Gen1', `ram`='12GB', `storage`='256GB', `screen_size`='8.03英寸', `resolution`='2160×1916', `refresh_rate`='120', `rear_camera`='5000万主摄'
+WHERE `chip` IS NULL AND `tenant_id`=0 AND `name`='vivo X Fold+'
+  AND `brand_id`=(SELECT `id` FROM `brand` WHERE `name`='vivo' AND `tenant_id`=0);
+UPDATE `phone_model` SET `release_year`='2022', `release_month`='11', `battery_mah`='4810', `charge_w`='120', `wireless_w`='0', `series`=NULL, `chip`='联发科 天玑9200', `ram`='12GB', `storage`='256GB', `screen_size`='6.78英寸', `resolution`='2800×1260', `refresh_rate`='120', `rear_camera`='5000万主摄'
+WHERE `chip` IS NULL AND `tenant_id`=0 AND `name`='vivo X90'
+  AND `brand_id`=(SELECT `id` FROM `brand` WHERE `name`='vivo' AND `tenant_id`=0);
+UPDATE `phone_model` SET `release_year`='2023', `release_month`='6', `battery_mah`='4810', `charge_w`='120', `wireless_w`='0', `series`=NULL, `chip`='联发科 天玑9200+', `ram`='8GB', `storage`='256GB', `screen_size`='6.78英寸', `resolution`='2800×1260', `refresh_rate`='120', `rear_camera`='5000万主摄'
+WHERE `chip` IS NULL AND `tenant_id`=0 AND `name`='vivo X90s'
+  AND `brand_id`=(SELECT `id` FROM `brand` WHERE `name`='vivo' AND `tenant_id`=0);
+UPDATE `phone_model` SET `release_year`='2022', `release_month`='11', `battery_mah`='4870', `charge_w`='120', `wireless_w`='50', `series`=NULL, `chip`='联发科 天玑9200', `ram`='12GB', `storage`='256GB', `screen_size`='6.78英寸', `resolution`='2800×1260', `refresh_rate`='120', `rear_camera`='5000万主摄'
+WHERE `chip` IS NULL AND `tenant_id`=0 AND `name`='vivo X90 Pro'
+  AND `brand_id`=(SELECT `id` FROM `brand` WHERE `name`='vivo' AND `tenant_id`=0);
+UPDATE `phone_model` SET `release_year`='2023', `release_month`='4', `battery_mah`='4400', `charge_w`='44', `wireless_w`='0', `series`=NULL, `chip`='高通 骁龙8+ Gen1', `ram`='12GB', `storage`='256GB', `screen_size`='6.74英寸', `resolution`='2520×1080', `refresh_rate`='120', `rear_camera`='5000万主摄'
+WHERE `chip` IS NULL AND `tenant_id`=0 AND `name`='vivo X Flip'
+  AND `brand_id`=(SELECT `id` FROM `brand` WHERE `name`='vivo' AND `tenant_id`=0);
+UPDATE `phone_model` SET `release_year`='2023', `release_month`='11', `battery_mah`='5000', `charge_w`=NULL, `wireless_w`='0', `series`=NULL, `chip`='联发科 天玑9300', `ram`='12GB', `storage`='256GB', `screen_size`='6.78英寸', `resolution`='2800×1260', `refresh_rate`='120', `rear_camera`='5000万主摄'
+WHERE `chip` IS NULL AND `tenant_id`=0 AND `name`='vivo X100'
+  AND `brand_id`=(SELECT `id` FROM `brand` WHERE `name`='vivo' AND `tenant_id`=0);
+UPDATE `phone_model` SET `release_year`='2024', `release_month`='3', `battery_mah`='5500', `charge_w`=NULL, `wireless_w`='0', `series`=NULL, `chip`='高通 骁龙8 Gen2', `ram`='12GB', `storage`='256GB', `screen_size`='8.03英寸', `resolution`='2480×2200', `refresh_rate`='120', `rear_camera`='5000万主摄'
+WHERE `chip` IS NULL AND `tenant_id`=0 AND `name`='vivo X Fold3'
+  AND `brand_id`=(SELECT `id` FROM `brand` WHERE `name`='vivo' AND `tenant_id`=0);
+UPDATE `phone_model` SET `release_year`='2024', `release_month`='5', `battery_mah`='5100', `charge_w`=NULL, `wireless_w`='0', `series`=NULL, `chip`='联发科 天玑9300+', `ram`='12GB', `storage`='256GB', `screen_size`='6.78英寸', `resolution`='2800×1260', `refresh_rate`='120', `rear_camera`='5000万主摄'
+WHERE `chip` IS NULL AND `tenant_id`=0 AND `name`='vivo X100s'
+  AND `brand_id`=(SELECT `id` FROM `brand` WHERE `name`='vivo' AND `tenant_id`=0);
+UPDATE `phone_model` SET `release_year`='2024', `release_month`='5', `battery_mah`='5400', `charge_w`='100', `wireless_w`='50', `series`=NULL, `chip`='联发科 天玑9300+', `ram`='12GB', `storage`='256GB', `screen_size`='6.78英寸', `resolution`='2800×1260', `refresh_rate`='120', `rear_camera`='5000万主摄'
+WHERE `chip` IS NULL AND `tenant_id`=0 AND `name`='vivo X100s Pro'
+  AND `brand_id`=(SELECT `id` FROM `brand` WHERE `name`='vivo' AND `tenant_id`=0);
+UPDATE `phone_model` SET `release_year`='2024', `release_month`='5', `battery_mah`='5500', `charge_w`='80', `wireless_w`='30', `series`=NULL, `chip`='高通 骁龙8 Gen3', `ram`='16GB', `storage`='1TB', `screen_size`='6.78英寸', `resolution`='3200×1440', `refresh_rate`='120', `rear_camera`='5000万主摄'
+WHERE `chip` IS NULL AND `tenant_id`=0 AND `name`='vivo X100 Ultra'
+  AND `brand_id`=(SELECT `id` FROM `brand` WHERE `name`='vivo' AND `tenant_id`=0);
+UPDATE `phone_model` SET `release_year`='2024', `release_month`='10', `battery_mah`='5800', `charge_w`='90', `wireless_w`='0', `series`=NULL, `chip`='联发科 天玑 9400', `ram`='12GB', `storage`='256GB', `screen_size`='6.67英寸', `resolution`='2800×1260', `refresh_rate`='120', `rear_camera`='5000万主摄'
+WHERE `chip` IS NULL AND `tenant_id`=0 AND `name`='vivo X200'
+  AND `brand_id`=(SELECT `id` FROM `brand` WHERE `name`='vivo' AND `tenant_id`=0);
+UPDATE `phone_model` SET `release_year`='2024', `release_month`='10', `battery_mah`='5700', `charge_w`='90', `wireless_w`='30', `series`=NULL, `chip`='联发科 天玑9400', `ram`='12GB', `storage`='256GB', `screen_size`='6.31英寸', `resolution`='2640×1216', `refresh_rate`='120', `rear_camera`='5000万主摄'
+WHERE `chip` IS NULL AND `tenant_id`=0 AND `name`='vivo X200 Pro mini'
+  AND `brand_id`=(SELECT `id` FROM `brand` WHERE `name`='vivo' AND `tenant_id`=0);
+UPDATE `phone_model` SET `release_year`='2025', `release_month`='4', `battery_mah`='6200', `charge_w`='90', `wireless_w`='40', `series`=NULL, `chip`='联发科 天玑 9400+', `ram`='12GB', `storage`='256GB', `screen_size`='6.67英寸', `resolution`='2800×1260', `refresh_rate`='120', `rear_camera`='5000万主摄'
+WHERE `chip` IS NULL AND `tenant_id`=0 AND `name`='vivo X200s'
+  AND `brand_id`=(SELECT `id` FROM `brand` WHERE `name`='vivo' AND `tenant_id`=0);
+UPDATE `phone_model` SET `release_year`='2025', `release_month`='4', `battery_mah`='6000', `charge_w`='90', `wireless_w`='40', `series`=NULL, `chip`='高通 骁龙 8 Elite', `ram`='12GB', `storage`='256GB', `screen_size`='6.82英寸', `resolution`='3168×1440', `refresh_rate`='120', `rear_camera`='5000万主摄'
+WHERE `chip` IS NULL AND `tenant_id`=0 AND `name`='vivo X200 Ultra'
+  AND `brand_id`=(SELECT `id` FROM `brand` WHERE `name`='vivo' AND `tenant_id`=0);
+UPDATE `phone_model` SET `release_year`='2025', `release_month`='10', `battery_mah`='6040', `charge_w`='90', `wireless_w`='40', `series`=NULL, `chip`='联发科 天玑 9500', `ram`='12GB', `storage`='256GB', `screen_size`='6.31英寸', `resolution`='2640×1216', `refresh_rate`='120', `rear_camera`=NULL
+WHERE `chip` IS NULL AND `tenant_id`=0 AND `name`='vivo X300'
+  AND `brand_id`=(SELECT `id` FROM `brand` WHERE `name`='vivo' AND `tenant_id`=0);
+UPDATE `phone_model` SET `release_year`='2026', `release_month`='3', `battery_mah`='6600', `charge_w`='100', `wireless_w`='40', `series`=NULL, `chip`='骁龙 8 Elite Gen5', `ram`='12GB', `storage`='256GB', `screen_size`='6.82英寸', `resolution`='3168×1440', `refresh_rate`='120', `rear_camera`=NULL
+WHERE `chip` IS NULL AND `tenant_id`=0 AND `name`='vivo X300 Ultra'
+  AND `brand_id`=(SELECT `id` FROM `brand` WHERE `name`='vivo' AND `tenant_id`=0);
+UPDATE `phone_model` SET `release_year`='2025', `release_month`='9', `battery_mah`='7500', `charge_w`='90', `wireless_w`='40', `series`=NULL, `chip`='联发科 天玑 9600M', `ram`='12GB', `storage`='1TB', `screen_size`='6.59英寸', `resolution`='2750×1260', `refresh_rate`='144', `rear_camera`='5000万主摄'
+WHERE `chip` IS NULL AND `tenant_id`=0 AND `name`='vivo X500'
+  AND `brand_id`=(SELECT `id` FROM `brand` WHERE `name`='vivo' AND `tenant_id`=0);
+UPDATE `phone_model` SET `release_year`='2021', `release_month`='1', `battery_mah`='4000', `charge_w`='33', `wireless_w`='0', `series`=NULL, `chip`='联发科 天玑820', `ram`='8GB', `storage`='128GB', `screen_size`='6.44英寸', `resolution`='2400×1080', `refresh_rate`='60', `rear_camera`='6400万主摄'
+WHERE `chip` IS NULL AND `tenant_id`=0 AND `name`='vivo S7t'
+  AND `brand_id`=(SELECT `id` FROM `brand` WHERE `name`='vivo' AND `tenant_id`=0);
+UPDATE `phone_model` SET `release_year`='2021', `release_month`='7', `battery_mah`='4050', `charge_w`='44', `wireless_w`='0', `series`=NULL, `chip`='联发科 天玑1100', `ram`='12GB', `storage`='256GB', `screen_size`='6.44英寸', `resolution`='2400×1080', `refresh_rate`='90', `rear_camera`=NULL
+WHERE `chip` IS NULL AND `tenant_id`=0 AND `name`='vivo S10 Pro'
+  AND `brand_id`=(SELECT `id` FROM `brand` WHERE `name`='vivo' AND `tenant_id`=0);
+UPDATE `phone_model` SET `release_year`='2021', `release_month`=NULL, `battery_mah`='4050', `charge_w`='44', `wireless_w`='0', `series`=NULL, `chip`='联发科 天玑900', `ram`='8GB', `storage`='256GB', `screen_size`='6.44英寸', `resolution`='2400×1080', `refresh_rate`='60', `rear_camera`='6400万主摄'
+WHERE `chip` IS NULL AND `tenant_id`=0 AND `name`='vivo S10e'
+  AND `brand_id`=(SELECT `id` FROM `brand` WHERE `name`='vivo' AND `tenant_id`=0);
+UPDATE `phone_model` SET `release_year`='2021', `release_month`='12', `battery_mah`='4300', `charge_w`='44', `wireless_w`='0', `series`=NULL, `chip`='联发科 天玑1200', `ram`='8GB', `storage`='256GB', `screen_size`='6.56英寸', `resolution`='2376×1080', `refresh_rate`='90', `rear_camera`=NULL
+WHERE `chip` IS NULL AND `tenant_id`=0 AND `name`='vivo S12 Pro'
+  AND `brand_id`=(SELECT `id` FROM `brand` WHERE `name`='vivo' AND `tenant_id`=0);
+UPDATE `phone_model` SET `release_year`='2022', `release_month`='5', `battery_mah`='4500', `charge_w`='80', `wireless_w`='0', `series`=NULL, `chip`='联发科 天玑8100', `ram`='8GB', `storage`='256GB', `screen_size`='6.56英寸', `resolution`='2376×1080', `refresh_rate`='120', `rear_camera`='5000万主摄'
+WHERE `chip` IS NULL AND `tenant_id`=0 AND `name`='vivo S15 Pro'
+  AND `brand_id`=(SELECT `id` FROM `brand` WHERE `name`='vivo' AND `tenant_id`=0);
+UPDATE `phone_model` SET `release_year`='2022', `release_month`='4', `battery_mah`='4700', `charge_w`='66', `wireless_w`='0', `series`=NULL, `chip`='三星 Exynos 1080', `ram`='12GB', `storage`='256GB', `screen_size`='6.44英寸', `resolution`='2404×1080', `refresh_rate`='90', `rear_camera`='5000万主摄'
+WHERE `chip` IS NULL AND `tenant_id`=0 AND `name`='vivo S15e'
+  AND `brand_id`=(SELECT `id` FROM `brand` WHERE `name`='vivo' AND `tenant_id`=0);
+UPDATE `phone_model` SET `release_year`='2022', `release_month`='12', `battery_mah`='4600', `charge_w`='66', `wireless_w`='0', `series`=NULL, `chip`='联发科 天玑8200', `ram`='12GB', `storage`='256GB', `screen_size`='6.78英寸', `resolution`='2400×1080', `refresh_rate`='120', `rear_camera`='5000万主摄'
+WHERE `chip` IS NULL AND `tenant_id`=0 AND `name`='vivo S16 Pro'
+  AND `brand_id`=(SELECT `id` FROM `brand` WHERE `name`='vivo' AND `tenant_id`=0);
+UPDATE `phone_model` SET `release_year`='2022', `release_month`='12', `battery_mah`='4600', `charge_w`='66', `wireless_w`='0', `series`=NULL, `chip`='三星 Exynos 1080', `ram`='8GB', `storage`='128GB', `screen_size`='6.62英寸', `resolution`='2400×1080', `refresh_rate`='120', `rear_camera`='5000万主摄'
+WHERE `chip` IS NULL AND `tenant_id`=0 AND `name`='vivo S16e'
+  AND `brand_id`=(SELECT `id` FROM `brand` WHERE `name`='vivo' AND `tenant_id`=0);
+UPDATE `phone_model` SET `release_year`='2023', `release_month`='5', `battery_mah`='4600', `charge_w`='80', `wireless_w`='0', `series`=NULL, `chip`='联发科 天玑8050', `ram`='12GB', `storage`='512GB', `screen_size`='6.78英寸', `resolution`='2800×1260', `refresh_rate`='120', `rear_camera`='5000万主摄'
+WHERE `chip` IS NULL AND `tenant_id`=0 AND `name`='vivo S17t'
+  AND `brand_id`=(SELECT `id` FROM `brand` WHERE `name`='vivo' AND `tenant_id`=0);
+UPDATE `phone_model` SET `release_year`='2023', `release_month`='5', `battery_mah`='4600', `charge_w`='80', `wireless_w`='0', `series`=NULL, `chip`='联发科 天玑8200', `ram`='8GB', `storage`='256GB', `screen_size`='6.78英寸', `resolution`='2800×1260', `refresh_rate`='120', `rear_camera`='5000万主摄'
+WHERE `chip` IS NULL AND `tenant_id`=0 AND `name`='vivo S17 Pro'
+  AND `brand_id`=(SELECT `id` FROM `brand` WHERE `name`='vivo' AND `tenant_id`=0);
+UPDATE `phone_model` SET `release_year`='2023', `release_month`='5', `battery_mah`='4600', `charge_w`='66', `wireless_w`='0', `series`=NULL, `chip`='联发科 天玑7200', `ram`='8GB', `storage`='128GB', `screen_size`='6.78英寸', `resolution`='2400×1080', `refresh_rate`='120', `rear_camera`='6400万主摄'
+WHERE `chip` IS NULL AND `tenant_id`=0 AND `name`='vivo S17e'
+  AND `brand_id`=(SELECT `id` FROM `brand` WHERE `name`='vivo' AND `tenant_id`=0);
+UPDATE `phone_model` SET `release_year`='2023', `release_month`='12', `battery_mah`='5000', `charge_w`='80', `wireless_w`='0', `series`=NULL, `chip`='联发科 天玑9200+', `ram`='12GB', `storage`='256GB', `screen_size`='6.78英寸', `resolution`='2800×1260', `refresh_rate`='120', `rear_camera`='5000万主摄'
+WHERE `chip` IS NULL AND `tenant_id`=0 AND `name`='vivo S18 Pro'
+  AND `brand_id`=(SELECT `id` FROM `brand` WHERE `name`='vivo' AND `tenant_id`=0);
+UPDATE `phone_model` SET `release_year`='2023', `release_month`='12', `battery_mah`='4800', `charge_w`='80', `wireless_w`='0', `series`=NULL, `chip`='联发科 天玑7200', `ram`='12GB', `storage`='256GB', `screen_size`='6.67英寸', `resolution`='2400×1080', `refresh_rate`='120', `rear_camera`='5000万主摄'
+WHERE `chip` IS NULL AND `tenant_id`=0 AND `name`='vivo S18e'
+  AND `brand_id`=(SELECT `id` FROM `brand` WHERE `name`='vivo' AND `tenant_id`=0);
+UPDATE `phone_model` SET `release_year`='2024', `release_month`='5', `battery_mah`='6000', `charge_w`='80', `wireless_w`='0', `series`=NULL, `chip`='高通 骁龙7 Gen3', `ram`='8GB', `storage`='256GB', `screen_size`='6.78英寸', `resolution`='2800×1260', `refresh_rate`='120', `rear_camera`='5000万主摄'
+WHERE `chip` IS NULL AND `tenant_id`=0 AND `name`='vivo S19'
+  AND `brand_id`=(SELECT `id` FROM `brand` WHERE `name`='vivo' AND `tenant_id`=0);
+UPDATE `phone_model` SET `release_year`='2024', `release_month`='5', `battery_mah`='5500', `charge_w`='80', `wireless_w`='0', `series`=NULL, `chip`='联发科 天玑9200+', `ram`='8GB', `storage`='256GB', `screen_size`='6.78英寸', `resolution`='2800×1260', `refresh_rate`='120', `rear_camera`='5000万主摄'
+WHERE `chip` IS NULL AND `tenant_id`=0 AND `name`='vivo S19 Pro'
+  AND `brand_id`=(SELECT `id` FROM `brand` WHERE `name`='vivo' AND `tenant_id`=0);
+UPDATE `phone_model` SET `release_year`='2024', `release_month`='11', `battery_mah`='5500', `charge_w`='90', `wireless_w`='0', `series`=NULL, `chip`='联发科 天玑9300+', `ram`='12GB', `storage`='256GB', `screen_size`='6.67英寸', `resolution`='2800×1260', `refresh_rate`='120', `rear_camera`='5000万主摄'
+WHERE `chip` IS NULL AND `tenant_id`=0 AND `name`='vivo S20 Pro'
+  AND `brand_id`=(SELECT `id` FROM `brand` WHERE `name`='vivo' AND `tenant_id`=0);
+UPDATE `phone_model` SET `release_year`='2025', `release_month`='5', `battery_mah`='6500', `charge_w`='90', `wireless_w`='0', `series`=NULL, `chip`='联发科 天玑 9300+', `ram`='12GB', `storage`='256GB', `screen_size`='6.31英寸', `resolution`='2640×1216', `refresh_rate`='120', `rear_camera`='5000万主摄'
+WHERE `chip` IS NULL AND `tenant_id`=0 AND `name`='vivo S30 Pro mini'
+  AND `brand_id`=(SELECT `id` FROM `brand` WHERE `name`='vivo' AND `tenant_id`=0);
+UPDATE `phone_model` SET `release_year`='2019', `release_month`='7', `battery_mah`='4500', `charge_w`=NULL, `wireless_w`='0', `series`=NULL, `chip`='联发科 Helio P65', `ram`='6GB', `storage`='128GB', `screen_size`='6.38英寸', `resolution`='2340×1080', `refresh_rate`=NULL, `rear_camera`='1600万主摄'
+WHERE `chip` IS NULL AND `tenant_id`=0 AND `name`='vivo Y7s'
+  AND `brand_id`=(SELECT `id` FROM `brand` WHERE `name`='vivo' AND `tenant_id`=0);
+UPDATE `phone_model` SET `release_year`='2021', `release_month`='12', `battery_mah`='5000', `charge_w`='10', `wireless_w`='0', `series`=NULL, `chip`='联发科 Helio P35（MT6765）', `ram`='4GB', `storage`='128GB', `screen_size`='6.5英寸', `resolution`='1600×720', `refresh_rate`='60', `rear_camera`='1300万主摄'
+WHERE `chip` IS NULL AND `tenant_id`=0 AND `name`='vivo Y10'
+  AND `brand_id`=(SELECT `id` FROM `brand` WHERE `name`='vivo' AND `tenant_id`=0);
+UPDATE `phone_model` SET `release_year`='2021', `release_month`='12', `battery_mah`='5000', `charge_w`='18', `wireless_w`='0', `series`=NULL, `chip`='高通 骁龙680 4G', `ram`='8GB', `storage`='128GB', `screen_size`='6.51英寸', `resolution`='1600×720', `refresh_rate`='60', `rear_camera`='1300万主摄'
+WHERE `chip` IS NULL AND `tenant_id`=0 AND `name`='vivo Y32'
+  AND `brand_id`=(SELECT `id` FROM `brand` WHERE `name`='vivo' AND `tenant_id`=0);
+UPDATE `phone_model` SET `release_year`='2024', `release_month`='8', `battery_mah`='6000', `charge_w`='44', `wireless_w`='0', `series`=NULL, `chip`='高通 骁龙 4 Gen2', `ram`='8GB', `storage`='256GB', `screen_size`='6.68英寸', `resolution`='1612×720', `refresh_rate`='120', `rear_camera`='5000万主摄'
+WHERE `chip` IS NULL AND `tenant_id`=0 AND `name`='vivo Y37 Pro'
+  AND `brand_id`=(SELECT `id` FROM `brand` WHERE `name`='vivo' AND `tenant_id`=0);
+UPDATE `phone_model` SET `release_year`='2018', `release_month`='10', `battery_mah`='3360', `charge_w`=NULL, `wireless_w`='0', `series`=NULL, `chip`=NULL, `ram`='3GB', `storage`='32GB', `screen_size`='5.99英寸', `resolution`='1440×720', `refresh_rate`=NULL, `rear_camera`='1300万主摄'
+WHERE `chip` IS NULL AND `tenant_id`=0 AND `name`='vivo Y73'
+  AND `brand_id`=(SELECT `id` FROM `brand` WHERE `name`='vivo' AND `tenant_id`=0);
+UPDATE `phone_model` SET `release_year`='2022', `release_month`='9', `battery_mah`='6000', `charge_w`='44', `wireless_w`='0', `series`=NULL, `chip`='联发科 天玑700', `ram`='8GB', `storage`='256GB', `screen_size`='6.58英寸', `resolution`='2408×1080', `refresh_rate`='60', `rear_camera`='5000万主摄'
+WHERE `chip` IS NULL AND `tenant_id`=0 AND `name`='vivo Y73t'
+  AND `brand_id`=(SELECT `id` FROM `brand` WHERE `name`='vivo' AND `tenant_id`=0);
+UPDATE `phone_model` SET `release_year`='2022', `release_month`='8', `battery_mah`='5000', `charge_w`='18', `wireless_w`='0', `series`=NULL, `chip`='联发科 天玑810', `ram`='6GB', `storage`='128GB', `screen_size`='6.58英寸', `resolution`='2408×1080', `refresh_rate`='60', `rear_camera`='1300万主摄'
+WHERE `chip` IS NULL AND `tenant_id`=0 AND `name`='vivo Y77e / vivo Y77e (t1 版)'
+  AND `brand_id`=(SELECT `id` FROM `brand` WHERE `name`='vivo' AND `tenant_id`=0);
+UPDATE `phone_model` SET `release_year`='2024', `release_month`='5', `battery_mah`='6000', `charge_w`='80', `wireless_w`='0', `series`=NULL, `chip`='高通 骁龙7 Gen3', `ram`='8GB', `storage`='128GB', `screen_size`='6.78英寸', `resolution`='2800×1260', `refresh_rate`='144', `rear_camera`='5000万主摄'
+WHERE `chip` IS NULL AND `tenant_id`=0 AND `name`='vivo Y200 GT / vivo Y200 Pro 企业定制版'
+  AND `brand_id`=(SELECT `id` FROM `brand` WHERE `name`='vivo' AND `tenant_id`=0);
+UPDATE `phone_model` SET `release_year`='2024', `release_month`='5', `battery_mah`='6000', `charge_w`='44', `wireless_w`='0', `series`=NULL, `chip`='高通 骁龙6 Gen1', `ram`='8GB', `storage`='128GB', `screen_size`='6.72英寸', `resolution`='2408×1080', `refresh_rate`='120', `rear_camera`='5000万主摄'
+WHERE `chip` IS NULL AND `tenant_id`=0 AND `name`='vivo Y200t'
+  AND `brand_id`=(SELECT `id` FROM `brand` WHERE `name`='vivo' AND `tenant_id`=0);
+UPDATE `phone_model` SET `release_year`='2024', `release_month`='12', `battery_mah`='6500', `charge_w`='44', `wireless_w`='0', `series`=NULL, `chip`='联发科 天玑6300', `ram`='8GB', `storage`='128GB', `screen_size`='6.77英寸', `resolution`='2392×1080', `refresh_rate`='120', `rear_camera`='5000万主摄'
+WHERE `chip` IS NULL AND `tenant_id`=0 AND `name`='vivo Y300 / vivo Y300c'
+  AND `brand_id`=(SELECT `id` FROM `brand` WHERE `name`='vivo' AND `tenant_id`=0);
+UPDATE `phone_model` SET `release_year`='2025', `release_month`='3', `battery_mah`='6500', `charge_w`='44', `wireless_w`='0', `series`=NULL, `chip`='高通 骁龙 4 Gen2', `ram`='8GB', `storage`='256GB', `screen_size`='6.68英寸', `resolution`='2392×1080', `refresh_rate`='120', `rear_camera`='5000万主摄'
+WHERE `chip` IS NULL AND `tenant_id`=0 AND `name`='vivo Y300i'
+  AND `brand_id`=(SELECT `id` FROM `brand` WHERE `name`='vivo' AND `tenant_id`=0);
+UPDATE `phone_model` SET `release_year`='2025', `release_month`='3', `battery_mah`='7300', `charge_w`='90', `wireless_w`='0', `series`=NULL, `chip`='高通 骁龙7S Gen3', `ram`='8GB', `storage`='128GB', `screen_size`='6.77英寸', `resolution`='2392×1080', `refresh_rate`='120', `rear_camera`='5000万主摄'
+WHERE `chip` IS NULL AND `tenant_id`=0 AND `name`='vivo Y300 Pro+'
+  AND `brand_id`=(SELECT `id` FROM `brand` WHERE `name`='vivo' AND `tenant_id`=0);
+UPDATE `phone_model` SET `release_year`='2014', `release_month`='2', `battery_mah`='2100', `charge_w`=NULL, `wireless_w`='0', `series`=NULL, `chip`='联发科 MT6572A', `ram`=NULL, `storage`='4GB', `screen_size`='5英寸', `resolution`='854×480', `refresh_rate`=NULL, `rear_camera`=NULL
+WHERE `chip` IS NULL AND `tenant_id`=0 AND `name`='vivo Y600'
+  AND `brand_id`=(SELECT `id` FROM `brand` WHERE `name`='vivo' AND `tenant_id`=0);
+UPDATE `phone_model` SET `release_year`='2023', `release_month`='11', `battery_mah`='5000', `charge_w`=NULL, `wireless_w`='0', `series`=NULL, `chip`='联发科 天玑9300', `ram`='12GB', `storage`='256GB', `screen_size`='6.78英寸', `resolution`='2800×1260', `refresh_rate`='120', `rear_camera`='5000万主摄'
+WHERE `chip` IS NULL AND `tenant_id`=0 AND `name`='X100'
+  AND `brand_id`=(SELECT `id` FROM `brand` WHERE `name`='vivo' AND `tenant_id`=0);
+UPDATE `phone_model` SET `release_year`='2018', `release_month`='11', `battery_mah`='3400', `charge_w`=NULL, `wireless_w`='0', `series`=NULL, `chip`='高通 骁龙660AIE', `ram`='6GB', `storage`='128GB', `screen_size`='6.41英寸', `resolution`='2340×1080', `refresh_rate`=NULL, `rear_camera`='1200万主摄'
+WHERE `chip` IS NULL AND `tenant_id`=0 AND `name`='vivo X21s'
+  AND `brand_id`=(SELECT `id` FROM `brand` WHERE `name`='vivo' AND `tenant_id`=0);
+UPDATE `phone_model` SET `release_year`='2022', `release_month`='4', `battery_mah`='4700', `charge_w`='80', `wireless_w`='50', `series`=NULL, `chip`='联发科 天玑9000', `ram`='12GB', `storage`='256GB', `screen_size`='6.78英寸', `resolution`='3200×1440', `refresh_rate`='120', `rear_camera`='5000万主摄'
+WHERE `chip` IS NULL AND `tenant_id`=0 AND `name`='vivo X80 Pro 天玑 9000 版'
+  AND `brand_id`=(SELECT `id` FROM `brand` WHERE `name`='vivo' AND `tenant_id`=0);
+UPDATE `phone_model` SET `release_year`='2018', `release_month`='8', `battery_mah`='3260', `charge_w`=NULL, `wireless_w`='0', `series`=NULL, `chip`='联发科 MT6762', `ram`='3GB', `storage`='32GB', `screen_size`='6.22英寸', `resolution`='1520×720', `refresh_rate`=NULL, `rear_camera`='1300万主摄'
+WHERE `chip` IS NULL AND `tenant_id`=0 AND `name`='vivo Y81s'
+  AND `brand_id`=(SELECT `id` FROM `brand` WHERE `name`='vivo' AND `tenant_id`=0);
+
+-- ===== 子代理收集·三星（4 款，来源: ZOL参数页(中关村在线),2026-10-25）=====
+UPDATE `phone_model` SET `release_year`='2024', `release_month`='7', `battery_mah`='4400', `charge_w`='25', `wireless_w`=NULL, `series`=NULL, `chip`='高通骁龙8 Gen3', `ram`='12GB', `storage`='512GB', `screen_size`='7.6英寸', `resolution`='2160×1856', `refresh_rate`='120', `rear_camera`='5000万主摄'
+WHERE `chip` IS NULL AND `tenant_id`=0 AND `name`='Galaxy Z Fold6'
+  AND `brand_id`=(SELECT `id` FROM `brand` WHERE `name`='三星' AND `tenant_id`=0);
+UPDATE `phone_model` SET `release_year`=NULL, `release_month`=NULL, `battery_mah`='4400', `charge_w`='25', `wireless_w`=NULL, `series`=NULL, `chip`='高通 骁龙 8 Elite for Galaxy', `ram`='12GB', `storage`='256GB', `screen_size`='8英寸', `resolution`='2184×1968', `refresh_rate`='120', `rear_camera`='20000万主摄'
+WHERE `chip` IS NULL AND `tenant_id`=0 AND `name`='Galaxy Z Fold7'
+  AND `brand_id`=(SELECT `id` FROM `brand` WHERE `name`='三星' AND `tenant_id`=0);
+UPDATE `phone_model` SET `release_year`=NULL, `release_month`=NULL, `battery_mah`='4800', `charge_w`='45', `wireless_w`='0', `series`=NULL, `chip`='高通 骁龙 8 Elite Gen 5 for Galaxy', `ram`='12GB', `storage`='256GB', `screen_size`='7.6英寸', `resolution`='2448×1848', `refresh_rate`='120', `rear_camera`='5000万主摄'
+WHERE `chip` IS NULL AND `tenant_id`=0 AND `name`='Galaxy Z Fold8'
+  AND `brand_id`=(SELECT `id` FROM `brand` WHERE `name`='三星' AND `tenant_id`=0);
+UPDATE `phone_model` SET `release_year`=NULL, `release_month`=NULL, `battery_mah`='5000', `charge_w`='25', `wireless_w`=NULL, `series`=NULL, `chip`=NULL, `ram`='16GB', `storage`='1TB', `screen_size`='8英寸', `resolution`='2504×2256', `refresh_rate`='120', `rear_camera`=NULL
+WHERE `chip` IS NULL AND `tenant_id`=0 AND `name`='Galaxy Z Fold8 Ultra'
+  AND `brand_id`=(SELECT `id` FROM `brand` WHERE `name`='三星' AND `tenant_id`=0);
+
+-- ===== 子代理收集·努比亚（1 款，来源: ZOL参数页(中关村在线),2026-10-25）=====
+UPDATE `phone_model` SET `release_year`='2023', `release_month`='7', `battery_mah`='5100', `charge_w`='80', `wireless_w`='0', `series`=NULL, `chip`='高通 骁龙8 Gen2（领先版）', `ram`='12GB', `storage`='256GB', `screen_size`='6.78英寸', `resolution`='2800×1260', `refresh_rate`='120', `rear_camera`='5000万主摄'
+WHERE `chip` IS NULL AND `tenant_id`=0 AND `name`='nubia Z50S Pro'
+  AND `brand_id`=(SELECT `id` FROM `brand` WHERE `name`='努比亚' AND `tenant_id`=0);
+
+-- ===== 子代理收集·华为（17 款，来源: ZOL参数页(中关村在线),2026-10-25）=====
+UPDATE `phone_model` SET `release_year`='2022', `release_month`='2', `battery_mah`='4400', `charge_w`='66', `wireless_w`='50', `series`=NULL, `chip`='海思 麒麟 9000L', `ram`='8GB', `storage`='256GB', `screen_size`='6.76英寸', `resolution`='2772×1344', `refresh_rate`='90', `rear_camera`='5000万主摄'
+WHERE `chip` IS NULL AND `tenant_id`=0 AND `name`='HUAWEI Mate 40E Pro'
+  AND `brand_id`=(SELECT `id` FROM `brand` WHERE `name`='华为' AND `tenant_id`=0);
+UPDATE `phone_model` SET `release_year`='2023', `release_month`=NULL, `battery_mah`='5000', `charge_w`='88', `wireless_w`='50', `series`=NULL, `chip`='海思 麒麟 9000s', `ram`='16GB', `storage`='512GB', `screen_size`='6.82英寸', `resolution`='2720×1260', `refresh_rate`='120', `rear_camera`='4800万主摄'
+WHERE `chip` IS NULL AND `tenant_id`=0 AND `name`='HUAWEI Mate 60 Pro+'
+  AND `brand_id`=(SELECT `id` FROM `brand` WHERE `name`='华为' AND `tenant_id`=0);
+UPDATE `phone_model` SET `release_year`='2022', `release_month`='4', `battery_mah`='4600', `charge_w`='66', `wireless_w`='0', `series`=NULL, `chip`='高通 骁龙888 4G', `ram`='8GB', `storage`='256GB', `screen_size`='7.8英寸', `resolution`='2480×2200', `refresh_rate`='120', `rear_camera`='5000万主摄'
+WHERE `chip` IS NULL AND `tenant_id`=0 AND `name`='HUAWEI Mate Xs 2'
+  AND `brand_id`=(SELECT `id` FROM `brand` WHERE `name`='华为' AND `tenant_id`=0);
+UPDATE `phone_model` SET `release_year`='2025', `release_month`='9', `battery_mah`='5600', `charge_w`='66', `wireless_w`='50', `series`=NULL, `chip`='HUAWEI Kirin 9020', `ram`='16GB', `storage`='256GB', `screen_size`='10.2英寸', `resolution`='3184×2232', `refresh_rate`='120', `rear_camera`='5000万主摄'
+WHERE `chip` IS NULL AND `tenant_id`=0 AND `name`='HUAWEI Mate XTs 非凡大师'
+  AND `brand_id`=(SELECT `id` FROM `brand` WHERE `name`='华为' AND `tenant_id`=0);
+UPDATE `phone_model` SET `release_year`='2025', `release_month`='11', `battery_mah`='5525', `charge_w`='66', `wireless_w`='50', `series`=NULL, `chip`='海思 麒麟9030 Pro', `ram`='12GB', `storage`='256GB', `screen_size`='8英寸', `resolution`='2416×2210', `refresh_rate`='1-120', `rear_camera`='5000万主摄'
+WHERE `chip` IS NULL AND `tenant_id`=0 AND `name`='HUAWEI Mate X7'
+  AND `brand_id`=(SELECT `id` FROM `brand` WHERE `name`='华为' AND `tenant_id`=0);
+UPDATE `phone_model` SET `release_year`='2026', `release_month`='9', `battery_mah`='5600', `charge_w`='66', `wireless_w`='50', `series`=NULL, `chip`='麒麟 9050 Pro', `ram`='16GB', `storage`='512GB', `screen_size`=NULL, `resolution`=NULL, `refresh_rate`=NULL, `rear_camera`=NULL
+WHERE `chip` IS NULL AND `tenant_id`=0 AND `name`='HUAWEI Mate XT 2 非凡大师'
+  AND `brand_id`=(SELECT `id` FROM `brand` WHERE `name`='华为' AND `tenant_id`=0);
+UPDATE `phone_model` SET `release_year`='2025', `release_month`='6', `battery_mah`='5700', `charge_w`='100', `wireless_w`='80', `series`=NULL, `chip`=NULL, `ram`='12GB', `storage`='256GB', `screen_size`='6.8英寸', `resolution`='2848×1276', `refresh_rate`='1-120', `rear_camera`='5000万主摄'
+WHERE `chip` IS NULL AND `tenant_id`=0 AND `name`='HUAWEI Pura 80 Pro'
+  AND `brand_id`=(SELECT `id` FROM `brand` WHERE `name`='华为' AND `tenant_id`=0);
+UPDATE `phone_model` SET `release_year`='2025', `release_month`='6', `battery_mah`='5700', `charge_w`='100', `wireless_w`='80', `series`=NULL, `chip`=NULL, `ram`='16GB', `storage`='512GB', `screen_size`='6.8英寸', `resolution`='2848×1276', `refresh_rate`='1-120', `rear_camera`='5000万主摄'
+WHERE `chip` IS NULL AND `tenant_id`=0 AND `name`='HUAWEI Pura 80 Pro+'
+  AND `brand_id`=(SELECT `id` FROM `brand` WHERE `name`='华为' AND `tenant_id`=0);
+UPDATE `phone_model` SET `release_year`='2022', `release_month`='7', `battery_mah`='4500', `charge_w`='100', `wireless_w`='0', `series`=NULL, `chip`='高通 骁龙778G 4G', `ram`='8GB', `storage`='256GB', `screen_size`='6.78英寸', `resolution`='2652×1200', `refresh_rate`='120', `rear_camera`='5000万主摄'
+WHERE `chip` IS NULL AND `tenant_id`=0 AND `name`='HUAWEI nova 10 Pro'
+  AND `brand_id`=(SELECT `id` FROM `brand` WHERE `name`='华为' AND `tenant_id`=0);
+UPDATE `phone_model` SET `release_year`='2022', `release_month`='12', `battery_mah`='4500', `charge_w`='66', `wireless_w`='0', `series`=NULL, `chip`='高通 骁龙680', `ram`='8GB', `storage`='128GB', `screen_size`='6.67英寸', `resolution`='2400×1080', `refresh_rate`='90', `rear_camera`=NULL
+WHERE `chip` IS NULL AND `tenant_id`=0 AND `name`='HUAWEI nova 10 SE'
+  AND `brand_id`=(SELECT `id` FROM `brand` WHERE `name`='华为' AND `tenant_id`=0);
+UPDATE `phone_model` SET `release_year`='2024', `release_month`='8', `battery_mah`='4400', `charge_w`='66', `wireless_w`='0', `series`=NULL, `chip`=NULL, `ram`=NULL, `storage`='256GB', `screen_size`='6.94英寸', `resolution`='2690×1136', `refresh_rate`='120', `rear_camera`='5000万主摄'
+WHERE `chip` IS NULL AND `tenant_id`=0 AND `name`='HUAWEI nova Flip'
+  AND `brand_id`=(SELECT `id` FROM `brand` WHERE `name`='华为' AND `tenant_id`=0);
+UPDATE `phone_model` SET `release_year`='2024', `release_month`='10', `battery_mah`='5000', `charge_w`='100', `wireless_w`='0', `series`=NULL, `chip`=NULL, `ram`=NULL, `storage`='256GB', `screen_size`='6.76英寸', `resolution`='2776×1224', `refresh_rate`='1-120', `rear_camera`='5000万主摄'
+WHERE `chip` IS NULL AND `tenant_id`=0 AND `name`='HUAWEI nova 13 Pro'
+  AND `brand_id`=(SELECT `id` FROM `brand` WHERE `name`='华为' AND `tenant_id`=0);
+UPDATE `phone_model` SET `release_year`='2025', `release_month`='5', `battery_mah`='5500', `charge_w`='100', `wireless_w`='0', `series`=NULL, `chip`=NULL, `ram`=NULL, `storage`='256GB', `screen_size`='6.78英寸', `resolution`='2776×1224', `refresh_rate`='120', `rear_camera`='5000万主摄'
+WHERE `chip` IS NULL AND `tenant_id`=0 AND `name`='HUAWEI nova 14 Pro'
+  AND `brand_id`=(SELECT `id` FROM `brand` WHERE `name`='华为' AND `tenant_id`=0);
+UPDATE `phone_model` SET `release_year`='2025', `release_month`='5', `battery_mah`='5500', `charge_w`='100', `wireless_w`='0', `series`=NULL, `chip`=NULL, `ram`=NULL, `storage`='256GB', `screen_size`='6.81英寸', `resolution`='2860×1272', `refresh_rate`='1-120', `rear_camera`='5000万主摄'
+WHERE `chip` IS NULL AND `tenant_id`=0 AND `name`='HUAWEI nova 14 Ultra'
+  AND `brand_id`=(SELECT `id` FROM `brand` WHERE `name`='华为' AND `tenant_id`=0);
+UPDATE `phone_model` SET `release_year`='2025', `release_month`='12', `battery_mah`='6500', `charge_w`='100', `wireless_w`='0', `series`=NULL, `chip`='海思 麒麟 9010S', `ram`=NULL, `storage`='256GB', `screen_size`='6.84英寸', `resolution`='2856×1320', `refresh_rate`='1-120', `rear_camera`='5000万主摄'
+WHERE `chip` IS NULL AND `tenant_id`=0 AND `name`='HUAWEI nova 15 Ultra'
+  AND `brand_id`=(SELECT `id` FROM `brand` WHERE `name`='华为' AND `tenant_id`=0);
+UPDATE `phone_model` SET `release_year`='2026', `release_month`='6', `battery_mah`='7000', `charge_w`='100', `wireless_w`='0', `series`=NULL, `chip`='海思 麒麟 9010S', `ram`=NULL, `storage`='256GB', `screen_size`='6.84英寸', `resolution`='2856×1320', `refresh_rate`='120', `rear_camera`=NULL
+WHERE `chip` IS NULL AND `tenant_id`=0 AND `name`='HUAWEI nova 16 Pro'
+  AND `brand_id`=(SELECT `id` FROM `brand` WHERE `name`='华为' AND `tenant_id`=0);
+UPDATE `phone_model` SET `release_year`='2026', `release_month`='8', `battery_mah`='8500', `charge_w`='66', `wireless_w`='0', `series`=NULL, `chip`='海思 麒麟 8020', `ram`=NULL, `storage`='256GB', `screen_size`='6.84英寸', `resolution`='2756×1272', `refresh_rate`='120', `rear_camera`='5000万主摄'
+WHERE `chip` IS NULL AND `tenant_id`=0 AND `name`='HUAWEI nova 16 SE'
+  AND `brand_id`=(SELECT `id` FROM `brand` WHERE `name`='华为' AND `tenant_id`=0);
+
+-- ===== 子代理收集·小米（5 款，来源: ZOL参数页(中关村在线),2026-10-25）=====
+UPDATE `phone_model` SET `release_year`='2025', `release_month`='5', `battery_mah`='6100', `charge_w`='90', `wireless_w`='50', `series`=NULL, `chip`='玄戒 O1', `ram`='16GB', `storage`='512GB', `screen_size`='6.73英寸', `resolution`='3200×1440', `refresh_rate`='120', `rear_camera`='5000万主摄'
+WHERE `chip` IS NULL AND `tenant_id`=0 AND `name`='Xiaomi 15S Pro'
+  AND `brand_id`=(SELECT `id` FROM `brand` WHERE `name`='小米' AND `tenant_id`=0);
+UPDATE `phone_model` SET `release_year`='2026', `release_month`='9', `battery_mah`='6000', `charge_w`='67', `wireless_w`='50', `series`=NULL, `chip`='玄戒 O3', `ram`='12GB', `storage`='256GB', `screen_size`='7.58英寸', `resolution`='2364×1672', `refresh_rate`='120', `rear_camera`=NULL
+WHERE `chip` IS NULL AND `tenant_id`=0 AND `name`='Xiaomi 18 Fold'
+  AND `brand_id`=(SELECT `id` FROM `brand` WHERE `name`='小米' AND `tenant_id`=0);
+UPDATE `phone_model` SET `release_year`='2021', `release_month`='8', `battery_mah`='4500', `charge_w`='120', `wireless_w`='50', `series`=NULL, `chip`='高通 骁龙888 Plus', `ram`='12GB', `storage`='256GB', `screen_size`='6.67英寸', `resolution`='2400×1080', `refresh_rate`='120', `rear_camera`=NULL
+WHERE `chip` IS NULL AND `tenant_id`=0 AND `name`='Xiaomi MIX 4'
+  AND `brand_id`=(SELECT `id` FROM `brand` WHERE `name`='小米' AND `tenant_id`=0);
+UPDATE `phone_model` SET `release_year`='2025', `release_month`='5', `battery_mah`='6000', `charge_w`='67', `wireless_w`='0', `series`=NULL, `chip`='高通 骁龙8S Gen4', `ram`='12GB', `storage`='256GB', `screen_size`='6.55英寸', `resolution`='2750×1236', `refresh_rate`='120', `rear_camera`='5000万主摄'
+WHERE `chip` IS NULL AND `tenant_id`=0 AND `name`='Xiaomi Civi 5 Pro'
+  AND `brand_id`=(SELECT `id` FROM `brand` WHERE `name`='小米' AND `tenant_id`=0);
+UPDATE `phone_model` SET `release_year`='2023', `release_month`='11', `battery_mah`='5000', `charge_w`='120', `wireless_w`='0', `series`=NULL, `chip`='第二代骁龙8移动平台', `ram`='12GB', `storage`='256GB', `screen_size`='6.67英寸', `resolution`='3200×1440', `refresh_rate`='120', `rear_camera`='5000万主摄'
+WHERE `chip` IS NULL AND `tenant_id`=0 AND `name`='Redmi K70'
+  AND `brand_id`=(SELECT `id` FROM `brand` WHERE `name`='小米' AND `tenant_id`=0);
+
+-- ===== 子代理收集·荣耀（46 款，来源: ZOL参数页(中关村在线),2026-10-25）=====
+UPDATE `phone_model` SET `release_year`='2021', `release_month`='8', `battery_mah`='4600', `charge_w`='66', `wireless_w`='0', `series`=NULL, `chip`='高通 骁龙888', `ram`='8GB', `storage`='128GB', `screen_size`='6.76英寸', `resolution`='2772×1344', `refresh_rate`='120', `rear_camera`='5000万主摄'
+WHERE `chip` IS NULL AND `tenant_id`=0 AND `name`='荣耀 Magic3'
+  AND `brand_id`=(SELECT `id` FROM `brand` WHERE `name`='荣耀' AND `tenant_id`=0);
+UPDATE `phone_model` SET `release_year`='2022', `release_month`='2', `battery_mah`='4800', `charge_w`='66', `wireless_w`='0', `series`=NULL, `chip`='高通 骁龙8 Gen1', `ram`='8GB', `storage`='256GB', `screen_size`='6.81英寸', `resolution`='2664×1224', `refresh_rate`='120', `rear_camera`='5000万主摄'
+WHERE `chip` IS NULL AND `tenant_id`=0 AND `name`='荣耀 Magic4'
+  AND `brand_id`=(SELECT `id` FROM `brand` WHERE `name`='荣耀' AND `tenant_id`=0);
+UPDATE `phone_model` SET `release_year`='2023', `release_month`='3', `battery_mah`='5100', `charge_w`='66', `wireless_w`='0', `series`=NULL, `chip`='高通 骁龙8 Gen2', `ram`='8GB', `storage`='256GB', `screen_size`='6.73英寸', `resolution`='2688×1224', `refresh_rate`='120', `rear_camera`='5400万主摄'
+WHERE `chip` IS NULL AND `tenant_id`=0 AND `name`='荣耀 Magic5'
+  AND `brand_id`=(SELECT `id` FROM `brand` WHERE `name`='荣耀' AND `tenant_id`=0);
+UPDATE `phone_model` SET `release_year`='2023', `release_month`='10', `battery_mah`='5000', `charge_w`='66', `wireless_w`='0', `series`=NULL, `chip`='高通 骁龙8+ Gen1', `ram`='12GB', `storage`='256GB', `screen_size`='7.92英寸', `resolution`='2344×2156', `refresh_rate`='120', `rear_camera`='5000万主摄'
+WHERE `chip` IS NULL AND `tenant_id`=0 AND `name`='荣耀 Magic Vs2'
+  AND `brand_id`=(SELECT `id` FROM `brand` WHERE `name`='荣耀' AND `tenant_id`=0);
+UPDATE `phone_model` SET `release_year`='2024', `release_month`=NULL, `battery_mah`='5450', `charge_w`='66', `wireless_w`='50', `series`=NULL, `chip`='高通 骁龙8 Gen3', `ram`='12GB', `storage`='256GB', `screen_size`='6.78英寸', `resolution`='2800×1264', `refresh_rate`='1-120', `rear_camera`='5000万主摄'
+WHERE `chip` IS NULL AND `tenant_id`=0 AND `name`='荣耀 Magic6'
+  AND `brand_id`=(SELECT `id` FROM `brand` WHERE `name`='荣耀' AND `tenant_id`=0);
+UPDATE `phone_model` SET `release_year`='2024', `release_month`='6', `battery_mah`='4800', `charge_w`='66', `wireless_w`='0', `series`=NULL, `chip`='高通 骁龙8+ Gen1', `ram`='12GB', `storage`='256GB', `screen_size`='6.8英寸', `resolution`='2520×1080', `refresh_rate`='120', `rear_camera`='5000万主摄'
+WHERE `chip` IS NULL AND `tenant_id`=0 AND `name`='荣耀 Magic V Flip'
+  AND `brand_id`=(SELECT `id` FROM `brand` WHERE `name`='荣耀' AND `tenant_id`=0);
+UPDATE `phone_model` SET `release_year`='2024', `release_month`='7', `battery_mah`='5000', `charge_w`='66', `wireless_w`='0', `series`=NULL, `chip`='高通 骁龙8 Gen2', `ram`='12GB', `storage`='256GB', `screen_size`='7.92英寸', `resolution`='2344×2156', `refresh_rate`='120', `rear_camera`='5000万主摄'
+WHERE `chip` IS NULL AND `tenant_id`=0 AND `name`='荣耀 Magic Vs3'
+  AND `brand_id`=(SELECT `id` FROM `brand` WHERE `name`='荣耀' AND `tenant_id`=0);
+UPDATE `phone_model` SET `release_year`='2024', `release_month`='10', `battery_mah`='5650', `charge_w`='100', `wireless_w`='80', `series`=NULL, `chip`='高通 骁龙 8 Elite', `ram`='12GB', `storage`='256GB', `screen_size`='6.78英寸', `resolution`='2800×1264', `refresh_rate`='1-120', `rear_camera`='5000万主摄'
+WHERE `chip` IS NULL AND `tenant_id`=0 AND `name`='荣耀 Magic7'
+  AND `brand_id`=(SELECT `id` FROM `brand` WHERE `name`='荣耀' AND `tenant_id`=0);
+UPDATE `phone_model` SET `release_year`='2025', `release_month`='7', `battery_mah`='5820', `charge_w`='66', `wireless_w`='50', `series`=NULL, `chip`='高通 骁龙 8 Elite', `ram`='12GB', `storage`='256GB', `screen_size`='7.95英寸', `resolution`='2352×2172', `refresh_rate`='120', `rear_camera`='5000万主摄'
+WHERE `chip` IS NULL AND `tenant_id`=0 AND `name`='荣耀 Magic V5'
+  AND `brand_id`=(SELECT `id` FROM `brand` WHERE `name`='荣耀' AND `tenant_id`=0);
+UPDATE `phone_model` SET `release_year`='2025', `release_month`='10', `battery_mah`='7000', `charge_w`='90', `wireless_w`='80', `series`=NULL, `chip`='骁龙 8 Elite Gen5', `ram`='12GB', `storage`='256GB', `screen_size`='6.58英寸', `resolution`='2760×1256', `refresh_rate`='1-120', `rear_camera`='5000万主摄'
+WHERE `chip` IS NULL AND `tenant_id`=0 AND `name`='荣耀 Magic8'
+  AND `brand_id`=(SELECT `id` FROM `brand` WHERE `name`='荣耀' AND `tenant_id`=0);
+UPDATE `phone_model` SET `release_year`='2026', `release_month`='1', `battery_mah`='5500', `charge_w`='80', `wireless_w`='50', `series`=NULL, `chip`='联发科 天玑 9500', `ram`='12GB', `storage`='256GB', `screen_size`='6.31英寸', `resolution`='2640×1216', `refresh_rate`='120', `rear_camera`='5000万主摄'
+WHERE `chip` IS NULL AND `tenant_id`=0 AND `name`='荣耀 Magic8 Pro Air'
+  AND `brand_id`=(SELECT `id` FROM `brand` WHERE `name`='荣耀' AND `tenant_id`=0);
+UPDATE `phone_model` SET `release_year`='2026', `release_month`='3', `battery_mah`='6850', `charge_w`='120', `wireless_w`=NULL, `series`=NULL, `chip`='骁龙 8 Elite Gen5', `ram`='12GB', `storage`='256GB', `screen_size`='7.95英寸', `resolution`='2352×2172', `refresh_rate`='120', `rear_camera`='5000万主摄'
+WHERE `chip` IS NULL AND `tenant_id`=0 AND `name`='荣耀 Magic V6'
+  AND `brand_id`=(SELECT `id` FROM `brand` WHERE `name`='荣耀' AND `tenant_id`=0);
+UPDATE `phone_model` SET `release_year`='2026', `release_month`='9', `battery_mah`='8000', `charge_w`='80', `wireless_w`='50', `series`=NULL, `chip`='骁龙 8 Elite Gen5', `ram`='12GB', `storage`='256GB', `screen_size`='6.37英寸', `resolution`='2664×1236', `refresh_rate`='1-120', `rear_camera`=NULL
+WHERE `chip` IS NULL AND `tenant_id`=0 AND `name`='荣耀 Magic9'
+  AND `brand_id`=(SELECT `id` FROM `brand` WHERE `name`='荣耀' AND `tenant_id`=0);
+UPDATE `phone_model` SET `release_year`='2021', `release_month`='6', `battery_mah`='4300', `charge_w`='66', `wireless_w`='0', `series`=NULL, `chip`='高通 骁龙778G', `ram`='8GB', `storage`='256GB', `screen_size`='6.57英寸', `resolution`='2340×1080', `refresh_rate`='120', `rear_camera`=NULL
+WHERE `chip` IS NULL AND `tenant_id`=0 AND `name`='荣耀 50'
+  AND `brand_id`=(SELECT `id` FROM `brand` WHERE `name`='荣耀' AND `tenant_id`=0);
+UPDATE `phone_model` SET `release_year`='2021', `release_month`='6', `battery_mah`='4000', `charge_w`='66', `wireless_w`='0', `series`=NULL, `chip`='联发科 天玑900', `ram`='8GB', `storage`='128GB', `screen_size`='6.78英寸', `resolution`='2388×1080', `refresh_rate`='120', `rear_camera`=NULL
+WHERE `chip` IS NULL AND `tenant_id`=0 AND `name`='荣耀 50 SE'
+  AND `brand_id`=(SELECT `id` FROM `brand` WHERE `name`='荣耀' AND `tenant_id`=0);
+UPDATE `phone_model` SET `release_year`='2021', `release_month`='12', `battery_mah`='4800', `charge_w`='66', `wireless_w`='0', `series`=NULL, `chip`='高通 骁龙778G', `ram`='8GB', `storage`='128GB', `screen_size`='6.67英寸', `resolution`='2400×1080', `refresh_rate`='120', `rear_camera`=NULL
+WHERE `chip` IS NULL AND `tenant_id`=0 AND `name`='荣耀 60'
+  AND `brand_id`=(SELECT `id` FROM `brand` WHERE `name`='荣耀' AND `tenant_id`=0);
+UPDATE `phone_model` SET `release_year`='2022', `release_month`='2', `battery_mah`='4300', `charge_w`='66', `wireless_w`='0', `series`=NULL, `chip`='联发科 天玑900', `ram`='8GB', `storage`='128GB', `screen_size`='6.67英寸', `resolution`='2400×1080', `refresh_rate`='120', `rear_camera`='6400万主摄'
+WHERE `chip` IS NULL AND `tenant_id`=0 AND `name`='荣耀 60 SE'
+  AND `brand_id`=(SELECT `id` FROM `brand` WHERE `name`='荣耀' AND `tenant_id`=0);
+UPDATE `phone_model` SET `release_year`='2022', `release_month`='5', `battery_mah`='4800', `charge_w`='66', `wireless_w`='0', `series`=NULL, `chip`='高通 骁龙778G Plus', `ram`='8GB', `storage`='256GB', `screen_size`='6.67英寸', `resolution`='2400×1080', `refresh_rate`='120', `rear_camera`='5400万主摄'
+WHERE `chip` IS NULL AND `tenant_id`=0 AND `name`='荣耀 70'
+  AND `brand_id`=(SELECT `id` FROM `brand` WHERE `name`='荣耀' AND `tenant_id`=0);
+UPDATE `phone_model` SET `release_year`='2022', `release_month`='5', `battery_mah`='4500', `charge_w`='100', `wireless_w`='0', `series`=NULL, `chip`='联发科 天玑9000', `ram`='8GB', `storage`='256GB', `screen_size`='6.78英寸', `resolution`='2652×1200', `refresh_rate`='120', `rear_camera`='5400万主摄'
+WHERE `chip` IS NULL AND `tenant_id`=0 AND `name`='荣耀 70 Pro+'
+  AND `brand_id`=(SELECT `id` FROM `brand` WHERE `name`='荣耀' AND `tenant_id`=0);
+UPDATE `phone_model` SET `release_year`='2022', `release_month`='11', `battery_mah`='4800', `charge_w`='66', `wireless_w`='0', `series`=NULL, `chip`='高通 骁龙782G', `ram`='8GB', `storage`='256GB', `screen_size`='6.67英寸', `resolution`='2400×1080', `refresh_rate`=NULL, `rear_camera`=NULL
+WHERE `chip` IS NULL AND `tenant_id`=0 AND `name`='荣耀 80'
+  AND `brand_id`=(SELECT `id` FROM `brand` WHERE `name`='荣耀' AND `tenant_id`=0);
+UPDATE `phone_model` SET `release_year`='2022', `release_month`='11', `battery_mah`='4600', `charge_w`='66', `wireless_w`='0', `series`=NULL, `chip`='联发科 天玑900', `ram`='8GB', `storage`='256GB', `screen_size`='6.67英寸', `resolution`='2400×1080', `refresh_rate`='120', `rear_camera`='6400万主摄'
+WHERE `chip` IS NULL AND `tenant_id`=0 AND `name`='荣耀 80 SE'
+  AND `brand_id`=(SELECT `id` FROM `brand` WHERE `name`='荣耀' AND `tenant_id`=0);
+UPDATE `phone_model` SET `release_year`='2022', `release_month`='12', `battery_mah`='4800', `charge_w`='66', `wireless_w`='0', `series`=NULL, `chip`='高通 骁龙8+ Gen1（降频版）', `ram`='12GB', `storage`='256GB', `screen_size`='6.67英寸', `resolution`='2400×1080', `refresh_rate`='120', `rear_camera`='5400万主摄'
+WHERE `chip` IS NULL AND `tenant_id`=0 AND `name`='荣耀 80 GT'
+  AND `brand_id`=(SELECT `id` FROM `brand` WHERE `name`='荣耀' AND `tenant_id`=0);
+UPDATE `phone_model` SET `release_year`='2023', `release_month`='5', `battery_mah`='5000', `charge_w`='66', `wireless_w`='0', `series`=NULL, `chip`='高通 骁龙7 Gen1', `ram`='12GB', `storage`='256GB', `screen_size`='6.7英寸', `resolution`='2664×1200', `refresh_rate`='120', `rear_camera`=NULL
+WHERE `chip` IS NULL AND `tenant_id`=0 AND `name`='荣耀 90'
+  AND `brand_id`=(SELECT `id` FROM `brand` WHERE `name`='荣耀' AND `tenant_id`=0);
+UPDATE `phone_model` SET `release_year`='2023', `release_month`='12', `battery_mah`='5000', `charge_w`='100', `wireless_w`='0', `series`=NULL, `chip`='高通 骁龙8 Gen2', `ram`='12GB', `storage`='256GB', `screen_size`='6.7英寸', `resolution`='2664×1200', `refresh_rate`='120', `rear_camera`='5000万主摄'
+WHERE `chip` IS NULL AND `tenant_id`=0 AND `name`='荣耀 90 GT'
+  AND `brand_id`=(SELECT `id` FROM `brand` WHERE `name`='荣耀' AND `tenant_id`=0);
+UPDATE `phone_model` SET `release_year`='2023', `release_month`='11', `battery_mah`='5000', `charge_w`=NULL, `wireless_w`='0', `series`=NULL, `chip`='高通 骁龙7 Gen3', `ram`='12GB', `storage`='256GB', `screen_size`='6.7英寸', `resolution`='2664×1200', `refresh_rate`='120', `rear_camera`='5000万主摄'
+WHERE `chip` IS NULL AND `tenant_id`=0 AND `name`='荣耀 100'
+  AND `brand_id`=(SELECT `id` FROM `brand` WHERE `name`='荣耀' AND `tenant_id`=0);
+UPDATE `phone_model` SET `release_year`='2024', `release_month`='5', `battery_mah`='5200', `charge_w`='100', `wireless_w`='0', `series`=NULL, `chip`='高通 骁龙7 Gen3', `ram`='12GB', `storage`='256GB', `screen_size`='6.7英寸', `resolution`='2664×1200', `refresh_rate`='120', `rear_camera`='5000万主摄'
+WHERE `chip` IS NULL AND `tenant_id`=0 AND `name`='荣耀 200'
+  AND `brand_id`=(SELECT `id` FROM `brand` WHERE `name`='荣耀' AND `tenant_id`=0);
+UPDATE `phone_model` SET `release_year`='2024', `release_month`='12', `battery_mah`='5300', `charge_w`='100', `wireless_w`='0', `series`=NULL, `chip`='高通 骁龙7 Gen3', `ram`='8GB', `storage`='256GB', `screen_size`='6.7英寸', `resolution`='2664×1200', `refresh_rate`='120', `rear_camera`='5000万主摄'
+WHERE `chip` IS NULL AND `tenant_id`=0 AND `name`='荣耀 300'
+  AND `brand_id`=(SELECT `id` FROM `brand` WHERE `name`='荣耀' AND `tenant_id`=0);
+UPDATE `phone_model` SET `release_year`='2024', `release_month`='12', `battery_mah`='5300', `charge_w`='100', `wireless_w`=NULL, `series`=NULL, `chip`='高通骁龙8 Gen3', `ram`='12GB', `storage`='256GB', `screen_size`='6.78英寸', `resolution`='2700×1224', `refresh_rate`='120', `rear_camera`='5000万主摄'
+WHERE `chip` IS NULL AND `tenant_id`=0 AND `name`='荣耀 300 Pro'
+  AND `brand_id`=(SELECT `id` FROM `brand` WHERE `name`='荣耀' AND `tenant_id`=0);
+UPDATE `phone_model` SET `release_year`='2018', `release_month`='12', `battery_mah`='4000', `charge_w`=NULL, `wireless_w`='0', `series`=NULL, `chip`='海思 麒麟 980', `ram`='6GB', `storage`='128GB', `screen_size`='6.4英寸', `resolution`='2310×1080', `refresh_rate`=NULL, `rear_camera`='4800万主摄'
+WHERE `chip` IS NULL AND `tenant_id`=0 AND `name`='荣耀 V20'
+  AND `brand_id`=(SELECT `id` FROM `brand` WHERE `name`='荣耀' AND `tenant_id`=0);
+UPDATE `phone_model` SET `release_year`='2024', `release_month`='12', `battery_mah`='5300', `charge_w`='100', `wireless_w`='0', `series`=NULL, `chip`='高通 骁龙8 Gen3', `ram`='12GB', `storage`='256GB', `screen_size`='6.7英寸', `resolution`='2664×1200', `refresh_rate`='120', `rear_camera`='5000万主摄'
+WHERE `chip` IS NULL AND `tenant_id`=0 AND `name`='荣耀 GT'
+  AND `brand_id`=(SELECT `id` FROM `brand` WHERE `name`='荣耀' AND `tenant_id`=0);
+UPDATE `phone_model` SET `release_year`='2021', `release_month`='7', `battery_mah`='4000', `charge_w`='5', `wireless_w`='0', `series`=NULL, `chip`='联发科 天玑700', `ram`='8GB', `storage`='128GB', `screen_size`='6.6英寸', `resolution`='2400×1080', `refresh_rate`='60', `rear_camera`='6400万主摄'
+WHERE `chip` IS NULL AND `tenant_id`=0 AND `name`='荣耀 X20 SE'
+  AND `brand_id`=(SELECT `id` FROM `brand` WHERE `name`='荣耀' AND `tenant_id`=0);
+UPDATE `phone_model` SET `release_year`='2021', `release_month`='10', `battery_mah`='4000', `charge_w`='5', `wireless_w`='0', `series`=NULL, `chip`='联发科 天玑810', `ram`='8GB', `storage`='128GB', `screen_size`='6.7英寸', `resolution`='2388×1080', `refresh_rate`='90', `rear_camera`='4800万主摄'
+WHERE `chip` IS NULL AND `tenant_id`=0 AND `name`='荣耀 X30i'
+  AND `brand_id`=(SELECT `id` FROM `brand` WHERE `name`='荣耀' AND `tenant_id`=0);
+UPDATE `phone_model` SET `release_year`='2021', `release_month`='10', `battery_mah`='5000', `charge_w`='5', `wireless_w`='0', `series`=NULL, `chip`='联发科 天玑900', `ram`='8GB', `storage`='128GB', `screen_size`='7.09英寸', `resolution`='2280×1080', `refresh_rate`=NULL, `rear_camera`='6400万主摄'
+WHERE `chip` IS NULL AND `tenant_id`=0 AND `name`='荣耀 X30 Max'
+  AND `brand_id`=(SELECT `id` FROM `brand` WHERE `name`='荣耀' AND `tenant_id`=0);
+UPDATE `phone_model` SET `release_year`='2022', `release_month`='7', `battery_mah`='4000', `charge_w`='40', `wireless_w`='0', `series`=NULL, `chip`='联发科 天玑700', `ram`='8GB', `storage`='128GB', `screen_size`='6.7英寸', `resolution`='2388×1080', `refresh_rate`='90', `rear_camera`='5000万主摄'
+WHERE `chip` IS NULL AND `tenant_id`=0 AND `name`='荣耀 X40i'
+  AND `brand_id`=(SELECT `id` FROM `brand` WHERE `name`='荣耀' AND `tenant_id`=0);
+UPDATE `phone_model` SET `release_year`='2022', `release_month`='10', `battery_mah`='4800', `charge_w`='66', `wireless_w`='0', `series`=NULL, `chip`='高通 骁龙888', `ram`='8GB', `storage`='256GB', `screen_size`='6.81英寸', `resolution`='2388×1080', `refresh_rate`='144', `rear_camera`='5000万主摄'
+WHERE `chip` IS NULL AND `tenant_id`=0 AND `name`='荣耀 X40 GT / 荣耀 X40 GT 竞速版'
+  AND `brand_id`=(SELECT `id` FROM `brand` WHERE `name`='荣耀' AND `tenant_id`=0);
+UPDATE `phone_model` SET `release_year`='2023', `release_month`='4', `battery_mah`='4500', `charge_w`='35', `wireless_w`='0', `series`=NULL, `chip`='联发科 天玑6020', `ram`='8GB', `storage`='256GB', `screen_size`='6.7英寸', `resolution`='2388×1080', `refresh_rate`='90', `rear_camera`=NULL
+WHERE `chip` IS NULL AND `tenant_id`=0 AND `name`='荣耀 X50i'
+  AND `brand_id`=(SELECT `id` FROM `brand` WHERE `name`='荣耀' AND `tenant_id`=0);
+UPDATE `phone_model` SET `release_year`='2023', `release_month`='11', `battery_mah`='4500', `charge_w`=NULL, `wireless_w`='0', `series`=NULL, `chip`='联发科 天玑6080', `ram`='12GB', `storage`='256GB', `screen_size`='6.7英寸', `resolution`='2412×1080', `refresh_rate`='90', `rear_camera`=NULL
+WHERE `chip` IS NULL AND `tenant_id`=0 AND `name`='荣耀 X50i+'
+  AND `brand_id`=(SELECT `id` FROM `brand` WHERE `name`='荣耀' AND `tenant_id`=0);
+UPDATE `phone_model` SET `release_year`='2024', `release_month`='10', `battery_mah`='6600', `charge_w`='66', `wireless_w`='0', `series`=NULL, `chip`='高通 骁龙6 Gen1', `ram`='8GB', `storage`='128GB', `screen_size`='6.78英寸', `resolution`='2700×1224', `refresh_rate`='120', `rear_camera`=NULL
+WHERE `chip` IS NULL AND `tenant_id`=0 AND `name`='荣耀 X60 Pro'
+  AND `brand_id`=(SELECT `id` FROM `brand` WHERE `name`='荣耀' AND `tenant_id`=0);
+UPDATE `phone_model` SET `release_year`='2025', `release_month`='4', `battery_mah`='6000', `charge_w`='35', `wireless_w`='0', `series`=NULL, `chip`='联发科 天玑 7025-Ultra', `ram`='8GB', `storage`='256GB', `screen_size`='6.7英寸', `resolution`='2412×1080', `refresh_rate`='90', `rear_camera`='10800万主摄'
+WHERE `chip` IS NULL AND `tenant_id`=0 AND `name`='荣耀 X70i'
+  AND `brand_id`=(SELECT `id` FROM `brand` WHERE `name`='荣耀' AND `tenant_id`=0);
+UPDATE `phone_model` SET `release_year`='2026', `release_month`='6', `battery_mah`='11000', `charge_w`='80', `wireless_w`='0', `series`=NULL, `chip`='高通 骁龙6 Gen5', `ram`='8GB', `storage`='128GB', `screen_size`='6.8英寸', `resolution`='2788×1280', `refresh_rate`='120', `rear_camera`='5000万主摄'
+WHERE `chip` IS NULL AND `tenant_id`=0 AND `name`='荣耀 X80 Pro Max'
+  AND `brand_id`=(SELECT `id` FROM `brand` WHERE `name`='荣耀' AND `tenant_id`=0);
+UPDATE `phone_model` SET `release_year`='2021', `release_month`='8', `battery_mah`='4000', `charge_w`='5', `wireless_w`='0', `series`=NULL, `chip`='联发科 Helio G80', `ram`='8GB', `storage`='128GB', `screen_size`='6.6英寸', `resolution`='2400×1080', `refresh_rate`='60', `rear_camera`='6400万主摄'
+WHERE `chip` IS NULL AND `tenant_id`=0 AND `name`='荣耀 Play5T Pro'
+  AND `brand_id`=(SELECT `id` FROM `brand` WHERE `name`='荣耀' AND `tenant_id`=0);
+UPDATE `phone_model` SET `release_year`='2022', `release_month`='4', `battery_mah`='4000', `charge_w`='40', `wireless_w`='0', `series`=NULL, `chip`='联发科 天玑810', `ram`='8GB', `storage`='256GB', `screen_size`='6.7英寸', `resolution`='2388×1080', `refresh_rate`='90', `rear_camera`='4800万主摄'
+WHERE `chip` IS NULL AND `tenant_id`=0 AND `name`='荣耀 Play6T Pro'
+  AND `brand_id`=(SELECT `id` FROM `brand` WHERE `name`='荣耀' AND `tenant_id`=0);
+UPDATE `phone_model` SET `release_year`='2022', `release_month`='10', `battery_mah`='5000', `charge_w`='5', `wireless_w`='0', `series`=NULL, `chip`='高通 骁龙480 Plus', `ram`='6GB', `storage`='128GB', `screen_size`='6.517英寸', `resolution`='1600×720', `refresh_rate`='90', `rear_camera`='1300万主摄'
+WHERE `chip` IS NULL AND `tenant_id`=0 AND `name`='荣耀 Play6C'
+  AND `brand_id`=(SELECT `id` FROM `brand` WHERE `name`='荣耀' AND `tenant_id`=0);
+UPDATE `phone_model` SET `release_year`='2023', `release_month`='3', `battery_mah`='4000', `charge_w`='40', `wireless_w`='0', `series`=NULL, `chip`='联发科 天玑6020', `ram`='8GB', `storage`='128GB', `screen_size`='6.7英寸', `resolution`=NULL, `refresh_rate`='90', `rear_camera`='5000万主摄'
+WHERE `chip` IS NULL AND `tenant_id`=0 AND `name`='荣耀 Play7T Pro'
+  AND `brand_id`=(SELECT `id` FROM `brand` WHERE `name`='荣耀' AND `tenant_id`=0);
+UPDATE `phone_model` SET `release_year`='2024', `release_month`='5', `battery_mah`='4500', `charge_w`='35', `wireless_w`='0', `series`=NULL, `chip`='联发科 天玑7050', `ram`='8GB', `storage`='256GB', `screen_size`='6.7英寸', `resolution`=NULL, `refresh_rate`='90', `rear_camera`=NULL
+WHERE `chip` IS NULL AND `tenant_id`=0 AND `name`='荣耀 Play8T Pro'
+  AND `brand_id`=(SELECT `id` FROM `brand` WHERE `name`='荣耀' AND `tenant_id`=0);
+UPDATE `phone_model` SET `release_year`='2025', `release_month`='4', `battery_mah`='8000', `charge_w`='66', `wireless_w`='0', `series`=NULL, `chip`='高通 骁龙7 Gen3', `ram`='8GB', `storage`='256GB', `screen_size`='6.78英寸', `resolution`='2700×1224', `refresh_rate`='120', `rear_camera`='5000万主摄'
+WHERE `chip` IS NULL AND `tenant_id`=0 AND `name`='荣耀 Power'
+  AND `brand_id`=(SELECT `id` FROM `brand` WHERE `name`='荣耀' AND `tenant_id`=0);
