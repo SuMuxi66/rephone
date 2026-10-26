@@ -25,7 +25,7 @@ UA = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.3
       'Accept-Language': 'zh-CN,zh;q=0.9'}
 NONPHONE = re.compile(r'笔记本|MagicBook|平板|MagicPad|Waterplay|豆包手机助手')
 
-PREFIX = ['真我','realme','Realme','REALME','OnePlus','oneplus','一加','努比亚','nubia','Nubia','腾讯红魔游戏手机','红魔','红米','Redmi','REDMI','redmi','小米','Xiaomi','xiaomi','荣耀','HONOR','华为','HUAWEI','OPPO','vivo','iQOO']
+PREFIX = ['真我','realme','Realme','REALME','OnePlus','oneplus','一加','努比亚','nubia','Nubia','腾讯红魔游戏手机','红魔','红米','Redmi','REDMI','redmi','小米','Xiaomi','xiaomi','荣耀','HONOR','华为','HUAWEI','OPPO','vivo','iQOO','三星','SAMSUNG','samsung','苹果','APPLE','Apple']
 BRAND_DISPLAY = {
     '华为': ['华为'], '小米': ['小米'], 'Redmi': ['Redmi', '红米'], '红米': ['Redmi', '红米'],
     'OPPO': ['OPPO'], 'realme': ['真我', 'realme'], '一加': ['一加'], 'vivo': ['vivo'],
@@ -39,10 +39,14 @@ FIELDS = ['release_year', 'release_month', 'chip', 'ram', 'storage', 'battery_ma
 def norm(name):
     s = str(name).strip().replace('（', '(').replace('）', ')')
     s = re.sub(r'\s+', '', s)
-    for p in PREFIX:
-        if s.lower().startswith(p.lower()) and len(s) > len(p):
-            s = s[len(p):]
-            break
+    changed = True
+    while changed:
+        changed = False
+        for p in PREFIX:
+            if s.lower().startswith(p.lower()) and len(s) > len(p):
+                s = s[len(p):]
+                changed = True
+                break
     s = re.sub(r'\(`[a-z0-9_]+`\)', '', s, flags=re.I)
     s = re.sub(r'\([a-z0-9_]{3,}\)$', '', s, flags=re.I)
     s = re.sub(r'5g$', '', s, flags=re.I)
@@ -51,7 +55,7 @@ def norm(name):
 
 def title_norm(title):
     s = re.sub(r'[【\[].*?[】\]]', '', title)
-    s = re.sub(r'[（(][^（）()]*?(?:GB|TB|内存|版|英寸|英寸以上)[^（）()]*?[）)]$', '', s)
+    s = re.sub(r'[（(][^（）()]*[）)]$', '', s)
     return norm(s)
 
 
