@@ -73,6 +73,7 @@ export const createBrand = (name) => http.post('/admin/brand', { name });
 export const fetchModels = (brandId, params) => http.get('/admin/models', { params: { brandId, ...params } });
 export const createModel = (payload) => http.post('/admin/model', payload);
 export const updateModel = (id, payload) => http.put(`/admin/model/${id}`, payload);
+export const updateModelSpec = (id, payload) => http.put(`/admin/model/${id}/spec`, payload);
 export const updateModelPrice = (id, storage, priceYuan) =>
   http.put(`/admin/model/${id}/price`, { storage, priceYuan });
 

@@ -27,6 +27,9 @@
             <el-checkbox v-model="noImage" :disabled="!activeBrandId" @change="onSearch">
               只看无图
             </el-checkbox>
+            <el-checkbox v-model="noSpec" :disabled="!activeBrandId" @change="onSearch">
+              只看缺参数
+            </el-checkbox>
             <el-input
               v-model="keyword"
               placeholder="按机型名搜索"
@@ -71,12 +74,20 @@
         <el-table-column prop="releaseYear" label="发布年份" width="100">
           <template #default="{ row }">{{ row.releaseYear || '--' }}</template>
         </el-table-column>
+        <el-table-column label="参数" width="90">
+          <template #default="{ row }">
+            <el-tag v-if="specCount(row) >= 12" size="small" type="success">完整</el-tag>
+            <el-tag v-else-if="specCount(row) === 0" size="small" type="info">缺失</el-tag>
+            <el-tag v-else size="small" type="warning">{{ specCount(row) }}/12</el-tag>
+          </template>
+        </el-table-column>
         <el-table-column label="内存档数" width="100">
           <template #default="{ row }">{{ row.prices.length }}</template>
         </el-table-column>
-        <el-table-column label="操作" width="90" fixed="right">
+        <el-table-column label="操作" width="130" fixed="right">
           <template #default="{ row }">
             <el-button link type="primary" @click="openEdit(row)">编辑</el-button>
+            <el-button link type="primary" @click="openSpec(row)">参数</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -140,6 +151,54 @@
       </template>
     </el-dialog>
 
+    <el-dialog v-model="specVisible" :title="specTitle" width="640px">
+      <el-form label-position="top" class="spec-form">
+        <div class="spec-grid">
+          <el-form-item label="系列">
+            <el-input v-model="specForm.series" placeholder="如 数字系列 / Mate系列" maxlength="64" />
+          </el-form-item>
+          <el-form-item label="发布月份">
+            <el-input-number v-model="specForm.releaseMonth" :min="1" :max="12" style="width: 100%" />
+          </el-form-item>
+          <el-form-item label="处理器">
+            <el-input v-model="specForm.chip" placeholder="如 骁龙8 Gen3" maxlength="128" />
+          </el-form-item>
+          <el-form-item label="运行内存">
+            <el-input v-model="specForm.ram" placeholder="如 12GB/16GB" maxlength="64" />
+          </el-form-item>
+          <el-form-item label="机身存储">
+            <el-input v-model="specForm.storage" placeholder="如 256GB/512GB/1TB" maxlength="64" />
+          </el-form-item>
+          <el-form-item label="电池容量(mAh)">
+            <el-input-number v-model="specForm.batteryMah" :min="100" :max="20000" :controls="false" style="width: 100%" />
+          </el-form-item>
+          <el-form-item label="有线快充(W)">
+            <el-input-number v-model="specForm.chargeW" :min="0" :max="300" :controls="false" style="width: 100%" />
+          </el-form-item>
+          <el-form-item label="无线充电(W，0=不支持)">
+            <el-input-number v-model="specForm.wirelessW" :min="0" :max="120" :controls="false" style="width: 100%" />
+          </el-form-item>
+          <el-form-item label="屏幕尺寸">
+            <el-input v-model="specForm.screenSize" placeholder="如 6.7英寸" maxlength="32" />
+          </el-form-item>
+          <el-form-item label="分辨率">
+            <el-input v-model="specForm.resolution" placeholder="如 2832×1280" maxlength="32" />
+          </el-form-item>
+          <el-form-item label="刷新率">
+            <el-input v-model="specForm.refreshRate" placeholder="如 1-120 / 144" maxlength="32" />
+          </el-form-item>
+          <el-form-item label="后置主摄">
+            <el-input v-model="specForm.rearCamera" placeholder="如 5000万主摄" maxlength="128" />
+          </el-form-item>
+        </div>
+        <div class="spec-tip">保存为全量覆盖：清空的字段会写空。参数缺失的机型可后续由数据 seed 自动补齐（以「处理器」是否为空判定）。</div>
+      </el-form>
+      <template #footer>
+        <el-button @click="specVisible = false">取消</el-button>
+        <el-button type="primary" :loading="submitting" @click="onSubmitSpec">保存</el-button>
+      </template>
+    </el-dialog>
+
     <el-dialog v-model="priceVisible" title="内存基准价" width="420px">
       <el-form label-position="top">
         <el-form-item label="内存规格" required>
@@ -168,6 +227,7 @@ import {
   fetchModels,
   updateModel,
   updateModelPrice,
+  updateModelSpec,
 } from '../api/admin';
 
 const brands = ref([]);
@@ -193,6 +253,23 @@ const priceForm = reactive({ modelId: null, storage: '', priceYuan: null, existi
 /** 只看未配图的机型：机型库 1400+ 条且几乎无图，补图时需要「待补图」视角 */
 const noImage = ref(false);
 
+/** 只看缺参数（chip 为空）的机型：参数补录视角 */
+const noSpec = ref(false);
+
+const specVisible = ref(false);
+const specRow = ref(null);
+const specTitle = computed(() => (specRow.value ? `${specRow.value.name} · 参数` : '机型参数'));
+const SPEC_FIELDS = [
+  'releaseMonth', 'series', 'chip', 'ram', 'storage',
+  'batteryMah', 'chargeW', 'wirelessW', 'screenSize', 'resolution', 'refreshRate', 'rearCamera',
+];
+const specForm = reactive(Object.fromEntries(SPEC_FIELDS.map((f) => [f, null])));
+
+function specCount(row) {
+  if (!row || !row.spec) return 0;
+  return SPEC_FIELDS.filter((f) => row.spec[f] !== null && row.spec[f] !== '').length;
+}
+
 const activeBrand = computed(() => brands.value.find((b) => b.id === activeBrandId.value));
 
 async function loadBrands() {
@@ -215,6 +292,7 @@ async function loadModels() {
     const params = { pageNum: pageNum.value, pageSize };
     if (keyword.value.trim()) params.keyword = keyword.value.trim();
     if (noImage.value) params.noImage = true;
+    if (noSpec.value) params.noSpec = true;
     const page = await fetchModels(activeBrandId.value, params);
     models.value = page.records || [];
     total.value = page.total || 0;
@@ -322,6 +400,31 @@ async function onSubmitModel() {
   }
 }
 
+function openSpec(row) {
+  specRow.value = row;
+  for (const f of SPEC_FIELDS) {
+    specForm[f] = row.spec && row.spec[f] !== undefined ? row.spec[f] : null;
+  }
+  specVisible.value = true;
+}
+
+async function onSubmitSpec() {
+  submitting.value = true;
+  try {
+    const payload = {};
+    for (const f of SPEC_FIELDS) {
+      const v = specForm[f];
+      payload[f] = typeof v === 'string' && !v.trim() ? null : v;
+    }
+    await updateModelSpec(specRow.value.id, payload);
+    ElMessage.success('参数已保存');
+    specVisible.value = false;
+    selectBrand(activeBrandId.value);
+  } finally {
+    submitting.value = false;
+  }
+}
+
 function openPrice(row, p) {
   priceForm.modelId = row.id;
   priceForm.existing = p;
@@ -409,6 +512,17 @@ onMounted(loadBrands);
   gap: 8px;
   margin-bottom: 8px;
   align-items: center;
+}
+.spec-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  column-gap: 16px;
+}
+.spec-tip {
+  margin-top: 4px;
+  color: #909399;
+  font-size: 12px;
+  line-height: 1.4;
 }
 .thumb {
   width: 44px;
