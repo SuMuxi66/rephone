@@ -66,8 +66,8 @@ public class AdminModelService {
         return brand.getId();
     }
 
-    /** 管理端机型分页（按机型名搜索，可选只看无图），随页组装内存基准价。 */
-    public Page<AdminModelItem> adminPage(Long brandId, String keyword, Boolean noImage,
+    /** 管理端机型分页（按机型名搜索，可选只看无图/只看缺参数），随页组装参数与内存基准价。 */
+    public Page<AdminModelItem> adminPage(Long brandId, String keyword, Boolean noImage, Boolean noSpec,
                                           long pageNum, long pageSize) {
         if (brandId == null) {
             throw new BizException(40030, "brandId 不能为空");
@@ -86,6 +86,10 @@ public class AdminModelService {
             // image 既可能是 NULL 也可能是空串，两个都要算「无图」
             wrapper.and(w -> w.isNull(PhoneModel::getImage).or().eq(PhoneModel::getImage, ""));
         }
+        if (Boolean.TRUE.equals(noSpec)) {
+            // chip 是参数 seed 的判空字段，同步用作「缺参数」判定
+            wrapper.and(w -> w.isNull(PhoneModel::getChip).or().eq(PhoneModel::getChip, ""));
+        }
         Page<PhoneModel> page = modelMapper.selectPage(new Page<>(pageNum, pageSize), wrapper);
         Map<Long, List<QuoteRule>> pricesByModel = page.getRecords().isEmpty() ? Map.of()
                 : ruleMapper.selectList(new LambdaQueryWrapper<QuoteRule>()
@@ -95,12 +99,18 @@ public class AdminModelService {
                 .collect(Collectors.groupingBy(QuoteRule::getModelId));
         Page<AdminModelItem> result = new Page<>(page.getCurrent(), page.getSize(), page.getTotal());
         result.setRecords(page.getRecords().stream().map(m -> new AdminModelItem(m.getId(), m.getName(),
-                m.getImage(), m.getReleaseYear(),
+                m.getImage(), m.getReleaseYear(), toSpec(m),
                 pricesByModel.getOrDefault(m.getId(), List.of()).stream()
                         .sorted(Comparator.comparing(QuoteRule::getSort))
                         .map(r -> new AdminModelItem.AdminModelPrice(r.getOptionKey(), r.getNumericValue()))
                         .toList())).toList());
         return result;
+    }
+
+    private AdminModelItem.AdminModelSpec toSpec(PhoneModel m) {
+        return new AdminModelItem.AdminModelSpec(m.getReleaseMonth(), m.getSeries(), m.getChip(),
+                m.getRam(), m.getStorage(), m.getBatteryMah(), m.getChargeW(), m.getWirelessW(),
+                m.getScreenSize(), m.getResolution(), m.getRefreshRate(), m.getRearCamera());
     }
 
     @Transactional
@@ -133,9 +143,78 @@ public class AdminModelService {
         Long count = modelMapper.selectCount(new LambdaQueryWrapper<PhoneModel>()
                 .eq(PhoneModel::getBrandId, req.brandId()));
         model.setSort(count == null ? 1 : count.intValue() + 1);
+        applySpec(model, req.spec());
         modelMapper.insert(model);
         upsertPrices(model.getId(), prices);
         return model.getId();
+    }
+
+    /** 创建/编辑共用：把参数写到实体（管理端入口，字符串 trim、空串归 null）。 */
+    private void applySpec(PhoneModel model, AdminModelItem.AdminModelSpec spec) {
+        if (spec == null) {
+            return;
+        }
+        model.setReleaseMonth(rangeSpec(spec.releaseMonth(), 1, 12, "发布月份"));
+        model.setSeries(cleanSpec(spec.series(), 64, "系列"));
+        model.setChip(cleanSpec(spec.chip(), 128, "处理器"));
+        model.setRam(cleanSpec(spec.ram(), 64, "运行内存"));
+        model.setStorage(cleanSpec(spec.storage(), 64, "机身存储"));
+        model.setBatteryMah(rangeSpec(spec.batteryMah(), 100, 20000, "电池容量(mAh)"));
+        model.setChargeW(rangeSpec(spec.chargeW(), 0, 300, "有线快充(W)"));
+        model.setWirelessW(rangeSpec(spec.wirelessW(), 0, 120, "无线充电(W)"));
+        model.setScreenSize(cleanSpec(spec.screenSize(), 32, "屏幕尺寸"));
+        model.setResolution(cleanSpec(spec.resolution(), 32, "分辨率"));
+        model.setRefreshRate(cleanSpec(spec.refreshRate(), 32, "刷新率"));
+        model.setRearCamera(cleanSpec(spec.rearCamera(), 128, "后置主摄"));
+    }
+
+    private String cleanSpec(String value, int max, String label) {
+        if (value == null || value.trim().isEmpty()) {
+            return null;
+        }
+        String v = value.trim();
+        if (v.length() > max) {
+            throw new BizException(40039, label + "长度不能超过 " + max + " 字");
+        }
+        return v;
+    }
+
+    private Integer rangeSpec(Integer value, int min, int max, String label) {
+        if (value == null) {
+            return null;
+        }
+        if (value < min || value > max) {
+            throw new BizException(40054, label + "须在 " + min + " ~ " + max + " 之间");
+        }
+        return value;
+    }
+
+    /**
+     * 全量保存机型参数。显式 LambdaUpdateWrapper 逐列 set（含 null）：
+     * MyBatis-Plus updateById 默认忽略 null 字段，「清空参数」会静默失效（同移除图片的坑）。
+     */
+    @Transactional
+    public void updateSpec(Long id, AdminModelItem.AdminModelSpec spec) {
+        requireModel(id);
+        if (spec == null) {
+            throw new BizException(40030, "参数不能为空");
+        }
+        PhoneModel patch = new PhoneModel();
+        applySpec(patch, spec);
+        modelMapper.update(null, new LambdaUpdateWrapper<PhoneModel>()
+                .eq(PhoneModel::getId, id)
+                .set(PhoneModel::getReleaseMonth, patch.getReleaseMonth())
+                .set(PhoneModel::getSeries, patch.getSeries())
+                .set(PhoneModel::getChip, patch.getChip())
+                .set(PhoneModel::getRam, patch.getRam())
+                .set(PhoneModel::getStorage, patch.getStorage())
+                .set(PhoneModel::getBatteryMah, patch.getBatteryMah())
+                .set(PhoneModel::getChargeW, patch.getChargeW())
+                .set(PhoneModel::getWirelessW, patch.getWirelessW())
+                .set(PhoneModel::getScreenSize, patch.getScreenSize())
+                .set(PhoneModel::getResolution, patch.getResolution())
+                .set(PhoneModel::getRefreshRate, patch.getRefreshRate())
+                .set(PhoneModel::getRearCamera, patch.getRearCamera()));
     }
 
     @Transactional

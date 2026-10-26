@@ -42,14 +42,16 @@ public class AdminModelController {
     /**
      * @param noImage true 时只返回没有配图的机型 —— 机型库有 1400+ 条且几乎无图，
      *                补图时需要一个「待补图」视角，否则只能在分页里一页页翻。
+     * @param noSpec  true 时只返回缺参数（chip 为空）的机型 —— 参数补录用。
      */
     @GetMapping("/models")
     public R<Page<AdminModelItem>> models(@RequestParam Long brandId,
                                           @RequestParam(required = false) String keyword,
                                           @RequestParam(required = false) Boolean noImage,
+                                          @RequestParam(required = false) Boolean noSpec,
                                           @RequestParam(defaultValue = "1") long pageNum,
                                           @RequestParam(defaultValue = "20") long pageSize) {
-        return R.ok(modelService.adminPage(brandId, keyword, noImage, pageNum, pageSize));
+        return R.ok(modelService.adminPage(brandId, keyword, noImage, noSpec, pageNum, pageSize));
     }
 
     @PostMapping("/model")
@@ -64,6 +66,13 @@ public class AdminModelController {
         Integer releaseYear = body == null || body.get("releaseYear") == null
                 ? null : Integer.valueOf(String.valueOf(body.get("releaseYear")));
         modelService.updateModel(id, name, releaseYear, image);
+        return R.ok();
+    }
+
+    /** 全量保存机型参数（12 字段，传 null 即清空该字段）。 */
+    @PutMapping("/model/{id}/spec")
+    public R<Void> updateSpec(@PathVariable Long id, @RequestBody AdminModelItem.AdminModelSpec spec) {
+        modelService.updateSpec(id, spec);
         return R.ok();
     }
 
