@@ -1,5 +1,13 @@
 # 计划：管理端机型参数维护（2026-10-26）
 
+## 落地情况（已完成）
+
+- 后端 4329474：spec 全量保存/回显/noSpec 过滤/校验，AdminModelSpecTest 5/5 + 回归 18/18。
+- 前端 f77e2bb：参数列（缺失/完整/n/12）+「只看缺参数」+ 12 字段编辑对话框，SFC 静态编译过。
+- 开发容器重建后真接口冒烟通过：admin 登录 → noSpec 命中 → 保存 → 回显（含 null 清空）→ 40054 拒绝 → 还原。
+- 附带 f689d77：补提 ZOL 爬虫匹配修复（三星/苹果前缀、循环剥前缀、无条件剥尾括号）。
+- admin UI 查看：cd admin && npm run dev（5173，admin/admin123456）。
+
 ## 目标
 
 让运营在管理后台直接查看/补录/修正机型的 12 个参数字段（series/release_month/chip/ram/storage/battery_mah/charge_w/wireless_w/screen_size/resolution/refresh_rate/rear_camera），覆盖爬虫未命中的 ~618 行。
