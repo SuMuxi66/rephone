@@ -12,6 +12,7 @@
     "t-tag": "tdesign-miniprogram/tag/tag",
     "t-picker": "tdesign-miniprogram/picker/picker",
     "t-picker-item": "tdesign-miniprogram/picker-item/picker-item",
-    "section-card": "/components/section-card/index"
+    "section-card": "/components/section-card/index",
+    "agreement-modal": "/components/agreement-modal/index"
   }
 }

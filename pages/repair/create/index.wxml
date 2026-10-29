@@ -86,3 +86,5 @@
   <text class="empty-text">还没有选择维修项目</text>
   <t-button theme="primary" size="small" bindtap="goRepairTab">去选择机型和维修项目</t-button>
 </view>
+
+<agreement-modal id="agreement-modal" />

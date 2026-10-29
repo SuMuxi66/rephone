@@ -2,6 +2,7 @@ import { createRepairOrder, fetchCosUploadSign } from '../../../services/repair/
 import { fen2yuan } from '../../../common/recycle-status';
 import { areaData } from '../../../config/index';
 import addressPrefill from '../../../common/address-prefill';
+import { ensureAgreements } from '../../../common/agreement-manager';
 
 const provinces = areaData.map((p) => ({ label: p.label, value: p.label }));
 const DAY_OPTIONS = [
@@ -264,6 +265,11 @@ Page({
     if (!/^1\d{10}$/.test(form.phone) || errors.phone) {
       this.setData({ 'errors.phone': /^1\d{10}$/.test(form.phone) ? '' : '手机号格式不正确' });
       wx.showToast({ title: '请修正手机号后提交', icon: 'none' });
+      return;
+    }
+    // 协议门禁：提交前须签署《维修知情用户须知》与《设备来源合法承诺书》（已签过则直接放行）
+    if (!(await ensureAgreements(this, 'repair'))) {
+      wx.showToast({ title: '需签署维修须知与承诺书后提交', icon: 'none' });
       return;
     }
     this.setData({ submitting: true });
