@@ -1,4 +1,5 @@
 import { calculateQuote } from '../../../services/recycle/quote';
+import { ensureAgreements } from '../../../common/agreement-manager';
 
 /** 机型库选择结果 / 当前选中（与维修页共用同一机型库二级页） */
 const RESULT_KEY = 'modelPicker.result';
@@ -203,6 +204,11 @@ Page({
     const { form, submitting } = this.data;
     if (submitting || !form.brandId || !form.modelId || !form.storage || !form.condition || !form.screen) {
       wx.showToast({ title: '请先完成机型、成色与屏幕状态的选择', icon: 'none' });
+      return;
+    }
+    // 协议门禁：获取预估价前先确认《回收估价用户须知》（已签过则直接放行）
+    if (!(await ensureAgreements(this, 'estimate'))) {
+      wx.showToast({ title: '需同意《回收估价用户须知》后继续', icon: 'none' });
       return;
     }
     this.setData({ submitting: true });

@@ -101,3 +101,5 @@
       <view class="footer-tip">预估价仅供参考，最终回收价以质检结果为准</view>
     </view>
 </view>
+
+<agreement-modal id="agreement-modal" />

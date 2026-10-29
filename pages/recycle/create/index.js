@@ -3,6 +3,7 @@ import { fetchSubscribeTemplates, requestOrderStatusSubscribe } from '../../../s
 import { fen2yuan } from '../../../common/recycle-status';
 import { areaData } from '../../../config/index';
 import addressPrefill from '../../../common/address-prefill';
+import { ensureAgreements, getUnsignedDocs } from '../../../common/agreement-manager';
 
 const provinces = areaData.map((p) => ({ label: p.label, value: p.label }));
 
@@ -285,6 +286,13 @@ Page({
       wx.showToast({ title: '请修正手机号后提交', icon: 'none' });
       return;
     }
+    // 协议门禁：提交前须签署《维修知情用户须知》《设备来源合法承诺书》《用户承诺书》。
+    // 先同步预判是否已签，已签则不进 await，保证 requestSubscribe 仍在原始点击手势内调用
+    if (getUnsignedDocs('recycle').length && !(await ensureAgreements(this, 'recycle'))) {
+      wx.showToast({ title: '需签署相关须知与承诺书后提交', icon: 'none' });
+      return;
+    }
+    // 人脸核验门禁预留：接入微信人脸核身 SDK 后，在发起核验前调 ensureAgreements(this, 'face')
     // 订阅必须在手势上下文里同步发起：这里一旦先进网络 await，微信可能拒绝调用
     this.requestSubscribe();
 

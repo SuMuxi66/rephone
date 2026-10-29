@@ -89,3 +89,5 @@
   <text class="empty-text">还没有估价结果</text>
   <t-button theme="primary" size="small" bindtap="goEstimateTab">去估价</t-button>
 </view>
+
+<agreement-modal id="agreement-modal" />
