@@ -1,0 +1,190 @@
+/* 协议签署弹窗：色值/圆角一律引用 design-tokens 令牌（组件在 page 节点树内，可继承 page 令牌） */
+.agree-mask {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 12000;
+  background: rgba(0, 0, 0, 0.55);
+  display: flex;
+  align-items: flex-end;
+}
+
+.agree-panel {
+  position: relative;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  background: var(--bg-card);
+  border-radius: var(--radius-card) var(--radius-card) 0 0;
+  overflow: hidden;
+}
+
+/* 清单模式自适应高度；阅读模式固定高度给 scroll-view 撑出滚动区 */
+.agree-panel.is-list {
+  max-height: 80vh;
+}
+
+.agree-panel.is-reader {
+  height: 82vh;
+}
+
+.agree-head {
+  display: flex;
+  align-items: center;
+  padding: 28rpx 32rpx 12rpx;
+}
+
+.agree-back {
+  flex-shrink: 0;
+  font-size: 26rpx;
+  color: var(--text-2);
+  margin-right: 16rpx;
+  padding: 8rpx 0;
+}
+
+.agree-head-main {
+  flex: 1;
+  min-width: 0;
+}
+
+.agree-title {
+  font-size: 32rpx;
+  font-weight: 600;
+  color: var(--text-1);
+}
+
+.agree-sub {
+  font-size: 24rpx;
+  color: var(--text-3);
+  margin-top: 6rpx;
+}
+
+.agree-progress {
+  flex-shrink: 0;
+  font-size: 24rpx;
+  color: var(--text-3);
+}
+
+.agree-list-scroll {
+  max-height: 46vh;
+  padding: 8rpx 32rpx;
+  box-sizing: border-box;
+}
+
+.agree-doc-row {
+  display: flex;
+  align-items: center;
+  padding: 24rpx 0;
+  border-bottom: 1rpx solid var(--border-light);
+}
+
+.agree-doc-row:last-child {
+  border-bottom: none;
+}
+
+.agree-doc-name {
+  flex: 1;
+  min-width: 0;
+  font-size: 28rpx;
+  color: var(--text-1);
+}
+
+.agree-doc-more {
+  flex-shrink: 0;
+  font-size: 24rpx;
+  color: var(--text-3);
+}
+
+.agree-check {
+  flex-shrink: 0;
+  width: 36rpx;
+  height: 36rpx;
+  margin-right: 20rpx;
+  border: 2rpx solid var(--line-strong);
+  border-radius: var(--radius-sm);
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.agree-check.is-on {
+  background: var(--brand);
+  border-color: var(--brand);
+}
+
+.agree-check.is-on::after {
+  content: '';
+  width: 14rpx;
+  height: 8rpx;
+  border-left: 3rpx solid var(--text-anti);
+  border-bottom: 3rpx solid var(--text-anti);
+  transform: rotate(-45deg) translate(1rpx, -1rpx);
+}
+
+.agree-consent {
+  display: flex;
+  align-items: center;
+  padding: 20rpx 32rpx;
+}
+
+.agree-consent .agree-check {
+  margin-right: 16rpx;
+}
+
+.agree-consent-text {
+  font-size: 26rpx;
+  color: var(--text-2);
+}
+
+.doc-scroll {
+  flex: 1;
+  min-height: 0;
+}
+
+.doc-content {
+  padding: 8rpx 32rpx 32rpx;
+}
+
+.doc-para {
+  font-size: 28rpx;
+  line-height: 1.7;
+  color: var(--text-2);
+  text-align: justify;
+  margin-bottom: 20rpx;
+}
+
+.agree-foot {
+  display: flex;
+  align-items: center;
+  padding: 8rpx 32rpx calc(24rpx + env(safe-area-inset-bottom));
+}
+
+.agree-btn {
+  flex: 1;
+  height: 88rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 30rpx;
+  border-radius: var(--radius-sm);
+}
+
+.agree-btn.is-primary {
+  background: var(--brand);
+  color: var(--text-anti);
+}
+
+.agree-btn.is-primary.is-disabled {
+  background: var(--brand-light);
+  color: var(--text-3);
+}
+
+.agree-btn.is-ghost {
+  flex: 0 0 200rpx;
+  margin-right: 20rpx;
+  background: var(--bg-sunken);
+  color: var(--text-2);
+}

@@ -1,0 +1,59 @@
+<!-- 通用协议签署弹窗：接入方式见 common/agreement-manager.js 的 ensureAgreements -->
+<view wx:if="{{opened}}" class="agree-mask" catchtouchmove="noop" bindtap="onMaskTap">
+  <view class="agree-panel {{view ? 'is-reader' : 'is-list'}}" catchtap="noop">
+    <view class="agree-head">
+      <view wx:if="{{mode === 'confirm' && view}}" class="agree-back" bindtap="closeDetail">‹ 返回</view>
+      <view class="agree-head-main">
+        <view class="agree-title">{{view ? view.title : '服务协议与隐私保护'}}</view>
+        <view wx:if="{{!view}}" class="agree-sub">请阅读并同意以下全部协议后开始使用</view>
+      </view>
+      <view wx:if="{{mode === 'read' && view && docs.length > 1}}" class="agree-progress">{{current + 1}}/{{docs.length}}</view>
+    </view>
+
+    <!-- 单篇全文：read 模式逐篇签署 / confirm 模式阅读详情 -->
+    <block wx:if="{{view}}">
+      <scroll-view scroll-y class="doc-scroll" lower-threshold="60" bindscrolltolower="onReachEnd">
+        <view class="doc-content">
+          <view wx:for="{{view.content}}" wx:key="*this" class="doc-para">{{item}}</view>
+        </view>
+      </scroll-view>
+      <block wx:if="{{mode === 'read'}}">
+        <view class="agree-consent" bindtap="toggleAgreed">
+          <view class="agree-check {{agreed ? 'is-on' : ''}}" />
+          <text class="agree-consent-text">我已阅读并同意《{{view.title}}》</text>
+        </view>
+        <view class="agree-foot">
+          <view class="agree-btn is-ghost" bindtap="onRefuse">暂不同意</view>
+          <view
+            class="agree-btn is-primary {{agreed && (!view.requireRead || reachedEnd) ? '' : 'is-disabled'}}"
+            bindtap="onConfirm"
+          >{{current + 1 < docs.length ? '同意并下一份' : '同意并继续'}}</view>
+        </view>
+      </block>
+    </block>
+
+    <!-- 协议清单：confirm 模式（全局首启），全部勾选才能继续，无关闭出口 -->
+    <block wx:else>
+      <scroll-view scroll-y class="agree-list-scroll">
+        <view
+          wx:for="{{docs}}"
+          wx:key="key"
+          class="agree-doc-row"
+          data-key="{{item.key}}"
+          bindtap="openDetail"
+        >
+          <view class="agree-check {{checks[item.key] ? 'is-on' : ''}}" catchtap="onToggleCheck" data-key="{{item.key}}" />
+          <view class="agree-doc-name">《{{item.title}}》</view>
+          <view class="agree-doc-more">阅读全文</view>
+        </view>
+      </scroll-view>
+      <view class="agree-consent" bindtap="onToggleAll">
+        <view class="agree-check {{allChecked ? 'is-on' : ''}}" />
+        <text class="agree-consent-text">我已阅读并同意以上全部协议</text>
+      </view>
+      <view class="agree-foot">
+        <view class="agree-btn is-primary {{allChecked ? '' : 'is-disabled'}}" bindtap="onConfirm">同意并继续</view>
+      </view>
+    </block>
+  </view>
+</view>
