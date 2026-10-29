@@ -49,3 +49,18 @@
    `uk(tenant_id, user_id, agreement_key, agreement_version)`；重复签署返回成功（幂等）；
    `POST /api/agreements/signatures` 支持批量 items；上线后置 `agreement-manager.js`
    的 `REMOTE_SYNC_ENABLED = true`，建议同时在下单接口做服务端 fail-closed 校验。
+
+## 四、自动化工具链：官方 miniprogram-automator 已跑通（17/17）
+
+官方入口 = `cli.bat auto --auto-port 9420` + npm 包 `miniprogram-automator`（本机装在
+`.tmp/e2e/`，未入库；SDK v0.13.0）。沉淀脚本：`tools/e2e/agreement-e2e.js`，
+运行方式见脚本头注释（Windows 下 `automator.launch` spawn .bat 会失败，
+用 `cli auto` + `automator.connect({wsEndpoint})` 已验证）。
+
+与 wechatide-skill CLI（`automation_*` 工具族）的差异：CLI 的选择器引擎穿不进
+自定义组件内部节点（`>>>` 落在组件宿主上，tap 打空炮）；官方 SDK 的
+`page.$('#agreement-modal')` 可直接取组件内部元素做**真实 tap / 真实 touch 序列**。
+E2E 结果（同日）：17/17 全过——S1 真实双击只关一次、S2 真实点「暂不同意」后
+`submitting=false` 未发请求、S3 三连签翻篇回顶（截图 `s3-doc2-top.png`）、
+第三篇拒绝后未下单；唯一兜底点：合成 touch 手势驱动 scroll-view 滚动在模拟器
+不生效，脚本退回 `trigger('scrolltolower')`（真实滑动手感仍以真机 Z3 为准）。
