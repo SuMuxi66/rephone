@@ -12,7 +12,7 @@
 
     <!-- 单篇全文：read 模式逐篇签署 / confirm 模式阅读详情 -->
     <block wx:if="{{view}}">
-      <scroll-view scroll-y class="doc-scroll" lower-threshold="60" bindscrolltolower="onReachEnd">
+      <scroll-view scroll-y scroll-top="{{scrollTop}}" class="doc-scroll" lower-threshold="60" bindscrolltolower="onReachEnd">
         <view class="doc-content">
           <view wx:for="{{view.content}}" wx:key="*this" class="doc-para">{{item}}</view>
         </view>

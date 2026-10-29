@@ -12,7 +12,9 @@ const STORAGE_KEY = 'agreement.signatures.v1';
 const REMOTE_SYNC_ENABLED = false;
 
 function readStore() {
-  return wx.getStorageSync(STORAGE_KEY) || {};
+  const store = wx.getStorageSync(STORAGE_KEY);
+  // 脏数据兜底：ESM 严格模式下对非对象真值赋属性会直接抛错，门禁崩溃等于阻断业务
+  return store && typeof store === 'object' ? store : {};
 }
 
 export function isSigned(docKey, version) {
