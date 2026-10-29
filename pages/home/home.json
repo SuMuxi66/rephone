@@ -5,6 +5,7 @@
   "usingComponents": {
     "t-loading": "tdesign-miniprogram/loading/loading",
     "t-icon": "tdesign-miniprogram/icon/icon",
-    "t-image": "/components/webp-image/index"
+    "t-image": "/components/webp-image/index",
+    "agreement-modal": "/components/agreement-modal/index"
   }
 }

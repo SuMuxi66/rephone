@@ -2,6 +2,7 @@ import { fetchHome } from '../../services/home/home';
 import { fetchSaleGoods } from '../../services/sale/order';
 import { fen2yuan } from '../../common/recycle-status';
 import { resolveImageUrl } from '../../common/image-url';
+import { ensureAgreements } from '../../common/agreement-manager';
 
 /** 平台承诺：一行纯文字，不做对仗标语（说人话） */
 const TRUSTS = ['官方质检', '顺丰包邮', '验收后付款'];
@@ -84,6 +85,7 @@ Page({
 
   onLoad() {
     this.loadHomePage();
+    this.requireGlobalAgreements();
   },
 
   onPullDownRefresh() {
@@ -141,5 +143,13 @@ Page({
       wx.setStorageSync('recycle.prefillBrandId', brandId);
     }
     wx.switchTab({ url: '/pages/recycle/estimate/index' });
+  },
+
+  /** 全局协议门禁：进入首页即弹，三份全部勾选同意后放行；弹窗无关闭出口（不同意则无法使用小程序） */
+  async requireGlobalAgreements() {
+    const passed = await ensureAgreements(this, 'global');
+    if (!passed) {
+      wx.showToast({ title: '需同意全部协议后才能使用', icon: 'none' });
+    }
   },
 });
