@@ -30,3 +30,7 @@ plugins/
 
 # 测试运行时本地兜底上传产物（CWD=server/start）
 server/start/data/
+
+# 本地临时工作区与脚本缓存（不入库；正式 E2E 在 tools/e2e/）
+.tmp/
+__pycache__/
