@@ -21,7 +21,7 @@ const BANNERS = [
     key: 'repair',
     theme: 'accent',
     title: '手机维修',
-    sub: '先报价再动手，修不好不收费',
+    sub: '先报价再动手',
     cta: '立即报修',
     tap: 'goRepair',
   },
@@ -49,7 +49,7 @@ const ENTRIES = [
     key: 'repair',
     icon: 'tools',
     name: '修手机',
-    sub: '修不好不收费',
+    sub: '先报价再动手',
     tap: 'goRepair',
   },
   {
