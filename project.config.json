@@ -4,6 +4,10 @@
     "ignore": [
       {
         "type": "folder",
+        "value": ".tmp"
+      },
+      {
+        "type": "folder",
         "value": "server"
       },
       {
